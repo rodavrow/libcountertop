@@ -40,6 +40,8 @@ func NewTable() *Table {
 		setting.Flag(Setting{
 			Name: "via_home", Group: Group, Icon: "mdi:home-import-outline",
 		}, func(c *schema.Network) *bool { return &c.ViaHome }),
+		setting.Pick(Setting{Name: "internet", Group: Group, Icon: "mdi:web"},
+			schema.Internets, func(c *schema.Network) *schema.Internet { return &c.Internet }),
 		home,
 	}, setting.Messages{Text: say.T, Missing: say.Missing})
 }
@@ -71,6 +73,9 @@ func (p *Policy) Restore(verify bool)                         { p.apply(verify) 
 func (p *Policy) Verifying() bool                             { return !fetch.Skipping() }
 
 func (p *Policy) HomeKey() string { return p.settings.Read().HomeKey }
+
+// Internet is how much of the internet the device may reach; Changed fires when it changes.
+func (p *Policy) Internet() schema.Internet { return p.settings.Read().Internet }
 
 func (p *Policy) DownloadThrough(home http.RoundTripper) {
 	p.mu.Lock()

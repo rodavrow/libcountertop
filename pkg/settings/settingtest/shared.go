@@ -118,6 +118,7 @@ var Shared = Coverage{
 		"Network.Verify":            "network.verify",
 		"Network.ViaHome":           "network.via_home",
 		"Network.HomeKey":           "network.home_key",
+		"Network.Internet":          "network.internet",
 		"Certs.Server":              "certs.server",
 		"Certs.Cert":                "certs.cert",
 		"Certs.CertAPIKey":          "certs.cert_api_key",

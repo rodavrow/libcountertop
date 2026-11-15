@@ -707,6 +707,10 @@ network.lease.now: Ora
 network.mac: Indirizzo MAC
 network.router: Router
 network.setting.home_key: Chiave casa
+network.setting.internet: Accesso a internet
+network.internet.open: Aperto
+network.internet.quiet: Silenzioso
+network.internet.local: Solo rete locale
 network.setting.verify: Verifica certificati
 network.setting.via_home: Scarica tramite Home Assistant
 network.ssid: Rete Wi-Fi
