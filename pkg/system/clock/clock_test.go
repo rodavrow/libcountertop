@@ -191,8 +191,11 @@ func TestServers(t *testing.T) {
 		return []net.IP{net.IPv4(192, 168, 1, 1), net.IPv4(10, 0, 0, 1)}
 	}})
 	got := offered.servers()
-	if len(got) != 2 || got[0] != "192.168.1.1" || got[1] != "10.0.0.1" {
-		t.Errorf("with a lease offering two: %v", got)
+	if len(got) != 2+len(pool) || got[0] != "192.168.1.1" || got[1] != "10.0.0.1" {
+		t.Errorf("with a lease offering two: %v, want those first", got)
+	}
+	if got[2] != pool[0] {
+		t.Errorf("with a lease offering two: %v, want the pool after them", got)
 	}
 }
 
