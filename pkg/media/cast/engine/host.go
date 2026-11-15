@@ -36,6 +36,12 @@ type HostOptions struct {
 	Network     func(context.Context) bool
 	Screen      func() (width, height int)
 	Tuning      *Tuning
+
+	// Quiet starts the engine without its own background fetches when it returns true. Like
+	// ArgsFor it is asked at each start; Restart applies a change.
+	Quiet func() bool
+	// ArgsFor, when set, gives the engine's flags at each start in place of Args.
+	ArgsFor func(quiet bool) []string
 }
 
 type Host struct {
@@ -48,6 +54,26 @@ type Host struct {
 	ready      chan struct{}
 	count      int
 	installing Installation
+	restart    func()
+}
+
+// Restart stops a running engine so that it starts again, with its options asked afresh.
+func (h *Host) Restart() {
+	h.mu.Lock()
+	restart := h.restart
+	h.mu.Unlock()
+	if restart != nil {
+		restart()
+	}
+}
+
+func (h *Host) quiet() bool { return h.o.Quiet != nil && h.o.Quiet() }
+
+func (h *Host) args(quiet bool) []string {
+	if h.o.ArgsFor != nil {
+		return slices.Clone(h.o.ArgsFor(quiet))
+	}
+	return slices.Clone(h.o.Args)
 }
 
 type Installation struct {
@@ -162,6 +188,9 @@ func (h *Host) run(ctx context.Context) error {
 	if h.o.Tuning != nil {
 		h.o.Tuning.Restarts(cancel)
 	}
+	h.mu.Lock()
+	h.restart = cancel
+	h.mu.Unlock()
 
 	var width, height int
 	if h.o.Screen != nil {
@@ -180,7 +209,8 @@ func (h *Host) run(ctx context.Context) error {
 		}
 	})
 
-	args := slices.Clone(h.o.Args)
+	quiet := h.quiet()
+	args := h.args(quiet)
 	if h.o.Tuning != nil {
 		args = append(args, h.o.Tuning.Args()...)
 	}
@@ -193,6 +223,7 @@ func (h *Host) run(ctx context.Context) error {
 			Display:     socket,
 			Args:        args,
 			Nameservers: h.o.Nameservers,
+			Quiet:       quiet,
 		})
 		if ctx.Err() == nil {
 			slog.Warn("the cast engine stopped", "err", err)
