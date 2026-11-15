@@ -46,6 +46,10 @@ type Config struct {
 	Credentials     func(*cast.Credentials)
 	Notice          func(title, body string)
 
+	// Cloud says whether the receiver may ask Google what a stock Cast device asks it: the
+	// certificate revocation list, and each app's name, icon and receiver page. nil means it may.
+	Cloud func() bool
+
 	Volume   Volume
 	Video    func() playback.Target
 	Output   func(ended func()) playback.Output
@@ -120,6 +124,7 @@ func (s *Server) keyed(name string) error {
 	}
 	k.oracle = s.config.Oracle
 	k.bundle = s.config.Bundle
+	k.cloud = s.cloud
 	k.synced = s.config.Synced
 	k.changed = s.config.Credentials
 	s.config.Credentials(k.Current())
@@ -169,7 +174,7 @@ func (s *Server) Up() error {
 	unspoken := map[string]bool{}
 	describer := fetch.Client(describeWait)
 	service.Receiver.Describe = func(app string) cast.AppConfig {
-		c, err := cast.Describe(context.Background(), describer, app)
+		c, err := s.describe(describer, app)
 		if err != nil {
 			slog.Info("a cast app has no config", "id", app, "err", err)
 		}
@@ -309,6 +314,7 @@ func (s *Server) env(name string, device cast.Device) cast.Env {
 		Device:    device,
 		HTTP:      fetch.Client(30 * time.Second),
 		Long:      fetch.Client(0),
+		Cloud:     s.cloud,
 		Video:     s.config.Video,
 		Volume:    v.Level,
 		SetVolume: v.SetLevel,
@@ -348,6 +354,13 @@ func (s *Server) env(name string, device cast.Device) cast.Env {
 		Resample:    s.config.Resample,
 		Preferences: s.config.Preferences,
 	}
+}
+
+func (s *Server) cloud() bool { return s.config.Cloud == nil || s.config.Cloud() }
+
+// describe looks an app up through client, unless Google lookups are off.
+func (s *Server) describe(client *http.Client, app string) (cast.AppConfig, error) {
+	return cast.Env{HTTP: client, Cloud: s.cloud}.Describe(context.Background(), app)
 }
 
 func contentShape(id string) string {

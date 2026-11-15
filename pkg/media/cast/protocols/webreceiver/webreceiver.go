@@ -246,7 +246,7 @@ func (r *Receiver) launch(a cast.App) {
 		slog.Info("a cast app waits for the web receiver", "app", a.ID)
 		return
 	}
-	page, err := cast.Describe(context.Background(), r.env.HTTP, a.ID)
+	page, err := r.env.Describe(context.Background(), a.ID)
 	if err == nil && page.URL == "" {
 		err = errors.New("no receiver page")
 	}

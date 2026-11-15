@@ -45,6 +45,7 @@ type keys struct {
 	oracle   func() string
 	bundle   func() string
 	synced   func(do func()) (stop func())
+	cloud    func() bool
 
 	bundlePath string
 	tried      string
@@ -136,7 +137,11 @@ func (k *keys) revocations(ctx context.Context) {
 }
 
 // revocation fetches the revocation list once and says how long to wait before the next fetch.
+// With Google lookups off it fetches nothing and looks at the switch again after retry.
 func (k *keys) revocation(ctx context.Context) time.Duration {
+	if k.cloud != nil && !k.cloud() {
+		return retry
+	}
 	body, err := ask(ctx, k.crlURL, oracleMost)
 	switch {
 	case err != nil:
