@@ -125,21 +125,7 @@ func (k *keys) CRL() []byte {
 
 func (k *keys) revocations(ctx context.Context) {
 	for {
-		wait := crlEvery
-		body, err := ask(ctx, k.crlURL, oracleMost)
-		switch {
-		case err != nil:
-			slog.Warn("fetching the cast revocation list", "err", err)
-			wait = retry
-		case len(body) == 0:
-			slog.Warn("the cast revocation list came back empty")
-			wait = retry
-		default:
-			k.crl.Store(&body)
-			slog.Debug("cast revocation list", "bytes", len(body))
-		}
-
-		t := time.NewTimer(wait)
+		t := time.NewTimer(k.revocation(ctx))
 		select {
 		case <-ctx.Done():
 			t.Stop()
@@ -147,6 +133,22 @@ func (k *keys) revocations(ctx context.Context) {
 		case <-t.C:
 		}
 	}
+}
+
+// revocation fetches the revocation list once and says how long to wait before the next fetch.
+func (k *keys) revocation(ctx context.Context) time.Duration {
+	body, err := ask(ctx, k.crlURL, oracleMost)
+	switch {
+	case err != nil:
+		slog.Warn("fetching the cast revocation list", "err", err)
+		return retry
+	case len(body) == 0:
+		slog.Warn("the cast revocation list came back empty")
+		return retry
+	}
+	k.crl.Store(&body)
+	slog.Debug("cast revocation list", "bytes", len(body))
+	return crlEvery
 }
 
 func (k *keys) Retarget() {
