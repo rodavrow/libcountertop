@@ -981,6 +981,9 @@ func (o *Output) completed(p *playing, err error, unseen bool) {
 		o.releaseLocked(p.src)
 		switch f, fails := p.src.(playback.Failer); {
 		case err == nil:
+			if fin, ok := p.src.(playback.Finisher); ok {
+				safe.Go("playout finished", fin.Finished)
+			}
 		case fails:
 			safe.Go("playout failure", func() { f.Fail(err) })
 		default:

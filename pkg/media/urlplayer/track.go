@@ -451,6 +451,16 @@ func (t *track) Fail(err error) {
 	}
 }
 
+// Finished passes the end on to a Remote that wants it; for the others nothing changes, as before.
+func (t *track) Finished() {
+	t.player.mu.Lock()
+	current := t.player.cur == t
+	t.player.mu.Unlock()
+	if f, ok := t.player.o.Remote.(playback.Finisher); ok && current {
+		f.Finished()
+	}
+}
+
 func (t *track) Next()     {}
 func (t *track) Previous() {}
 
