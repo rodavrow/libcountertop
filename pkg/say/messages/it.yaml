@@ -711,6 +711,7 @@ network.setting.internet: Accesso a internet
 network.internet.open: Aperto
 network.internet.quiet: Silenzioso
 network.internet.local: Solo rete locale
+network.internet.hint: Solo rete locale blocca tutto ciò che è fuori dalla tua rete
 network.setting.verify: Verifica certificati
 network.setting.via_home: Scarica tramite Home Assistant
 network.ssid: Rete Wi-Fi

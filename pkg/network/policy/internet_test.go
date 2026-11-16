@@ -59,3 +59,15 @@ func TestInternetAccessRefusesAnUnknownLevel(t *testing.T) {
 		t.Error("Change(internet, partial) = nil, want an error")
 	}
 }
+
+func TestSetInternetSavesEachLevelAndBackToOpen(t *testing.T) {
+	p := New(&networkMemory{c: schema.DefaultNetwork()})
+	for _, want := range []schema.Internet{
+		schema.InternetLocal, schema.InternetQuiet, schema.InternetOpen,
+	} {
+		p.SetInternet(want)
+		if got := p.Internet(); got != want {
+			t.Errorf("after SetInternet(%q): Internet() = %q", want, got)
+		}
+	}
+}

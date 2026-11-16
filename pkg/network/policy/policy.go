@@ -111,6 +111,12 @@ func (p *Policy) SetVerify(verify bool) {
 	}
 }
 
+func (p *Policy) SetInternet(i schema.Internet) {
+	if err := p.save(p.knobs.Table.MustRow("internet"), string(i)); err != nil {
+		slog.Error("saving internet access failed", "err", err)
+	}
+}
+
 func (p *Policy) SetViaHome(on bool) {
 	if err := p.save(p.knobs.Table.MustRow("via_home"), setting.OnOff(on)); err != nil {
 		slog.Error("saving the download route failed", "err", err)

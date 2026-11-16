@@ -9,17 +9,20 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/display/menu"
 	"github.com/ygelfand/libcountertop/pkg/display/shell"
 	"github.com/ygelfand/libcountertop/pkg/say"
+	config "github.com/ygelfand/libcountertop/pkg/settings/schema"
 )
 
 type NetworkState struct {
 	SSID, Address, MAC, Router string
 	Renew                      time.Time
 	Verify, ViaHome            bool
+	Internet                   config.Internet
 }
 
 func NetworkPage(
 	read func() NetworkState,
 	setVerify, setViaHome func(bool),
+	setInternet func(config.Internet),
 	wifi *WifiPages,
 	web *WebAccess,
 	stack *shell.Shell,
@@ -60,6 +63,25 @@ func NetworkPage(
 			},
 		)
 		acts = append(acts, func(int) { setVerify(!c.Verify) })
+		if setInternet != nil {
+			rows = append(rows, menu.Row{
+				Glyph: gogui.IconGlobe,
+				Label: say.T("network.setting.internet"),
+				Hint:  say.T("network.internet.hint"),
+				Kind:  menu.Chevron,
+				Value: c.Internet.Label(),
+				Open: func() shell.View {
+					return Choose(
+						say.T("network.setting.internet"),
+						config.Internets,
+						func() config.Internet { return read().Internet },
+						setInternet,
+						nil,
+					)
+				},
+			})
+			acts = append(acts, nil)
+		}
 		rows = append(rows, menu.Row{
 			Glyph: gogui.IconDownload,
 			Label: say.T("network.setting.via_home"),

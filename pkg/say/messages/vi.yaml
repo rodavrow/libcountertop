@@ -707,6 +707,7 @@ network.lease.now: Bây giờ
 network.mac: Địa chỉ MAC
 network.router: Bộ định tuyến
 network.setting.home_key: Khóa nhà
+network.internet.hint: Chỉ mạng nội bộ chặn mọi thứ bên ngoài mạng của bạn
 network.setting.internet: Truy cập internet
 network.internet.open: Mở
 network.internet.quiet: Yên lặng
