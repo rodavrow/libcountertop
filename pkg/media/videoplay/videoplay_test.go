@@ -10,6 +10,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -96,12 +97,17 @@ func (f *fakeOutput) Position(src playback.Source) (time.Duration, bool) {
 func (f *fakeOutput) Behind(playback.Source) time.Duration { return 0 }
 func (f *fakeOutput) Changed(playback.Source)              {}
 
-func newPlayer() (*Player, *fakeOutput) {
+func newPlayer() (*Player, *fakeOutput) { return newPlayerWith(nil) }
+
+func newPlayerWith(localOnly func() bool) (*Player, *fakeOutput) {
 	out := &fakeOutput{}
-	p := New(Options{Output: func(ended func()) playback.Output {
-		out.ended = ended
-		return out
-	}})
+	p := New(Options{
+		Output: func(ended func()) playback.Output {
+			out.ended = ended
+			return out
+		},
+		LocalOnly: localOnly,
+	})
 	return p, out
 }
 
@@ -132,7 +138,12 @@ func waitFor(t *testing.T, p *Player, want State) {
 
 func playing(t *testing.T) (*Player, *fakeOutput) {
 	t.Helper()
-	p, out := newPlayer()
+	return playingWith(t, nil)
+}
+
+func playingWith(t *testing.T, localOnly func() bool) (*Player, *fakeOutput) {
+	t.Helper()
+	p, out := newPlayerWith(localOnly)
 	if err := p.Play(context.Background(), serve(t)+"/a.mp4", "Test", 0); err != nil {
 		t.Fatal(err)
 	}
@@ -171,7 +182,6 @@ func TestTheActionsAreTheContract(t *testing.T) {
 func TestPlayVideoRefusesBadArguments(t *testing.T) {
 	cases := map[string]map[string]any{
 		"no url":           {},
-		"a public url":     {"url": "https://93.184.215.14/a.mp4"},
 		"a file url":       {"url": "file:///etc/passwd"},
 		"a negative start": {"url": "http://192.168.1.10/a.mp4", "start": -5},
 		"a long title": {
@@ -191,12 +201,79 @@ func TestPlayVideoRefusesBadArguments(t *testing.T) {
 	}
 }
 
-func TestAPublicURLIsRefusedAsNotLocal(t *testing.T) {
-	p, _ := newPlayer()
-	err := action(t, p, "play_video", map[string]any{"url": "https://93.184.215.14/a.mp4"})
-	if !errors.Is(err, ErrNotLocal) {
-		t.Fatalf("a public url gave %v, want ErrNotLocal", err)
+func TestUnderLocalOnlyAPublicURLIsBlocked(t *testing.T) {
+	p, out := newPlayerWith(always(true))
+	err := action(t, p, "play_video", map[string]any{"url": publicURL})
+	if !errors.Is(err, ErrBlocked) {
+		t.Fatalf("a public url gave %v, want ErrBlocked", err)
 	}
+	if p.State() != Idle || out.calls() != "" {
+		t.Errorf("a blocked url left the state %s and the output saw %q", p.State(), out.calls())
+	}
+}
+
+func TestWithoutLocalOnlyAPublicURLIsAccepted(t *testing.T) {
+	for name, localOnly := range map[string]func() bool{"nil": nil, "false": always(false)} {
+		p, _ := newPlayerWith(localOnly)
+		if err := action(t, p, "play_video", map[string]any{"url": publicURL}); err != nil {
+			t.Errorf("LocalOnly %s: a public url was refused: %v", name, err)
+		}
+		if p.State() != Loading {
+			t.Errorf("LocalOnly %s: the state is %s, want loading", name, p.State())
+		}
+		_ = p.Stop()
+	}
+}
+
+// localOnlyLater plays the test server before Local only is on, with every address counted as
+// outside, so turning it on afterwards blocks the server the way it would a public host.
+func localOnlyLater(t *testing.T) (*Player, *fakeOutput, *atomic.Bool) {
+	t.Helper()
+	var on atomic.Bool
+	p, out := playingWith(t, on.Load)
+	outsideIsEverything(p.guard)
+	return p, out, &on
+}
+
+func TestTurningOnLocalOnlyBlocksTheNextFetch(t *testing.T) {
+	p, out, on := localOnlyLater(t)
+	on.Store(true)
+	resp, err := p.client.Get(p.url.String())
+	if err == nil {
+		_ = resp.Body.Close()
+	}
+	if !errors.Is(err, ErrBlocked) {
+		t.Fatalf("the next fetch gave %v, want ErrBlocked", err)
+	}
+	// The decoder sees the refusal as a stream cut short, which alone would read as the end.
+	out.last().(playback.Failer).Fail(io.ErrUnexpectedEOF)
+	waitFor(t, p, Failed)
+	if !strings.HasSuffix(out.calls(), "stop") {
+		t.Errorf("the output was not let go: %q", out.calls())
+	}
+}
+
+func TestTurningOnLocalOnlyStopsAStreamAlreadyFlowing(t *testing.T) {
+	p, out, on := localOnlyLater(t)
+	p.enforce(context.Background())
+	if p.State() != Playing {
+		t.Fatalf("the check stopped a video Local only allows: %s", p.State())
+	}
+	on.Store(true)
+	p.enforce(context.Background())
+	waitFor(t, p, Failed)
+	if !strings.HasSuffix(out.calls(), "stop") {
+		t.Errorf("the output was not let go: %q", out.calls())
+	}
+}
+
+func TestAnUnrelatedRefusalIsNotTakenForABlock(t *testing.T) {
+	p, out := playingWith(t, always(true))
+	if err := action(t, p, "play_video", map[string]any{"url": publicURL}); err == nil {
+		t.Fatal("a public url was accepted under Local only")
+	}
+	out.last().(playback.Failer).Fail(io.ErrUnexpectedEOF)
+	waitFor(t, p, Idle)
 }
 
 func TestPlayVideoReadsItsArguments(t *testing.T) {

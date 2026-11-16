@@ -7,8 +7,18 @@ import (
 	"net/http/httptest"
 	"net/netip"
 	"net/url"
+	"sync/atomic"
 	"testing"
 )
+
+// The public addresses here are in the documentation ranges, so nothing real is ever reached.
+const (
+	publicIP      = "203.0.113.7"
+	publicURL     = "https://" + publicIP + "/a.mp4"
+	publicSegment = "http://" + publicIP + "/live/seg_00042.ts"
+)
+
+func always(on bool) func() bool { return func() bool { return on } }
 
 func TestLocalTakesOnlyPrivateLoopbackAndLinkLocal(t *testing.T) {
 	cases := map[string]bool{
@@ -32,14 +42,14 @@ func TestLocalTakesOnlyPrivateLoopbackAndLinkLocal(t *testing.T) {
 		"::ffff:8.8.8.8":     false,
 	}
 	for addr, want := range cases {
-		if got := Local(netip.MustParseAddr(addr)); got != want {
-			t.Errorf("Local(%s) = %v, want %v", addr, got, want)
+		if got := local(netip.MustParseAddr(addr)); got != want {
+			t.Errorf("local(%s) = %v, want %v", addr, got, want)
 		}
 	}
 }
 
-func guardResolving(addrs ...string) *guard {
-	g := newGuard(nil)
+func localOnlyResolving(addrs ...string) *guard {
+	g := newGuard(always(true))
 	g.lookup = func(context.Context, string) ([]netip.Addr, error) {
 		out := make([]netip.Addr, len(addrs))
 		for i, a := range addrs {
@@ -50,44 +60,58 @@ func guardResolving(addrs ...string) *guard {
 	return g
 }
 
-func TestAPrivateAddressIsAccepted(t *testing.T) {
-	_, err := newGuard(nil).parse(context.Background(), "http://192.168.1.10:8099/a.mp4")
-	if err != nil {
+func TestWithoutLocalOnlyAPublicAddressIsAccepted(t *testing.T) {
+	for name, g := range map[string]*guard{"nil": newGuard(nil), "false": newGuard(always(false))} {
+		if _, err := g.parse(context.Background(), publicURL); err != nil {
+			t.Errorf("LocalOnly %s: a public url was refused: %v", name, err)
+		}
+		if err := g.dial("tcp", publicIP+":443", nil); err != nil {
+			t.Errorf("LocalOnly %s: the dialer refused a public address: %v", name, err)
+		}
+	}
+}
+
+func TestLocalOnlyAcceptsAPrivateAddress(t *testing.T) {
+	g := newGuard(always(true))
+	if _, err := g.parse(context.Background(), "http://192.168.1.10:8099/a.mp4"); err != nil {
 		t.Fatalf("a private address was refused: %v", err)
 	}
-}
-
-func TestAPublicAddressIsRefused(t *testing.T) {
-	_, err := newGuard(nil).parse(context.Background(), "https://93.184.215.14/a.mp4")
-	if !errors.Is(err, ErrNotLocal) {
-		t.Fatalf("a public address gave %v, want ErrNotLocal", err)
+	if err := g.dial("tcp", "192.168.1.10:8099", nil); err != nil {
+		t.Fatalf("the dialer refused a private address: %v", err)
 	}
 }
 
-func TestANameThatResolvesPubliclyIsRefused(t *testing.T) {
-	_, err := guardResolving("93.184.215.14").parse(context.Background(), "https://example.com/a.mp4")
-	if !errors.Is(err, ErrNotLocal) {
-		t.Fatalf("a public name gave %v, want ErrNotLocal", err)
+func TestLocalOnlyRefusesAPublicAddress(t *testing.T) {
+	_, err := newGuard(always(true)).parse(context.Background(), publicURL)
+	if !errors.Is(err, ErrBlocked) {
+		t.Fatalf("a public address gave %v, want ErrBlocked", err)
 	}
 }
 
-func TestANameWithAnyPublicAddressIsRefused(t *testing.T) {
-	_, err := guardResolving("192.168.1.10", "93.184.215.14").
+func TestLocalOnlyRefusesANameThatResolvesPublicly(t *testing.T) {
+	_, err := localOnlyResolving(publicIP).parse(context.Background(), "https://example.com/a.mp4")
+	if !errors.Is(err, ErrBlocked) {
+		t.Fatalf("a public name gave %v, want ErrBlocked", err)
+	}
+}
+
+func TestLocalOnlyRefusesANameWithAnyPublicAddress(t *testing.T) {
+	_, err := localOnlyResolving("192.168.1.10", publicIP).
 		parse(context.Background(), "http://nas.lan/a.mp4")
-	if !errors.Is(err, ErrNotLocal) {
-		t.Fatalf("a name with one public address gave %v, want ErrNotLocal", err)
+	if !errors.Is(err, ErrBlocked) {
+		t.Fatalf("a name with one public address gave %v, want ErrBlocked", err)
 	}
 }
 
-func TestANameThatResolvesLocallyIsAccepted(t *testing.T) {
-	_, err := guardResolving("192.168.1.10").parse(context.Background(), "http://nas.lan/a.mp4")
+func TestLocalOnlyAcceptsANameThatResolvesLocally(t *testing.T) {
+	_, err := localOnlyResolving("192.168.1.10").parse(context.Background(), "http://nas.lan/a.mp4")
 	if err != nil {
 		t.Fatalf("a local name was refused: %v", err)
 	}
 }
 
-func TestANameThatDoesNotResolveIsRefused(t *testing.T) {
-	g := newGuard(nil)
+func TestLocalOnlyRefusesANameThatDoesNotResolve(t *testing.T) {
+	g := newGuard(always(true))
 	g.lookup = func(context.Context, string) ([]netip.Addr, error) {
 		return nil, errors.New("nxdomain")
 	}
@@ -103,6 +127,21 @@ func TestOnlyHTTPSchemesAreAccepted(t *testing.T) {
 		if _, err := newGuard(nil).parse(context.Background(), raw); err == nil {
 			t.Errorf("%q was accepted", raw)
 		}
+	}
+}
+
+func TestTheSettingIsReadAtEveryCheck(t *testing.T) {
+	var on atomic.Bool
+	g := newGuard(on.Load)
+	if _, err := g.parse(context.Background(), publicURL); err != nil {
+		t.Fatalf("a public url was refused before Local only: %v", err)
+	}
+	on.Store(true)
+	if _, err := g.parse(context.Background(), publicURL); !errors.Is(err, ErrBlocked) {
+		t.Fatalf("a public url after Local only gave %v, want ErrBlocked", err)
+	}
+	if err := g.dial("tcp", publicIP+":80", nil); !errors.Is(err, ErrBlocked) {
+		t.Fatalf("dialing out after Local only gave %v, want ErrBlocked", err)
 	}
 }
 
@@ -132,37 +171,71 @@ func get(t *testing.T, c *http.Client, url string) error {
 	return err
 }
 
-func TestARedirectToAPublicAddressIsRefused(t *testing.T) {
+func TestLocalOnlyRefusesARedirectToAPublicAddress(t *testing.T) {
 	srv := redirector(t)
-	err := get(t, newGuard(nil).client(nil), srv.URL+redirecting("http://93.184.215.14/a.mp4"))
-	if !errors.Is(err, ErrNotLocal) {
-		t.Fatalf("a redirect to a public address gave %v, want ErrNotLocal", err)
+	g := newGuard(always(true))
+	if err := get(t, g.client(nil), srv.URL+redirecting(publicURL)); !errors.Is(err, ErrBlocked) {
+		t.Fatalf("a redirect to a public address gave %v, want ErrBlocked", err)
+	}
+	if g.refusals.Load() == 0 {
+		t.Fatal("the refused redirect was not counted")
 	}
 }
 
-func TestARedirectWithinTheNetworkIsFollowed(t *testing.T) {
+func TestLocalOnlyFollowsARedirectWithinTheNetwork(t *testing.T) {
 	srv := redirector(t)
-	if err := get(t, newGuard(nil).client(nil), srv.URL+redirecting(srv.URL+"/a.mp4")); err != nil {
+	err := get(t, newGuard(always(true)).client(nil), srv.URL+redirecting(srv.URL+"/a"))
+	if err != nil {
 		t.Fatalf("a local redirect was refused: %v", err)
 	}
 }
 
+func TestLocalOnlyRefusesAnHLSSegmentOutside(t *testing.T) {
+	g := newGuard(always(true))
+	if err := get(t, g.client(nil), publicSegment); !errors.Is(err, ErrBlocked) {
+		t.Fatalf("fetching a public segment gave %v, want ErrBlocked", err)
+	}
+	if err := g.dial("tcp", publicIP+":80", nil); !errors.Is(err, ErrBlocked) {
+		t.Fatalf("the dialer let the segment host through: %v", err)
+	}
+}
+
+// With every address counted as outside, the test server stands in for a public one.
+func outsideIsEverything(g *guard) *guard {
+	g.local = func(netip.Addr) bool { return false }
+	return g
+}
+
 func TestTheDefaultClientRefusesToConnectOutside(t *testing.T) {
 	srv := redirector(t)
-	g := newGuard(func(netip.Addr) bool { return false })
-	if err := get(t, g.client(nil), srv.URL); !errors.Is(err, ErrNotLocal) {
-		t.Fatalf("connecting to a refused address gave %v, want ErrNotLocal", err)
+	g := outsideIsEverything(newGuard(always(true)))
+	if err := get(t, g.client(nil), srv.URL); !errors.Is(err, ErrBlocked) {
+		t.Fatalf("connecting outside gave %v, want ErrBlocked", err)
 	}
 }
 
 func TestAGivenClientChecksEveryRequest(t *testing.T) {
 	srv := redirector(t)
-	g := newGuard(func(netip.Addr) bool { return false })
-	if err := get(t, g.client(&http.Client{}), srv.URL); !errors.Is(err, ErrNotLocal) {
+	g := outsideIsEverything(newGuard(always(true)))
+	if err := get(t, g.client(&http.Client{}), srv.URL); !errors.Is(err, ErrBlocked) {
 		t.Fatalf("a given client reached a refused address: %v", err)
 	}
-	outside := srv.URL + redirecting("http://93.184.215.14/")
-	if err := get(t, newGuard(nil).client(&http.Client{}), outside); !errors.Is(err, ErrNotLocal) {
+	outside := srv.URL + redirecting(publicURL)
+	err := get(t, newGuard(always(true)).client(&http.Client{}), outside)
+	if !errors.Is(err, ErrBlocked) {
 		t.Fatalf("a given client followed a redirect outside: %v", err)
+	}
+}
+
+func TestAConnectionOpenedBeforeLocalOnlyIsNotReused(t *testing.T) {
+	srv := redirector(t)
+	var on atomic.Bool
+	c := outsideIsEverything(newGuard(on.Load)).client(nil)
+	if err := get(t, c, srv.URL); err != nil {
+		t.Fatalf("the first request failed: %v", err)
+	}
+	on.Store(true)
+	if err := get(t, c, srv.URL); !errors.Is(err, ErrBlocked) {
+		t.Fatalf("a kept-alive connection was reused after Local only: %v", err)
 	}
 }

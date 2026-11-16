@@ -1,5 +1,5 @@
-// Package videoplay plays a video from a URL on the local network when Home Assistant asks, with
-// no cast receiver and no internet involved.
+// Package videoplay plays a video from a URL when Home Assistant asks, without the cast receiver.
+// Under Local only it plays only from the local network, and needs no internet at all.
 package videoplay
 
 import (
@@ -9,7 +9,7 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
-	"net/netip"
+	"net/url"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -34,6 +34,7 @@ const (
 
 const (
 	Name          = "videoplay"
+	checkEvery    = time.Second
 	positionEvery = 5 * time.Second
 	maxURL        = 4096
 	maxTitle      = 256
@@ -42,14 +43,15 @@ const (
 var errIdle = errors.New("videoplay: no video is playing")
 
 type Options struct {
-	// HTTP is the client to fetch with. Nil, the usual choice, builds one with no proxy that refuses
-	// to connect anywhere Allowed does not.
+	// HTTP is the client to fetch with. Nil, the usual choice, builds one with no proxy that also
+	// refuses to connect off the local network while LocalOnly says so.
 	HTTP     *http.Client
 	Output   func(ended func()) playback.Output
 	Target   func() playback.Target
 	Resample func(from int) func([]int16) []int16
-	// Allowed says which addresses a video may come from; nil means Local.
-	Allowed func(netip.Addr) bool
+	// LocalOnly says whether videos may only come from private, loopback and link-local addresses.
+	// It is asked at every check, request and dial, never kept. Nil means any address.
+	LocalOnly func() bool
 }
 
 type Player struct {
@@ -63,15 +65,17 @@ type Player struct {
 	build sync.Once
 	urls  atomic.Pointer[urlplayer.Player]
 
-	mu  sync.Mutex
-	now State
+	mu      sync.Mutex
+	now     State
+	url     *url.URL
+	blocked uint64
 }
 
 func New(o Options) *Player {
 	if o.Output == nil {
 		panic("videoplay: New needs an Output")
 	}
-	g := newGuard(o.Allowed)
+	g := newGuard(o.LocalOnly)
 	p := &Player{
 		o:      o,
 		guard:  g,
@@ -105,17 +109,34 @@ func (p *Player) Name() string { return Name }
 func (p *Player) Entities() []esphome.Entity { return []esphome.Entity{p.state, p.position} }
 
 func (p *Player) Run(ctx context.Context) error {
-	t := time.NewTicker(positionEvery)
+	t := time.NewTicker(checkEvery)
 	defer t.Stop()
+	ticks := 0
 	for {
 		select {
 		case <-ctx.Done():
 			return p.Stop()
 		case <-t.C:
-			if p.State() == Playing {
+			p.enforce(ctx)
+			ticks++
+			if ticks%int(positionEvery/checkEvery) == 0 && p.State() == Playing {
 				p.publish()
 			}
 		}
+	}
+}
+
+// enforce stops a video whose URL Local only no longer allows. Requests are refused anyway, but a
+// response already streaming would otherwise play on.
+func (p *Player) enforce(ctx context.Context) {
+	p.mu.Lock()
+	u, now := p.url, p.now
+	p.mu.Unlock()
+	if u == nil || now == Idle || now == Failed || !p.guard.restricted() {
+		return
+	}
+	if err := p.guard.check(ctx, u); errors.Is(err, ErrBlocked) {
+		p.block(err)
 	}
 }
 
@@ -128,13 +149,14 @@ func (p *Player) State() State {
 func (p *Player) Actions() []*esphome.Action {
 	return []*esphome.Action{
 		{
-			Name:        "play_video",
-			Description: "Play a video from a URL on the local network, full screen.",
+			Name: "play_video",
+			Description: "Plays a video URL. When Internet access is Local only, the URL must be " +
+				"on the local network.",
 			Args: []esphome.Arg{
 				{
 					Name:        "url",
 					Type:        esphome.ArgString,
-					Description: "An http or https URL whose host is on the local network.",
+					Description: "An http or https URL.",
 					Example:     "http://192.168.1.10:8099/video.mp4",
 				},
 				{Name: "title", Type: esphome.ArgString, Example: "Holiday"},
@@ -176,7 +198,7 @@ func (p *Player) Actions() []*esphome.Action {
 	}
 }
 
-// Play checks the URL is local before anything is fetched, then replaces whatever this player
+// Play checks the URL is allowed before anything is fetched, then replaces whatever this player
 // shows with it.
 func (p *Player) Play(ctx context.Context, raw, title string, start int) error {
 	switch {
@@ -195,6 +217,9 @@ func (p *Player) Play(ctx context.Context, raw, title string, start int) error {
 	}
 	urls := p.player()
 	at := time.Duration(start) * time.Second
+	p.mu.Lock()
+	p.url, p.blocked = u, p.guard.refusals.Load()
+	p.mu.Unlock()
 	p.set(Loading)
 	p.position.Set(float32(start))
 	urls.Describe(&cast.Metadata{MetadataType: cast.MetadataMovie, Title: title})
@@ -336,8 +361,16 @@ func (p *Player) ended() {
 	}
 }
 
-// failed hears a video that stopped partway; running out of stream is the end, not a fault.
+// failed hears a video that stopped partway; running out of stream is the end, not a fault. A
+// refusal along the way shows as the block it was, whatever error the decoder made of it.
 func (p *Player) failed(err error) {
+	p.mu.Lock()
+	refused := p.guard.refusals.Load() != p.blocked
+	p.mu.Unlock()
+	if refused || errors.Is(err, ErrBlocked) {
+		p.block(err)
+		return
+	}
 	if errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) {
 		p.stop()
 		return
@@ -347,7 +380,16 @@ func (p *Player) failed(err error) {
 }
 
 func (p *Player) refused(err error) {
+	if errors.Is(err, ErrBlocked) {
+		p.block(err)
+		return
+	}
 	slog.Warn("the video would not open", "err", err)
+	p.end(Failed)
+}
+
+func (p *Player) block(err error) {
+	slog.Warn("the video stopped", "err", ErrBlocked, "detail", err)
 	p.end(Failed)
 }
 
