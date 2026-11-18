@@ -36,6 +36,11 @@ type Failer interface {
 	Fail(err error)
 }
 
+// Finisher is told when its sound played out to the end, which no other call reports.
+type Finisher interface {
+	Finished()
+}
+
 type Backdrop interface {
 	Backdrop(img *image.RGBA)
 }

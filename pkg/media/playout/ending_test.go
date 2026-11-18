@@ -3,6 +3,7 @@ package playout
 import (
 	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/ygelfand/libcountertop/pkg/media/playback"
 )
@@ -91,5 +92,30 @@ func TestStoppingAnotherSourceKeepsThePage(t *testing.T) {
 	o.Stop(&endless{})
 	if got := s.leaves.Load() - before; got != 0 {
 		t.Errorf("stopping a source that was not playing left the page %d times", got)
+	}
+}
+
+type finishing struct {
+	ending
+	finished chan struct{}
+}
+
+func (f *finishing) Finished() { close(f.finished) }
+
+func TestASourceThatPlaysToItsEndIsToldSo(t *testing.T) {
+	o := newOutput()
+	q := o.options.Queue.(*fakeQueue)
+	src := &finishing{finished: make(chan struct{})}
+	o.Play(src)
+	deadline := time.After(5 * time.Second)
+	for {
+		q.Take()
+		select {
+		case <-src.finished:
+			return
+		case <-deadline:
+			t.Fatal("a source that played to its end was never told")
+		case <-time.After(10 * time.Millisecond):
+		}
 	}
 }
