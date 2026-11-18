@@ -165,7 +165,7 @@ func (s *station) logo() string {
 }
 
 func (s *station) icon(app string) string {
-	c, _ := cast.Describe(s.ctx, s.env.HTTP, app)
+	c, _ := s.env.Describe(s.ctx, app)
 	return c.Icon
 }
 

@@ -86,6 +86,7 @@ type NWS struct {
 	alerts  []Alert
 	problem error
 	loaded  bool
+	outside bool
 }
 
 func New(o Options) *NWS {
@@ -164,7 +165,9 @@ func (n *NWS) poll(ctx context.Context) {
 	defer cancel()
 	lat, lon, err := n.locate(ctx)
 	var alerts []Alert
-	if err == nil {
+	if err == nil && !covered(lat, lon) {
+		n.outsideOnce()
+	} else if err == nil {
 		alerts, err = n.fetch(ctx, lat, lon)
 	}
 	if err != nil {
@@ -180,6 +183,17 @@ func (n *NWS) poll(ctx context.Context) {
 		n.forget(alerts)
 	}
 	n.redraw()
+}
+
+// outsideOnce notes, once, that home is where the weather service issues no alerts.
+func (n *NWS) outsideOnce() {
+	n.mu.Lock()
+	first := !n.outside
+	n.outside = true
+	n.mu.Unlock()
+	if first {
+		slog.Info("weather alerts cover only the United States; home is outside, so none are asked for")
+	}
 }
 
 func (n *NWS) forget(alerts []Alert) {

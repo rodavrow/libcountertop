@@ -707,6 +707,11 @@ network.lease.now: Bây giờ
 network.mac: Địa chỉ MAC
 network.router: Bộ định tuyến
 network.setting.home_key: Khóa nhà
+network.internet.hint: Chỉ mạng nội bộ chặn mọi thứ bên ngoài mạng của bạn
+network.setting.internet: Truy cập internet
+network.internet.open: Mở
+network.internet.quiet: Yên lặng
+network.internet.local: Chỉ mạng nội bộ
 network.setting.verify: Xác minh chứng chỉ
 network.setting.via_home: Tải qua Home Assistant
 network.ssid: Mạng Wi-Fi

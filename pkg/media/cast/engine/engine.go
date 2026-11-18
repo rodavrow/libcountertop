@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -37,6 +38,7 @@ type Options struct {
 	Display     string
 	Args        []string
 	Nameservers func() []string
+	Quiet       bool
 }
 
 func Install(ctx context.Context, dir string, progress func(at float32)) (string, error) {
@@ -91,6 +93,9 @@ func session(ctx context.Context, o Options) error {
 	if err != nil {
 		return err
 	}
+	if err := writePolicy(etc, o.Quiet); err != nil {
+		return err
+	}
 	target, err := filepath.EvalSymlinks("/etc")
 	if err != nil {
 		return fmt.Errorf("engine: %w", err)
@@ -100,18 +105,9 @@ func session(ctx context.Context, o Options) error {
 	if err := wipe(tmp, ""); err != nil {
 		return err
 	}
-	args := append([]string{
-		"--remote-debugging-address=127.0.0.1",
-		"--remote-debugging-port=" + strconv.Itoa(o.Port),
-		"--ozone-platform=wayland",
-		"--kiosk",
-		"--no-first-run",
-		"--disable-component-update",
-		"--disk-cache-size=" + strconv.Itoa(diskCache),
-	}, o.Args...)
 	p, err := payload.Start(payload.Command{
 		Path: filepath.Join(o.Root, "chromium.sh"),
-		Args: append(args, "about:blank"),
+		Args: append(launchArgs(o.Port, o.Args, o.Quiet), "about:blank"),
 		Env: []string{
 			"CAST_ENGINE_STATE=" + o.State,
 			"WAYLAND_DISPLAY=" + o.Display,
@@ -133,6 +129,103 @@ func session(ctx context.Context, o Options) error {
 		return fmt.Errorf("engine: %w", err)
 	}
 	return errors.New("engine: chromium exited")
+}
+
+// quiet turns off what Chromium fetches on its own: field trials, Safe Browsing lists, push,
+// spell-check dictionaries, translation, optimization hints, Cast discovery and DNS-over-HTTPS
+// probes. An engine started quiet still shows every page it is told to.
+var quiet = []string{
+	"--disable-background-networking",
+	"--disable-sync",
+	"--no-pings",
+	"--disable-domain-reliability",
+	"--metrics-recording-only",
+	"--disable-client-side-phishing-detection",
+	"--disable-default-apps",
+	"--disable-component-extensions-with-background-pages",
+	"--disable-features=Translate,OptimizationHints,MediaRouter,DialMediaRouteProvider," +
+		"AutofillServerCommunication,CertificateTransparencyComponentUpdater,DnsOverHttps",
+}
+
+func launchArgs(port int, extra []string, quieted bool) []string {
+	args := []string{
+		"--remote-debugging-address=127.0.0.1",
+		"--remote-debugging-port=" + strconv.Itoa(port),
+		"--ozone-platform=wayland",
+		"--kiosk",
+		"--no-first-run",
+		"--disable-component-update",
+		"--disk-cache-size=" + strconv.Itoa(diskCache),
+	}
+	if quieted {
+		args = append(args, quiet...)
+	}
+	return mergeFeatures(slices.Concat(args, extra))
+}
+
+const disableFeatures = "--disable-features="
+
+// mergeFeatures folds every --disable-features into one, last: Chromium reads only the last one
+// it is given, so a caller's list would otherwise silently undo the engine's.
+func mergeFeatures(args []string) []string {
+	var out, features []string
+	for _, a := range args {
+		v, ok := strings.CutPrefix(a, disableFeatures)
+		if !ok {
+			out = append(out, a)
+			continue
+		}
+		for f := range strings.SplitSeq(v, ",") {
+			if f != "" && !slices.Contains(features, f) {
+				features = append(features, f)
+			}
+		}
+	}
+	if len(features) == 0 {
+		return out
+	}
+	return append(out, disableFeatures+strings.Join(features, ","))
+}
+
+// policy is Chromium's managed policy, read from /etc/chromium/policies/managed, which the
+// engine sees through the /etc bound over the real one.
+var policy = map[string]any{
+	"MetricsReportingEnabled":     false,
+	"SafeBrowsingProtectionLevel": 0,
+	"NetworkPredictionOptions":    2,
+	"BrowserSignin":               0,
+	"SyncDisabled":                true,
+	"SpellcheckEnabled":           false,
+	"TranslateEnabled":            false,
+	"DnsOverHttpsMode":            "off",
+	"BackgroundModeEnabled":       false,
+	"ComponentUpdatesEnabled":     false,
+	"PasswordManagerEnabled":      false,
+}
+
+const policyPath = "chromium/policies/managed/lanovo.json"
+
+// writePolicy keeps the managed policy in the engine's /etc when it starts quiet, and removes it
+// when it does not, so a policy from a quiet start does not outlive the choice.
+func writePolicy(etc string, quieted bool) error {
+	path := filepath.Join(etc, policyPath)
+	if !quieted {
+		if err := os.Remove(path); err != nil && !errors.Is(err, os.ErrNotExist) {
+			return fmt.Errorf("engine: %w", err)
+		}
+		return nil
+	}
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		return fmt.Errorf("engine: %w", err)
+	}
+	managed, err := json.MarshalIndent(policy, "", "  ")
+	if err != nil {
+		return fmt.Errorf("engine: %w", err)
+	}
+	if err := safe.WriteFile(path, managed, 0o644); err != nil {
+		return fmt.Errorf("engine: %w", err)
+	}
+	return nil
 }
 
 func writeEtc(dir string, nameservers []string) (string, error) {

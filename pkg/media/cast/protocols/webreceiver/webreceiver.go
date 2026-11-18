@@ -43,11 +43,21 @@ type Options struct {
 	Built   func(*Receiver)
 }
 
+// EngineArgs are the engine flags for running Google-hosted receiver pages: those are HTTPS pages
+// on the internet that play media from the local network, which Chromium blocks by default.
 func EngineArgs() []string {
+	return append(LocalEngineArgs(),
+		"--allow-running-insecure-content",
+		"--disable-features=LocalNetworkAccessChecks,BlockInsecurePrivateNetworkRequests,"+
+			"PrivateNetworkAccessSendPreflights",
+	)
+}
+
+// LocalEngineArgs are the engine flags for an engine that only shows pages on the local network,
+// which need none of EngineArgs' web-security exceptions.
+func LocalEngineArgs() []string {
 	return []string{
 		"--autoplay-policy=no-user-gesture-required",
-		"--allow-running-insecure-content",
-		"--disable-features=LocalNetworkAccessChecks,BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessSendPreflights",
 		"--user-agent=Mozilla/5.0 (X11; Linux armv7l) AppleWebKit/537.36 (KHTML, like Gecko) " +
 			"Chrome/150.0.0.0 Safari/537.36 CrKey/1.56.500000",
 	}
@@ -246,7 +256,7 @@ func (r *Receiver) launch(a cast.App) {
 		slog.Info("a cast app waits for the web receiver", "app", a.ID)
 		return
 	}
-	page, err := cast.Describe(context.Background(), r.env.HTTP, a.ID)
+	page, err := r.env.Describe(context.Background(), a.ID)
 	if err == nil && page.URL == "" {
 		err = errors.New("no receiver page")
 	}

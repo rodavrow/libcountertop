@@ -15,6 +15,9 @@ type Env struct {
 	HTTP *http.Client
 	Long *http.Client
 
+	// Cloud says whether the receiver may ask Google about apps; nil means it may.
+	Cloud func() bool
+
 	Video func() playback.Target
 
 	Volume        func() int

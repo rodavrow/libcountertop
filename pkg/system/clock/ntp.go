@@ -43,9 +43,11 @@ func (c *Clock) servers() []string {
 		return pool
 	}
 
-	servers := make([]string, 0, len(offered))
+	// The pool comes last, for when none of the offered servers answers: a gateway named for time
+	// but not serving it must not leave the clock unset.
+	servers := make([]string, 0, len(offered)+len(pool))
 	for _, ip := range offered {
 		servers = append(servers, ip.String())
 	}
-	return servers
+	return append(servers, pool...)
 }

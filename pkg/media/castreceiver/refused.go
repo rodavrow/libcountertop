@@ -1,12 +1,10 @@
 package castreceiver
 
 import (
-	"context"
 	"sync"
 	"time"
 
 	"github.com/ygelfand/libcountertop/pkg/fetch"
-	"github.com/ygelfand/libcountertop/pkg/media/cast"
 	"github.com/ygelfand/libcountertop/pkg/say"
 )
 
@@ -50,8 +48,7 @@ func (s *Server) tellRefused(app string) {
 		return
 	}
 	name := app
-	if c, err := cast.Describe(context.Background(), fetch.Client(describeWait), app); err == nil &&
-		c.Name != "" {
+	if c, err := s.describe(fetch.Client(describeWait), app); err == nil && c.Name != "" {
 		name = c.Name
 	}
 	s.config.Notice(say.F("cast.refused", map[string]any{"Name": name}), "")

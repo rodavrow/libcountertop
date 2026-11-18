@@ -707,6 +707,11 @@ network.lease.now: Now
 network.mac: MAC address
 network.router: Router
 network.setting.home_key: Home key
+network.setting.internet: Internet access
+network.internet.open: Open
+network.internet.quiet: Quiet
+network.internet.local: Local only
+network.internet.hint: Local only blocks everything outside your network
 network.setting.verify: Verify certificates
 network.setting.via_home: Download through Home Assistant
 network.ssid: Wi-Fi network
