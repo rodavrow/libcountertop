@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"runtime/debug"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/ygelfand/libcountertop/pkg/runtime/safe"
@@ -17,6 +18,7 @@ type Group struct {
 	entries  []*entry
 	started  bool
 	stopping bool
+	within   time.Duration
 }
 
 type entry struct {
@@ -28,9 +30,24 @@ type entry struct {
 	err    error
 	since  time.Time
 	starts int
+
+	// supervised and over bracket the entry's supervisor: started, and returned.
+	supervised, over atomic.Bool
 }
 
+// running reports whether the entry's supervisor, and so perhaps its Run, has not returned.
+func (e *entry) running() bool { return e.supervised.Load() && !e.over.Load() }
+
 func New() *Group { return &Group{} }
+
+// StopWithin bounds how long stopping waits for the services to return. A service still running
+// at the deadline is named in the log and left behind, unclosed, and the group stops anyway. Zero,
+// the default, waits for every service however long it takes.
+func (g *Group) StopWithin(d time.Duration) {
+	g.mu.Lock()
+	defer g.mu.Unlock()
+	g.within = d
+}
 
 func (g *Group) Add(svc Service, opts ...Option) {
 	g.mu.Lock()
@@ -128,8 +145,10 @@ func (g *Group) Run(ctx context.Context) error {
 		started = append(started, e)
 
 		wg.Add(1)
+		e.supervised.Store(true)
 		safe.Go("service "+e.svc.Name(), func() {
 			defer wg.Done()
+			defer e.over.Store(true)
 			g.supervise(ctx, e, acquired)
 		})
 	}
@@ -233,11 +252,44 @@ func grow(wait, max time.Duration) time.Duration {
 func (g *Group) stop(started []*entry, wg *sync.WaitGroup) {
 	g.mu.Lock()
 	g.stopping = true
+	within := g.within
 	g.mu.Unlock()
 
-	wg.Wait()
+	if !wait(wg, within) {
+		var running []string
+		for _, e := range started {
+			if e.running() {
+				running = append(running, e.svc.Name())
+			}
+		}
+		slog.Error("services did not stop in time, stopping without them",
+			"services", running, "after", within)
+	}
 	for i := len(started) - 1; i >= 0; i-- {
-		started[i].close()
+		if !started[i].running() {
+			started[i].close()
+		}
+	}
+}
+
+// wait reports whether wg finished within d; zero waits for as long as it takes.
+func wait(wg *sync.WaitGroup, d time.Duration) bool {
+	if d <= 0 {
+		wg.Wait()
+		return true
+	}
+	done := make(chan struct{})
+	go func() {
+		wg.Wait()
+		close(done)
+	}()
+	t := time.NewTimer(d)
+	defer t.Stop()
+	select {
+	case <-done:
+		return true
+	case <-t.C:
+		return false
 	}
 }
 
