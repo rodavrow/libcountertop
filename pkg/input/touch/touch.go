@@ -10,6 +10,7 @@ import (
 
 	"github.com/ygelfand/libcountertop/pkg/display/geometry"
 	"github.com/ygelfand/libcountertop/pkg/hook"
+	"github.com/ygelfand/libcountertop/pkg/runtime/safe"
 	"github.com/ygelfand/libcountertop/pkg/runtime/startup"
 )
 
@@ -165,16 +166,30 @@ func (s *Screen) Run(ctx context.Context) error {
 	stop := context.AfterFunc(ctx, func() { _ = s.Close() })
 	defer stop()
 
-	d := decoder{place: s.place}
-	err := read(f, func(e rawEvent) {
-		for _, c := range d.event(e, time.Now()) {
-			s.Feed(c)
-		}
+	// Some panels' event devices cannot be polled, and closing one does not wake a read already
+	// waiting on it: that read ends only at the next touch. So the reading runs on its own, and Run
+	// returns when the context ends rather than holding up whatever waits for it to.
+	ended := make(chan error, 1)
+	safe.Go("touch read", func() {
+		d := decoder{place: s.place}
+		ended <- read(f, func(e rawEvent) {
+			if ctx.Err() != nil {
+				return
+			}
+			for _, c := range d.event(e, time.Now()) {
+				s.Feed(c)
+			}
+		})
 	})
-	if ctx.Err() != nil {
+	select {
+	case <-ctx.Done():
 		return nil
+	case err := <-ended:
+		if ctx.Err() != nil {
+			return nil
+		}
+		return err
 	}
-	return err
 }
 
 func (s *Screen) Feed(c Contact) {
