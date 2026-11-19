@@ -16,7 +16,36 @@ func (p *BasicPages) Media() *shell.Page {
 		player, pick := p.playerRow()
 		mini, flip := p.miniRow()
 		paused, delay := p.pausedRow()
-		return []menu.Row{player, mini, paused}, []func(int){pick, flip, delay}
+		rows, acts := []menu.Row{player, mini, paused}, []func(int){pick, flip, delay}
+		if p.options.Sponsor != nil {
+			rows = append(rows, menu.Row{
+				Glyph: gogui.IconPlay,
+				Label: say.T("youtube.app"),
+				Kind:  menu.Chevron,
+				Open:  func() shell.View { return p.YouTube() },
+			})
+			acts = append(acts, nil)
+		}
+		return rows, acts
+	}}
+}
+
+func (p *BasicPages) YouTube() *shell.Page {
+	return &shell.Page{Title: say.T("youtube.app"), Build: func() ([]menu.Row, []func(int)) {
+		player := p.options.Player
+		on := player.Background()
+		return []menu.Row{
+			{
+				Label: say.T("youtube.skip"),
+				Kind:  menu.Chevron,
+				Value: p.options.Sponsor.Skips(),
+				Open:  func() shell.View { return p.options.Sponsor.Sponsor() },
+			},
+			{Label: say.T("media.setting.background"), Kind: menu.Toggle, On: on},
+		}, []func(int){
+			nil,
+			func(int) { player.SetBackground(!on) },
+		}
 	}}
 }
 

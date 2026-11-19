@@ -26,26 +26,7 @@ type Pages struct{ options Dependencies }
 
 func New(o Dependencies) *Pages { return &Pages{options: o} }
 
-func (p *Pages) Cast() *shell.Page {
-	return &shell.Page{
-		Title: say.T("features.cast"),
-		Build: func() ([]menu.Row, []func(int)) {
-			c := p.options.Settings.Read()
-			return []menu.Row{
-				{Label: say.T("features.cast"), Kind: menu.Toggle, On: c.Receiver},
-				{
-					Label: say.T("youtube.skip"),
-					Open:  func() shell.View { return p.Sponsor() },
-					Kind:  menu.Chevron,
-					Value: SkipSays(c.YouTube.Skip),
-				},
-			}, []func(int){
-				func(int) { p.options.Receiver.SetReceiver(!c.Receiver) },
-				nil,
-			}
-		},
-	}
-}
+func (p *Pages) Skips() string { return SkipSays(p.options.Settings.Read().YouTube.Skip) }
 
 func (p *Pages) Sponsor() *shell.Page {
 	return &shell.Page{

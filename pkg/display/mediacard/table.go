@@ -34,6 +34,15 @@ func Table() *setting.Table[schema.Media] {
 				},
 				func(m *schema.Media) *bool { return &m.Mini },
 			),
+			setting.Flag(
+				setting.Setting[schema.Media]{
+					Name:  "background",
+					Group: volume.MediaGroup,
+					ID:    "background_play",
+					Icon:  "mdi:headphones",
+				},
+				func(m *schema.Media) *bool { return &m.Background },
+			),
 		},
 		setting.Messages{Text: say.T, Missing: say.Missing},
 	)

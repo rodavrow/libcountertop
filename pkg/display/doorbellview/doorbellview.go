@@ -38,7 +38,13 @@ type Speaker interface {
 }
 
 type Cameras interface {
-	Watch(entity string) bool
+	Stream(
+		ctx context.Context,
+		entity string,
+		out *callvideo.Stream,
+		sound func([]int16),
+		first func(),
+	) string
 	Picture(ctx context.Context, entity string, w, h int) (*image.RGBA, error)
 }
 

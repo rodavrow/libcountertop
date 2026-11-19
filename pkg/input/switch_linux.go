@@ -3,8 +3,6 @@ package input
 import (
 	"encoding/binary"
 	"unsafe"
-
-	"golang.org/x/sys/unix"
 )
 
 // EVIOCGBIT(EV_SW, n) = _IOR('E', 0x20+EV_SW, n), EVIOCGSW(n) = _IOR('E', 0x1b, n), SW_MAX = 0x10.
@@ -16,13 +14,8 @@ const (
 
 func (d *Device) switchBits(req uintptr) (uint64, error) {
 	var b [swBytes]byte
-	if _, _, errno := unix.Syscall(
-		unix.SYS_IOCTL,
-		d.f.Fd(),
-		req,
-		uintptr(unsafe.Pointer(&b[0])),
-	); errno != 0 {
-		return 0, errno
+	if err := ioctl(d.f, req, unsafe.Pointer(&b[0])); err != nil {
+		return 0, err
 	}
 	return binary.LittleEndian.Uint64(b[:]), nil
 }

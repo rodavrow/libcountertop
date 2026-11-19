@@ -31,6 +31,7 @@ type Account struct {
 type Session struct {
 	http    *http.Client
 	account Account
+	visitor *Visitor
 
 	mu    sync.Mutex
 	token Token
@@ -38,6 +39,10 @@ type Session struct {
 
 func NewSession(hc *http.Client, a Account) *Session {
 	return &Session{http: hc, account: a}
+}
+
+func Anonymous(hc *http.Client, v *Visitor) *Session {
+	return &Session{http: hc, visitor: v}
 }
 
 func SignedIn(hc *http.Client, c Client, t Token) *Session {
@@ -92,13 +97,20 @@ func (s *Session) parsed(ctx context.Context, endpoint string, body map[string]a
 }
 
 func (s *Session) post(ctx context.Context, endpoint string, body map[string]any) ([]byte, error) {
-	access, err := s.access(ctx)
-	if err != nil {
-		return nil, err
+	var access, visitor string
+	if s.visitor != nil {
+		visitor = s.visitor.ID()
+	} else {
+		var err error
+		if access, err = s.access(ctx); err != nil {
+			return nil, err
+		}
 	}
-	body["context"] = map[string]any{
-		"client": map[string]string{"clientName": tvClientName, "clientVersion": tvClientVersion},
+	client := map[string]string{"clientName": tvClientName, "clientVersion": tvClientVersion}
+	if visitor != "" {
+		client["visitorData"] = visitor
 	}
+	body["context"] = map[string]any{"client": client}
 	raw, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
@@ -114,13 +126,21 @@ func (s *Session) post(ctx context.Context, endpoint string, body map[string]any
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", cobalt)
-	req.Header.Set("Authorization", "Bearer "+access)
+	if access != "" {
+		req.Header.Set("Authorization", "Bearer "+access)
+	}
+	if visitor != "" {
+		req.Header.Set("X-Goog-Visitor-Id", visitor)
+	}
 	status, got, err := send(s.http, req)
 	if err != nil {
 		return nil, fmt.Errorf("youtube: %s: %w", endpoint, err)
 	}
 	if status/100 != 2 {
 		return nil, fmt.Errorf("youtube: %s: %d", endpoint, status)
+	}
+	if s.visitor != nil {
+		s.visitor.learn(got)
 	}
 	return got, nil
 }

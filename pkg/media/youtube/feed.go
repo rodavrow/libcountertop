@@ -28,6 +28,7 @@ type Video struct {
 	Thumbnail Picture
 	Kind      Kind
 	Watched   int
+	Resume    time.Duration
 }
 
 type Picture struct {
@@ -190,6 +191,7 @@ func (l lockup) video() (Video, bool) {
 
 type endpoint struct {
 	VideoID string `json:"videoId"`
+	Start   int64  `json:"startTimeSeconds"`
 }
 
 func pickThumbnail(list []Picture, upright bool) Picture {
@@ -336,6 +338,7 @@ func (t tile) video() (Video, bool) {
 	switch {
 	case t.OnSelect.Watch != nil:
 		v.ID = t.OnSelect.Watch.VideoID
+		v.Resume = time.Duration(t.OnSelect.Watch.Start) * time.Second
 	case t.OnSelect.Reel != nil:
 		v.ID, v.Kind = t.OnSelect.Reel.VideoID, Short
 	}

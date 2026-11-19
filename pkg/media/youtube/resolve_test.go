@@ -9,8 +9,6 @@ import (
 	"testing"
 	"time"
 
-	yt "github.com/kkdai/youtube/v2"
-
 	"github.com/ygelfand/libcountertop/pkg/media/playback"
 	"github.com/ygelfand/libcountertop/pkg/media/webm"
 )
@@ -45,7 +43,7 @@ func TestAVideoStreamIsVP9(t *testing.T) {
 }
 
 func TestTheTallestVP9ThatTheDecoderKeepsUpWithIsChosen(t *testing.T) {
-	formats := yt.FormatList{
+	formats := []format{
 		{ItagNo: 251, MimeType: `audio/webm; codecs="opus"`, Bitrate: 147426},
 		{
 			ItagNo:   137,
@@ -81,7 +79,7 @@ func TestTheTallestVP9ThatTheDecoderKeepsUpWithIsChosen(t *testing.T) {
 	if f := bestVP9(formats, limits); f == nil || f.ItagNo != 303 {
 		t.Errorf("chose %+v", f)
 	}
-	if f := bestVP9(yt.FormatList{formats[4]}, limits); f == nil || f.ItagNo != 303 {
+	if f := bestVP9([]format{formats[4]}, limits); f == nil || f.ItagNo != 303 {
 		t.Errorf("with only 60 fps on offer, chose %+v", f)
 	}
 	if f := bestVP9(formats[:2], limits); f != nil {
@@ -90,7 +88,7 @@ func TestTheTallestVP9ThatTheDecoderKeepsUpWithIsChosen(t *testing.T) {
 }
 
 func TestTheTallestPictureFollowsThePanel(t *testing.T) {
-	formats := yt.FormatList{
+	formats := []format{
 		{
 			ItagNo:   248,
 			MimeType: `video/webm; codecs="vp9"`,
@@ -111,7 +109,7 @@ func TestTheTallestPictureFollowsThePanel(t *testing.T) {
 }
 
 func TestTenBitVP9IsPassedOver(t *testing.T) {
-	formats := yt.FormatList{
+	formats := []format{
 		{
 			ItagNo:   332,
 			MimeType: `video/webm; codecs="vp9.2"`,
@@ -140,7 +138,7 @@ func TestATrackWithoutAPanelHasNoPictures(t *testing.T) {
 }
 
 func TestTheBestOpusFormatIsChosen(t *testing.T) {
-	formats := yt.FormatList{
+	formats := []format{
 		{ItagNo: 140, MimeType: `audio/mp4; codecs="mp4a.40.2"`, Bitrate: 131104},
 		{ItagNo: 249, MimeType: `audio/webm; codecs="opus"`, Bitrate: 55420},
 		{ItagNo: 251, MimeType: `audio/webm; codecs="opus"`, Bitrate: 147426},
@@ -159,40 +157,31 @@ func TestTheOriginalLanguageIsChosenOverADubOrAProcessedCopy(t *testing.T) {
 	at := func(xtags string) string {
 		return "https://gv.example/videoplayback?itag=251&xtags=" + url.QueryEscape(xtags)
 	}
-	var def, dub yt.Format
-	def.AudioTrack = &struct {
-		DisplayName    string `json:"displayName"`
-		ID             string `json:"id"`
-		AudioIsDefault bool   `json:"audioIsDefault"`
-	}{AudioIsDefault: true}
-	dub.AudioTrack = &struct {
-		DisplayName    string `json:"displayName"`
-		ID             string `json:"id"`
-		AudioIsDefault bool   `json:"audioIsDefault"`
-	}{}
-	format := func(track yt.Format, bitrate int, xtags string) yt.Format {
+	def := format{AudioTrack: &audioTrack{AudioIsDefault: true}}
+	dub := format{AudioTrack: &audioTrack{}}
+	with := func(track format, bitrate int, xtags string) format {
 		track.ItagNo, track.MimeType, track.Bitrate, track.URL = 251, opus, bitrate, at(xtags)
 		return track
 	}
 
 	for _, c := range []struct {
 		name    string
-		formats yt.FormatList
+		formats []format
 		want    int
 	}{
-		{"a louder dub, and processed copies of the original", yt.FormatList{
-			format(dub, 158163, "acont=dubbed:lang=es-US"),
-			format(def, 150000, "acont=original:lang=en-US:drc=1"),
-			format(def, 140000, "acont=original:lang=en-US:vb=1"),
-			format(def, 128000, "acont=original:lang=en-US"),
+		{"a louder dub, and processed copies of the original", []format{
+			with(dub, 158163, "acont=dubbed:lang=es-US"),
+			with(def, 150000, "acont=original:lang=en-US:drc=1"),
+			with(def, 140000, "acont=original:lang=en-US:vb=1"),
+			with(def, 128000, "acont=original:lang=en-US"),
 		}, 128000},
-		{"only the default flag to go on", yt.FormatList{
-			format(dub, 158163, ""),
-			format(def, 120000, ""),
+		{"only the default flag to go on", []format{
+			with(dub, 158163, ""),
+			with(def, 120000, ""),
 		}, 120000},
-		{"one language, one of them compressed", yt.FormatList{
-			format(yt.Format{}, 124446, "drc=1"),
-			format(yt.Format{}, 112788, ""),
+		{"one language, one of them compressed", []format{
+			with(format{}, 124446, "drc=1"),
+			with(format{}, 112788, ""),
 		}, 112788},
 	} {
 		if f := bestOpus(c.formats); f == nil || f.Bitrate != c.want {
@@ -203,13 +192,13 @@ func TestTheOriginalLanguageIsChosenOverADubOrAProcessedCopy(t *testing.T) {
 
 func TestAChunkIsFifteenSecondsOfItsStream(t *testing.T) {
 	for _, at := range []struct {
-		f    yt.Format
+		f    format
 		want int64
 	}{
-		{yt.Format{ItagNo: 251, ContentLength: 3012048, ApproxDurationMs: "173121"}, 260970},
-		{yt.Format{ItagNo: 248, ContentLength: 6934788, ApproxDurationMs: "173080"}, 600990},
-		{yt.Format{ItagNo: 1, ContentLength: 3012048}, chunkFloor},
-		{yt.Format{ItagNo: 2, ContentLength: 1000, ApproxDurationMs: "173121"}, chunkFloor},
+		{format{ItagNo: 251, ContentLength: 3012048, ApproxDurationMs: "173121"}, 260970},
+		{format{ItagNo: 248, ContentLength: 6934788, ApproxDurationMs: "173080"}, 600990},
+		{format{ItagNo: 1, ContentLength: 3012048}, chunkFloor},
+		{format{ItagNo: 2, ContentLength: 1000, ApproxDurationMs: "173121"}, chunkFloor},
 	} {
 		if got := chunkFor(&at.f); got != at.want {
 			t.Errorf("itag %d: chunk %d, want %d", at.f.ItagNo, got, at.want)

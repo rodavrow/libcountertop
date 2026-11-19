@@ -24,9 +24,11 @@ type signing struct {
 type accounts struct {
 	o Options
 
-	mu       sync.Mutex
-	sessions map[string]*youtube.Session
-	signing  *signing
+	mu        sync.Mutex
+	sessions  map[string]*youtube.Session
+	signing   *signing
+	visitor   *youtube.Visitor
+	anonymous *youtube.Session
 }
 
 func newAccounts(o Options) *accounts {
@@ -36,6 +38,58 @@ func newAccounts(o Options) *accounts {
 func (a *accounts) list() []schema.YouTubeAccount { return a.o.Accounts.Read().Accounts }
 
 func (a *accounts) current() (schema.YouTubeAccount, bool) { return a.o.Accounts.Read().Current() }
+
+func (a *accounts) isAnonymous() bool { return a.o.Accounts.Read().Anonymous() }
+
+func (a *accounts) stayAnonymous() { a.choose(schema.YouTubeAnonymous) }
+
+func (a *accounts) profile() *youtube.Visitor {
+	if !a.isAnonymous() {
+		return nil
+	}
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	return a.visitorLocked()
+}
+
+func (a *accounts) chosen() *youtube.Session {
+	acc, ok := a.current()
+	if !ok {
+		return nil
+	}
+	return a.session(acc)
+}
+
+func (a *accounts) anonymousSession() *youtube.Session {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	if a.anonymous == nil {
+		a.anonymous = youtube.Anonymous(a.o.Client, a.visitorLocked())
+	}
+	return a.anonymous
+}
+
+func (a *accounts) visitorLocked() *youtube.Visitor {
+	if a.visitor == nil {
+		a.visitor = youtube.NewVisitor(a.o.Accounts.Read().Visitor, a.keepVisitor)
+	}
+	return a.visitor
+}
+
+func (a *accounts) keepVisitor(id string) {
+	if err := a.o.Accounts.Update(func(y *schema.YouTubeAccounts) { y.Visitor = id }); err != nil {
+		slog.Warn("youtube accounts", "err", err)
+	}
+}
+
+func (a *accounts) reset() {
+	a.mu.Lock()
+	a.visitor, a.anonymous = nil, nil
+	a.mu.Unlock()
+	if err := a.o.Accounts.Update(func(y *schema.YouTubeAccounts) { y.Visitor = "" }); err != nil {
+		slog.Warn("youtube accounts", "err", err)
+	}
+}
 
 func (a *accounts) choose(id string) {
 	if err := a.o.Accounts.Update(func(y *schema.YouTubeAccounts) { y.Chosen = id }); err != nil {

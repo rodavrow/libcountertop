@@ -47,25 +47,6 @@ func TestTheLastVideoWithNothingRelatedHasNoNext(t *testing.T) {
 	}
 }
 
-func TestAPartlyWatchedVideoResumesWhereItWasLeft(t *testing.T) {
-	ten := 10 * time.Minute
-	for _, c := range []struct {
-		watched int
-		length  time.Duration
-		want    time.Duration
-	}{
-		{watched: 40, length: ten, want: 4 * time.Minute},
-		{watched: 0, length: ten},
-		{watched: 96, length: ten},
-		{watched: 100, length: ten},
-		{watched: 40},
-	} {
-		if got := resumeAt(Video{Watched: c.watched, Length: c.length}); got != c.want {
-			t.Errorf("%d%% of %v resumes at %v, want %v", c.watched, c.length, got, c.want)
-		}
-	}
-}
-
 type changes struct {
 	playback.Output
 	n       int
@@ -76,6 +57,8 @@ type changes struct {
 func (c *changes) Changed(playback.Source)   { c.n++ }
 func (c *changes) Handoff(s playback.Source) { c.handed = append(c.handed, s) }
 func (c *changes) Stop(s playback.Source)    { c.stopped = append(c.stopped, s) }
+
+func (c *changes) Position(playback.Source) (time.Duration, bool) { return 0, false }
 
 func TestStoppingAHandedOffVideoClosesItsCard(t *testing.T) {
 	out := &changes{}

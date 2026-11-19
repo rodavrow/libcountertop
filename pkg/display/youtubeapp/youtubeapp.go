@@ -49,6 +49,7 @@ const (
 	shortRows      = 2
 	peek           = 0.5
 	faceKeep       = 32
+	refreshZ       = 1000
 )
 
 type tab int
@@ -105,6 +106,10 @@ type App struct {
 func New(o Options) *App {
 	a := &App{o: o, view: &View{}, topped: map[string]bool{}}
 	a.accounts = newAccounts(o)
+	if o.Resolver != nil {
+		o.Resolver.Profile = a.accounts.profile
+		o.Resolver.Account = a.accounts.chosen
+	}
 	a.feeds = newFeeds(a.redraw)
 	a.titles = newTitles(o.Client, a.redraw)
 	a.thumbs = covers.New(covers.Options{
@@ -121,7 +126,17 @@ func New(o Options) *App {
 		Label:    say.T("youtube.app"),
 		Changed:  a.redraw,
 	})
+	o.Shell.Changed.Listen(a.shown)
 	return a
+}
+
+func (a *App) shown(c shell.Change) {
+	if c.To != shell.View(a.view) || c.From == c.To {
+		return
+	}
+	if key, _, ok := a.viewer(); ok {
+		a.feeds.refresh(key)
+	}
 }
 
 func (a *App) App() apps.App {
@@ -129,12 +144,7 @@ func (a *App) App() apps.App {
 		ID:   schema.AppYouTube,
 		Name: func() string { return say.T("youtube.app") },
 		Icon: "mdi:youtube",
-		Open: func() {
-			if acc, ok := a.accounts.current(); ok {
-				a.feeds.refresh(acc.ID)
-			}
-			a.o.Shell.Push(a.view)
-		},
+		Open: func() { a.o.Shell.Push(a.view) },
 	}
 }
 
@@ -169,16 +179,22 @@ func (a *App) build(w *gogui.Window) gogui.View {
 		Spacing: gogui.NoSpacing,
 		Color:   gogui.CurrentTheme().Cfg.ColorBackground,
 	}
-	if len(a.accounts.list()) == 0 {
+	if _, _, ok := a.viewer(); !ok && len(a.accounts.list()) == 0 {
 		outer.Content = []gogui.View{body, leave}
 		return gogui.Column(outer)
 	}
 	bar := a.tabs(wide)
 	if wide {
 		outer.Content = []gogui.View{bar, body, leave}
+	} else {
+		outer.Content = []gogui.View{body, bar, leave}
+	}
+	if a.refetching() {
+		outer.Content = append(outer.Content, a.busy(w))
+	}
+	if wide {
 		return gogui.Row(outer)
 	}
-	outer.Content = []gogui.View{body, bar, leave}
 	return gogui.Column(outer)
 }
 
@@ -188,7 +204,7 @@ func (a *App) page(w *gogui.Window) gogui.View {
 	if sign, ok := a.accounts.state(); ok {
 		return a.signInPage(w, sign)
 	}
-	acc, ok := a.accounts.current()
+	key, s, ok := a.viewer()
 	if !ok {
 		return a.welcome(w)
 	}
@@ -198,21 +214,67 @@ func (a *App) page(w *gogui.Window) gogui.View {
 	if t == accountsTab {
 		return a.accountsPage(w)
 	}
-	s := a.accounts.session(acc)
-	width := a.width(w)
-	switch t {
-	case searchTab:
-		return a.searchPage(w, acc.ID, s, width)
-	case shortsTab:
-		return a.shortsPage(w, shortsStream(acc.ID), s, width)
-	case subscriptionsTab:
-		return a.subscriptions(w, browsing(acc.ID, youtube.Subscriptions), s, width)
-	case historyTab:
-		return a.listed(w, browsing(acc.ID, youtube.History), s, width)
-	case laterTab:
-		return a.listed(w, browsing(acc.ID, youtube.WatchLater), s, width)
+	if t == searchTab {
+		return a.searchPage(w, key, s, a.width(w))
 	}
-	return a.home(w, browsing(acc.ID, youtube.Home), s, width)
+	anonymous := key == schema.YouTubeAnonymous
+	width := a.width(w)
+	switch {
+	case t == shortsTab:
+		return a.shortsPage(w, shortsStream(key), s, width)
+	case !anonymous && t == subscriptionsTab:
+		return a.subscriptions(w, browsing(key, youtube.Subscriptions), s, width)
+	case !anonymous && t == historyTab:
+		return a.listed(w, browsing(key, youtube.History), s, width)
+	case !anonymous && t == laterTab:
+		return a.listed(w, browsing(key, youtube.WatchLater), s, width)
+	}
+	return a.home(w, browsing(key, youtube.Home), s, width)
+}
+
+func (a *App) refetching() bool {
+	key, _, ok := a.viewer()
+	if !ok {
+		return false
+	}
+	a.mu.Lock()
+	t := a.tab
+	a.mu.Unlock()
+	anonymous := key == schema.YouTubeAnonymous
+	switch {
+	case t == searchTab || t == accountsTab:
+		return false
+	case t == shortsTab:
+		return a.feeds.refetching(shortsStream(key))
+	case !anonymous && t == subscriptionsTab:
+		return a.feeds.refetching(browsing(key, youtube.Subscriptions))
+	case !anonymous && t == historyTab:
+		return a.feeds.refetching(browsing(key, youtube.History))
+	case !anonymous && t == laterTab:
+		return a.feeds.refetching(browsing(key, youtube.WatchLater))
+	}
+	return a.feeds.refetching(browsing(key, youtube.Home))
+}
+
+func (a *App) busy(w *gogui.Window) gogui.View {
+	if a.spinning.CompareAndSwap(false, true) {
+		time.AfterFunc(widgets.SpinStep, func() {
+			a.spinning.Store(false)
+			a.redraw()
+		})
+	}
+	b := shell.Busy{Text: say.T("home.loading")}
+	return widgets.Floating(refreshZ, a.o.UI.Toolkit.Busy(w, b, a.o.UI.Palette()))
+}
+
+func (a *App) viewer() (string, *youtube.Session, bool) {
+	if acc, ok := a.accounts.current(); ok {
+		return acc.ID, a.accounts.session(acc), true
+	}
+	if a.accounts.isAnonymous() {
+		return schema.YouTubeAnonymous, a.accounts.anonymousSession(), true
+	}
+	return "", nil, false
 }
 
 func (a *App) home(w *gogui.Window, k feedKey, s *youtube.Session, width float32) gogui.View {
@@ -222,6 +284,9 @@ func (a *App) home(w *gogui.Window, k feedKey, s *youtube.Session, width float32
 	}
 	items := a.shelfItems(w, k, s, "youtube", f.shelves, width)
 	if len(items) == 0 {
+		if k.account == schema.YouTubeAnonymous {
+			return note(say.T("youtube.unwatched"))
+		}
 		return note(say.T("youtube.empty"))
 	}
 	if f.loading {
@@ -625,6 +690,10 @@ func (a *App) welcome(w *gogui.Window) gogui.View {
 			a.mark(reach * 2.4),
 			gogui.Label(say.T("youtube.app"), head),
 			a.button("youtube-sign-in", say.T("youtube.signin"), true, a.accounts.signIn),
+			a.button("youtube-anonymous", say.T("youtube.stay"), false, func() {
+				a.accounts.stayAnonymous()
+				a.open(homeTab)
+			}),
 		},
 	})
 }
@@ -662,7 +731,7 @@ func (a *App) signInPage(w *gogui.Window, s signing) gogui.View {
 		side := float32(min(vw, vh)) * 0.32
 		qr = widgets.QR(activateURL+url.QueryEscape(s.code.User), side, side)
 	}
-	if len(a.accounts.list()) > 0 || s.problem != "" {
+	if len(a.accounts.list()) > 0 || a.accounts.isAnonymous() || s.problem != "" {
 		words = append(
 			words,
 			a.button("youtube-cancel", say.T("youtube.cancel"), false, a.accounts.stopSigning),
@@ -704,12 +773,9 @@ func (a *App) signInPage(w *gogui.Window, s signing) gogui.View {
 
 func (a *App) accountsPage(w *gogui.Window) gogui.View {
 	reach := style.Reach()
-	current, _ := a.accounts.current()
+	current, signed := a.accounts.current()
 	body := gogui.CurrentTheme().Cfg.TextStyleDef
-	var rows []gogui.View
-	for _, acc := range a.accounts.list() {
-		chosen := acc.ID == current.ID
-		id := acc.ID
+	row := func(id string, face gogui.View, name string, chosen bool, action gogui.View, pick func()) gogui.View {
 		cfg := gogui.ContainerCfg{
 			ID:      "youtube-account-" + id,
 			Sizing:  gogui.FillFit,
@@ -721,22 +787,45 @@ func (a *App) accountsPage(w *gogui.Window) gogui.View {
 		st := body
 		a.o.UI.Toolkit.Tab(&cfg, &st, widgets.Chosen(chosen))
 		cfg.Content = []gogui.View{
-			a.avatar(acc.Name, acc.Photo, reach*1.2),
+			face,
 			gogui.Row(gogui.ContainerCfg{
 				Sizing: gogui.FillFit, Padding: gogui.NoPadding,
-				Content: []gogui.View{gogui.Label(acc.Name, st)},
+				Content: []gogui.View{gogui.Label(name, st)},
 			}),
-			a.icon("youtube-remove-"+id, "mdi:account-remove-outline", func() {
+			action,
+		}
+		return a.o.UI.Toolkit.Pressable(gogui.Row, cfg, func(e gogui.EventCtx) {
+			pick()
+			a.open(homeTab)
+			e.Consume()
+		})
+	}
+	rows := []gogui.View{row(
+		schema.YouTubeAnonymous,
+		a.anonymousFace(reach*1.2),
+		say.T("youtube.anonymous"),
+		a.accounts.isAnonymous(),
+		a.icon("youtube-reset", "mdi:restore", func() {
+			a.accounts.reset()
+			a.feeds.forget(schema.YouTubeAnonymous)
+			a.redraw()
+		}),
+		a.accounts.stayAnonymous,
+	)}
+	for _, acc := range a.accounts.list() {
+		id := acc.ID
+		rows = append(rows, row(
+			id,
+			a.avatar(acc.Name, acc.Photo, reach*1.2),
+			acc.Name,
+			signed && id == current.ID,
+			a.icon("youtube-signout-"+id, "mdi:logout", func() {
 				a.accounts.remove(id)
 				a.feeds.forget(id)
 				a.redraw()
 			}),
-		}
-		rows = append(rows, a.o.UI.Toolkit.Pressable(gogui.Row, cfg, func(e gogui.EventCtx) {
-			a.accounts.choose(id)
-			a.open(homeTab)
-			e.Consume()
-		}))
+			func() { a.accounts.choose(id) },
+		))
 	}
 	rows = append(rows, a.button("youtube-add", say.T("youtube.add"), false, a.accounts.signIn))
 	return a.scroller("youtube-accounts", rows)
@@ -752,7 +841,14 @@ func (a *App) tabs(wide bool) gogui.View {
 	glyph.Size = reach * 0.7
 	small := widgets.Secondary()
 	current, _ := a.accounts.current()
-	key := func(id, icon string, face gogui.View, label string, chosen bool, do func()) gogui.View {
+	anonymous := a.accounts.isAnonymous()
+	key := func(
+		id, icon string,
+		face gogui.View,
+		label string,
+		chosen bool,
+		do func(*gogui.Window),
+	) gogui.View {
 		cfg := gogui.ContainerCfg{
 			ID:      "youtube-tab-" + id,
 			Sizing:  gogui.FillFit,
@@ -768,7 +864,7 @@ func (a *App) tabs(wide bool) gogui.View {
 		}
 		cfg.Content = []gogui.View{face, gogui.Label(label, l)}
 		return a.o.UI.Toolkit.Pressable(gogui.Column, cfg, func(e gogui.EventCtx) {
-			do()
+			do(e.Window)
 			e.Consume()
 		})
 	}
@@ -776,18 +872,25 @@ func (a *App) tabs(wide bool) gogui.View {
 	for _, t := range []struct {
 		tab         tab
 		id, icon, k string
+		list        string
+		signed      bool
 	}{
-		{searchTab, "search", "mdi:magnify", "youtube.search"},
-		{homeTab, "home", "mdi:home-variant-outline", "youtube.home"},
-		{shortsTab, "shorts", "mdi:play-box-multiple-outline", "youtube.shorts"},
-		{subscriptionsTab, "subscriptions", "mdi:youtube-subscription", "youtube.subscriptions"},
-		{historyTab, "history", "mdi:history", "youtube.history"},
-		{laterTab, "later", "mdi:clock-outline", "youtube.later"},
+		{searchTab, "search", "mdi:magnify", "youtube.search", "", false},
+		{homeTab, "home", "mdi:home-variant-outline", "youtube.home", "youtube-home", false},
+		{shortsTab, "shorts", "mdi:play-box-multiple-outline", "youtube.shorts", "youtube-shorts", false},
+		{subscriptionsTab, "subscriptions", "mdi:youtube-subscription", "youtube.subscriptions",
+			"youtube-list-subscriptions", true},
+		{historyTab, "history", "mdi:history", "youtube.history", "youtube-list-" + youtube.History, true},
+		{laterTab, "later", "mdi:clock-outline", "youtube.later", "youtube-list-" + youtube.WatchLater, true},
 	} {
-		keys = append(
-			keys,
-			key(t.id, t.icon, nil, say.T(t.k), open == t.tab, func() { a.open(t.tab) }),
-		)
+		if t.signed && anonymous {
+			continue
+		}
+		icon, do := t.icon, func(*gogui.Window) { a.open(t.tab) }
+		if open == t.tab && t.list != "" {
+			icon, do = "mdi:refresh", func(w *gogui.Window) { a.reload(w, t.list) }
+		}
+		keys = append(keys, key(t.id, icon, nil, say.T(t.k), open == t.tab, do))
 	}
 	if wide {
 		keys = append(
@@ -795,8 +898,20 @@ func (a *App) tabs(wide bool) gogui.View {
 			gogui.Column(gogui.ContainerCfg{Sizing: gogui.FillFill, Padding: gogui.NoPadding}),
 		)
 	}
-	keys = append(keys, key("accounts", "", a.avatar(current.Name, current.Photo, reach*0.7),
-		say.T("youtube.accounts"), open == accountsTab, func() { a.open(accountsTab) }))
+	face := a.avatar(current.Name, current.Photo, reach*0.7)
+	if anonymous {
+		face = a.anonymousFace(reach * 0.7)
+	}
+	keys = append(keys, key(
+		"accounts",
+		"",
+		face,
+		say.T(
+			"youtube.accounts",
+		),
+		open == accountsTab,
+		func(*gogui.Window) { a.open(accountsTab) },
+	))
 	cfg := gogui.ContainerCfg{
 		ID:      "youtube-tabs",
 		Padding: gogui.PaddingSmall,
@@ -811,6 +926,13 @@ func (a *App) tabs(wide bool) gogui.View {
 	}
 	cfg.Sizing = gogui.FillFit
 	return gogui.Row(cfg)
+}
+
+func (a *App) reload(w *gogui.Window, list string) {
+	w.ScrollVerticalTo(effective(w, list), 0)
+	if key, _, ok := a.viewer(); ok {
+		a.feeds.refresh(key)
+	}
 }
 
 func (a *App) open(t tab) {
@@ -848,11 +970,11 @@ func (a *App) skips(ctx context.Context, id string) []sponsorblock.Segment {
 }
 
 func (a *App) related(ctx context.Context, id string) []youtube.Video {
-	acc, ok := a.accounts.current()
+	_, s, ok := a.viewer()
 	if !ok {
 		return nil
 	}
-	return a.feeds.related(ctx, a.accounts.session(acc), id)
+	return a.feeds.related(ctx, s, id)
 }
 
 func (a *App) width(w *gogui.Window) float32 {

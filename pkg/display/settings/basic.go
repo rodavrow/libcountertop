@@ -79,6 +79,7 @@ type BasicDependencies struct {
 	SyncPage              func() shell.View
 	Media                 MediaIdle
 	Player                PlayerStart
+	Sponsor               SponsorPages
 	Home                  DashboardMode
 	HA                    HomeAccess
 	Marks                 ModeMarks

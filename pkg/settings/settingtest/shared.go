@@ -28,6 +28,7 @@ var Shared = Coverage{
 		"Media.Buttons":             "media.buttons",
 		"Media.Player":              "media.player",
 		"Media.Mini":                "media.mini",
+		"Media.Background":          "media.background",
 		"Poster.Enabled":            "poster.on",
 		"Poster.Every":              "poster.every",
 		"Poster.Fit":                "poster.fit",
@@ -254,6 +255,7 @@ var Shared = Coverage{
 
 		"YouTubeAccounts.Device":   "the YouTube app's sign-in device id, made at the first sign-in",
 		"YouTubeAccounts.Chosen":   "the YouTube app's account picker",
+		"YouTubeAccounts.Visitor":  "the YouTube app's anonymous profile, handed out by YouTube and cleared by Reset",
 		"YouTubeAccounts.Accounts": "added by signing in on the YouTube app, removed there",
 	},
 }

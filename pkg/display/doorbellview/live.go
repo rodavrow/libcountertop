@@ -144,10 +144,9 @@ func (l *session) run(ctx context.Context) {
 			if why := l.v.o.Bell.Door(l.slot).VideoWhy; why != "" {
 				l.v.notice(l.slot, say.T("doorbell.why.fallback"), why)
 			}
-			if l.assistant(ctx) {
-				return
+			if why := l.assistant(ctx); why != "" {
+				l.explain(why)
 			}
-			l.explain(say.T("doorbell.why.camera"))
 			<-ctx.Done()
 			return
 		}
@@ -286,18 +285,36 @@ func (l *session) play(pcm []int16) {
 	}
 }
 
-func (l *session) assistant(ctx context.Context) bool {
-	if l.v.o.Cameras == nil {
-		return false
+func (l *session) assistant(ctx context.Context) string {
+	if l.v.o.Cameras == nil || l.v.o.Display == nil {
+		return say.T("doorbell.why.camera")
 	}
 	cctx, cancel := context.WithTimeout(ctx, cameraWait)
 	entity, ok := l.v.o.Bell.Camera(cctx, l.slot)
 	cancel()
-	if !ok || ctx.Err() != nil {
-		return false
+	if ctx.Err() != nil {
+		return ""
 	}
-	l.v.o.Shell.Remove(l.view)
-	return l.v.o.Cameras.Watch(entity)
+	if !ok {
+		return say.T("doorbell.why.camera")
+	}
+	out := callvideo.NewStream(l.v.o.Display, surface.AVC, videoLayer, videoZ)
+	l.mu.Lock()
+	l.video = out
+	l.mu.Unlock()
+	defer func() {
+		out.Close()
+		l.mu.Lock()
+		l.video, l.shown = nil, false
+		l.mu.Unlock()
+		l.v.o.Shell.Redraw()
+	}()
+	return l.v.o.Cameras.Stream(ctx, entity, out, l.play, func() {
+		l.mu.Lock()
+		l.shown, l.why = true, ""
+		l.mu.Unlock()
+		l.v.o.Shell.Redraw()
+	})
 }
 
 func (l *session) explain(why string) {

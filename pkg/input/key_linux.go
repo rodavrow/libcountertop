@@ -1,10 +1,6 @@
 package input
 
-import (
-	"unsafe"
-
-	"golang.org/x/sys/unix"
-)
+import "unsafe"
 
 // EVIOCGBIT(EV_KEY, n) = _IOR('E', 0x20+EV_KEY, n), EVIOCGKEY(n) = _IOR('E', 0x18, n), KEY_MAX = 0x2ff.
 const (
@@ -15,15 +11,8 @@ const (
 
 func (d *Device) keyBits(req uintptr) ([keyBytes]byte, error) {
 	var b [keyBytes]byte
-	if _, _, errno := unix.Syscall(
-		unix.SYS_IOCTL,
-		d.f.Fd(),
-		req,
-		uintptr(unsafe.Pointer(&b[0])),
-	); errno != 0 {
-		return b, errno
-	}
-	return b, nil
+	err := ioctl(d.f, req, unsafe.Pointer(&b[0]))
+	return b, err
 }
 
 func bitSet(b [keyBytes]byte, code uint16) bool {

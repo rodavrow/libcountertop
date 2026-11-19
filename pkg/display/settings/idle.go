@@ -79,6 +79,13 @@ type PlayerStart interface {
 	SetPlayerStart(config.PlayerStart)
 	Mini() bool
 	SetMini(bool)
+	Background() bool
+	SetBackground(bool)
+}
+
+type SponsorPages interface {
+	Sponsor() *shell.Page
+	Skips() string
 }
 type VisualLabel interface{ SetLabel(string) }
 type HomeAccess interface{ Access() ha.Access }

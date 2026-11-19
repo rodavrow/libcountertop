@@ -28,7 +28,7 @@ const (
 	maxArchive = 256 << 20
 	firstToGo  = 1000
 	diskCache  = 16 << 20
-	scratch    = "size=192m,mode=0700"
+	scratch    = "size=512m,mode=0700"
 )
 
 type Options struct {

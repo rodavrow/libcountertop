@@ -13,10 +13,42 @@ type Beneath struct {
 	Stalled  func()
 	Resumed  func()
 
-	mu   sync.Mutex
-	c    *surface.Client
-	kept uint32
-	spec Spec
+	mu    sync.Mutex
+	c     *surface.Client
+	kept  uint32
+	spec  Spec
+	dy    int
+	moved chan struct{}
+}
+
+func (b *Beneath) Slide(dy int) {
+	b.mu.Lock()
+	b.dy = dy
+	moved := b.wake()
+	b.mu.Unlock()
+	select {
+	case moved <- struct{}{}:
+	default:
+	}
+}
+
+func (b *Beneath) Offset() int {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return b.dy
+}
+
+func (b *Beneath) Moved() <-chan struct{} {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	return b.wake()
+}
+
+func (b *Beneath) wake() chan struct{} {
+	if b.moved == nil {
+		b.moved = make(chan struct{}, 1)
+	}
+	return b.moved
 }
 
 type Spec struct {

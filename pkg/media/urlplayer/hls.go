@@ -36,7 +36,7 @@ func (c hlsCloser) Close() error {
 }
 
 func (t *track) openHLS(ctx context.Context) error {
-	o := hls.Options{HTTP: t.client, Resample: t.resample, At: t.at}
+	o := hls.Options{HTTP: t.client, Resample: t.resample, At: t.at, SoundOnly: !t.screen}
 	if t.target != nil {
 		limits := t.target()
 		o.Tallest, o.Fastest = limits.Tallest, limits.Fastest

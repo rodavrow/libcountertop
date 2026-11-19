@@ -15,6 +15,7 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/display/surface"
 	"github.com/ygelfand/libcountertop/pkg/homeassistant"
 	"github.com/ygelfand/libcountertop/pkg/media/rtc"
+	"github.com/ygelfand/libcountertop/pkg/say"
 )
 
 const (
@@ -45,13 +46,62 @@ type Streams interface {
 }
 
 func (c *Cameras) stream(ctx context.Context, cam homeassistant.Camera, live func()) error {
+	out := callvideo.NewStream(c.o.Display, surface.AVC, streamLayer, streamZ)
+	defer out.Close()
+	defer c.unstage(out)
+	return c.feed(ctx, cam.ID, out, c.play(), func() {
+		c.mu.Lock()
+		if c.watching == cam.ID {
+			c.video = out
+		}
+		c.mu.Unlock()
+		live()
+		c.o.Shell.Redraw()
+	})
+}
+
+func (c *Cameras) Stream(
+	ctx context.Context,
+	entity string,
+	out *callvideo.Stream,
+	sound func([]int16),
+	first func(),
+) string {
+	cam, ok := c.camera(entity)
+	if !ok {
+		c.refreshList(ctx)
+		if cam, ok = c.camera(entity); !ok {
+			return say.T("cameras.why.failed")
+		}
+	}
+	if why := c.unstreamable(cam); why != "" {
+		return why
+	}
+	err := c.feed(ctx, cam.ID, out, sound, first)
+	if ctx.Err() != nil {
+		return ""
+	}
+	slog.Warn("camera stream ended", "camera", cam.ID, "err", err)
+	if errors.Is(err, errUndecodable) {
+		c.mu.Lock()
+		c.refused[cam.ID] = struct{}{}
+		c.mu.Unlock()
+	}
+	return reason(err)
+}
+
+func (c *Cameras) feed(
+	ctx context.Context,
+	entity string,
+	out *callvideo.Stream,
+	sound func([]int16),
+	first func(),
+) error {
 	ctx, cancel := context.WithCancelCause(ctx)
 	defer cancel(nil)
 	playing, played := context.WithCancel(ctx)
 	defer played()
 
-	out := callvideo.NewStream(c.o.Display, surface.AVC, streamLayer, streamZ)
-	defer out.Close()
 	var once sync.Once
 	v, err := rtc.NewViewer(
 		func(f rtc.Frame) {
@@ -61,18 +111,12 @@ func (c *Cameras) stream(ctx context.Context, cam homeassistant.Camera, live fun
 				cancel(errUndecodable)
 			case out.Stats().Shown > 0:
 				once.Do(func() {
-					c.mu.Lock()
-					if c.watching == cam.ID {
-						c.video = out
-					}
-					c.mu.Unlock()
-					live()
+					first()
 					played()
-					c.o.Shell.Redraw()
 				})
 			}
 		},
-		c.play(),
+		sound,
 		func(s webrtc.PeerConnectionState) {
 			if s == webrtc.PeerConnectionStateFailed ||
 				s == webrtc.PeerConnectionStateDisconnected {
@@ -84,7 +128,6 @@ func (c *Cameras) stream(ctx context.Context, cam homeassistant.Camera, live fun
 		return err
 	}
 	defer v.Close()
-	defer c.unstage(out)
 
 	octx, ocancel := context.WithTimeout(ctx, offerWait)
 	offer, err := v.Offer(octx)
@@ -93,7 +136,7 @@ func (c *Cameras) stream(ctx context.Context, cam homeassistant.Camera, live fun
 		return err
 	}
 	actx, acancel := context.WithTimeout(ctx, answerWait)
-	session, err := c.o.Streams.OpenWebRTC(actx, cam.ID, offer)
+	session, err := c.o.Streams.OpenWebRTC(actx, entity, offer)
 	acancel()
 	if err != nil {
 		return err
@@ -102,13 +145,13 @@ func (c *Cameras) stream(ctx context.Context, cam homeassistant.Camera, live fun
 		cctx, ccancel := context.WithTimeout(context.Background(), closeWait)
 		defer ccancel()
 		if err := c.o.Streams.CloseWebRTC(cctx, session); err != nil {
-			slog.Debug("camera stream close", "camera", cam.ID, "err", err)
+			slog.Debug("camera stream close", "camera", entity, "err", err)
 		}
 	}()
 	if err := v.Answered(session.Answer); err != nil {
 		return err
 	}
-	slog.Info("camera answered", "camera", cam.ID, "audio", audioOf(session.Answer))
+	slog.Info("camera answered", "camera", entity, "audio", audioOf(session.Answer))
 	select {
 	case <-playing.Done():
 	case <-time.After(firstWait):
@@ -117,7 +160,7 @@ func (c *Cameras) stream(ctx context.Context, cam homeassistant.Camera, live fun
 	if ctx.Err() != nil {
 		return context.Cause(ctx)
 	}
-	slog.Info("camera streaming", "camera", cam.ID)
+	slog.Info("camera streaming", "camera", entity)
 	<-ctx.Done()
 	if cause := context.Cause(ctx); !errors.Is(cause, context.Canceled) {
 		return cause

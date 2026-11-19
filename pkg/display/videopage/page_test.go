@@ -80,3 +80,23 @@ func TestAPictureEndsTheLoadingSpinner(t *testing.T) {
 		t.Errorf("picture %v, spinning %v", look.Picture, look.Spinning)
 	}
 }
+
+func TestOnlyAViewerClosingThePageCountsAsLeaving(t *testing.T) {
+	stack := shell.New()
+	t.Cleanup(stack.Close)
+	left := 0
+	deps := Dependencies{Shell: stack, Volume: &level{}, Left: func() { left++ }}
+
+	shown := New(&fake{}, deps)
+	shown.Show()
+	stack.Remove(shown)
+	if left != 1 {
+		t.Errorf("closing a held page left %d times, want once", left)
+	}
+
+	retired := New(&fake{}, deps)
+	retired.Close()
+	if left != 1 {
+		t.Errorf("closing a released page counted as leaving: %d", left)
+	}
+}

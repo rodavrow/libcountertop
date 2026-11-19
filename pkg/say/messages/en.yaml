@@ -682,6 +682,7 @@ look.title: Visuals
 media.entity.buttons: Volume buttons
 media.entity.duck: Music ducking
 media.group.media: Media
+media.setting.background: Background play
 media.setting.buttons: Volume buttons
 media.setting.duck: Ducking depth
 media.setting.mini: Mini player
@@ -1851,6 +1852,7 @@ youtube.account: YouTube account
 youtube.accounts: Accounts
 youtube.add: Add account
 youtube.again: New code
+youtube.anonymous: Anonymous
 youtube.app: YouTube
 youtube.asking: Getting a code…
 youtube.cancel: Cancel
@@ -1883,7 +1885,9 @@ youtube.signin: Sign in to YouTube
 youtube.skip: Skip segments
 youtube.skip.none: None
 youtube.skip.some: "{{.N}} kinds"
+youtube.stay: Stay anonymous
 youtube.subscriptions: Subscriptions
+youtube.unwatched: Watch something to fill Home
 youtube.waiting: Waiting for approval…
 zone.title: Time zone
 

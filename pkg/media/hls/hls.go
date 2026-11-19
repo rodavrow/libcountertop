@@ -10,6 +10,7 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
+	"slices"
 	"strconv"
 	"strings"
 	"sync"
@@ -27,14 +28,15 @@ import (
 )
 
 type Options struct {
-	HTTP     *http.Client
-	Ask      func(*http.Request)
-	Tallest  int
-	Fastest  int
-	Lead     time.Duration
-	From     time.Time
-	At       time.Duration
-	Resample func(from int) func(stereo []int16) []int16
+	HTTP      *http.Client
+	Ask       func(*http.Request)
+	Tallest   int
+	Fastest   int
+	SoundOnly bool
+	Lead      time.Duration
+	From      time.Time
+	At        time.Duration
+	Resample  func(from int) func(stereo []int16) []int16
 }
 
 type Frame struct {
@@ -84,6 +86,7 @@ const (
 	sizeWait      = 20 * time.Second
 	outRate       = 48000
 	startDistance = 3
+	keyLookback   = 2 * time.Minute
 	playlistMost  = 64 << 20
 	segmentMost   = 32 << 20
 	tsClock       = 90000
@@ -134,9 +137,21 @@ func Open(ctx context.Context, master string, o Options) (*Stream, error) {
 		frames:   make(chan Frame, heldFrames),
 	}
 	s.room = sync.NewCond(&s.mu)
-	go func() { s.fail(s.follow(run, video, true, audio == "")) }()
-	if audio != "" {
+	if !o.SoundOnly && o.From.IsZero() {
+		s.o.From = s.keyedStart(ctx, video)
+	}
+	switch {
+	case o.SoundOnly && audio != "":
+		s.measured()
 		go func() { s.fail(s.follow(run, audio, false, true)) }()
+	case o.SoundOnly:
+		s.measured()
+		go func() { s.fail(s.follow(run, video, false, true)) }()
+	default:
+		go func() { s.fail(s.follow(run, video, true, audio == "")) }()
+		if audio != "" {
+			go func() { s.fail(s.follow(run, audio, false, true)) }()
+		}
 	}
 
 	wait := time.NewTimer(sizeWait)
@@ -287,6 +302,14 @@ func (s *Stream) follow(ctx context.Context, u string, video, audio bool) error 
 				}
 			} else {
 				next = first + start(m, walls, s.o.Lead, s.o.From)
+				slog.Debug(
+					"hls start",
+					"track", p.name,
+					"seq", next,
+					"first", first,
+					"last", last,
+					"lead", s.o.Lead,
+				)
 			}
 		}
 		template, at := "", -1
@@ -297,7 +320,7 @@ func (s *Stream) follow(ctx context.Context, u string, video, audio bool) error 
 			if err != nil {
 				return err
 			}
-			got, err := s.take(ctx, su, walls[next-first], video, audio, p)
+			got, err := s.take(ctx, su, next, false, walls[next-first], video, audio, p)
 			if err != nil {
 				return fmt.Errorf("hls: segment %d: %w", next, err)
 			}
@@ -404,6 +427,70 @@ func start(m *playlist.Media, walls []time.Time, want time.Duration, from time.T
 	return i
 }
 
+func (s *Stream) keyedStart(ctx context.Context, u string) time.Time {
+	m, final, err := s.media(ctx, u)
+	if err != nil || m.Endlist || len(m.Segments) == 0 {
+		return time.Time{}
+	}
+	walls := clock(m)
+	var back time.Duration
+	for i := start(m, walls, s.o.Lead, time.Time{}); i >= 0 && back <= keyLookback; i-- {
+		if walls[i].IsZero() {
+			return time.Time{}
+		}
+		su, err := resolve(final, m.Segments[i].URI)
+		if err != nil {
+			return time.Time{}
+		}
+		data, _, err := s.get(ctx, su, segmentMost)
+		if err != nil {
+			return time.Time{}
+		}
+		if keyed(data) {
+			if i < len(m.Segments)-1 {
+				slog.Debug("hls key frame start", "seq", m.MediaSequence+i, "behind", back)
+			}
+			return walls[i]
+		}
+		back += m.Segments[i].Duration
+	}
+	return time.Time{}
+}
+
+func keyed(data []byte) bool {
+	if len(data) == 0 || data[0] != 0x47 {
+		return true
+	}
+	r := &mpegts.Reader{R: bytes.NewReader(data)}
+	if err := r.Initialize(); err != nil {
+		return false
+	}
+	pictured, found := false, false
+	for _, t := range r.Tracks() {
+		if _, ok := t.Codec.(*tscodecs.H264); !ok {
+			continue
+		}
+		pictured = true
+		r.OnDataH264(t, func(_, _ int64, au [][]byte) error {
+			if h264.IsRandomAccess(au) && slices.ContainsFunc(au, func(n []byte) bool {
+				return len(n) > 0 && h264.NALUType(n[0]&0x1f) == h264.NALUTypeSPS
+			}) {
+				found = true
+			}
+			return nil
+		})
+	}
+	if !pictured {
+		return true
+	}
+	for !found {
+		if err := r.Read(); err != nil {
+			return false
+		}
+	}
+	return true
+}
+
 func into(m *playlist.Media, at time.Duration) (int, time.Duration) {
 	var from time.Duration
 	for i, seg := range m.Segments {
@@ -487,7 +574,7 @@ func (s *Stream) ahead(
 	limit := max(int(time.Duration(max(target, 1))*3*time.Second/missWait), 8)
 	for misses < limit && time.Since(*progress) <= stall {
 		u := strings.Replace(template, mark, fmt.Sprintf("/sq/%d/", *next), 1)
-		got, err := s.take(ctx, u, *wall, video, audio, p)
+		got, err := s.take(ctx, u, *next, true, *wall, video, audio, p)
 		if err != nil {
 			return fmt.Errorf("hls: segment %d: %w", *next, err)
 		}
@@ -513,20 +600,37 @@ func (s *Stream) ahead(
 func (s *Stream) take(
 	ctx context.Context,
 	u string,
+	seq int,
+	numbered bool,
 	wall time.Time,
 	video, audio bool,
 	p *pace,
 ) (bool, error) {
 	began := time.Now()
-	data, err := s.get(ctx, u, segmentMost)
+	data, first, err := s.get(ctx, u, segmentMost)
 	if err != nil {
 		if ctx.Err() != nil {
 			return false, ctx.Err()
 		}
-		slog.Debug("hls segment not there", "err", err)
+		slog.Debug("hls segment not there", "track", p.name, "seq", seq, "err", err)
 		return false, nil
 	}
-	p.segment(time.Since(began))
+	took := time.Since(began)
+	p.segment(took)
+	var age time.Duration
+	if !wall.IsZero() {
+		age = time.Since(wall)
+	}
+	slog.Debug(
+		"hls segment",
+		"track", p.name,
+		"seq", seq,
+		"numbered", numbered,
+		"bytes", len(data),
+		"first", first.Round(time.Millisecond),
+		"body", (took - first).Round(time.Millisecond),
+		"age", age.Round(100*time.Millisecond),
+	)
 	return true, s.segment(data, video, audio, wall)
 }
 
@@ -599,7 +703,7 @@ func (s *Stream) buffered() time.Duration {
 }
 
 func (s *Stream) media(ctx context.Context, u string) (*playlist.Media, string, error) {
-	body, final, err := s.fetch(ctx, u, playlistMost)
+	body, final, _, err := s.fetch(ctx, u, playlistMost)
 	if err != nil {
 		return nil, "", fmt.Errorf("hls: playlist: %w", err)
 	}
@@ -614,29 +718,35 @@ func (s *Stream) media(ctx context.Context, u string) (*playlist.Media, string, 
 	return m, final, nil
 }
 
-func (s *Stream) get(ctx context.Context, u string, most int64) ([]byte, error) {
-	body, _, err := s.fetch(ctx, u, most)
-	return body, err
+func (s *Stream) get(ctx context.Context, u string, most int64) ([]byte, time.Duration, error) {
+	body, _, first, err := s.fetch(ctx, u, most)
+	return body, first, err
 }
 
-func (s *Stream) fetch(ctx context.Context, u string, most int64) ([]byte, string, error) {
+func (s *Stream) fetch(
+	ctx context.Context,
+	u string,
+	most int64,
+) ([]byte, string, time.Duration, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u, nil)
 	if err != nil {
-		return nil, "", err
+		return nil, "", 0, err
 	}
 	if s.o.Ask != nil {
 		s.o.Ask(req)
 	}
+	began := time.Now()
 	resp, err := client(s.o).Do(req)
 	if err != nil {
-		return nil, "", err
+		return nil, "", 0, err
 	}
+	first := time.Since(began)
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return nil, "", &statusError{code: resp.StatusCode, status: resp.Status}
+		return nil, "", first, &statusError{code: resp.StatusCode, status: resp.Status}
 	}
 	body, err := io.ReadAll(io.LimitReader(resp.Body, most))
-	return body, resp.Request.URL.String(), err
+	return body, resp.Request.URL.String(), first, err
 }
 
 func resolve(base, ref string) (string, error) {
@@ -875,21 +985,10 @@ func (s *Stream) picture(at time.Duration, au [][]byte) {
 	if err != nil {
 		return
 	}
-	f := Frame{Data: data, At: at}
-	if s.ended {
-		select {
-		case s.frames <- f:
-			s.keyed = true
-		case <-s.done:
-		}
-		return
-	}
 	select {
-	case s.frames <- f:
+	case s.frames <- Frame{Data: data, At: at}:
 		s.keyed = true
 	case <-s.done:
-	default:
-		s.keyed = false
 	}
 }
 

@@ -22,7 +22,7 @@ const (
 
 	streamAhead = 2
 
-	finishedPercent = 95
+	reportEvery = 20 * time.Second
 )
 
 type PlayerOptions struct {
@@ -78,14 +78,7 @@ func (p *Player) PlayStream(list []Video, index int, more func(context.Context) 
 	p.mu.Lock()
 	p.list, p.index, p.related, p.more = slices.Clone(list), index, nil, more
 	p.mu.Unlock()
-	p.open(list[index], resumeAt(list[index]), false)
-}
-
-func resumeAt(v Video) time.Duration {
-	if v.Watched <= 0 || v.Watched >= finishedPercent || v.Length <= 0 {
-		return 0
-	}
-	return v.Length * time.Duration(v.Watched) / 100
+	p.open(list[index], list[index].Resume, false)
 }
 
 func (p *Player) Stop() {
@@ -170,6 +163,10 @@ func (p *Player) around() (prev, next bool) {
 }
 
 func (p *Player) open(v Video, at time.Duration, held bool) {
+	p.reopen(v, at, held, nil)
+}
+
+func (p *Player) reopen(v Video, at time.Duration, held bool, reports *watch) {
 	p.end(true)
 	ctx, cancel := context.WithCancel(p.ctx)
 	p.mu.Lock()
@@ -184,6 +181,7 @@ func (p *Player) open(v Video, at time.Duration, held bool) {
 			skips = func(ctx context.Context) []sponsorblock.Segment { return p.o.Skips(ctx, v.ID) }
 		}
 		t, err := Open(ctx, p.o.Resolver, v.ID, Options{
+			reports:  reports,
 			At:       at,
 			Skips:    skips,
 			Finished: func() { p.finished(s) },
@@ -217,8 +215,32 @@ func (p *Player) open(v Video, at time.Duration, held bool) {
 			p.o.Output.Pause(s)
 		}
 		p.changed()
+		safe.Go("youtube watch reports", func() { p.reporting(s) })
 		p.relate(ctx, s)
 	})
+}
+
+func (p *Player) reporting(s *source) {
+	tick := time.NewTicker(reportEvery)
+	defer tick.Stop()
+	for {
+		select {
+		case <-p.ctx.Done():
+			return
+		case <-tick.C:
+		}
+		if p.current() != s {
+			return
+		}
+		if !p.paused(s) {
+			p.report(s)
+		}
+	}
+}
+
+func (p *Player) report(s *source) {
+	at, _ := p.o.Output.Position(s)
+	s.report(at)
 }
 
 func (p *Player) relate(ctx context.Context, s *source) {
@@ -277,6 +299,9 @@ func (p *Player) end(handoff bool) {
 	if opening != nil {
 		opening()
 	}
+	if cur != nil {
+		p.report(cur)
+	}
 	switch {
 	case handoff && cur != nil:
 		p.o.Output.Handoff(cur)
@@ -314,7 +339,7 @@ func (p *Player) seek(s *source, to time.Duration) {
 	if p.current() != s {
 		return
 	}
-	p.open(s.video, to, p.paused(s))
+	p.reopen(s.video, to, p.paused(s), s.reports)
 }
 
 func (p *Player) finished(s *source) {
@@ -362,6 +387,7 @@ func (s *source) Showing() playback.Showing {
 		sh.Art = s.video.Thumbnail.URL
 	}
 	sh.HasPrevious, sh.HasNext = s.p.around()
+	sh.Short = s.video.Kind == Short
 	for _, v := range s.p.Upcoming() {
 		sh.Upcoming = append(sh.Upcoming, playback.Upcoming{
 			Title:  v.Title,
@@ -380,8 +406,11 @@ func (s *source) Kind() nowplaying.Kind { return nowplaying.FromApp }
 
 func (s *source) Logo() string { return s.p.o.Logo }
 
-func (s *source) Play()     { s.p.o.Output.Resume(s) }
-func (s *source) Pause()    { s.p.o.Output.Pause(s) }
+func (s *source) Play() { s.p.o.Output.Resume(s) }
+func (s *source) Pause() {
+	s.p.o.Output.Pause(s)
+	s.p.report(s)
+}
 func (s *source) Stop()     { go s.p.stop(s) }
 func (s *source) Next()     { go s.p.step(1) }
 func (s *source) Previous() { go s.p.step(-1) }

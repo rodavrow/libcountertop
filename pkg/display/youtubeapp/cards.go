@@ -283,6 +283,17 @@ func (a *App) avatar(name, photo string, side float32) gogui.View {
 	})
 }
 
+func (a *App) anonymousFace(side float32) gogui.View {
+	st := gogui.CurrentTheme().TextStyleIconMedium
+	st.Family, st.Size, st.Color = icons.Family, side*0.6, pillInk
+	return gogui.Circle(gogui.ContainerCfg{
+		Width: side, Height: side, Sizing: gogui.FixedFixed, Padding: gogui.NoPadding,
+		Color:  widgets.Color(a.o.UI.Palette().Danger),
+		HAlign: gogui.HAlignCenter, VAlign: gogui.VAlignMiddle,
+		Content: []gogui.View{gogui.Label(icons.Glyph(icons.Named("mdi:incognito")), st)},
+	})
+}
+
 func initial(name string) string {
 	r, _ := utf8.DecodeRuneInString(strings.TrimSpace(name))
 	if r == utf8.RuneError {

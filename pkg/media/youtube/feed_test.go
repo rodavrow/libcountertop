@@ -181,6 +181,12 @@ func TestHistoryComesBackAsOneShelfWithProgress(t *testing.T) {
 			"10",
 		) + `],
 	"continuations":[{"nextContinuationData":{"continuation":"older"}}]}}}}}}}`
+	raw = strings.Replace(
+		raw,
+		`{"videoId":"bbbbbbbbbbb"}`,
+		`{"videoId":"bbbbbbbbbbb","startTimeSeconds":372}`,
+		1,
+	)
 	p, err := parsePage([]byte(raw))
 	if err != nil {
 		t.Fatal(err)
@@ -189,8 +195,12 @@ func TestHistoryComesBackAsOneShelfWithProgress(t *testing.T) {
 		t.Fatalf("shelves %+v", p.Shelves)
 	}
 	v := p.Shelves[0].Videos[1]
-	if v.Watched != 10 || v.Length != time.Hour+2*time.Minute+time.Second {
+	if v.Watched != 10 || v.Length != time.Hour+2*time.Minute+time.Second ||
+		v.Resume != 372*time.Second {
 		t.Errorf("second video %+v", v)
+	}
+	if first := p.Shelves[0].Videos[0]; first.Resume != 0 {
+		t.Errorf("first video resumes at %v, want the top", first.Resume)
 	}
 	if p.More != "older" {
 		t.Errorf("more %q", p.More)

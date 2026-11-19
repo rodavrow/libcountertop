@@ -807,6 +807,7 @@ func (c *card) Now() nowplaying.Now {
 
 		LiveWithin: s.LiveWithin,
 		Break:      s.Break,
+		Short:      s.Short,
 		Can:        can,
 	}
 }

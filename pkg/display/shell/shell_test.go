@@ -75,6 +75,35 @@ func TestIdlingKeepsWhatIsHeld(t *testing.T) {
 	}
 }
 
+func TestAnAppUnderAHeldPlayerOutlastsItsTimeout(t *testing.T) {
+	s := &Shell{}
+	app, player := &view{covers: true, wait: AppTimeout}, &view{covers: true}
+	s.Push(app)
+	h := s.Hold(player)
+	s.woke = time.Now().Add(-2 * AppTimeout)
+	s.idled(s.generation)
+	if got := s.Views(); len(got) != 2 || got[0] != app || got[1] != player {
+		t.Fatalf("left %v, want the app under the held player", got)
+	}
+
+	h.Release()
+	s.mu.Lock()
+	armed, since := s.timer != nil, time.Since(s.woke)
+	s.mu.Unlock()
+	if !armed || since > time.Second {
+		t.Fatalf(
+			"after the player went the app's time was not restarted: armed %v, idle %v",
+			armed,
+			since,
+		)
+	}
+	s.woke = time.Now().Add(-AppTimeout)
+	s.idled(s.generation)
+	if got := s.Views(); len(got) != 0 {
+		t.Errorf("the app outlived its own timeout once the player was gone: %v", got)
+	}
+}
+
 func TestQueuedOldIdleCannotCloseRefreshedStack(t *testing.T) {
 	s := New()
 	defer s.Close()

@@ -38,6 +38,7 @@ type Page struct {
 	until    time.Time
 	drawn    string
 	hold     *shell.Hold
+	slide    slide
 }
 
 func (p *Page) Shows(s config.Stream) bool { return s == config.StreamMedia }
@@ -98,6 +99,15 @@ func New(c Controls, o Dependencies) *Page {
 	return &Page{c: c, options: o, loading: true, began: time.Now()}
 }
 
+func (p *Page) Close() {
+	p.mu.Lock()
+	dismissed := p.hold != nil
+	p.mu.Unlock()
+	if dismissed && p.options.Left != nil {
+		p.options.Left()
+	}
+}
+
 func (p *Page) Covers() bool { return true }
 
 func (p *Page) ControlsBelow() bool { return true }
@@ -131,6 +141,9 @@ func (p *Page) SetPicture(on bool) {
 	p.redraw()
 	if on && !up {
 		p.Show()
+	}
+	if on {
+		p.arrive()
 	}
 }
 
@@ -293,4 +306,5 @@ func (p *Page) tick() {
 type Dependencies struct {
 	Shell  *shell.Shell
 	Volume volume.Channel
+	Left   func()
 }

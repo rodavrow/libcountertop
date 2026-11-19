@@ -320,14 +320,18 @@ func (s *Shell) Holding(v View) bool {
 func (s *Shell) Remove(v View) {
 	s.mu.Lock()
 	s.stack = slices.DeleteFunc(s.stack, func(have View) bool { return have == v })
+	held := s.holds[v]
 	delete(s.holds, v)
-	if len(s.stack) == 0 {
+	switch {
+	case len(s.stack) == 0:
 		s.closed = time.Now()
 		s.generation++
 		if s.timer != nil {
 			s.timer.Stop()
 			s.timer = nil
 		}
+	case held:
+		s.rearmLocked()
 	}
 	s.mu.Unlock()
 	s.changed()
@@ -451,10 +455,7 @@ func (s *Shell) idled(generation uint64) {
 	idle := time.Since(s.woke)
 	for i := len(s.stack) - 1; i >= 0; i-- {
 		v := s.stack[i]
-		if s.holds[v] {
-			continue
-		}
-		if expiry(v) > idle {
+		if s.holds[v] || expiry(v) > idle {
 			break
 		}
 		s.stack = slices.Delete(s.stack, i, i+1)
@@ -526,6 +527,10 @@ func (s *Shell) wake() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.showControlsLocked()
+	s.rearmLocked()
+}
+
+func (s *Shell) rearmLocked() {
 	s.generation++
 	if s.timer != nil {
 		s.timer.Stop()
@@ -544,12 +549,10 @@ func (s *Shell) wake() {
 }
 
 func (s *Shell) next() (time.Duration, bool) {
-	for i := len(s.stack) - 1; i >= 0; i-- {
-		if v := s.stack[i]; !s.holds[v] {
-			return expiry(v), true
-		}
+	if len(s.stack) == 0 || s.holds[s.stack[len(s.stack)-1]] {
+		return 0, false
 	}
-	return 0, false
+	return expiry(s.stack[len(s.stack)-1]), true
 }
 
 func expiry(v View) time.Duration {

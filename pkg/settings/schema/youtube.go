@@ -2,9 +2,12 @@ package schema
 
 import "slices"
 
+const YouTubeAnonymous = "anonymous"
+
 type YouTubeAccounts struct {
 	Device   string           `json:"device,omitempty"`
 	Chosen   string           `json:"chosen,omitempty"`
+	Visitor  string           `json:"visitor,omitempty"`
 	Accounts []YouTubeAccount `json:"accounts,omitempty"`
 }
 
@@ -30,7 +33,12 @@ func (y YouTubeAccounts) Find(id string) (YouTubeAccount, bool) {
 	return y.Accounts[i], true
 }
 
+func (y YouTubeAccounts) Anonymous() bool { return y.Chosen == YouTubeAnonymous }
+
 func (y YouTubeAccounts) Current() (YouTubeAccount, bool) {
+	if y.Anonymous() {
+		return YouTubeAccount{}, false
+	}
 	if a, ok := y.Find(y.Chosen); ok {
 		return a, true
 	}

@@ -45,8 +45,11 @@ func (c *Card) Entities() []esphome.Entity      { return c.settings.Entities() }
 func (c *Card) PlayerStart() config.PlayerStart { return c.options.Media.Read().Player }
 func (c *Card) Mini() bool                      { return c.options.Media.Read().Mini }
 
+func (c *Card) Background() bool { return c.options.Media.Read().Background }
+
 func (c *Card) SetPlayerStart(p config.PlayerStart) { c.change("player", string(p)) }
 func (c *Card) SetMini(on bool)                     { c.change("mini", setting.OnOff(on)) }
+func (c *Card) SetBackground(on bool)               { c.change("background", setting.OnOff(on)) }
 
 func (c *Card) change(name, value string) {
 	if err := c.settings.Change(name, value); err != nil {
@@ -207,10 +210,28 @@ func (c *Card) video() bool {
 	return true
 }
 
+func (c *Card) Left() {
+	now := c.options.Player.Now()
+	if !now.Playing && !now.Paused {
+		return
+	}
+	if c.Background() {
+		c.raise()
+		return
+	}
+	if src := c.options.Player.Holder(); src != nil {
+		src.Stop()
+	}
+}
+
 func (c *Card) hold() {
 	if p, ok := c.options.Shell.Top().(Presenter); ok && p.Presents() {
 		return
 	}
+	c.raise()
+}
+
+func (c *Card) raise() {
 	c.mu.Lock()
 	held := c.held
 	c.mu.Unlock()

@@ -9,7 +9,7 @@ import (
 )
 
 func TestUprightVideoIsScaledIntoPlace(t *testing.T) {
-	x, y, m, at := placement(geometry.Rotate0, 1200, 1920, 1920, 1080)
+	x, y, m, at := placement(geometry.Rotate0, 1200, 1920, 1920, 1080, 0)
 	if x != 0 || y != 622 || m != (surface.Matrix{DsDx: 0.625, DsDy: 0.625}) {
 		t.Errorf("position %v,%v matrix %+v", x, y, m)
 	}
@@ -19,12 +19,22 @@ func TestUprightVideoIsScaledIntoPlace(t *testing.T) {
 }
 
 func TestSidewaysVideoIsTurnedIntoPlace(t *testing.T) {
-	x, y, m, at := placement(geometry.Rotate90, 1200, 1920, 1920, 1080)
+	x, y, m, at := placement(geometry.Rotate90, 1200, 1920, 1920, 1080, 0)
 	if x != 60 || y != 1920 || m != (surface.Matrix{DtDx: -1, DtDy: 1}) {
 		t.Errorf("position %v,%v matrix %+v", x, y, m)
 	}
 	if at != (geometry.Rect{X: 60, Y: 0, W: 1080, H: 1920}) {
 		t.Errorf("at %+v", at)
+	}
+}
+
+func TestASlideMovesThePictureNotItsPlace(t *testing.T) {
+	x, y, _, at := placement(geometry.Rotate0, 1200, 1920, 1920, 1080, -300)
+	if x != 0 || y != 322 {
+		t.Errorf("slid position %v,%v, want 0,322", x, y)
+	}
+	if at != (geometry.Rect{X: 0, Y: 622, W: 1200, H: 675}) {
+		t.Errorf("at %+v, want the unslid place", at)
 	}
 }
 

@@ -111,6 +111,13 @@ func (f *feeds) dropSearches(account string) {
 	}
 }
 
+func (f *feeds) refetching(k feedKey) bool {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	cur := f.byKey[k]
+	return cur != nil && cur.loading && cur.loaded && cur.at.IsZero()
+}
+
 func (f *feeds) more(k feedKey, s *youtube.Session, seen int) bool {
 	token, ok := f.claim(k, seen)
 	if !ok {

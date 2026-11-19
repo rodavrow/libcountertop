@@ -16,10 +16,11 @@ import (
 )
 
 const (
-	videoSkip  = 10 * time.Second
-	scrimAlpha = 170
-	nextUnits  = 3.2
-	flickSpeed = 300
+	videoSkip   = 10 * time.Second
+	scrimAlpha  = 170
+	nextColumns = 3
+	nextShare   = 0.4
+	flickSpeed  = 300
 )
 
 var (
@@ -96,7 +97,11 @@ func (pv *Renderer) Video(w *gogui.Window, p *videoplayer.Page) gogui.View {
 	cfg := full
 	cfg.ID = "video"
 	cfg.Content = layers
-	cfg.OnClick = func(e gogui.EventCtx) {
+	cfg.OnGesture = func(e gogui.EventCtx) {
+		if !tapped(e) {
+			drag(e, p, vh)
+			return
+		}
 		if look.Shown {
 			p.Conceal()
 		} else {
@@ -105,27 +110,36 @@ func (pv *Renderer) Video(w *gogui.Window, p *videoplayer.Page) gogui.View {
 		e.Consume()
 		e.Window.InvalidateLayout()
 	}
-	cfg.OnGesture = func(e gogui.EventCtx) { flick(e, look.Controls) }
 	return gogui.Column(cfg)
 }
 
-func flick(e gogui.EventCtx, c videoplayer.Controls) {
+func tapped(e gogui.EventCtx) bool {
+	return e.Event != nil && e.Event.GestureType == gogui.GestureTap
+}
+
+func drag(e gogui.EventCtx, p *videoplayer.Page, height int) {
 	ev := e.Event
-	if c == nil || ev == nil || ev.GestureType != gogui.GestureSwipe {
+	if ev == nil || !p.Slides() {
 		return
 	}
-	vx, vy := ev.VelocityX, ev.VelocityY
-	if vy*vy <= vx*vx || vy*vy < flickSpeed*flickSpeed {
-		return
-	}
-	can := c.Now().Can
 	switch {
-	case vy < 0 && can.Has(nowplaying.CanNext):
-		c.Next()
-	case vy > 0 && can.Has(nowplaying.CanPrevious):
-		c.Previous()
-	default:
+	case ev.GestureType == gogui.GestureSwipe:
+		fling := float32(0)
+		if ev.VelocityY*ev.VelocityY > ev.VelocityX*ev.VelocityX &&
+			ev.VelocityY*ev.VelocityY >= flickSpeed*flickSpeed {
+			fling = ev.VelocityY
+		}
+		p.DragTo(ev.CentroidY, height)
+		p.DragEnd(fling, height)
+	case ev.GestureType != gogui.GesturePan:
 		return
+	case ev.GesturePhase == gogui.GesturePhaseBegan:
+		p.DragStart(ev.CentroidY)
+	case ev.GesturePhase == gogui.GesturePhaseChanged:
+		p.DragTo(ev.CentroidY, height)
+	default:
+		p.DragTo(ev.CentroidY, height)
+		p.DragEnd(0, height)
 	}
 	e.Consume()
 }
@@ -289,7 +303,7 @@ func (pv *Renderer) videoBand(
 			pv.videoVolume(side),
 			pv.videoTransport(p, now, c),
 			gogui.Row(
-				gogui.ContainerCfg{Sizing: gogui.FixedFit, Width: side, Padding: gogui.NoPadding},
+				gogui.ContainerCfg{Sizing: gogui.FillFit, MaxWidth: side, Padding: gogui.NoPadding},
 			),
 		},
 	}))
@@ -305,9 +319,17 @@ func (pv *Renderer) videoBand(
 		Spacing: gogui.SpacingMedium,
 		Color:   videoScrim,
 		Content: rows,
-		OnClick: func(e gogui.EventCtx) {
-			p.Linger()
-			e.Consume()
+		OnGesture: func(e gogui.EventCtx) {
+			if e.Event == nil {
+				return
+			}
+			switch e.Event.GestureType {
+			case gogui.GestureTap:
+				p.Linger()
+				e.Consume()
+			case gogui.GestureSwipe:
+				e.Consume()
+			}
 		},
 	})
 }
@@ -318,32 +340,44 @@ func (pv *Renderer) videoNext(
 	queue []nowplaying.Track,
 	quiet gogui.TextStyle,
 ) gogui.View {
-	cardW := reach() * nextUnits
+	vw, vh := w.WindowSize()
+	t := gogui.CurrentTheme()
+	gap := t.Cfg.SpacingMedium
+	bar := t.ScrollbarStyle
+	gutter := bar.Size + 2*bar.GapEdge
+	pad := t.Cfg.PaddingLarge
+	room := float32(vw) - pad.Left - pad.Right - gutter
+	cardW := (room - gap*(nextColumns-1)) / nextColumns
 	cardH := cardW * 9 / 16
-	ink := gogui.CurrentTheme().TextStyleDef
+	ink := t.TextStyleDef
 	ink.Color = videoInk
 	cards := make([]gogui.View, 0, len(queue))
 	for i, tr := range queue {
-		art := gogui.View(gogui.Column(gogui.ContainerCfg{
-			Width: cardW, Height: cardH, Sizing: gogui.FixedFixed, Padding: gogui.NoPadding,
-			Radius: gogui.RadiusMedium, Color: videoScrim,
-		}))
+		box := gogui.ContainerCfg{
+			Width:   cardW,
+			Height:  cardH,
+			Sizing:  gogui.FixedFixed,
+			Padding: gogui.NoPadding,
+			Radius:  gogui.RadiusMedium,
+			Color:   videoScrim,
+			Clip:    true,
+			HAlign:  gogui.HAlignCenter,
+			VAlign:  gogui.VAlignMiddle,
+		}
 		if img := ui.Picture(tr.Art, tr.ArtID); img != nil {
 			iw, ih := img.Size()
-			h := cardW * float32(ih) / float32(max(iw, 1))
-			art = gogui.Column(gogui.ContainerCfg{
-				Width:   cardW,
-				Height:  cardH,
-				Sizing:  gogui.FixedFixed,
-				Padding: gogui.NoPadding,
-				Radius:  gogui.RadiusMedium,
-				Clip:    true,
-				VAlign:  gogui.VAlignMiddle,
-				Content: []gogui.View{
-					gogui.Image(gogui.ImageCfg{Src: Still(img), Width: cardW, Height: h}),
-				},
-			})
+			fw, fh := cardW/float32(max(iw, 1)), cardH/float32(max(ih, 1))
+			s := max(fw, fh)
+			if ih > iw {
+				s, box.Color = min(fw, fh), gogui.ColorTransparent
+			}
+			box.Content = []gogui.View{gogui.Image(gogui.ImageCfg{
+				Src:    Still(img),
+				Width:  float32(iw) * s,
+				Height: float32(ih) * s,
+			})}
 		}
+		art := gogui.Column(box)
 		play := tr.Play
 		cards = append(cards, pv.options.UI.Presses.Pressable(gogui.Column, gogui.ContainerCfg{
 			ID:      fmt.Sprintf("video-next-%d", i),
@@ -363,22 +397,34 @@ func (pv *Renderer) videoNext(
 			}
 		}))
 	}
+	rows := make([]gogui.View, 0, (len(cards)+nextColumns-1)/nextColumns)
+	for len(cards) > 0 {
+		n := min(nextColumns, len(cards))
+		rows = append(rows, gogui.Row(gogui.ContainerCfg{
+			Sizing:  gogui.FillFit,
+			Padding: gogui.NoPadding,
+			Spacing: gogui.SpacingMedium,
+			Content: cards[:n],
+		}))
+		cards = cards[n:]
+	}
 	return gogui.Column(gogui.ContainerCfg{
 		Sizing:  gogui.FillFit,
 		Padding: gogui.NoPadding,
 		Spacing: gogui.SpacingSmall,
 		Content: []gogui.View{
 			gogui.Label(say.T("player.next"), quiet),
-			gogui.Row(gogui.ContainerCfg{
+			gogui.Column(gogui.ContainerCfg{
 				ID:         "video-next",
 				Sizing:     gogui.FillFit,
-				Padding:    gogui.NoPadding,
+				MaxHeight:  float32(vh) * nextShare,
+				Padding:    gogui.NewPadding(0, gutter, 0, 0),
 				Spacing:    gogui.SpacingMedium,
 				Scrollable: true,
-				ScrollMode: gogui.ScrollHorizontalOnly,
+				ScrollMode: gogui.ScrollVerticalOnly,
 				Clip:       true,
 				OnGesture:  pv.options.UI.HoldStill,
-				Content:    cards,
+				Content:    rows,
 			}),
 		},
 	})
@@ -522,8 +568,7 @@ func (pv *Renderer) videoTransport(
 	}
 	return gogui.Row(
 		gogui.ContainerCfg{
-			Sizing:  gogui.FillFit,
-			HAlign:  gogui.HAlignCenter,
+			Sizing:  gogui.FitFit,
 			VAlign:  gogui.VAlignMiddle,
 			Spacing: gogui.SpacingPx(reach()),
 			Content: buttons,
@@ -535,11 +580,11 @@ func (pv *Renderer) videoVolume(width float32) gogui.View {
 	speaker := gogui.CurrentTheme().TextStyleIconLarge
 	speaker.Color, speaker.Size = videoInk, reach()*0.7
 	return gogui.Row(gogui.ContainerCfg{
-		Sizing:  gogui.FixedFit,
-		Width:   width,
-		Padding: gogui.NoPadding,
-		VAlign:  gogui.VAlignMiddle,
-		Spacing: gogui.SpacingMedium,
+		Sizing:   gogui.FillFit,
+		MaxWidth: width,
+		Padding:  gogui.NoPadding,
+		VAlign:   gogui.VAlignMiddle,
+		Spacing:  gogui.SpacingMedium,
 		Content: []gogui.View{
 			gogui.Label(gogui.IconSpeaker, speaker),
 			pv.options.UI.Grip(pv.kit.Slider(gogui.SliderCfg{

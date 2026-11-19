@@ -176,6 +176,7 @@ func (s *Screen) hold(c playout.Controls) (*videopage.Page, *video.Beneath) {
 		view := s.view
 		s.under.Stalled = func() { view.SetLoading(true) }
 		s.under.Resumed = func() { view.SetLoading(false) }
+		view.SlideWith(s.under.Slide)
 		done := make(chan struct{})
 		s.viewDone = done
 		go func() { defer close(done); view.Run(ctx) }()

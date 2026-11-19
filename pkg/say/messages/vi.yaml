@@ -682,6 +682,7 @@ look.title: Hiệu ứng
 media.entity.buttons: Nút âm lượng
 media.entity.duck: Giảm âm nhạc
 media.group.media: Media
+media.setting.background: Phát trong nền
 media.setting.buttons: Nút âm lượng
 media.setting.duck: Độ giảm âm
 media.setting.mini: Trình phát thu nhỏ
@@ -1851,6 +1852,7 @@ youtube.account: Tài khoản YouTube
 youtube.accounts: Tài khoản
 youtube.add: Thêm tài khoản
 youtube.again: Mã mới
+youtube.anonymous: Ẩn danh
 youtube.app: YouTube
 youtube.asking: Đang lấy mã…
 youtube.cancel: Hủy
@@ -1883,7 +1885,9 @@ youtube.signin: Đăng nhập YouTube
 youtube.skip: Bỏ qua phân đoạn
 youtube.skip.none: Không
 youtube.skip.some: "{{.N}} loại"
+youtube.stay: Tiếp tục ẩn danh
 youtube.subscriptions: Kênh đăng ký
+youtube.unwatched: Xem một video để có nội dung cho Trang chủ
 youtube.waiting: Đang chờ xác nhận…
 zone.title: Múi giờ
 feedback.group.feedback: Âm thanh phản hồi

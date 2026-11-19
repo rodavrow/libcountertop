@@ -70,7 +70,9 @@ func (p *Port) configure(baud uint32, flow bool) error {
 	t.Cc[unix.VMIN] = 0
 	t.Cc[unix.VTIME] = 1
 
-	if err := unix.IoctlSetTermios(int(p.f.Fd()), unix.TCSETS, &t); err != nil {
+	if err := p.control(
+		func(fd int) error { return unix.IoctlSetTermios(fd, unix.TCSETS, &t) },
+	); err != nil {
 		return fmt.Errorf("ble: setting the line: %w", err)
 	}
 	p.baud, p.flow = baud, flow
@@ -90,7 +92,11 @@ func (p *Port) Drain(within time.Duration) error {
 	deadline := time.Now().Add(within)
 
 	for {
-		left, err := unix.IoctlGetInt(int(p.f.Fd()), unix.TIOCOUTQ)
+		var left int
+		err := p.control(func(fd int) (err error) {
+			left, err = unix.IoctlGetInt(fd, unix.TIOCOUTQ)
+			return err
+		})
 		if err != nil {
 			return fmt.Errorf("ble: asking what is left to send: %w", err)
 		}
@@ -109,10 +115,25 @@ func (p *Port) Flush() error {
 	if !p.tty {
 		return nil
 	}
-	return unix.IoctlSetInt(int(p.f.Fd()), unix.TCFLSH, unix.TCIOFLUSH)
+	return p.control(
+		func(fd int) error { return unix.IoctlSetInt(fd, unix.TCFLSH, unix.TCIOFLUSH) },
+	)
 }
 
 func (p *Port) Close() error { return p.f.Close() }
+
+// File.Fd puts the descriptor in blocking mode: deadlines stop working and Close no longer wakes a Read.
+func (p *Port) control(f func(fd int) error) error {
+	conn, err := p.f.SyscallConn()
+	if err != nil {
+		return err
+	}
+	var ferr error
+	if err := conn.Control(func(fd uintptr) { ferr = f(int(fd)) }); err != nil {
+		return err
+	}
+	return ferr
+}
 
 // /dev/stpbt returns zero bytes instead of EAGAIN, which os.File reports as EOF.
 func (p *Port) readSome(buf []byte) (int, error) {

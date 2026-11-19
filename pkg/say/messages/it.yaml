@@ -682,6 +682,7 @@ look.title: Grafica
 media.entity.buttons: Pulsanti volume
 media.entity.duck: Abbassamento musica
 media.group.media: Contenuti multimediali
+media.setting.background: Riproduzione in background
 media.setting.buttons: Pulsanti volume
 media.setting.duck: Livello abbassamento
 media.setting.mini: Mini lettore
@@ -1851,6 +1852,7 @@ youtube.account: Account YouTube
 youtube.accounts: Account
 youtube.add: Aggiungi account
 youtube.again: Nuovo codice
+youtube.anonymous: Anonimo
 youtube.app: YouTube
 youtube.asking: Richiesta del codice…
 youtube.cancel: Annulla
@@ -1883,7 +1885,9 @@ youtube.signin: Accedi a YouTube
 youtube.skip: Salta segmenti
 youtube.skip.none: Nessuno
 youtube.skip.some: "{{.N}} tipi"
+youtube.stay: Resta anonimo
 youtube.subscriptions: Iscrizioni
+youtube.unwatched: Guarda qualcosa per riempire Home
 youtube.waiting: In attesa di conferma…
 zone.title: Fuso orario
 

@@ -35,10 +35,19 @@ func fit(fw, fh, w, h int) geometry.Rect {
 
 func placement(
 	o geometry.Orientation,
-	fw, fh, w, h int,
+	fw, fh, w, h, dy int,
 ) (x, y float32, m surface.Matrix, at geometry.Rect) {
 	vw, vh := o.Size(fw, fh)
-	return o.Place(fw, fh, fit(vw, vh, w, h), w, h)
+	r := fit(vw, vh, w, h)
+	_, _, _, at = o.Place(fw, fh, r, w, h)
+	r.Y += dy
+	x, y, m, _ = o.Place(fw, fh, r, w, h)
+	return x, y, m, at
+}
+
+type slider interface {
+	Offset() int
+	Moved() <-chan struct{}
 }
 
 func codecOf(fourcc uint32) (uint32, error) {
@@ -156,8 +165,17 @@ func (pl Player) On(
 	fw, fh := p.Native()
 	var rep videostream.Report
 	visible := reused
+	sl, slides := p.(slider)
+	var moved <-chan struct{}
+	if slides {
+		moved = sl.Moved()
+	}
 	face := func(o geometry.Orientation) error {
-		x, y, m, at := placement(o, fw, fh, want.W, want.H)
+		dy := 0
+		if slides {
+			dy = sl.Offset()
+		}
+		x, y, m, at := placement(o, fw, fh, want.W, want.H, dy)
 		rep.Orientation, rep.At = o, at
 		return c.VideoPlace(id, x, y, m, videoZ, visible)
 	}
@@ -261,6 +279,10 @@ func (pl Player) On(
 			select {
 			case <-ctx.Done():
 				return pl, ctx.Err()
+			case <-moved:
+				if err := face(rep.Orientation); err != nil {
+					return pl, err
+				}
 			case <-time.After(full):
 			}
 		}
@@ -278,6 +300,11 @@ func (pl Player) On(
 			return rep, err
 		case <-changed:
 			ctrl.update(p.Orientation())
+			continue
+		case <-moved:
+			if err := face(rep.Orientation); err != nil {
+				return rep, err
+			}
 			continue
 		case <-look.C:
 		case f, ok := <-next:

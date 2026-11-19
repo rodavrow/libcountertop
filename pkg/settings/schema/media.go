@@ -6,10 +6,11 @@ import (
 )
 
 type Media struct {
-	DuckDB  float64       `json:"duck_db"`
-	Buttons VolumeButtons `json:"buttons"`
-	Player  PlayerStart   `json:"player"`
-	Mini    bool          `json:"mini"`
+	DuckDB     float64       `json:"duck_db"`
+	Buttons    VolumeButtons `json:"buttons"`
+	Player     PlayerStart   `json:"player"`
+	Mini       bool          `json:"mini"`
+	Background bool          `json:"background"`
 }
 
 func DefaultMedia() Media {

@@ -34,6 +34,7 @@ const (
 )
 
 type Options struct {
+	reports  *watch
 	At       time.Duration
 	Skips    func(ctx context.Context) []sponsorblock.Segment
 	Finished func()
@@ -62,6 +63,8 @@ type Track struct {
 
 	live *hls.Stream
 	base time.Time
+
+	reports *watch
 }
 
 var errJumping = errors.New("youtube: jumping past a segment")
@@ -84,7 +87,7 @@ func Open(ctx context.Context, r *Resolver, id string, o Options) (*Track, error
 		skips <- o.Skips(ctx)
 	}()
 
-	info, stream, err := r.Audio(ctx, id)
+	info, stream, reports, err := r.audio(ctx, id, o.reports)
 	if l, ok := errors.AsType[*Live](err); ok {
 		return openLive(ctx, r, l, o)
 	}
@@ -97,6 +100,7 @@ func Open(ctx context.Context, r *Resolver, id string, o Options) (*Track, error
 		return nil, err
 	}
 	t.skips = <-skips
+	t.reports = reports
 	return t, nil
 }
 
@@ -112,19 +116,23 @@ func openLive(ctx context.Context, r *Resolver, l *Live, o Options) (*Track, err
 		ctx,
 		l.HLS,
 		hls.Options{
-			HTTP:     r.http,
-			Ask:      ask,
-			Tallest:  limits.Tallest,
-			Fastest:  limits.Fastest,
-			Lead:     liveLead,
-			From:     from,
-			Resample: r.Resample,
+			HTTP:      r.http,
+			Ask:       ask,
+			Tallest:   limits.Tallest,
+			Fastest:   limits.Fastest,
+			SoundOnly: r.target == nil,
+			Lead:      liveLead,
+			From:      from,
+			Resample:  r.Resample,
 		},
 	)
 	if err != nil {
 		return nil, fmt.Errorf("youtube: %s: %w", l.Info.ID, err)
 	}
-	t := &Track{info: l.Info, r: r, o: o, live: s}
+	t := &Track{info: l.Info, r: r, o: o, live: s, reports: o.reports}
+	if t.reports == nil {
+		t.reports = r.report(l.Info.ID)
+	}
 	if oldest, _, ok := s.Window(); ok {
 		t.base = oldest
 	}
@@ -370,6 +378,12 @@ func (t *Track) Showing() playback.Showing {
 		s.LiveWithin = liveLead + liveSlack
 	}
 	return s
+}
+
+func (t *Track) report(at time.Duration) {
+	if t.reports != nil && t.live == nil {
+		t.reports.report(at)
+	}
 }
 
 func (t *Track) Close() {

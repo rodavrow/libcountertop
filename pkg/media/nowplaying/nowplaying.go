@@ -38,6 +38,7 @@ type Now struct {
 	Shuffle bool
 	Repeat  Repeat
 	Liked   bool
+	Short   bool
 
 	Can Controls
 }
