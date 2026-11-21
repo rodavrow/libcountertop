@@ -507,18 +507,45 @@ func (h *Controller) Relay(
 	if !req.IsEvent {
 		return h.call(ctx, req)
 	}
+	if err := sendable(req); err != nil {
+		return nil, err
+	}
 	h.mu.Lock()
 	targets, err := h.targets()
 	h.mu.Unlock()
 	if err != nil {
 		return nil, err
 	}
+	h.deliver(targets, req)
+	return nil, nil
+}
+
+// maxRequest is the most one Noise frame carries: 65,535 bytes less a 4-byte header and a
+// 16-byte tag.
+const maxRequest = 0xffff - 4 - 16
+
+// sendable refuses a request no connection can carry. A failed send is how a dead connection is
+// told from a live one, so a request that fails on its own account must never reach one.
+func sendable(req *api.HomeassistantActionRequest) error {
+	raw, err := proto.Marshal(req)
+	if err != nil {
+		return fmt.Errorf("homeassistant: %s: %w", req.GetService(), err)
+	}
+	if len(raw) > maxRequest {
+		return fmt.Errorf("%w: %s is %d bytes, at most %d",
+			ErrTooLarge, req.GetService(), len(raw), maxRequest)
+	}
+	return nil
+}
+
+func (h *Controller) deliver(targets []sender, req *api.HomeassistantActionRequest) {
 	for _, t := range targets {
 		if err := t.Send(req); err != nil {
+			slog.Warn("Home Assistant link dropped, sending to it failed",
+				"action", req.GetService(), "err", err)
 			h.lost(t)
 		}
 	}
-	return nil, nil
 }
 
 func (h *Controller) targets() ([]sender, error) {
@@ -562,11 +589,10 @@ func (h *Controller) send(
 	}()
 
 	req.CallId = id
-	for _, t := range targets {
-		if err := t.Send(req); err != nil {
-			h.lost(t)
-		}
+	if err := sendable(req); err != nil {
+		return nil, err
 	}
+	h.deliver(targets, req)
 
 	select {
 	case r := <-p.ch:

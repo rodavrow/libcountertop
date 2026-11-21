@@ -19,9 +19,13 @@ type fake struct {
 	mu     sync.Mutex
 	answer func(*api.HomeassistantActionRequest) *api.HomeassistantActionResponse
 	fail   error
+	sent   int
 }
 
 func (f *fake) Send(m proto.Message) error {
+	f.mu.Lock()
+	f.sent++
+	f.mu.Unlock()
 	if f.fail != nil {
 		return f.fail
 	}
@@ -207,6 +211,48 @@ func TestSendFailureDisconnects(t *testing.T) {
 	}
 	if heard != Unknown {
 		t.Errorf("heard %s after the hold, want unknown", heard)
+	}
+}
+
+func (f *fake) sends() int {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	return f.sent
+}
+
+// One Noise frame carries at most 65,515 bytes, so a connection refuses anything larger.
+var tooLarge = map[string]string{"changes": strings.Repeat("x", 70_000)}
+
+func TestRegressionARequestTooLargeToSendKeepsTheLink(t *testing.T) {
+	h, f := connected(answering(`{"response":"ok"}`))
+	set(h, f, Allowed)
+
+	err := h.Call(context.Background(), "echolocal.voices", tooLarge)
+
+	if !errors.Is(err, ErrTooLarge) {
+		t.Fatalf("an oversized request said %v, want ErrTooLarge", err)
+	}
+	if n := f.sends(); n != 0 {
+		t.Errorf("the oversized request was sent %d times, want it held back", n)
+	}
+	if err := h.Call(context.Background(), "light.turn_on", nil); err != nil {
+		t.Errorf("the next call said %v, want the link kept", err)
+	}
+}
+
+func TestRegressionAnEventTooLargeToSendKeepsTheLink(t *testing.T) {
+	h, f := connected(answering(`{"response":"ok"}`))
+	set(h, f, Allowed)
+	event := request("esphome.countertop_actions", tooLarge, nil, "")
+	event.IsEvent = true
+
+	_, err := h.Relay(context.Background(), event)
+
+	if !errors.Is(err, ErrTooLarge) {
+		t.Fatalf("an oversized event said %v, want ErrTooLarge", err)
+	}
+	if err := h.Call(context.Background(), "light.turn_on", nil); err != nil {
+		t.Errorf("the next call said %v, want the link kept", err)
 	}
 }
 
