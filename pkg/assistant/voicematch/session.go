@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log/slog"
+	"reflect"
 	"slices"
 	"strconv"
 	"strings"
@@ -146,7 +147,12 @@ func (s *Service) Accept() error {
 	return err
 }
 
+// Save stores a voice and queues it for Home Assistant. Saving one exactly as it already stands
+// does neither: every queued save carries the whole voice.
 func (s *Service) Save(p Profile) error {
+	if slices.ContainsFunc(s.Profiles(), func(q Profile) bool { return reflect.DeepEqual(q, p) }) {
+		return nil
+	}
 	profiles := slices.DeleteFunc(s.Profiles(), func(q Profile) bool { return q.ID == p.ID })
 	if err := s.SetProfiles(append(profiles, p)); err != nil {
 		return err

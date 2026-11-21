@@ -100,6 +100,9 @@ type Service struct {
 	outbox   []change
 	wake     func() string
 
+	// queued numbers the changes that join the outbox.
+	queued uint64
+
 	syncing sync.Mutex
 	syncs   sync.WaitGroup
 }
