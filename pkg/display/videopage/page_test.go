@@ -8,23 +8,20 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/media/nowplaying"
 )
 
-type level struct{ v int }
-
-func (l *level) Level() int             { return l.v }
-func (l *level) Set(v int)              { l.v = v }
-func (l *level) Watch(func(int)) func() { return func() {} }
-
 func page(t *testing.T, c Controls) *Page {
 	t.Helper()
 	stack := shell.New()
 	t.Cleanup(stack.Close)
-	return New(c, Dependencies{Shell: stack, Volume: &level{}})
+	return New(c, Dependencies{Shell: stack})
 }
 
 type fake struct {
 	now    nowplaying.Now
 	paused int
+	times  int
 }
+
+func (f *fake) Speed(times int) { f.times = times }
 
 func (f *fake) Play()                 { f.now.Paused = false }
 func (f *fake) Pause()                { f.now.Paused = true; f.paused++ }
@@ -58,6 +55,35 @@ func TestFollowPointsTheControlsAtTheNextTrack(t *testing.T) {
 	}
 }
 
+func TestHurryPlaysFastOnlyWhatCanGoFast(t *testing.T) {
+	slow := playing()
+	p := page(t, slow)
+	if p.Hurry(2) || slow.times != 0 || p.Look().Times != 1 {
+		t.Errorf(
+			"hurried a video that cannot go fast: speed %d, look %d",
+			slow.times,
+			p.Look().Times,
+		)
+	}
+
+	quick := playing()
+	quick.now.Can = nowplaying.CanFast
+	p.Follow(quick)
+	if !p.Hurry(2) || quick.times != 2 || p.Look().Times != 2 {
+		t.Errorf("held video plays at speed %d, look %d, want 2", quick.times, p.Look().Times)
+	}
+	p.Hurry(1)
+	if quick.times != 1 || p.Look().Times != 1 {
+		t.Errorf("released video plays at speed %d, look %d, want 1", quick.times, p.Look().Times)
+	}
+
+	p.Hurry(2)
+	p.Follow(playing())
+	if p.Look().Times != 1 {
+		t.Errorf("the next video shows speed %d, want 1", p.Look().Times)
+	}
+}
+
 func TestRevealAndConcealToggleTheControls(t *testing.T) {
 	p := page(t, playing())
 	if p.Look().Shown {
@@ -85,7 +111,7 @@ func TestOnlyAViewerClosingThePageCountsAsLeaving(t *testing.T) {
 	stack := shell.New()
 	t.Cleanup(stack.Close)
 	left := 0
-	deps := Dependencies{Shell: stack, Volume: &level{}, Left: func() { left++ }}
+	deps := Dependencies{Shell: stack, Left: func() { left++ }}
 
 	shown := New(&fake{}, deps)
 	shown.Show()

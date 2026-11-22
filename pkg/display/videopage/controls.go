@@ -13,6 +13,10 @@ type Controls interface {
 	CanSeek() bool
 }
 
+type Speeder interface {
+	Speed(times int)
+}
+
 type Mark struct {
 	From, To time.Duration
 	Color    theme.Color

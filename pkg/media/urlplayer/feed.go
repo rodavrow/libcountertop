@@ -700,7 +700,7 @@ func (t *track) openFeed(ctx context.Context) error {
 		lanes = append(lanes, videoLane)
 	}
 	t.seekable = true
-	t.length = t.feed.Duration()
+	t.length.Store(int64(t.feed.Duration()))
 	return t.use(startMuxed(ctx, t.feed.reader(ctx, t.at, lanes...), frame, hz, t.at, pic))
 }
 

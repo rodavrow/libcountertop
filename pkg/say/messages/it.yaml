@@ -478,6 +478,7 @@ features.rtsp: Stream videocamera
 features.rtsp.hint: RTSP e ONVIF, per Home Assistant e registratori
 features.airplay: AirPlay
 features.airplay.hint: Duplica lo schermo da un Mac o iPhone
+airplay.code: "Inserisci questo codice su {{.Client}}"
 features.sendspin: Sendspin
 features.sendspin.hint: Audio in tutta la casa
 features.speaker: Altoparlante Bluetooth
@@ -664,6 +665,7 @@ keyboard.code_expired: Codice scaduto
 message.close: Chiudi
 keyboard.compact: Compatta
 keyboard.enter: Invio
+keyboard.full_width: Larghezza intera
 keyboard.hide: Nascondi
 keyboard.large: Grande
 keyboard.refresh: Aggiorna
@@ -682,6 +684,7 @@ look.title: Grafica
 media.entity.buttons: Pulsanti volume
 media.entity.duck: Abbassamento musica
 media.group.media: Contenuti multimediali
+media.setting.autoplay: Riproduzione automatica
 media.setting.background: Riproduzione in background
 media.setting.buttons: Pulsanti volume
 media.setting.duck: Livello abbassamento
@@ -1394,6 +1397,11 @@ sound.alerts: Volume sveglia
 sound.feedback: Suoni di sistema
 sound.main: Volume principale
 sound.media: Volume contenuti
+sound.mute.alerts: Silenzia sveglie
+sound.mute.feedback: Silenzia suoni di sistema
+sound.mute.main: Silenzia tutto
+sound.mute.media: Silenzia contenuti
+sound.mute.voice: Silenzia assistente
 sound.voice: Volume assistente
 source.both: Microfono e altoparlante
 source.mic: Microfono

@@ -43,6 +43,15 @@ func Table() *setting.Table[schema.Media] {
 				},
 				func(m *schema.Media) *bool { return &m.Background },
 			),
+			setting.Flag(
+				setting.Setting[schema.Media]{
+					Name:  "autoplay",
+					Group: volume.MediaGroup,
+					ID:    "youtube_autoplay",
+					Icon:  "mdi:skip-next-circle-outline",
+				},
+				func(m *schema.Media) *bool { return &m.Autoplay },
+			),
 		},
 		setting.Messages{Text: say.T, Missing: say.Missing},
 	)

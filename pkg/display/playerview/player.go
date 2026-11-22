@@ -241,7 +241,11 @@ func (p *Renderer) extras(now nowplaying.Now, l look) (gogui.View, gogui.View) {
 	mdi.Family = icons.Family
 	vol, words, stop := slot(side), slot(side), slot(side)
 	if loud := p.options.Loud; loud != nil {
-		vol = p.round("player-volume", icons.Glyph(icons.Named("mdi:volume-high")), mdi, side,
+		glyph := "mdi:volume-high"
+		if muted := p.options.Muted; muted != nil && muted() {
+			glyph = "mdi:volume-off"
+		}
+		vol = p.round("player-volume", icons.Glyph(icons.Named(glyph)), mdi, side,
 			gogui.ColorTransparent, loud)
 	}
 	if !p.sheet(now).Empty() {

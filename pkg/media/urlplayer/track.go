@@ -45,12 +45,13 @@ type track struct {
 	left     []int16
 	drop     int64
 	picture  playback.Picture
-	length   time.Duration
+	length   atomic.Int64
 	format   string
 	handed   atomic.Int64
 	waiting  atomic.Bool
 	skipping atomic.Int64
 	skipped  atomic.Int64
+	finished sync.Once
 
 	frameMu   sync.Mutex
 	queued    []time.Duration
@@ -100,6 +101,9 @@ func (t *track) Read(ctx context.Context, pcm []int16) (int, error) {
 		if err != nil {
 			if n > 0 && errors.Is(err, io.EOF) {
 				return n, nil
+			}
+			if errors.Is(err, io.EOF) {
+				t.finished.Do(func() { t.player.finished(t) })
 			}
 			return n, err
 		}
@@ -393,6 +397,9 @@ func (t *track) Showing() playback.Showing {
 		s.Length = t.feed.Duration()
 	case !t.media.Streaming():
 		s.Length = t.media.Length()
+		if s.Length == 0 {
+			s.Length = time.Duration(t.length.Load())
+		}
 	}
 	if followed {
 		s.Break = st.Break
@@ -463,6 +470,8 @@ func (t *track) Finished() {
 
 func (t *track) Next()     {}
 func (t *track) Previous() {}
+
+func (t *track) Fast() {}
 
 func (t *track) Seek(to time.Duration) {
 	if r := t.player.o.Remote; r != nil {

@@ -30,6 +30,7 @@ type PlayerOptions struct {
 	Output   playback.Output
 	Skips    func(ctx context.Context, id string) []sponsorblock.Segment
 	Related  func(ctx context.Context, id string) []Video
+	Autoplay func() bool
 	Label    string
 	Logo     string
 	Changed  func()
@@ -353,11 +354,16 @@ func (p *Player) finished(s *source) {
 	if p.current() != s {
 		return
 	}
-	if _, next := p.around(); next {
+	if p.advances() {
 		p.step(1)
 		return
 	}
 	p.Stop()
+}
+
+func (p *Player) advances() bool {
+	_, next := p.around()
+	return next && p.o.Autoplay != nil && p.o.Autoplay()
 }
 
 func (p *Player) skipWhenHeard(s *source, seg sponsorblock.Segment) {

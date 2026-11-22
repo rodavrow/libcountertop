@@ -1,5 +1,7 @@
-https://github.com/FDH2/UxPlay 4e95a9ec013c52d8555d88dbc55abe346e94d56e
-lib/ with playfair/, llhttp/ and mdnsd/; lib/dns_sd/ and the GStreamer renderers left out
+https://github.com/FDH2/UxPlay 48f5ce47c9
+lib/ with playfair/, fairplay_v2/, llhttp/ and mdnsd/; lib/dns_sd/ and the GStreamer renderers left out
 mdnsd/dnssd_mdnsd.c names the mDNS host from the AirPlay name and hardware address, not gethostname()
 dnssd.c gives each device its own pi (AIRPLAY_PI's last group replaced by the hardware address), used by mdnsd and /info
-raop_ntp.c sets client_time_received once the clock is synced; upstream never sets it, so remote-to-local time conversion always returned 0
+raop.c calls conn_destroy for every connection except the local HLS ones
+raop_rtp_mirror.c calls video_set_codec_and_size on every codec header, not only the first
+http_handlers.h passes setProperty?muted to an added on_video_mute callback

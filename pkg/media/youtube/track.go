@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/pion/opus"
+	aacpcm "github.com/tphakala/go-aac/pcm"
 
 	"github.com/ygelfand/libcountertop/pkg/media/hls"
 	"github.com/ygelfand/libcountertop/pkg/media/playback"
@@ -43,12 +44,12 @@ type Options struct {
 }
 
 type Track struct {
-	info   Info
-	r      *Resolver
-	o      Options
-	stream io.ReadCloser
-	demux  *webm.Reader
-	dec    opus.Decoder
+	info    Info
+	r       *Resolver
+	o       Options
+	stream  io.ReadCloser
+	packets demuxer
+	sound   func(data []byte) ([]int16, error)
 
 	mu       sync.Mutex
 	ended    bool
@@ -56,7 +57,6 @@ type Track struct {
 	produced int64
 	skip     int
 	left     []int16
-	frame    []int16
 
 	skips   []sponsorblock.Segment
 	jumping bool
@@ -151,52 +151,126 @@ func openLive(ctx context.Context, r *Resolver, l *Live, o Options) (*Track, err
 }
 
 func newTrack(r *Resolver, info Info, stream io.ReadCloser, o Options) (*Track, error) {
-	demux := webm.NewReader(stream)
-	tr, err := demux.Track()
-	if err != nil {
+	t := &Track{info: info, r: r, o: o, stream: stream, start: o.At}
+	open := t.openOpus
+	if info.Codec == codecAAC {
+		open = t.openAAC
+	}
+	if err := open(); err != nil {
 		return nil, fmt.Errorf("youtube: %s: %w", info.ID, err)
 	}
-	if tr.Codec != "A_OPUS" {
-		return nil, fmt.Errorf("youtube: %s is %s, not opus", info.ID, tr.Codec)
-	}
-	at := o.At
-	if s, ok := stream.(interface{ From(int64) }); ok && at > 0 {
-		if err := demux.Index(); err != nil {
-			return nil, fmt.Errorf("youtube: %s: %w", info.ID, err)
-		}
-		off, cue, ok := demux.Cue(int64(at))
-		slog.Debug(
-			"youtube audio cue",
-			"video",
-			info.ID,
-			"want",
-			at,
-			"cue",
-			time.Duration(cue),
-			"at",
-			off,
-			"found",
-			ok,
-		)
-		if ok {
-			s.From(off)
-			demux.Restart(stream, off)
-		}
-	}
-	dec, err := opus.NewDecoderWithOutput(rate, channels)
-	if err != nil {
-		return nil, err
-	}
-
-	t := &Track{
-		info: info, r: r, o: o, stream: stream, demux: demux, dec: dec,
-		start: at, frame: make([]int16, maxFrame*channels),
-	}
-	if at == 0 && len(tr.Private) >= 12 {
-		t.skip = int(binary.LittleEndian.Uint16(tr.Private[10:12])) * channels
+	if err := t.cueUp(); err != nil {
+		return nil, fmt.Errorf("youtube: %s: %w", info.ID, err)
 	}
 	return t, nil
 }
+
+func (t *Track) openOpus() error {
+	demux := webm.NewReader(t.stream)
+	tr, err := demux.Track()
+	if err != nil {
+		return err
+	}
+	if tr.Codec != "A_OPUS" {
+		return fmt.Errorf("%s, not opus", tr.Codec)
+	}
+	dec, err := opus.NewDecoderWithOutput(rate, channels)
+	if err != nil {
+		return err
+	}
+	frame := make([]int16, maxFrame*channels)
+	t.packets = webmAudio{Reader: demux, src: t.stream}
+	t.sound = func(data []byte) ([]int16, error) {
+		got, err := dec.DecodeToInt16(data, frame)
+		if err != nil {
+			return nil, err
+		}
+		return frame[:got*channels], nil
+	}
+	if t.start == 0 && len(tr.Private) >= 12 {
+		t.skip = int(binary.LittleEndian.Uint16(tr.Private[10:12])) * channels
+	}
+	return nil
+}
+
+func (t *Track) openAAC() error {
+	d, err := newDash(t.stream)
+	if err != nil {
+		return err
+	}
+	dec, err := aacpcm.NewRawDecoder(d.config)
+	if err != nil {
+		return fmt.Errorf("aac: %w", err)
+	}
+	resample := func(p []int16) []int16 { return p }
+	if hz := dec.SampleRate(); hz != rate {
+		if t.r == nil || t.r.Resample == nil {
+			return fmt.Errorf("aac at %d Hz with no resampler", hz)
+		}
+		resample = t.r.Resample(hz)
+	}
+	from := dec.Channels()
+	var buf []byte
+	t.packets = d
+	t.sound = func(data []byte) ([]int16, error) {
+		out, _, err := dec.DecodeFrame(buf[:0], data)
+		if err != nil {
+			return nil, err
+		}
+		buf = out
+		return resample(stereo(out, from)), nil
+	}
+	return nil
+}
+
+func (t *Track) cueUp() error {
+	s, ok := t.stream.(interface{ From(int64) })
+	if !ok || t.start <= 0 {
+		return nil
+	}
+	off, cue, found, err := t.packets.cue(t.start)
+	if err != nil {
+		return err
+	}
+	slog.Debug(
+		"youtube audio cue",
+		"video",
+		t.info.ID,
+		"want",
+		t.start,
+		"cue",
+		cue,
+		"at",
+		off,
+		"found",
+		found,
+	)
+	if found {
+		s.From(off)
+		t.packets.restart(off)
+	}
+	return nil
+}
+
+type webmAudio struct {
+	*webm.Reader
+	src io.Reader
+}
+
+func (w webmAudio) next() (packet, error) {
+	f, err := w.Next()
+	return packet{at: time.Duration(f.Time), data: f.Data}, err
+}
+
+func (w webmAudio) cue(at time.Duration) (int64, time.Duration, bool, error) {
+	if err := w.Index(); err != nil {
+		return 0, 0, false, err
+	}
+	off, cue, ok := w.Cue(int64(at))
+	return off, time.Duration(cue), ok, nil
+}
+
+func (w webmAudio) restart(off int64) { w.Restart(w.src, off) }
 
 func (t *Track) Info() Info { return t.info }
 
@@ -276,11 +350,11 @@ func (t *Track) finish() {
 
 func (t *Track) decode() error {
 	for {
-		f, err := t.demux.Next()
+		f, err := t.packets.next()
 		if err != nil {
 			return err
 		}
-		at := time.Duration(f.Time)
+		at := f.at
 		if at < t.start {
 			continue
 		}
@@ -291,11 +365,10 @@ func (t *Track) decode() error {
 			}
 			return errJumping
 		}
-		got, err := t.dec.DecodeToInt16(f.Data, t.frame)
+		samples, err := t.sound(f.data)
 		if err != nil {
 			continue
 		}
-		samples := t.frame[:got*channels]
 		if t.skip > 0 {
 			drop := min(t.skip, len(samples))
 			samples, t.skip = samples[drop:], t.skip-drop
@@ -326,6 +399,8 @@ func (t *Track) Start() time.Duration {
 }
 
 func (t *Track) Marks() []playback.Mark { return sponsorblock.Marks(t.skips) }
+
+func (t *Track) Fast() {}
 
 func (t *Track) Seek(to time.Duration) {
 	if t.o.Seek == nil {

@@ -68,7 +68,7 @@ func slidingPage(t *testing.T, c Controls) (*Page, *track) {
 	t.Helper()
 	stack := shell.New()
 	t.Cleanup(stack.Close)
-	p := New(c, Dependencies{Shell: stack, Volume: &level{}})
+	p := New(c, Dependencies{Shell: stack})
 	tr := &track{}
 	p.SlideWith(tr.move)
 	return p, tr

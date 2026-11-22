@@ -12,10 +12,19 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/settings/schema"
 )
 
-type pageLevels map[schema.Stream]int
+type pageLevels struct {
+	levels map[schema.Stream]int
+	muted  map[schema.Stream]bool
+}
 
-func (l pageLevels) Level(s schema.Stream) int  { return l[s] }
-func (l pageLevels) Set(s schema.Stream, v int) { l[s] = v }
+func newPageLevels(levels map[schema.Stream]int) *pageLevels {
+	return &pageLevels{levels: levels, muted: map[schema.Stream]bool{}}
+}
+
+func (l *pageLevels) Level(s schema.Stream) int     { return l.levels[s] }
+func (l *pageLevels) Set(s schema.Stream, v int)    { l.levels[s] = v }
+func (l *pageLevels) Muted(s schema.Stream) bool    { return l.muted[s] }
+func (l *pageLevels) Mute(s schema.Stream, on bool) { l.muted[s] = on }
 
 type pageChimes struct {
 	mu      sync.Mutex
@@ -37,15 +46,27 @@ func (c *pageChimes) heard() []schema.Stream {
 }
 
 func TestSoundPageHasEveryStreamAndTheChime(t *testing.T) {
-	levels := pageLevels{schema.StreamMain: 50, schema.StreamMedia: 40}
+	levels := newPageLevels(map[schema.Stream]int{schema.StreamMain: 50, schema.StreamMedia: 40})
 	chimes := &pageChimes{chime: schema.ChimeDing}
 	streams := []schema.Stream{schema.StreamMain, schema.StreamMedia, schema.StreamAlerts}
 	rows, actions := NewPage(PageOptions{
 		Levels: levels, Streams: streams, MainSteps: 20, Chimes: chimes,
 	}).Build()
 
-	if len(rows) != len(streams)+1 || len(actions) != len(rows) {
+	if len(rows) != 2*len(streams)+1 || len(actions) != len(rows) {
 		t.Fatalf("%d rows and %d actions", len(rows), len(actions))
+	}
+	mute := rows[len(streams)+1]
+	if mute.Kind != menu.Toggle || mute.On {
+		t.Errorf("media mute row %+v", mute)
+	}
+	actions[len(streams)+1](0)
+	if !levels.Muted(schema.StreamMedia) {
+		t.Error("the media mute row left media playing")
+	}
+	actions[1](30)
+	if levels.Muted(schema.StreamMedia) || levels.Level(schema.StreamMedia) != 30 {
+		t.Error("moving the media slider left media muted")
 	}
 	if rows[0].Kind != menu.Slider || rows[0].Level != 50 || rows[0].Snap == nil {
 		t.Errorf("main row %+v", rows[0])
@@ -69,7 +90,7 @@ func TestSoundPageHasEveryStreamAndTheChime(t *testing.T) {
 }
 
 func TestSoundPagePreviewsTheStreamOnceItSettles(t *testing.T) {
-	levels := pageLevels{}
+	levels := newPageLevels(map[schema.Stream]int{})
 	chimes := &pageChimes{}
 	_, actions := NewPage(PageOptions{
 		Levels: levels, Streams: []schema.Stream{schema.StreamAlerts}, Chimes: chimes,
@@ -78,8 +99,8 @@ func TestSoundPagePreviewsTheStreamOnceItSettles(t *testing.T) {
 	for v := 10; v <= 30; v += 10 {
 		actions[0](v)
 	}
-	if levels[schema.StreamAlerts] != 30 {
-		t.Errorf("alerts at %d", levels[schema.StreamAlerts])
+	if levels.levels[schema.StreamAlerts] != 30 {
+		t.Errorf("alerts at %d", levels.levels[schema.StreamAlerts])
 	}
 	if got := chimes.heard(); len(got) != 0 {
 		t.Errorf("previewed %v while still moving", got)

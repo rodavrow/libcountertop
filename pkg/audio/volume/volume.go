@@ -70,6 +70,19 @@ func (v *Volume) Set(s schema.Stream, level int) {
 	v.Mixer.Set(s, level)
 }
 
+func (v *Volume) Mute(s schema.Stream, on bool) {
+	if s != schema.StreamMain || v.main == nil {
+		v.Mixer.Mute(s, on)
+		return
+	}
+	if v.output.Muted(s) == on {
+		return
+	}
+	v.output.Mute(s, on)
+	v.mainNum.muted(s, on)
+	v.Changed.Emit(Change{Stream: s, Level: v.main.Level()})
+}
+
 func (v *Volume) Adjust(s schema.Stream, steps int) {
 	size := Step
 	if s == schema.StreamMain && v.main != nil && v.mainSteps > 0 {

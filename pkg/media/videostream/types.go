@@ -9,9 +9,10 @@ import (
 )
 
 type Frame struct {
-	Data  []byte
-	At    time.Duration
-	Crypt *surface.Crypt
+	Data          []byte
+	At            time.Duration
+	Crypt         *surface.Crypt
+	Width, Height int
 }
 
 type Source interface {

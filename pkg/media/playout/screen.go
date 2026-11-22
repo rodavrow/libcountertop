@@ -14,6 +14,7 @@ type Controls interface {
 	Seek(to time.Duration)
 	CanSeek() bool
 	Marks() []playback.Mark
+	Speed(times int)
 }
 
 type Feed struct {

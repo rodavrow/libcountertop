@@ -108,6 +108,7 @@ const (
 	CanShuffle
 	CanRepeat
 	CanLike
+	CanFast
 )
 
 func (c Controls) Has(want Controls) bool { return c&want == want }

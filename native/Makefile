@@ -28,7 +28,7 @@ AIRPLAY := $(NATIVE)/airplay
 UXPLAY := $(AIRPLAY)/uxplay
 OPENSSL := $(AIRPLAY)/third_party/openssl
 PLIST := $(AIRPLAY)/third_party/libplist
-UXPLAY_SOURCES := $(wildcard $(UXPLAY)/*.c $(UXPLAY)/playfair/*.c $(UXPLAY)/llhttp/*.c $(UXPLAY)/mdnsd/*.c)
+UXPLAY_SOURCES := $(wildcard $(UXPLAY)/*.c $(UXPLAY)/playfair/*.c $(UXPLAY)/fairplay_v2/*.c $(UXPLAY)/llhttp/*.c $(UXPLAY)/mdnsd/*.c)
 UXPLAY_INCLUDES := -I$(UXPLAY) -I$(UXPLAY)/playfair -I$(UXPLAY)/llhttp -I$(UXPLAY)/mdnsd -I$(OPENSSL)/include -I$(PLIST)/include
 UXPLAY_FLAGS := -O2 -fPIC -w -D_GNU_SOURCE -DPLIST_210 -DPLIST_230 $(UXPLAY_INCLUDES)
 

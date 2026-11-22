@@ -20,6 +20,8 @@ const settle = 400 * time.Millisecond
 type Levels interface {
 	Level(schema.Stream) int
 	Set(schema.Stream, int)
+	Muted(schema.Stream) bool
+	Mute(schema.Stream, bool)
 }
 type Chimes interface {
 	Chime() schema.Chime
@@ -69,9 +71,18 @@ func NewPage(o PageOptions) *shell.Page {
 			}
 			rows = append(rows, row)
 			actions = append(actions, func(level int) {
+				o.Levels.Mute(s, false)
 				o.Levels.Set(s, level)
 				hear.after(s)
 			})
+		}
+		for _, s := range streams {
+			muted := o.Levels.Muted(s)
+			rows = append(
+				rows,
+				menu.Row{Label: say.T("sound.mute." + string(s)), Kind: menu.Toggle, On: muted},
+			)
+			actions = append(actions, func(int) { o.Levels.Mute(s, !muted) })
 		}
 		if o.Media != nil {
 			if field, ok := o.Media.Table.Find("buttons"); ok {

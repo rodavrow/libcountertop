@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"mime"
 	"net/http"
 	"net/url"
 	"sort"
@@ -99,6 +100,8 @@ const (
 	lead       = 30 * time.Second
 	retryAfter = 5 * time.Second
 	plainVP9   = `video/webm; codecs="vp9"`
+	codecOpus  = "opus"
+	codecAAC   = "mp4a.40.2"
 )
 
 func rateOf(f *format) int64 {
@@ -153,9 +156,7 @@ func (r *Resolver) audio(
 	id string,
 	keep *watch,
 ) (Info, io.ReadCloser, *watch, error) {
-	t, stream, w, err := r.open(ctx, id, "opus audio", bestOpus, ahead, true, keep)
-	t.Codec = "opus"
-	return t, stream, w, err
+	return r.open(ctx, id, "opus or aac audio", bestAudio, ahead, true, keep)
 }
 
 func (r *Resolver) Video(ctx context.Context, id string) (Info, io.ReadCloser, error) {
@@ -168,7 +169,6 @@ func (r *Resolver) Video(ctx context.Context, id string) (Info, io.ReadCloser, e
 		false,
 		nil,
 	)
-	t.Codec = "vp9"
 	return t, stream, err
 }
 
@@ -407,7 +407,9 @@ func (r *Resolver) open(
 		},
 	)
 
-	return infoOf(id, w), stream, reports, nil
+	info := infoOf(id, w)
+	info.Codec = codecOf(f)
+	return info, stream, reports, nil
 }
 
 func infoOf(id string, w watched) Info {
@@ -462,11 +464,29 @@ func bestVP9(formats []format, limits playback.Target) *format {
 	return found[0]
 }
 
-func bestOpus(formats []format) *format {
+func bestAudio(formats []format) *format {
+	if f := bestOf(formats, func(f *format) bool {
+		return strings.HasPrefix(f.MimeType, "audio/webm") && codecOf(f) == codecOpus
+	}); f != nil {
+		return f
+	}
+	return bestOf(formats, func(f *format) bool {
+		return strings.HasPrefix(f.MimeType, "audio/mp4") && codecOf(f) == codecAAC
+	})
+}
+
+func codecOf(f *format) string {
+	_, params, err := mime.ParseMediaType(f.MimeType)
+	if err != nil {
+		return ""
+	}
+	return params["codecs"]
+}
+
+func bestOf(formats []format, want func(*format) bool) *format {
 	var found []*format
 	for i := range formats {
-		f := &formats[i]
-		if strings.HasPrefix(f.MimeType, "audio/webm") && strings.Contains(f.MimeType, "opus") {
+		if f := &formats[i]; want(f) {
 			found = append(found, f)
 		}
 	}

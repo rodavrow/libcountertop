@@ -280,7 +280,7 @@ func streamOf(ctx context.Context, pics playback.Pictures) (video.Stream, io.Clo
 				Codec:  p.Codec,
 				Width:  uint32(p.Width),
 				Height: uint32(p.Height),
-				Source: liveFrames(p.Next),
+				Source: liveFrames{next: p.Next, size: p.Size},
 				Sparse: p.Sparse,
 			}
 			return st, io.NopCloser(nil), nil
@@ -301,11 +301,18 @@ func streamOf(ctx context.Context, pics playback.Pictures) (video.Stream, io.Clo
 	return st, stream, nil
 }
 
-type liveFrames func(context.Context) ([]byte, time.Duration, error)
+type liveFrames struct {
+	next func(context.Context) ([]byte, time.Duration, error)
+	size func() (width, height int)
+}
 
 func (f liveFrames) Next(ctx context.Context) (video.Frame, error) {
-	data, at, err := f(ctx)
-	return video.Frame{Data: data, At: at}, err
+	data, at, err := f.next(ctx)
+	fr := video.Frame{Data: data, At: at}
+	if err == nil && f.size != nil {
+		fr.Width, fr.Height = f.size()
+	}
+	return fr, err
 }
 
 type sealedFrames func(context.Context) ([]byte, time.Duration, *cenc.Crypt, error)

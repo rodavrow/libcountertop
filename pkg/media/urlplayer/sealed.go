@@ -53,7 +53,7 @@ func (t *track) openSealed(ctx context.Context, soundLane, videoLane int) error 
 		k.Fail(io.EOF)
 	}()
 	t.seekable = true
-	t.length = t.feed.Duration()
+	t.length.Store(int64(t.feed.Duration()))
 	t.dec = &sealedSound{k: k, buf: make([]int16, sealedRead*outChannels)}
 	t.convert = func(p []int16) []int16 { return p }
 	return nil

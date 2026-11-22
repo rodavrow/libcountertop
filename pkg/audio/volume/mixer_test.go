@@ -103,3 +103,21 @@ func TestMixerMuteKeepsTheSavedLevel(t *testing.T) {
 		t.Errorf("unmuted at %d", m.Level(schema.StreamMedia))
 	}
 }
+
+func TestMixerMuteSwitchFollowsAndCommandsTheStream(t *testing.T) {
+	m := newTestMixer(newFakeOutput(), map[schema.Stream]int{})
+	sw := m.entities.Switches[schema.StreamVoice]
+	if sw == nil || sw.ObjectID != "mute_voice" || sw.Get() {
+		t.Fatal("mute_voice missing or on at start")
+	}
+
+	m.Mute(schema.StreamVoice, true)
+	if !sw.Get() {
+		t.Error("mute_voice off after muting voice")
+	}
+
+	sw.OnCommand(false)
+	if m.Muted(schema.StreamVoice) || sw.Get() {
+		t.Error("turning mute_voice off left voice muted")
+	}
+}

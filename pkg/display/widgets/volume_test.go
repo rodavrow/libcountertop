@@ -34,6 +34,7 @@ func TestExpandedVolumeCardFitsShortDisplays(t *testing.T) {
 			Linger:  func() {},
 			Dismiss: func() {},
 			Set:     func(string, int) {},
+			Mute:    func(string, bool) {},
 		})
 		layout := gogui.GenerateViewLayout(view, w)
 		var card *gogui.Shape

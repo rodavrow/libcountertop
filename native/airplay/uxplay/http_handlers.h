@@ -201,8 +201,25 @@ http_handler_set_property(raop_conn_t *conn,
         plist_to_xml(errResponse, response_data, (uint32_t *) response_datalen);
         plist_free(errResponse);
         http_response_add_header(response, "Content-Type", "text/x-apple-plist+xml");
+    } else if (!strcmp(property, "muted")) {
+        int datalen = 0;
+        const char *data = http_request_get_data(request, &datalen);
+        plist_t root = NULL;
+        uint8_t muted = 0;
+        if (data && datalen > 0) plist_from_bin(data, datalen, &root);
+        plist_t value = root ? plist_dict_get_item(root, "value") : NULL;
+        if (value && PLIST_IS_BOOLEAN(value)) {
+            plist_get_bool_val(value, &muted);
+            if (raop->callbacks.on_video_mute) raop->callbacks.on_video_mute(raop->callbacks.cls, muted != 0);
+        }
+        if (root) plist_free(root);
+        plist_t errResponse = plist_new_dict();
+        plist_dict_set_item(errResponse, "errorCode", plist_new_uint(0));
+        plist_to_xml(errResponse, response_data, (uint32_t *) response_datalen);
+        plist_free(errResponse);
+        http_response_add_header(response, "Content-Type", "text/x-apple-plist+xml");
     } else {
-        logger_log(raop->logger, LOGGER_DEBUG, "property %s is unknown, unhandled", property);      
+        logger_log(raop->logger, LOGGER_DEBUG, "property %s is unknown, unhandled", property);
         goto post_error;
     }
     return;
@@ -356,7 +373,7 @@ http_handler_playback_info(raop_conn_t *conn, http_request_t *request, http_resp
           https://datatracker.ietf.org/doc/id/draft-lentczner-rhttp-00.txt .  
 
    After the Upgrade the channel becomes a reverse http "AirPlay (reversed)" channel for
-   http requests from Server to Client.
+   http requests from Server to Client, with connection type CONNECTION_TYPE_EVENT
   */
 
 static void
@@ -377,8 +394,8 @@ http_handler_reverse(raop_conn_t *conn, http_request_t *request, http_response_t
     logger_log(raop->logger, LOGGER_INFO, "client requested reverse connection: %s; purpose: %s  \"%s\"",
                connection, upgrade, purpose);
 
-    httpd_set_connection_type(raop->httpd, (void *) conn, CONNECTION_TYPE_PTTH);
-    int type_PTTH = httpd_count_connection_type(raop->httpd, CONNECTION_TYPE_PTTH);
+    httpd_set_connection_type(raop->httpd, (void *) conn, CONNECTION_TYPE_EVENT);
+    int type_PTTH = httpd_count_connection_type(raop->httpd, CONNECTION_TYPE_EVENT);
 
     if (type_PTTH == 1) {
         logger_log(raop->logger, LOGGER_DEBUG, "will use socket %d for %s connections", socket_fd, purpose);
@@ -386,7 +403,7 @@ http_handler_reverse(raop_conn_t *conn, http_request_t *request, http_response_t
         http_response_add_header(response, "Connection", "Upgrade");
         http_response_add_header(response, "Upgrade", "PTTH/1.0");
     } else {
-        logger_log(raop->logger, LOGGER_ERR, "multiple TPPH connections (%d) are forbidden", type_PTTH );
+        logger_log(raop->logger, LOGGER_ERR, "multiple EVENT (PTTH) connections (%d) are forbidden", type_PTTH );
     }    
 }
 

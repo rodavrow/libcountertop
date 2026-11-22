@@ -5,7 +5,6 @@ import (
 
 	gogui "github.com/go-gui-org/go-gui/gui"
 
-	"github.com/ygelfand/libcountertop/pkg/audio/volume"
 	"github.com/ygelfand/libcountertop/pkg/display/shell"
 	"github.com/ygelfand/libcountertop/pkg/display/style"
 	videoplayer "github.com/ygelfand/libcountertop/pkg/display/videopage"
@@ -28,11 +27,11 @@ type Lyrics interface {
 type Dependencies struct {
 	Player           Player
 	Lyrics           Lyrics
-	Volume           volume.Channel
 	Shell            *shell.Shell
 	UI               *widgets.UI
 	Dock             func() schema.Edge
 	Loud             func()
+	Muted            func() bool
 	BluetoothSources func() shell.View
 	Mini             func() bool
 }

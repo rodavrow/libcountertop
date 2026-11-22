@@ -81,6 +81,8 @@ type PlayerStart interface {
 	SetMini(bool)
 	Background() bool
 	SetBackground(bool)
+	Autoplay() bool
+	SetAutoplay(bool)
 }
 
 type SponsorPages interface {

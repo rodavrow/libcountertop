@@ -154,6 +154,27 @@ func TestWAVPlaysEverySample(t *testing.T) {
 	}
 }
 
+func TestTheCurrentTrackReachingItsEndIsReported(t *testing.T) {
+	finished := make(chan struct{}, 2)
+	p := New(Options{HTTP: http.DefaultClient, Finished: func() { finished <- struct{}{} }})
+	url := serve(t, "audio/wav", wavFile(outRate, ramp(outRate/10)), true)
+	tr := p.track(cast.Media{ContentID: url}, nil, 0)
+	p.cur = tr
+	readAll(t, tr)
+	buf := make([]int16, 16)
+	_, _ = tr.Read(context.Background(), buf)
+	select {
+	case <-finished:
+	case <-time.After(2 * time.Second):
+		t.Fatal("reading to the end did not report it")
+	}
+	select {
+	case <-finished:
+		t.Error("the end was reported twice")
+	case <-time.After(100 * time.Millisecond):
+	}
+}
+
 func TestWAVSeekLandsOnTheExactSample(t *testing.T) {
 	want := ramp(outRate)
 	got := readAll(

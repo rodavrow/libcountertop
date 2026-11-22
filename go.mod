@@ -7,6 +7,7 @@ require (
 	charm.land/lipgloss/v2 v2.0.1
 	filippo.io/cpace v0.0.0-20210101143347-24d601e2e469
 	github.com/Sendspin/sendspin-go v1.8.2
+	github.com/abema/go-mp4 v1.7.3
 	github.com/antzucaro/matchr v0.0.0-20221106193745-7bed6ef61ef9
 	github.com/asticode/go-astits v1.16.0
 	github.com/at-wat/ebml-go v0.19.4
@@ -62,7 +63,6 @@ require (
 require (
 	charm.land/bubbles/v2 v2.0.0 // indirect
 	charm.land/bubbletea/v2 v2.0.2 // indirect
-	github.com/abema/go-mp4 v1.7.3 // indirect
 	github.com/alecthomas/chroma/v2 v2.27.0 // indirect
 	github.com/asticode/go-astikit v0.30.0 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect

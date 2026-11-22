@@ -551,7 +551,7 @@ conn_destroy(void *ptr) {
     raop_t *raop = conn->raop;
     logger_log(raop->logger, LOGGER_DEBUG, "Destroying connection");
 
-    if (raop->callbacks.conn_destroy) {
+    if (raop->callbacks.conn_destroy && conn->connection_type != CONNECTION_TYPE_HLS) {
         raop->callbacks.conn_destroy(raop->callbacks.cls);
     }
 
@@ -849,7 +849,7 @@ void raop_remove_known_connections(raop_t * raop) {
 
 void raop_remove_hls_connections(raop_t * raop) {
     httpd_remove_connections_by_type(raop->httpd, CONNECTION_TYPE_HLS);
-    httpd_remove_connections_by_type(raop->httpd, CONNECTION_TYPE_PTTH);
+    httpd_remove_connections_by_type(raop->httpd, CONNECTION_TYPE_EVENT);
     httpd_remove_connections_by_type(raop->httpd, CONNECTION_TYPE_AIRPLAY);
 }
 

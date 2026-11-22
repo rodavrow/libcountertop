@@ -88,6 +88,7 @@ func (m *Mixer) Mute(s schema.Stream, on bool) {
 		return
 	}
 	m.output.Mute(s, on)
+	m.entities.muted(s, on)
 	m.Changed.Emit(Change{Stream: s, Level: m.Level(s)})
 }
 

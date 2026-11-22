@@ -24,9 +24,12 @@ type Part struct {
 
 type lane struct {
 	Queue
-	gain  float32
-	muted bool
-	heard time.Time
+	gain     float32
+	muted    bool
+	heard    time.Time
+	times    int
+	channels int
+	fast     []int16
 }
 
 func (l *lane) level() float32 {
@@ -34,6 +37,29 @@ func (l *lane) level() float32 {
 		return 0
 	}
 	return l.gain
+}
+
+func (l *lane) next(n int) []int16 {
+	if l.times <= 1 || l.channels < 1 {
+		return l.Next(n)
+	}
+	raw := l.Next(n * l.times)
+	frames := len(raw) / (l.channels * l.times)
+	size := frames * l.channels
+	if cap(l.fast) < size {
+		l.fast = make([]int16, size)
+	}
+	out := l.fast[:size]
+	for f := range frames {
+		for c := range l.channels {
+			var sum int32
+			for k := range l.times {
+				sum += int32(raw[(f*l.times+k)*l.channels+c])
+			}
+			out[f*l.channels+c] = int16(sum / int32(l.times))
+		}
+	}
+	return out
 }
 
 func (b *Bus) lane(s schema.Stream) *lane {
@@ -90,6 +116,13 @@ func (b *Bus) SetGain(s schema.Stream, gain float32) {
 	b.held(s).gain = max(gain, 0)
 }
 
+func (b *Bus) SetSpeed(s schema.Stream, times, channels int) {
+	b.mu.Lock()
+	defer b.mu.Unlock()
+	l := b.held(s)
+	l.times, l.channels = max(times, 1), channels
+}
+
 func (b *Bus) Gain(s schema.Stream) float32 {
 	b.mu.Lock()
 	defer b.mu.Unlock()
@@ -137,15 +170,22 @@ func (b *Bus) gather(at uint64, n int) (queued int, rendered bool) {
 	b.parts = b.parts[:0]
 	now := time.Now()
 	b.mu.Lock()
+	silent := b.held(schema.StreamMain).muted
+	level := func(l *lane) float32 {
+		if silent {
+			return 0
+		}
+		return l.level()
+	}
 	for s, l := range b.lanes {
-		chunk := l.Next(n)
+		chunk := l.next(n)
 		queued = max(queued, len(chunk))
 		if len(chunk) > 0 {
-			b.parts = append(b.parts, Part{Stream: s, Samples: chunk, Level: l.level()})
+			b.parts = append(b.parts, Part{Stream: s, Samples: chunk, Level: level(l)})
 			l.heard = now
 		}
 	}
-	src, media := b.src, b.held(schema.StreamMedia).level()
+	src, media := b.src, level(b.held(schema.StreamMedia))
 	if src != nil {
 		b.held(schema.StreamMedia).heard = now
 	}

@@ -25,6 +25,7 @@ type Ranged struct {
 	lead   time.Duration
 	retry  time.Duration
 
+	moved  chan struct{}
 	mu     sync.Mutex
 	cancel context.CancelFunc
 	chunks chan piece
@@ -63,6 +64,7 @@ func NewRanged(ctx context.Context, client *http.Client, url string, size int64,
 	r := &Ranged{
 		client: client, url: url, chunk: c.Size, ahead: c.Ahead, parent: ctx, size: size,
 		ask: c.Ask, renew: c.Renew, rate: c.Rate, lead: c.Lead, retry: c.Retry,
+		moved: make(chan struct{}, 1),
 	}
 	r.start(0)
 	return r
@@ -83,7 +85,6 @@ func (r *Ranged) start(from int64) {
 
 func (r *Ranged) fetch(ctx context.Context, out chan<- piece, from int64) {
 	defer close(out)
-	began := time.Now()
 	for off := from; ; off += r.chunk {
 		r.mu.Lock()
 		size := r.size
@@ -91,7 +92,7 @@ func (r *Ranged) fetch(ctx context.Context, out chan<- piece, from int64) {
 		if size > 0 && off >= size {
 			return
 		}
-		if !wait(ctx, time.Until(began.Add(r.due(off-from)))) {
+		if !r.await(ctx, off) {
 			return
 		}
 
@@ -112,11 +113,24 @@ func (r *Ranged) fetch(ctx context.Context, out chan<- piece, from int64) {
 	}
 }
 
-func (r *Ranged) due(into int64) time.Duration {
+func (r *Ranged) await(ctx context.Context, off int64) bool {
 	if r.rate <= 0 {
-		return 0
+		return ctx.Err() == nil
 	}
-	return time.Duration(into)*time.Second/time.Duration(r.rate) - r.lead
+	room := r.rate * int64(r.lead) / int64(time.Second)
+	for {
+		r.mu.Lock()
+		pos := r.pos
+		r.mu.Unlock()
+		if off-pos <= room {
+			return ctx.Err() == nil
+		}
+		select {
+		case <-r.moved:
+		case <-ctx.Done():
+			return false
+		}
+	}
 }
 
 func wait(ctx context.Context, d time.Duration) bool {
@@ -260,6 +274,10 @@ func (r *Ranged) Read(p []byte) (int, error) {
 			r.cur = r.cur[n:]
 			r.pos += int64(n)
 			r.mu.Unlock()
+			select {
+			case r.moved <- struct{}{}:
+			default:
+			}
 			return n, nil
 		}
 		chunks := r.chunks

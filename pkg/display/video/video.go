@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"image"
 	"io"
 	"sync"
 	"sync/atomic"
@@ -35,13 +36,15 @@ func fit(fw, fh, w, h int) geometry.Rect {
 
 func placement(
 	o geometry.Orientation,
-	fw, fh, w, h, dy int,
+	fw, fh int,
+	layer, picture image.Point,
+	dy int,
 ) (x, y float32, m surface.Matrix, at geometry.Rect) {
 	vw, vh := o.Size(fw, fh)
-	r := fit(vw, vh, w, h)
-	_, _, _, at = o.Place(fw, fh, r, w, h)
+	r := fit(vw, vh, picture.X, picture.Y)
+	_, _, _, at = o.Place(fw, fh, r, layer.X, layer.Y)
 	r.Y += dy
-	x, y, m, _ = o.Place(fw, fh, r, w, h)
+	x, y, m, _ = o.Place(fw, fh, r, layer.X, layer.Y)
 	return x, y, m, at
 }
 
@@ -163,6 +166,8 @@ func (pl Player) On(
 	}()
 
 	fw, fh := p.Native()
+	layer := image.Pt(want.W, want.H)
+	picture := layer
 	var rep videostream.Report
 	visible := reused
 	sl, slides := p.(slider)
@@ -175,7 +180,7 @@ func (pl Player) On(
 		if slides {
 			dy = sl.Offset()
 		}
-		x, y, m, at := placement(o, fw, fh, want.W, want.H, dy)
+		x, y, m, at := placement(o, fw, fh, layer, picture, dy)
 		rep.Orientation, rep.At = o, at
 		return c.VideoPlace(id, x, y, m, videoZ, visible)
 	}
@@ -317,6 +322,12 @@ func (pl Player) On(
 			}
 			resume()
 			last = f.At
+			if size := image.Pt(f.Width, f.Height); size.X > 0 && size.Y > 0 && size != picture {
+				picture = size
+				if err := face(rep.Orientation); err != nil {
+					return rep, err
+				}
+			}
 			var flags uint32
 			if !s.Sparse && f.At < from {
 				flags = surface.SampleHide

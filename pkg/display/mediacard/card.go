@@ -45,7 +45,9 @@ func (c *Card) Entities() []esphome.Entity      { return c.settings.Entities() }
 func (c *Card) PlayerStart() config.PlayerStart { return c.options.Media.Read().Player }
 func (c *Card) Mini() bool                      { return c.options.Media.Read().Mini }
 
-func (c *Card) Background() bool { return c.options.Media.Read().Background }
+func (c *Card) Background() bool    { return c.options.Media.Read().Background }
+func (c *Card) Autoplay() bool      { return c.options.Media.Read().Autoplay }
+func (c *Card) SetAutoplay(on bool) { c.change("autoplay", setting.OnOff(on)) }
 
 func (c *Card) SetPlayerStart(p config.PlayerStart) { c.change("player", string(p)) }
 func (c *Card) SetMini(on bool)                     { c.change("mini", setting.OnOff(on)) }

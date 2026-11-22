@@ -73,7 +73,7 @@ func (f *fakeLive) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(packedSegment(f.t, uint64(n)*tsClock))
 }
 
-func followed(t *testing.T, f *fakeLive, within time.Duration) error {
+func followed(t *testing.T, f *fakeLive, within time.Duration) (*Stream, error) {
 	t.Helper()
 	least, targets := stallLeast, stallTargets
 	stallLeast, stallTargets = 500*time.Millisecond, 0
@@ -104,34 +104,38 @@ func followed(t *testing.T, f *fakeLive, within time.Duration) error {
 				if !errors.Is(rerr, io.EOF) {
 					t.Errorf("read after the end gave %v", rerr)
 				}
-				return err
+				return s, err
 			}
 			if n == 0 {
 				t.Fatal("read gave nothing and no end")
 			}
 		}
 		t.Fatal("read never ended")
-		return err
+		return s, err
 	case <-time.After(within):
 		cancel()
 		t.Fatalf("still following after %v", within)
-		return nil
+		return s, nil
 	}
 }
 
 func TestAnEndedPlaylistEndsTheStream(t *testing.T) {
 	f := &fakeLive{t: t, segments: 3, ended: true}
-	if err := followed(t, f, 3*time.Second); !errors.Is(err, io.EOF) {
+	s, err := followed(t, f, 3*time.Second)
+	if !errors.Is(err, io.EOF) {
 		t.Fatalf("ended with %v", err)
 	}
 	if len(f.fetched) != 3 {
 		t.Errorf("fetched %v", f.fetched)
 	}
+	if got := s.Length(); got != 3*time.Second {
+		t.Errorf("length %v, want the three segments' 3s", got)
+	}
 }
 
 func TestAStreamThatGoesQuietEnds(t *testing.T) {
 	f := &fakeLive{t: t, segments: 3}
-	if err := followed(t, f, 5*time.Second); !errors.Is(err, io.EOF) {
+	if _, err := followed(t, f, 5*time.Second); !errors.Is(err, io.EOF) {
 		t.Fatalf("ended with %v", err)
 	}
 	if len(f.fetched) != 3 {

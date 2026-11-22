@@ -8,6 +8,13 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/display/style"
 )
 
+func Code(text string) gogui.View {
+	st := gogui.CurrentTheme().Cfg.TextStyleDef
+	st.Size = style.Reach() * 1.8
+	st.Color = gogui.CurrentTheme().Cfg.ColorAccent
+	return gogui.Label(text, st)
+}
+
 type Keypad struct {
 	ID     string
 	Redraw func()

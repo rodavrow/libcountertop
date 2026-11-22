@@ -86,13 +86,10 @@ func (v *View) who(x configsync.Exchange, tall float32) gogui.View {
 }
 
 func code(digits string) gogui.View {
-	st := gogui.CurrentTheme().Cfg.TextStyleDef
-	st.Size = style.Reach() * 1.8
-	st.Color = gogui.CurrentTheme().Cfg.ColorAccent
 	if len(digits) == codeLength {
 		digits = digits[:3] + " " + digits[3:]
 	}
-	return gogui.Label(digits, st)
+	return widgets.Code(digits)
 }
 
 func (v *View) entry(x configsync.Exchange, wide, vh float32) gogui.View {

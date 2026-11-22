@@ -53,11 +53,13 @@ static uint64_t mono_us(void) {
     return (uint64_t)ts.tv_sec * 1000000u + (uint64_t)ts.tv_nsec / 1000u;
 }
 
+static struct airplay_mirror mirror;
+
 static void video_process(void *cls, raop_ntp_t *ntp, video_decode_struct *d) {
     (void)cls;
     (void)ntp;
     if (d->data_len <= 0) return;
-    struct airplay_frame f = {mono_us()};
+    struct airplay_frame f = {mono_us(), mirror.width, mirror.height};
     send_msg(MSG_FRAME, &f, sizeof(f), d->data, (uint32_t)d->data_len);
 }
 
@@ -81,18 +83,14 @@ static void audio_process(void *cls, raop_ntp_t *ntp, audio_decode_struct *d) {
     aac_decode(d->data, d->data_len, d->rtp_time);
 }
 
-static struct airplay_mirror mirror;
-
-static void video_report_size(void *cls, float *ws, float *hs, float *w, float *h) {
+static int video_set_codec_and_size(void *cls, video_codec_t codec, unsigned short ws, unsigned short hs,
+                                    unsigned short x, unsigned short y, unsigned short w, unsigned short h) {
     (void)cls;
     (void)ws;
     (void)hs;
-    mirror.width = (uint32_t)*w;
-    mirror.height = (uint32_t)*h;
-}
-
-static int video_set_codec(void *cls, video_codec_t codec) {
-    (void)cls;
+    (void)x;
+    (void)y;
+    uint32_t was = mirror.codec;
     switch (codec) {
     case VIDEO_CODEC_H264:
         mirror.codec = CODEC_H264;
@@ -104,7 +102,9 @@ static int video_set_codec(void *cls, video_codec_t codec) {
         logw("refusing codec %d", codec);
         return -1;
     }
-    send_msg(MSG_MIRROR, &mirror, sizeof(mirror), NULL, 0);
+    mirror.width = w;
+    mirror.height = h;
+    if (was != mirror.codec) send_msg(MSG_MIRROR, &mirror, sizeof(mirror), NULL, 0);
     return 0;
 }
 
@@ -119,6 +119,7 @@ static void report_client_request(void *cls, char *id, char *model, char *name, 
 
 static void mirror_video_running(void *cls, bool on) {
     (void)cls;
+    mirror.codec = 0;
     if (!on) send_msg(MSG_ENDED, NULL, 0, NULL, 0);
 }
 
@@ -130,13 +131,60 @@ static void conn_destroy(void *cls) {
 static void conn_init(void *cls) { (void)cls; }
 static void conn_reset(void *cls, int reason) { (void)cls; logi("connection reset %d", reason); }
 static void conn_feedback(void *cls) { (void)cls; }
-static void video_reset(void *cls, reset_type_t t) { (void)cls; (void)t; }
+
+static pthread_mutex_t shown_mu = PTHREAD_MUTEX_INITIALIZER;
+static struct airplay_position shown = {0, 0, STATE_LOADING};
+
+static void showing(int64_t state) {
+    pthread_mutex_lock(&shown_mu);
+    shown.at_us = 0;
+    shown.length_us = 0;
+    shown.state = state;
+    pthread_mutex_unlock(&shown_mu);
+}
+
+static void video_reset(void *cls, reset_type_t t) {
+    (void)cls;
+    switch (t) {
+    case RESET_TYPE_HLS_SHUTDOWN:
+        raop_destroy_airplay_video(raop, -1);
+        raop_remove_hls_connections(raop);
+        showing(STATE_LOADING);
+        send_msg(MSG_STOP, NULL, 0, NULL, 0);
+        break;
+    case RESET_TYPE_NOHOLD:
+        raop_destroy_airplay_video(raop, -1);
+        break;
+    default:
+        break;
+    }
+}
 static void video_pause(void *cls) { (void)cls; }
 static void video_resume(void *cls) { (void)cls; }
 static void audio_flush(void *cls) { (void)cls; aac_flush(); }
 static void video_flush(void *cls) { (void)cls; }
-static double audio_set_client_volume(void *cls) { (void)cls; return 0.0; }
-static void audio_set_volume(void *cls, float v) { (void)cls; (void)v; }
+static pthread_mutex_t level_mu = PTHREAD_MUTEX_INITIALIZER;
+static float level_db = -144.0f;
+
+static double audio_set_client_volume(void *cls) {
+    (void)cls;
+    pthread_mutex_lock(&level_mu);
+    float db = level_db;
+    pthread_mutex_unlock(&level_mu);
+    return db;
+}
+
+static void audio_set_volume(void *cls, float v) {
+    (void)cls;
+    struct airplay_volume m = {v};
+    send_msg(MSG_VOLUME, &m, sizeof(m), NULL, 0);
+}
+
+static void on_video_mute(void *cls, bool muted) {
+    (void)cls;
+    struct airplay_mute m = {muted};
+    send_msg(MSG_MUTE, &m, sizeof(m), NULL, 0);
+}
 static void audio_get_format(void *cls, unsigned char *ct, unsigned short *spf, bool *screen, bool *media, uint64_t *fmt) {
     (void)cls;
     logi("audio format ct=%d spf=%d screen=%d media=%d format=%llx", *ct, *spf, *screen, *media, (unsigned long long)*fmt);
@@ -147,17 +195,79 @@ static void audio_set_metadata(void *cls, const void *b, int n) { (void)cls; (vo
 static void audio_set_coverart(void *cls, const void *b, int n) { (void)cls; (void)b; (void)n; }
 static void audio_stop_coverart_rendering(void *cls) { (void)cls; }
 static void audio_set_progress(void *cls, uint32_t *s, uint32_t *c, uint32_t *e) { (void)cls; (void)s; (void)c; (void)e; }
-static void display_pin(void *cls, char *pin) { (void)cls; (void)pin; }
-static void register_client(void *cls, const char *id, const char *pk, const char *name) { (void)cls; (void)id; (void)pk; (void)name; }
-static bool check_register(void *cls, const char *pk) { (void)cls; (void)pk; return false; }
+static void display_pin(void *cls, char *pin) {
+    (void)cls;
+    if (pin) send_msg(MSG_PIN, NULL, 0, pin, (uint32_t)strlen(pin));
+}
+
+static void register_client(void *cls, const char *id, const char *pk, const char *name) {
+    (void)cls;
+    (void)id;
+    (void)pk;
+    if (name) send_msg(MSG_PAIRED, NULL, 0, name, (uint32_t)strlen(name));
+}
+
 static const char *passwd(void *cls, int *len) { (void)cls; *len = 0; return NULL; }
 static void export_dacp(void *cls, const char *a, const char *d) { (void)cls; (void)a; (void)d; }
-static void on_video_play(void *cls, const char *loc, const float start) { (void)cls; (void)loc; (void)start; }
-static void on_video_scrub(void *cls, const float p) { (void)cls; (void)p; }
-static void on_video_rate(void *cls, const float r) { (void)cls; (void)r; }
-static void on_video_stop(void *cls) { (void)cls; }
-static void on_video_acquire_playback_info(void *cls, playback_info_t *p) { (void)cls; (void)p; }
-static float on_video_playlist_remove(void *cls) { (void)cls; return 0; }
+
+static void on_video_play(void *cls, const char *loc, const float start) {
+    (void)cls;
+    if (!loc) return;
+    logi("video play %s from %.1fs", loc, start);
+    showing(STATE_LOADING);
+    struct airplay_play p = {(int64_t)((double)start * 1e6)};
+    send_msg(MSG_PLAY, &p, sizeof(p), loc, (uint32_t)strlen(loc));
+}
+
+static void on_video_scrub(void *cls, const float at) {
+    (void)cls;
+    struct airplay_scrub s = {(int64_t)((double)at * 1e6)};
+    send_msg(MSG_SCRUB, &s, sizeof(s), NULL, 0);
+}
+
+static void on_video_rate(void *cls, const float rate) {
+    (void)cls;
+    struct airplay_rate r = {rate > 0.0f};
+    send_msg(MSG_RATE, &r, sizeof(r), NULL, 0);
+}
+
+static void on_video_stop(void *cls) {
+    (void)cls;
+    showing(STATE_LOADING);
+    send_msg(MSG_STOP, NULL, 0, NULL, 0);
+}
+
+static void on_video_acquire_playback_info(void *cls, playback_info_t *p) {
+    (void)cls;
+    pthread_mutex_lock(&shown_mu);
+    struct airplay_position now = shown;
+    pthread_mutex_unlock(&shown_mu);
+    p->ready_to_play = now.state == STATE_PLAYING || now.state == STATE_PAUSED || now.state == STATE_ENDED;
+    p->playback_likely_to_keep_up = p->ready_to_play;
+    p->playback_buffer_empty = !p->ready_to_play;
+    p->playback_buffer_full = p->ready_to_play;
+    p->rate = now.state == STATE_PLAYING ? 1.0f : 0.0f;
+    p->duration = (double)now.length_us / 1e6;
+    p->position = (double)now.at_us / 1e6;
+    p->seek_start = 0;
+    p->seek_duration = p->duration;
+    if (now.state == STATE_LOADING) p->position = -1.0;
+    if (now.state == STATE_ENDED) p->position = p->duration;
+    if (now.state == STATE_OVER) {
+        p->position = -1.0;
+        p->duration = -1.0;
+    }
+}
+
+static float on_video_playlist_remove(void *cls) {
+    (void)cls;
+    pthread_mutex_lock(&shown_mu);
+    float at = (float)((double)shown.at_us / 1e6);
+    pthread_mutex_unlock(&shown_mu);
+    struct airplay_rate r = {0};
+    send_msg(MSG_RATE, &r, sizeof(r), NULL, 0);
+    return at;
+}
 static void get_custom_profile(void *cls, const char **p) { (void)cls; *p = NULL; }
 
 static void log_line(void *cls, int level, const char *msg) {
@@ -190,6 +300,22 @@ static void listen_daemon(void) {
         struct airplay_header h;
         if (read_all(&h, sizeof(h))) return;
         if (h.length > AIRPLAY_MAX_PAYLOAD) return;
+        if (h.kind == MSG_LEVEL && h.length == sizeof(struct airplay_volume)) {
+            struct airplay_volume l;
+            if (read_all(&l, sizeof(l))) return;
+            pthread_mutex_lock(&level_mu);
+            level_db = l.db;
+            pthread_mutex_unlock(&level_mu);
+            continue;
+        }
+        if (h.kind == MSG_POSITION && h.length == sizeof(struct airplay_position)) {
+            struct airplay_position p;
+            if (read_all(&p, sizeof(p))) return;
+            pthread_mutex_lock(&shown_mu);
+            shown = p;
+            pthread_mutex_unlock(&shown_mu);
+            continue;
+        }
         char skip[256];
         uint32_t left = h.length;
         while (left > 0) {
@@ -202,10 +328,11 @@ static void listen_daemon(void) {
 }
 
 int main(int argc, char **argv) {
-    if (argc < 6) {
-        fprintf(stderr, "usage: %s NAME MAC KEYFILE WIDTH HEIGHT\n", argv[0]);
+    if (argc < 7) {
+        fprintf(stderr, "usage: %s NAME MAC KEYFILE WIDTH HEIGHT LANGUAGE\n", argv[0]);
         return 2;
     }
+    int screen = atoi(argv[4]) > 0 && atoi(argv[5]) > 0;
     const char *name = argv[1];
     char hw[6];
     if (parse_mac(argv[2], hw)) {
@@ -232,7 +359,6 @@ int main(int argc, char **argv) {
     cb.audio_set_client_volume = audio_set_client_volume;
     cb.audio_set_volume = audio_set_volume;
     cb.audio_get_format = audio_get_format;
-    cb.video_report_size = video_report_size;
     cb.audio_set_metadata = audio_set_metadata;
     cb.audio_set_coverart = audio_set_coverart;
     cb.audio_stop_coverart_rendering = audio_stop_coverart_rendering;
@@ -240,11 +366,10 @@ int main(int argc, char **argv) {
     cb.report_client_request = report_client_request;
     cb.display_pin = display_pin;
     cb.register_client = register_client;
-    cb.check_register = check_register;
     cb.passwd = passwd;
     cb.export_dacp = export_dacp;
     cb.video_reset = video_reset;
-    cb.video_set_codec = video_set_codec;
+    cb.video_set_codec_and_size = video_set_codec_and_size;
     cb.mirror_video_running = mirror_video_running;
     cb.on_video_play = on_video_play;
     cb.on_video_scrub = on_video_scrub;
@@ -252,6 +377,7 @@ int main(int argc, char **argv) {
     cb.on_video_stop = on_video_stop;
     cb.on_video_playlist_remove = on_video_playlist_remove;
     cb.on_video_acquire_playback_info = on_video_acquire_playback_info;
+    cb.on_video_mute = on_video_mute;
     cb.get_custom_profile = get_custom_profile;
 
     raop = raop_init(&cb);
@@ -263,6 +389,11 @@ int main(int argc, char **argv) {
     raop_set_plist(raop, "height", atoi(argv[5]));
     raop_set_plist(raop, "refreshRate", 60);
     raop_set_plist(raop, "maxFPS", 30);
+    if (screen) {
+        raop_set_plist(raop, "hls", 1);
+        raop_set_plist(raop, "pin", 0);
+        raop_set_lang(raop, NULL, NULL, argv[6]);
+    }
 
     unsigned short tcp[2] = {AIRPLAY_MIRROR_PORT, AIRPLAY_PORT};
     unsigned short udp[3] = {AIRPLAY_TIMING_PORT, AIRPLAY_CONTROL_PORT, AIRPLAY_DATA_PORT};
@@ -282,10 +413,12 @@ int main(int argc, char **argv) {
         return 1;
     }
     raop_set_dnssd(raop, dnssd);
-    if (atoi(argv[4]) <= 0 || atoi(argv[5]) <= 0) {
+    if (!screen) {
         dnssd_set_airplay_features(dnssd, 7, 0);
     } else {
         dnssd_set_airplay_features(dnssd, 42, 1);
+        dnssd_set_airplay_features(dnssd, 0, 1);
+        dnssd_set_airplay_features(dnssd, 4, 1);
     }
     if (dnssd_build_records(dnssd)) {
         logw("building the announcement records failed");

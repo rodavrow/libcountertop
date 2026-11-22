@@ -129,23 +129,25 @@ func (a *App) rail(w *gogui.Window, covering *Screen) gogui.View {
 func (a *App) volumeCard(w *gogui.Window) gogui.View {
 	vol := a.o.Volume
 	stream, open := vol.Picked()
+	choice := func(s schema.Stream) widgets.VolumeChoice {
+		return widgets.VolumeChoice{
+			Key:   string(s),
+			Label: s.Label(),
+			Level: vol.Level(s),
+			Muted: vol.Muted(s),
+		}
+	}
 	var choices []widgets.VolumeChoice
 	for _, s := range a.o.Streams {
-		choices = append(
-			choices,
-			widgets.VolumeChoice{Key: string(s), Label: s.Label(), Level: vol.Level(s)},
-		)
+		choices = append(choices, choice(s))
 	}
 	return a.ui.Toolkit.VolumeCard(w, widgets.VolumeOptions{
-		Current: widgets.VolumeChoice{
-			Key:   string(stream),
-			Label: stream.Label(),
-			Level: vol.Level(stream),
-		},
+		Current: choice(stream),
 		Choices: choices,
 		Open:    open,
 		Left:    a.o.Settings().Screen.Volume == schema.EdgeLeft,
 		Set:     func(s string, v int) { vol.Set(schema.Stream(s), v) },
+		Mute:    func(s string, on bool) { vol.Mute(schema.Stream(s), on) },
 		Linger:  vol.Linger,
 		Expand:  vol.Expand,
 		Dismiss: vol.Dismiss,

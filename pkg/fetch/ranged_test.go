@@ -162,18 +162,29 @@ func TestContentRangeTotal(t *testing.T) {
 	}
 }
 
-func TestAPacedStreamStaysWithinItsLead(t *testing.T) {
+func TestAPacedStreamStaysWithinItsLeadOfWhatWasRead(t *testing.T) {
 	body := content(1000)
-	start := time.Now()
 	var mu sync.Mutex
-	asked := map[string]time.Duration{}
+	asked := map[string]bool{}
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		mu.Lock()
-		asked[r.Header.Get("Range")] = time.Since(start)
+		asked[r.Header.Get("Range")] = true
 		mu.Unlock()
 		http.ServeContent(w, r, "", time.Time{}, bytes.NewReader(body))
 	}))
 	t.Cleanup(s.Close)
+	seen := func(span string) bool {
+		mu.Lock()
+		defer mu.Unlock()
+		return asked[span]
+	}
+	within := func(span string) bool {
+		until := time.Now().Add(time.Second)
+		for !seen(span) && time.Now().Before(until) {
+			time.Sleep(5 * time.Millisecond)
+		}
+		return seen(span)
+	}
 
 	r := NewRanged(
 		t.Context(),
@@ -182,17 +193,22 @@ func TestAPacedStreamStaysWithinItsLead(t *testing.T) {
 		0,
 		Chunks{Size: 100, Ahead: 10, Rate: 1000, Lead: 200 * time.Millisecond},
 	)
-	got, err := io.ReadAll(r)
-	if err != nil || !bytes.Equal(got, body) {
-		t.Fatalf("read %d bytes, %v", len(got), err)
+	if !within("bytes=200-299") {
+		t.Fatal("a chunk inside the lead was not fetched before anything was read")
 	}
-	mu.Lock()
-	defer mu.Unlock()
-	if at := asked["bytes=200-299"]; at > 100*time.Millisecond {
-		t.Errorf("a chunk inside the lead waited %v", at)
+	time.Sleep(50 * time.Millisecond)
+	if seen("bytes=300-399") {
+		t.Error("a chunk past the lead was fetched before anything was read")
 	}
-	if at := asked["bytes=600-699"]; at < 350*time.Millisecond {
-		t.Errorf("a chunk 0.6s in was asked for at %v, before 0.4s", at)
+
+	if _, err := io.ReadFull(r, make([]byte, 600)); err != nil {
+		t.Fatal(err)
+	}
+	if !within("bytes=800-899") {
+		t.Error("reading fast did not pull the fetch along with it")
+	}
+	if seen("bytes=900-999") {
+		t.Error("the fetch ran past its lead of what was read")
 	}
 }
 

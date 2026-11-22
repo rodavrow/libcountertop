@@ -11,6 +11,7 @@ type Media struct {
 	Player     PlayerStart   `json:"player"`
 	Mini       bool          `json:"mini"`
 	Background bool          `json:"background"`
+	Autoplay   bool          `json:"autoplay"`
 }
 
 func DefaultMedia() Media {

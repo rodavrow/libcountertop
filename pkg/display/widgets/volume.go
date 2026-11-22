@@ -5,20 +5,45 @@ import (
 
 	gogui "github.com/go-gui-org/go-gui/gui"
 
+	"github.com/ygelfand/libcountertop/pkg/display/icons"
 	"github.com/ygelfand/libcountertop/pkg/display/style"
 )
 
 type VolumeChoice struct {
 	Key, Label string
 	Level      int
+	Muted      bool
 }
 type VolumeOptions struct {
 	Current                 VolumeChoice
 	Open, Left              bool
 	Choices                 []VolumeChoice
 	Set                     func(string, int)
+	Mute                    func(string, bool)
 	Linger, Expand, Dismiss func()
 	Grip                    func(gogui.View) gogui.View
+}
+
+func muteToggle(choice VolumeChoice, options VolumeOptions) gogui.View {
+	t := gogui.CurrentTheme()
+	shown := gogui.Label(fmt.Sprintf("%d", choice.Level), t.TextStyleTitle)
+	if choice.Muted {
+		icon := t.TextStyleTitle
+		icon.Family = icons.Family
+		icon.Color = Secondary().Color
+		shown = gogui.Label(icons.Glyph(icons.Named("mdi:volume-off")), icon)
+	}
+	return gogui.Row(gogui.ContainerCfg{
+		ID:      "volume-mute-" + choice.Key,
+		Padding: gogui.NoPadding,
+		Content: []gogui.View{shown},
+		OnClick: func(e gogui.EventCtx) {
+			options.Mute(choice.Key, !choice.Muted)
+			options.Linger()
+			e.Window.InvalidateLayout()
+			e.Consume()
+		},
+	})
 }
 
 func (kit *Toolkit) VolumeCard(w *gogui.Window, options VolumeOptions) gogui.View {
@@ -48,6 +73,7 @@ func (kit *Toolkit) VolumeCard(w *gogui.Window, options VolumeOptions) gogui.Vie
 			Height:    meterHeight,
 			Sizing:    gogui.FixedFixed,
 			OnChange: func(v float32, e gogui.EventCtx) {
+				options.Mute(choice.Key, false)
 				options.Set(choice.Key, 100-int(v+0.5))
 				options.Linger()
 				e.Window.InvalidateLayout()
@@ -70,8 +96,11 @@ func (kit *Toolkit) VolumeCard(w *gogui.Window, options VolumeOptions) gogui.Vie
 		if current {
 			label = append([]gogui.View{gogui.Label(arrow, icon)}, label...)
 		}
+		if choice.Muted {
+			meter.Color = t.Cfg.ColorTextSecondary
+		}
 		capsule := []gogui.View{
-			gogui.Label(fmt.Sprintf("%d", choice.Level), t.TextStyleTitle),
+			muteToggle(choice, options),
 			options.Grip(kit.Slider(meter)),
 			gogui.Separator(gogui.SeparatorCfg{Size: 1}),
 			gogui.Row(gogui.ContainerCfg{

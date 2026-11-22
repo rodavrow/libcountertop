@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 
-#define AIRPLAY_VERSION 5
+#define AIRPLAY_VERSION 7
 
 #define AIRPLAY_PORT 7000
 #define AIRPLAY_MIRROR_PORT 7100
@@ -19,9 +19,25 @@
 #define MSG_DISCONNECT 'X'
 #define MSG_AUDIO 'A'
 #define MSG_SOUND 'S'
+#define MSG_PLAY 'P'
+#define MSG_SCRUB 'K'
+#define MSG_RATE 'T'
+#define MSG_STOP 'Z'
+#define MSG_POSITION 'O'
+#define MSG_PIN 'N'
+#define MSG_PAIRED 'D'
+#define MSG_VOLUME 'L'
+#define MSG_MUTE 'U'
+#define MSG_LEVEL 'B'
 
 #define CODEC_H264 1
 #define CODEC_H265 2
+
+#define STATE_LOADING 0
+#define STATE_PLAYING 1
+#define STATE_PAUSED 2
+#define STATE_OVER 3
+#define STATE_ENDED 4
 
 struct airplay_header {
     uint32_t kind;
@@ -51,4 +67,32 @@ struct airplay_audio {
 
 struct airplay_frame {
     uint64_t at_us;
+    uint32_t width;
+    uint32_t height;
+};
+
+struct airplay_play {
+    int64_t start_us;
+};
+
+struct airplay_scrub {
+    int64_t at_us;
+};
+
+struct airplay_rate {
+    uint32_t playing;
+};
+
+struct airplay_volume {
+    float db;
+};
+
+struct airplay_mute {
+    uint32_t muted;
+};
+
+struct airplay_position {
+    int64_t at_us;
+    int64_t length_us;
+    int64_t state;
 };

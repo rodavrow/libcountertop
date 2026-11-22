@@ -7,7 +7,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/ygelfand/libcountertop/pkg/audio/volume"
 	"github.com/ygelfand/libcountertop/pkg/display/shell"
 	"github.com/ygelfand/libcountertop/pkg/display/ui"
 	"github.com/ygelfand/libcountertop/pkg/media/nowplaying"
@@ -39,6 +38,7 @@ type Page struct {
 	drawn    string
 	hold     *shell.Hold
 	slide    slide
+	times    int
 }
 
 func (p *Page) Shows(s config.Stream) bool { return s == config.StreamMedia }
@@ -61,6 +61,7 @@ type Look struct {
 	Backdrop *ui.Image
 	FrameW   int
 	FrameH   int
+	Times    int
 }
 
 func (p *Page) Look() Look {
@@ -77,7 +78,25 @@ func (p *Page) Look() Look {
 		Backdrop: p.backdrop,
 		FrameW:   p.frameW,
 		FrameH:   p.frameH,
+		Times:    max(p.times, 1),
 	}
+}
+
+func (p *Page) Hurry(times int) bool {
+	c := p.controls()
+	s, ok := c.(Speeder)
+	if !ok {
+		return false
+	}
+	if times > 1 && !c.Now().Can.Has(nowplaying.CanFast) {
+		return false
+	}
+	s.Speed(times)
+	p.mu.Lock()
+	p.times = times
+	p.mu.Unlock()
+	p.redraw()
+	return true
 }
 
 func (p *Page) Reveal() { p.reveal() }
@@ -120,6 +139,9 @@ func (p *Page) Docks() bool {
 
 func (p *Page) Follow(c Controls) {
 	p.mu.Lock()
+	if c != p.c {
+		p.times = 1
+	}
 	p.c = c
 	p.mu.Unlock()
 }
@@ -210,12 +232,6 @@ func (p *Page) redraw() {
 
 func (p *Page) Run(ctx context.Context) {
 	p.Show()
-	quiet := p.options.Volume.Watch(func(int) {
-		if p.options.Shell.Top() == p {
-			p.reveal()
-		}
-	})
-	defer quiet()
 	defer func() {
 		p.mu.Lock()
 		hold := p.hold
@@ -280,7 +296,7 @@ func (p *Page) tick() {
 	p.paused = now.Paused
 	spinning := p.loading && time.Since(p.began) > spinAfter
 	key := fmt.Sprintf(
-		"%v|%v|%d|%v|%v|%s|%s|%s|%d|%d|%d|%d|%s",
+		"%v|%v|%d|%v|%v|%s|%s|%s|%d|%d|%d|%s",
 		p.shown,
 		p.picture,
 		now.Elapsed/time.Second,
@@ -292,7 +308,6 @@ func (p *Page) tick() {
 		now.ArtID,
 		now.MarkID,
 		now.Can,
-		p.options.Volume.Level(),
 		breakKey(now.Break),
 	)
 	changed := key != p.drawn
@@ -304,7 +319,6 @@ func (p *Page) tick() {
 }
 
 type Dependencies struct {
-	Shell  *shell.Shell
-	Volume volume.Channel
-	Left   func()
+	Shell *shell.Shell
+	Left  func()
 }

@@ -29,6 +29,7 @@ var Shared = Coverage{
 		"Media.Player":              "media.player",
 		"Media.Mini":                "media.mini",
 		"Media.Background":          "media.background",
+		"Media.Autoplay":            "media.autoplay",
 		"Poster.Enabled":            "poster.on",
 		"Poster.Every":              "poster.every",
 		"Poster.Fit":                "poster.fit",

@@ -48,3 +48,32 @@ func TestKeyboardQRUsesAnIconAndALargerPanel(t *testing.T) {
 		check(&layout)
 	}
 }
+
+func TestAFullWidthKeyboardIsNeverShorterThanLargeAndGrowsOnAWidePanel(t *testing.T) {
+	for _, size := range [][2]int{{800, 480}, {1280, 800}, {720, 1152}} {
+		w := gui.SimpleWindow("keyboard", size[0], size[1], &struct{}{}, func(*gui.Window) {})
+		at := func(k KeyboardSize) int {
+			opts := KeyboardOptions{
+				Size:    k,
+				Palette: theme.Theme{},
+				Kit:     style.ByName("standard").Kit,
+				Type:    func(rune) {},
+				Press:   func(gui.KeyCode) {},
+				Cancel:  "Cancel",
+				Save:    "Save",
+			}
+			r, _ := NewEditor().Keyboard(w, opts)
+			if r.Y < 0 {
+				t.Fatalf("%v %s: keyboard %+v runs off the top", size, k, r)
+			}
+			return r.H
+		}
+		large, full := at(KeyboardLarge), at(KeyboardFullWidth)
+		if full < large {
+			t.Errorf("%v: full width %d tall, large %d", size, full, large)
+		}
+		if size[0] == 1280 && full <= large {
+			t.Errorf("%v: full width %d tall, no taller than large %d", size, full, large)
+		}
+	}
+}

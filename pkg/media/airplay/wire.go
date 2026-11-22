@@ -2,6 +2,7 @@ package airplay
 
 import (
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -11,7 +12,7 @@ import (
 )
 
 const (
-	version    = 5
+	version    = 7
 	maxPayload = 4 << 20
 
 	msgReady      = 'R'
@@ -22,9 +23,29 @@ const (
 	msgDisconnect = 'X'
 	msgAudio      = 'A'
 	msgSound      = 'S'
+	msgPlay       = 'P'
+	msgScrub      = 'K'
+	msgRate       = 'T'
+	msgStop       = 'Z'
+	msgPosition   = 'O'
+	msgPin        = 'N'
+	msgPaired     = 'D'
+	msgVolume     = 'L'
+	msgMute       = 'U'
+	msgLevel      = 'B'
 
 	codecH264 = 1
 	codecH265 = 2
+)
+
+type state int64
+
+const (
+	stateLoading state = iota
+	statePlaying
+	statePaused
+	stateOver
+	stateEnded
 )
 
 var (
@@ -157,16 +178,66 @@ func (m mirroring) picture() (uint32, bool) {
 }
 
 type frame struct {
-	at   time.Duration
-	data []byte
+	at            time.Duration
+	width, height int
+	data          []byte
 }
 
+const frameHead = 16
+
 func frameOf(p []byte) (frame, error) {
-	if len(p) < 8 {
+	if len(p) < frameHead {
 		return frame{}, fmt.Errorf("airplay: %d byte frame", len(p))
 	}
 	us := binary.LittleEndian.Uint64(p[0:])
-	return frame{at: time.Duration(us) * time.Microsecond, data: p[8:]}, nil
+	return frame{
+		at:     time.Duration(us) * time.Microsecond,
+		width:  int(binary.LittleEndian.Uint32(p[8:])),
+		height: int(binary.LittleEndian.Uint32(p[12:])),
+		data:   p[frameHead:],
+	}, nil
+}
+
+type play struct {
+	at       time.Duration
+	location string
+}
+
+func playOf(p []byte) (play, error) {
+	if len(p) < 8 {
+		return play{}, fmt.Errorf("airplay: %d byte play", len(p))
+	}
+	at := time.Duration(int64(binary.LittleEndian.Uint64(p[0:]))) * time.Microsecond
+	if len(p) == 8 {
+		return play{}, errors.New("airplay: play without a location")
+	}
+	return play{at: max(at, 0), location: string(p[8:])}, nil
+}
+
+func scrubOf(p []byte) (time.Duration, error) {
+	if len(p) != 8 {
+		return 0, fmt.Errorf("airplay: %d byte scrub", len(p))
+	}
+	at := time.Duration(int64(binary.LittleEndian.Uint64(p[0:]))) * time.Microsecond
+	return max(at, 0), nil
+}
+
+func rateOf(p []byte) (playing bool, err error) {
+	if len(p) != 4 {
+		return false, fmt.Errorf("airplay: %d byte rate", len(p))
+	}
+	return binary.LittleEndian.Uint32(p[0:]) != 0, nil
+}
+
+type position struct {
+	at, length time.Duration
+	state      state
+}
+
+func (p position) bytes() []byte {
+	b := binary.LittleEndian.AppendUint64(nil, uint64(p.at.Microseconds()))
+	b = binary.LittleEndian.AppendUint64(b, uint64(p.length.Microseconds()))
+	return binary.LittleEndian.AppendUint64(b, uint64(p.state))
 }
 
 type audio struct {

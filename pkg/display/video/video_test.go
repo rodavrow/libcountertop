@@ -1,6 +1,7 @@
 package video
 
 import (
+	"image"
 	"testing"
 	"time"
 
@@ -8,8 +9,27 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/display/surface"
 )
 
+var hd = image.Pt(1920, 1080)
+
+func TestANewPictureSizeIsPlacedThroughTheOpenLayer(t *testing.T) {
+	x, y, m, at := placement(
+		geometry.Rotate0,
+		1280,
+		800,
+		image.Pt(1280, 800),
+		image.Pt(1066, 800),
+		0,
+	)
+	if x != 107 || y != 0 || m != (surface.Matrix{DsDx: 1066.0 / 1280, DsDy: 1}) {
+		t.Errorf("position %v,%v matrix %+v", x, y, m)
+	}
+	if at != (geometry.Rect{X: 107, Y: 0, W: 1066, H: 800}) {
+		t.Errorf("at %+v, want the 4:3 picture pillarboxed", at)
+	}
+}
+
 func TestUprightVideoIsScaledIntoPlace(t *testing.T) {
-	x, y, m, at := placement(geometry.Rotate0, 1200, 1920, 1920, 1080, 0)
+	x, y, m, at := placement(geometry.Rotate0, 1200, 1920, hd, hd, 0)
 	if x != 0 || y != 622 || m != (surface.Matrix{DsDx: 0.625, DsDy: 0.625}) {
 		t.Errorf("position %v,%v matrix %+v", x, y, m)
 	}
@@ -19,7 +39,7 @@ func TestUprightVideoIsScaledIntoPlace(t *testing.T) {
 }
 
 func TestSidewaysVideoIsTurnedIntoPlace(t *testing.T) {
-	x, y, m, at := placement(geometry.Rotate90, 1200, 1920, 1920, 1080, 0)
+	x, y, m, at := placement(geometry.Rotate90, 1200, 1920, hd, hd, 0)
 	if x != 60 || y != 1920 || m != (surface.Matrix{DtDx: -1, DtDy: 1}) {
 		t.Errorf("position %v,%v matrix %+v", x, y, m)
 	}
@@ -29,7 +49,7 @@ func TestSidewaysVideoIsTurnedIntoPlace(t *testing.T) {
 }
 
 func TestASlideMovesThePictureNotItsPlace(t *testing.T) {
-	x, y, _, at := placement(geometry.Rotate0, 1200, 1920, 1920, 1080, -300)
+	x, y, _, at := placement(geometry.Rotate0, 1200, 1920, hd, hd, -300)
 	if x != 0 || y != 322 {
 		t.Errorf("slid position %v,%v, want 0,322", x, y)
 	}

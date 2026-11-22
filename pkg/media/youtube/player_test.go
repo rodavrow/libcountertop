@@ -36,6 +36,26 @@ func TestUpNextIsTheRestOfTheListThenRelated(t *testing.T) {
 	}
 }
 
+func TestAFinishedVideoMovesOnOnlyWithAutoplay(t *testing.T) {
+	auto := false
+	p := NewPlayer(t.Context(), PlayerOptions{Autoplay: func() bool { return auto }})
+	p.list = []Video{{ID: "a"}, {ID: "b"}}
+	if p.advances() {
+		t.Error("moved on to the next video with autoplay off")
+	}
+	auto = true
+	if !p.advances() {
+		t.Error("stayed put with autoplay on and a next video")
+	}
+	p.index = 1
+	if p.advances() {
+		t.Error("moved on with nothing next")
+	}
+	if NewPlayer(t.Context(), PlayerOptions{}).advances() {
+		t.Error("a player with no autoplay setting moved on")
+	}
+}
+
 func TestTheLastVideoWithNothingRelatedHasNoNext(t *testing.T) {
 	p := NewPlayer(t.Context(), PlayerOptions{})
 	p.list = []Video{{ID: "a"}}

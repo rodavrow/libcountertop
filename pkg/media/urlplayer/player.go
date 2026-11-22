@@ -31,6 +31,7 @@ type Options struct {
 	Target   func() playback.Target
 	Remote   Remote
 	Ready    func()
+	Finished func()
 }
 
 type Remote interface {
@@ -389,7 +390,11 @@ func (p *Player) Shown() (Shown, bool) {
 	}
 	t.mu.Lock()
 	defer t.mu.Unlock()
-	s := Shown{Width: t.picture.Width, Height: t.picture.Height, Length: t.length}
+	s := Shown{
+		Width:  t.picture.Width,
+		Height: t.picture.Height,
+		Length: time.Duration(t.length.Load()),
+	}
 	if s.Length == 0 && !t.media.Streaming() {
 		s.Length = t.media.Length()
 	}
@@ -410,6 +415,21 @@ func (p *Player) ready(t *track) {
 	if current && !t.waiting.Load() && p.o.Ready != nil {
 		p.o.Ready()
 	}
+}
+
+func (p *Player) finished(t *track) {
+	p.mu.Lock()
+	current := p.cur == t
+	p.mu.Unlock()
+	if current && p.o.Finished != nil {
+		safe.Go("urlplayer finished", p.o.Finished)
+	}
+}
+
+func (p *Player) Paused() bool {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	return p.paused
 }
 
 func (p *Player) Report() string {

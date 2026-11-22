@@ -28,6 +28,10 @@ type Seeker interface {
 	Seek(to time.Duration)
 }
 
+type Fast interface {
+	Fast()
+}
+
 type Placer interface {
 	Place() (at time.Duration, ok bool)
 }
@@ -73,6 +77,7 @@ type Picture struct {
 	Codec         uint32
 	Width, Height int
 	Next          func(context.Context) (data []byte, at time.Duration, err error)
+	Size          func() (width, height int)
 	Sparse        bool
 	Session       uint32
 	Sealed        func(context.Context) (data []byte, at time.Duration, crypt *cenc.Crypt, err error)

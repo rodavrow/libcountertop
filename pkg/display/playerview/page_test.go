@@ -43,12 +43,6 @@ func (playing) From() nowplaying.Kind            { return nowplaying.FromCast }
 func (playing) Transport() nowplaying.Controller { return quiet{} }
 func (playing) Open()                            {}
 
-type level struct{ v int }
-
-func (l *level) Level() int             { return l.v }
-func (l *level) Set(v int)              { l.v = v }
-func (l *level) Watch(func(int)) func() { return func() {} }
-
 type drawn struct{ frames int }
 
 func (*drawn) Program(int, string, string) error                          { return nil }
@@ -120,7 +114,6 @@ func TestThePlayerDrawsBothWays(t *testing.T) {
 		presentation.Reset()
 		p := New(Dependencies{
 			Player: playing{now: now},
-			Volume: &level{v: 40},
 			Shell:  shell.New(),
 			UI:     presentation,
 		})

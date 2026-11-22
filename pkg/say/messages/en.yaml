@@ -477,6 +477,7 @@ features.rtsp: Camera stream
 features.rtsp.hint: RTSP and ONVIF, for Home Assistant and recorders
 features.airplay: AirPlay
 features.airplay.hint: Mirror from a Mac or iPhone
+airplay.code: "Enter this code on {{.Client}}"
 features.sendspin: Sendspin
 features.sendspin.hint: Whole-home audio
 features.speaker: Bluetooth speaker
@@ -663,6 +664,7 @@ keyboard.code_expired: Code expired
 message.close: Close
 keyboard.compact: Compact
 keyboard.enter: Enter
+keyboard.full_width: Full width
 keyboard.hide: Hide
 keyboard.large: Large
 keyboard.refresh: Refresh
@@ -682,6 +684,7 @@ look.title: Visuals
 media.entity.buttons: Volume buttons
 media.entity.duck: Music ducking
 media.group.media: Media
+media.setting.autoplay: Autoplay
 media.setting.background: Background play
 media.setting.buttons: Volume buttons
 media.setting.duck: Ducking depth
@@ -1394,6 +1397,11 @@ sound.alerts: Alarm volume
 sound.feedback: System sounds
 sound.main: Main volume
 sound.media: Media volume
+sound.mute.alerts: Mute alarms
+sound.mute.feedback: Mute system sounds
+sound.mute.main: Mute all sound
+sound.mute.media: Mute media
+sound.mute.voice: Mute assistant
 sound.voice: Assistant volume
 source.both: Microphone and speaker
 source.mic: Microphone

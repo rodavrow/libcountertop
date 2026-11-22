@@ -33,7 +33,7 @@ func (p *BasicPages) Media() *shell.Page {
 func (p *BasicPages) YouTube() *shell.Page {
 	return &shell.Page{Title: say.T("youtube.app"), Build: func() ([]menu.Row, []func(int)) {
 		player := p.options.Player
-		on := player.Background()
+		on, auto := player.Background(), player.Autoplay()
 		return []menu.Row{
 			{
 				Label: say.T("youtube.skip"),
@@ -42,9 +42,11 @@ func (p *BasicPages) YouTube() *shell.Page {
 				Open:  func() shell.View { return p.options.Sponsor.Sponsor() },
 			},
 			{Label: say.T("media.setting.background"), Kind: menu.Toggle, On: on},
+			{Label: say.T("media.setting.autoplay"), Kind: menu.Toggle, On: auto},
 		}, []func(int){
 			nil,
 			func(int) { player.SetBackground(!on) },
+			func(int) { player.SetAutoplay(!auto) },
 		}
 	}}
 }

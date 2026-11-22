@@ -19,9 +19,10 @@ import (
 type KeyboardSize = schema.KeyboardSize
 
 const (
-	KeyboardCompact  = schema.KeyboardCompact
-	KeyboardStandard = schema.KeyboardStandard
-	KeyboardLarge    = schema.KeyboardLarge
+	KeyboardCompact   = schema.KeyboardCompact
+	KeyboardStandard  = schema.KeyboardStandard
+	KeyboardLarge     = schema.KeyboardLarge
+	KeyboardFullWidth = schema.KeyboardFullWidth
 )
 
 type KeyboardStyle interface {
@@ -53,7 +54,12 @@ func (editor *Editor) Keyboard(w *gogui.Window, opts KeyboardOptions) (ui.Rect, 
 	gap := style.Reach() * 0.12
 	pad := style.Reach() * 0.2
 	high := style.Reach() * rowScale
-	unit := min((float32(vw)-2*pad-9*gap)/10, high*1.6)
+	unit := (float32(vw) - 2*pad - 9*gap) / 10
+	if size == KeyboardFullWidth {
+		high = max(high, unit/1.6)
+	} else {
+		unit = min(unit, high*1.6)
+	}
 
 	plain := pal.Background.Blend(pal.Text, 0.18)
 	special := pal.Background.Blend(pal.Text, 0.10)
@@ -262,7 +268,7 @@ func keySize(k KeyboardSize) (row, text float32) {
 	switch k {
 	case KeyboardStandard:
 		return 1, 1.15
-	case KeyboardLarge:
+	case KeyboardLarge, KeyboardFullWidth:
 		return 1.2, 1.25
 	}
 	return 0.75, 1

@@ -21,6 +21,8 @@ const (
 	nextColumns = 3
 	nextShare   = 0.4
 	flickSpeed  = 300
+	fastTimes   = 2
+	fastShare   = 2.0 / 3
 )
 
 var (
@@ -93,11 +95,17 @@ func (pv *Renderer) Video(w *gogui.Window, p *videoplayer.Page) gogui.View {
 			layers = append(layers, pv.ad(b))
 		}
 	}
+	if look.Times > 1 {
+		layers = append(layers, pv.fast(look.Times))
+	}
 
 	cfg := full
 	cfg.ID = "video"
 	cfg.Content = layers
 	cfg.OnGesture = func(e gogui.EventCtx) {
+		if hurried(e, p, vw) {
+			return
+		}
 		if !tapped(e) {
 			drag(e, p, vh)
 			return
@@ -111,6 +119,29 @@ func (pv *Renderer) Video(w *gogui.Window, p *videoplayer.Page) gogui.View {
 		e.Window.InvalidateLayout()
 	}
 	return gogui.Column(cfg)
+}
+
+func hurried(e gogui.EventCtx, p *videoplayer.Page, width int) bool {
+	ev := e.Event
+	if ev == nil || ev.GestureType != gogui.GestureLongPress {
+		return false
+	}
+	switch ev.GesturePhase {
+	case gogui.GesturePhaseBegan:
+		if ev.CentroidX < float32(width)*fastShare || !p.Hurry(fastTimes) {
+			return false
+		}
+	case gogui.GesturePhaseChanged:
+		return false
+	default:
+		if p.Look().Times == 1 {
+			return false
+		}
+		p.Hurry(1)
+	}
+	e.Consume()
+	e.Window.InvalidateLayout()
+	return true
 }
 
 func tapped(e gogui.EventCtx) bool {
@@ -294,17 +325,13 @@ func (pv *Renderer) videoBand(
 	if now.LiveWithin > 0 {
 		rows = append(rows, pv.live(now, c, quiet))
 	}
-	side := reach() * 5
 	rows = append(rows, gogui.Row(gogui.ContainerCfg{
 		Sizing:  gogui.FillFit,
 		Padding: gogui.NoPadding,
 		VAlign:  gogui.VAlignMiddle,
+		HAlign:  gogui.HAlignCenter,
 		Content: []gogui.View{
-			pv.videoVolume(side),
 			pv.videoTransport(p, now, c),
-			gogui.Row(
-				gogui.ContainerCfg{Sizing: gogui.FillFit, MaxWidth: side, Padding: gogui.NoPadding},
-			),
 		},
 	}))
 
@@ -492,6 +519,28 @@ func (pv *Renderer) ad(b *nowplaying.Break) gogui.View {
 	})
 }
 
+func (pv *Renderer) fast(times int) gogui.View {
+	ink := gogui.CurrentTheme().TextStyleDef
+	ink.Color = videoInk
+	glyph := gogui.CurrentTheme().TextStyleIconLarge
+	glyph.Color, glyph.Size = videoInk, ink.Size
+	return gogui.Row(gogui.ContainerCfg{
+		Float:        true,
+		FloatAnchor:  gogui.FloatTopCenter,
+		FloatTieOff:  gogui.FloatTopCenter,
+		FloatOffsetY: reach() * 0.5,
+		Color:        videoScrim,
+		Radius:       gogui.RadiusLarge,
+		Padding:      gogui.PaddingSmall,
+		Spacing:      gogui.SpacingSmall,
+		VAlign:       gogui.VAlignMiddle,
+		Content: []gogui.View{
+			gogui.Label(fmt.Sprintf("%d×", times), ink),
+			gogui.Label(gogui.IconFastForward, glyph),
+		},
+	})
+}
+
 func (pv *Renderer) videoTransport(
 	p *videoplayer.Page,
 	now nowplaying.Now,
@@ -574,32 +623,6 @@ func (pv *Renderer) videoTransport(
 			Content: buttons,
 		},
 	)
-}
-
-func (pv *Renderer) videoVolume(width float32) gogui.View {
-	speaker := gogui.CurrentTheme().TextStyleIconLarge
-	speaker.Color, speaker.Size = videoInk, reach()*0.7
-	return gogui.Row(gogui.ContainerCfg{
-		Sizing:   gogui.FillFit,
-		MaxWidth: width,
-		Padding:  gogui.NoPadding,
-		VAlign:   gogui.VAlignMiddle,
-		Spacing:  gogui.SpacingMedium,
-		Content: []gogui.View{
-			gogui.Label(gogui.IconSpeaker, speaker),
-			pv.options.UI.Grip(pv.kit.Slider(gogui.SliderCfg{
-				ID:     "media-volume",
-				Height: reach(),
-				Sizing: gogui.FillFit,
-				Value:  float32(pv.options.Volume.Level()),
-				Max:    100,
-				OnChange: func(v float32, e gogui.EventCtx) {
-					pv.options.Volume.Set(int(v + 0.5))
-					e.Window.InvalidateLayout()
-				},
-			})),
-		},
-	})
 }
 
 func nonEmpty(ss ...string) []string {

@@ -71,8 +71,9 @@ type Stream struct {
 	resample func([]int16) []int16
 	decoded  []byte
 
-	ended bool
-	start time.Duration
+	ended  bool
+	start  time.Duration
+	length time.Duration
 
 	frames chan Frame
 	sps    []byte
@@ -270,11 +271,18 @@ func (s *Stream) follow(ctx context.Context, u string, video, audio bool) error 
 		}
 		p.playlist(time.Since(began))
 		u = final
+		s.mu.Lock()
 		if video {
-			s.mu.Lock()
 			s.ended = m.Endlist
-			s.mu.Unlock()
 		}
+		if m.Endlist {
+			var total time.Duration
+			for _, seg := range m.Segments {
+				total += seg.Duration
+			}
+			s.length = max(s.length, total)
+		}
+		s.mu.Unlock()
 		stall = max(stallLeast, time.Duration(m.TargetDuration)*stallTargets*time.Second)
 		first := m.MediaSequence
 		last := first + len(m.Segments) - 1
@@ -506,6 +514,12 @@ func (s *Stream) Ended() bool {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	return s.ended
+}
+
+func (s *Stream) Length() time.Duration {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.length
 }
 
 func (s *Stream) Start() time.Duration {

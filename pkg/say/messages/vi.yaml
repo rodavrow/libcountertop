@@ -478,6 +478,7 @@ features.rtsp: Luồng camera
 features.rtsp.hint: RTSP và ONVIF, cho Home Assistant và đầu ghi
 features.airplay: AirPlay
 features.airplay.hint: Phản chiếu từ Mac hoặc iPhone
+airplay.code: "Nhập mã này trên {{.Client}}"
 features.sendspin: Sendspin
 features.sendspin.hint: Âm thanh toàn nhà
 features.speaker: Loa Bluetooth
@@ -664,6 +665,7 @@ keyboard.code_expired: Mã đã hết hạn
 message.close: Đóng
 keyboard.compact: Gọn
 keyboard.enter: Nhập
+keyboard.full_width: Toàn chiều rộng
 keyboard.hide: Ẩn
 keyboard.large: Lớn
 keyboard.refresh: Làm mới
@@ -682,6 +684,7 @@ look.title: Hiệu ứng
 media.entity.buttons: Nút âm lượng
 media.entity.duck: Giảm âm nhạc
 media.group.media: Media
+media.setting.autoplay: Tự động phát
 media.setting.background: Phát trong nền
 media.setting.buttons: Nút âm lượng
 media.setting.duck: Độ giảm âm
@@ -1394,6 +1397,11 @@ sound.alerts: Âm lượng báo thức
 sound.feedback: Âm thanh hệ thống
 sound.main: Âm lượng chính
 sound.media: Âm lượng media
+sound.mute.alerts: Tắt tiếng báo thức
+sound.mute.feedback: Tắt âm thanh hệ thống
+sound.mute.main: Tắt mọi âm thanh
+sound.mute.media: Tắt tiếng media
+sound.mute.voice: Tắt tiếng trợ lý
 sound.voice: Âm lượng trợ lý
 source.both: Micrô và loa
 source.mic: Micrô

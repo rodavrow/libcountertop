@@ -41,6 +41,13 @@ func (e *ending) Previous()                 {}
 type fakeQueue struct {
 	mu      sync.Mutex
 	samples []int16
+	times   int
+}
+
+func (h *fakeQueue) Speed(times int) {
+	h.mu.Lock()
+	h.times = times
+	h.mu.Unlock()
 }
 
 func (h *fakeQueue) Play(
@@ -350,6 +357,42 @@ func TestAnAttachedSenderKeepsTheCardAfterAStop(t *testing.T) {
 type fromApp struct{ ending }
 
 func (*fromApp) Kind() nowplaying.Kind { return nowplaying.FromApp }
+
+type fastSource struct{ endless }
+
+func (*fastSource) Fast() {}
+
+func TestOnlyAFastSourcePlaysFastAndAStopPutsTheSpeedBack(t *testing.T) {
+	q := &fakeQueue{}
+	o := newOutput()
+	o.q = q
+	slow := &endless{}
+	o.Play(slow)
+	c := o.cur.card
+	if c.Now().Can.Has(nowplaying.CanFast) {
+		t.Error("a source read in real time offered to play fast")
+	}
+	c.Speed(2)
+	if q.times > 1 {
+		t.Errorf("a source read in real time played at speed %d", q.times)
+	}
+	o.Stop(slow)
+
+	quick := &fastSource{}
+	o.Play(quick)
+	c = o.cur.card
+	if !c.Now().Can.Has(nowplaying.CanFast) {
+		t.Error("a fast source did not offer to play fast")
+	}
+	c.Speed(2)
+	if q.times != 2 {
+		t.Errorf("a fast source played at speed %d, want 2", q.times)
+	}
+	o.Stop(quick)
+	if q.times != 1 {
+		t.Errorf("the speed stayed at %d after the stop, want 1", q.times)
+	}
+}
 
 func TestTheCardTakesItsSourcesKind(t *testing.T) {
 	o := newOutput()

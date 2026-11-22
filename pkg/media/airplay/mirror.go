@@ -19,9 +19,10 @@ var (
 
 type mirror struct {
 	*sound
-	size   mirroring
-	frames chan frame
-	first  time.Duration
+	size          mirroring
+	frames        chan frame
+	first         time.Duration
+	width, height int
 }
 
 func newMirror(client string, size mirroring, rate, channels int, disconnect func()) *mirror {
@@ -30,6 +31,8 @@ func newMirror(client string, size mirroring, rate, channels int, disconnect fun
 		size:   size,
 		frames: make(chan frame, frameDepth),
 		first:  -1,
+		width:  int(size.width),
+		height: int(size.height),
 	}
 }
 
@@ -54,6 +57,7 @@ func (m *mirror) Live(context.Context) (playback.Picture, error) {
 		Width:  int(m.size.width),
 		Height: int(m.size.height),
 		Next:   m.next,
+		Size:   m.shown,
 		Sparse: true,
 	}, nil
 }
@@ -66,6 +70,9 @@ func (m *mirror) next(ctx context.Context) ([]byte, time.Duration, error) {
 			m.first = f.at
 		}
 		at := f.at - m.first
+		if f.width > 0 && f.height > 0 {
+			m.width, m.height = f.width, f.height
+		}
 		m.mu.Unlock()
 		return f.data, at, nil
 	case <-m.done:
@@ -73,4 +80,10 @@ func (m *mirror) next(ctx context.Context) ([]byte, time.Duration, error) {
 	case <-ctx.Done():
 		return nil, 0, ctx.Err()
 	}
+}
+
+func (m *mirror) shown() (width, height int) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	return m.width, m.height
 }

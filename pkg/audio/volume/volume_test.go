@@ -52,8 +52,34 @@ func TestASuppliedMainHasItsOwnEntity(t *testing.T) {
 	if got := v.Streams(); len(got) != 2 || got[0] != schema.StreamMain {
 		t.Errorf("streams %v, want main first", got)
 	}
-	if len(v.Entities()) != 2 {
-		t.Errorf("%d entities, want main and media", len(v.Entities()))
+	if len(v.Entities()) != 4 {
+		t.Errorf("%d entities, want a volume and a mute for main and media", len(v.Entities()))
+	}
+}
+
+func TestMutingASuppliedMainKeepsItsLevel(t *testing.T) {
+	v, speaker := steppedVolume()
+	var heard []Change
+	v.Changed.Listen(func(c Change) { heard = append(heard, c) })
+
+	v.Mute(schema.StreamMain, true)
+	if !v.Muted(schema.StreamMain) {
+		t.Fatal("main not muted")
+	}
+	if speaker.step != 25 {
+		t.Errorf("muting moved the speaker to step %d, want 25", speaker.step)
+	}
+	if len(heard) != 1 || heard[0] != (Change{Stream: schema.StreamMain, Level: 83}) {
+		t.Errorf("changes %v, want main at 83", heard)
+	}
+	sw := v.mainNum.Switches[schema.StreamMain]
+	if sw == nil || sw.ObjectID != "mute_main" || !sw.Get() {
+		t.Error("mute_main does not read on")
+	}
+
+	v.Mute(schema.StreamMain, false)
+	if v.Muted(schema.StreamMain) || sw.Get() {
+		t.Error("main still muted")
 	}
 }
 

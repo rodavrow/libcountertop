@@ -50,6 +50,7 @@ func (t *track) openHLS(ctx context.Context) error {
 		return context.Canceled
 	}
 	t.at, t.seekable = s.Start(), s.Ended()
+	t.length.Store(int64(s.Length()))
 	t.dec = &hlsAudio{s: s}
 	t.convert = func(p []int16) []int16 { return p }
 	if t.screen && s.Width > 0 {

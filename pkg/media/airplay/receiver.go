@@ -48,6 +48,8 @@ type Options struct {
 	Size      func() (width, height int)
 	Largest   image.Point
 	Output    func(ended func()) playback.Output
+	Video     func() playback.Target
+	Volume    Volume
 	OpenPorts func()
 	Latency   func() time.Duration
 	Rate      int
@@ -61,7 +63,20 @@ type Receiver struct {
 	mu     sync.Mutex
 	cancel context.CancelFunc
 	live   *screening
+	codes  func(client, code string) (release func())
 	wg     sync.WaitGroup
+}
+
+func (r *Receiver) ShowCodes(show func(client, code string) (release func())) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	r.codes = show
+}
+
+func (r *Receiver) shower() func(client, code string) (release func()) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	return r.codes
 }
 
 func NewReceiver(o Options) *Receiver {
@@ -193,6 +208,7 @@ func (r *Receiver) session(ctx context.Context) error {
 			r.opts.Keyfile,
 			strconv.Itoa(sentW),
 			strconv.Itoa(sentH),
+			language(),
 		},
 		Files: []*os.File{theirs},
 	})
@@ -251,6 +267,12 @@ func (r *Receiver) session(ctx context.Context) error {
 		r.mu.Unlock()
 	}()
 	defer s.over()
+	defer s.hideCode()
+	if vol := r.opts.Volume; vol != nil {
+		s.tellLevel()
+		stop := vol.Listen(func(int) { s.tellLevel() })
+		defer stop()
+	}
 	for {
 		m, err := readMessage(ours)
 		if err != nil {
@@ -314,6 +336,35 @@ type screening struct {
 	mu      sync.Mutex
 	playing source
 	output  playback.Output
+	video   *video
+	code    func()
+}
+
+func (s *screening) showCode(code string) {
+	show := s.r.shower()
+	if show == nil {
+		slog.Warn("airplay asked for a code with nowhere to show it", "client", s.client)
+		return
+	}
+	slog.Info("airplay code", "client", s.client)
+	release := show(s.client, code)
+	s.mu.Lock()
+	old := s.code
+	s.code = release
+	s.mu.Unlock()
+	if old != nil {
+		old()
+	}
+}
+
+func (s *screening) hideCode() {
+	s.mu.Lock()
+	release := s.code
+	s.code = nil
+	s.mu.Unlock()
+	if release != nil {
+		release()
+	}
 }
 
 type source interface {
@@ -376,7 +427,41 @@ func (s *screening) handle(ctx context.Context, m message) {
 			return
 		}
 		s.hear(a)
+	case msgPlay:
+		p, err := playOf(m.payload)
+		if err != nil {
+			slog.Warn("airplay video dropped", "err", err)
+			return
+		}
+		s.stream(p)
+	case msgScrub:
+		if at, err := scrubOf(m.payload); err == nil {
+			s.scrub(at)
+		}
+	case msgRate:
+		if playing, err := rateOf(m.payload); err == nil {
+			s.rate(playing)
+		}
+	case msgVolume:
+		if db, err := dbOf(m.payload); err == nil {
+			s.loudness(db)
+		}
+	case msgMute:
+		if on, err := rateOf(m.payload); err == nil {
+			s.muted(on)
+		}
+	case msgPin:
+		s.showCode(string(m.payload))
+	case msgPaired:
+		slog.Info("airplay paired", "client", string(m.payload))
+		s.hideCode()
+	case msgStop:
+		s.between()
 	case msgEnded:
+		if s.streaming() != nil {
+			slog.Debug("airplay connection closed during a video", "client", s.client)
+			return
+		}
 		slog.Info("airplay over", "client", s.client)
 		s.over()
 	}
@@ -416,20 +501,24 @@ func (s *screening) ended(src source) {
 
 func (s *screening) over() {
 	s.mu.Lock()
-	src, out := s.playing, s.output
-	s.playing, s.output = nil, nil
+	src, out, v := s.playing, s.output, s.video
+	s.playing, s.output, s.video = nil, nil, nil
 	s.mu.Unlock()
-	if src == nil {
-		return
+	if v != nil {
+		v.stop()
 	}
-	src.end()
-	out.Stop(src)
-	s.resized()
+	if src != nil {
+		src.end()
+		out.Stop(src)
+	}
+	if src != nil || v != nil {
+		s.resized()
+	}
 }
 
 func (s *screening) resized() {
 	s.mu.Lock()
-	showing := s.playing != nil
+	showing := s.playing != nil || s.video != nil
 	s.mu.Unlock()
 	if showing || s.r.opts.Size == nil {
 		return

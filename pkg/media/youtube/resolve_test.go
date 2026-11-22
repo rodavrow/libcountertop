@@ -137,18 +137,22 @@ func TestATrackWithoutAPanelHasNoPictures(t *testing.T) {
 	}
 }
 
-func TestTheBestOpusFormatIsChosen(t *testing.T) {
+func TestOpusIsChosenOverAACAndAACLCWhenThereIsNoOpus(t *testing.T) {
 	formats := []format{
+		{ItagNo: 139, MimeType: `audio/mp4; codecs="mp4a.40.5"`, Bitrate: 49000},
 		{ItagNo: 140, MimeType: `audio/mp4; codecs="mp4a.40.2"`, Bitrate: 131104},
 		{ItagNo: 249, MimeType: `audio/webm; codecs="opus"`, Bitrate: 55420},
 		{ItagNo: 251, MimeType: `audio/webm; codecs="opus"`, Bitrate: 147426},
 		{ItagNo: 248, MimeType: `video/webm; codecs="vp9"`, Bitrate: 2000000},
 	}
-	if f := bestOpus(formats); f == nil || f.ItagNo != 251 {
+	if f := bestAudio(formats); f == nil || f.ItagNo != 251 {
 		t.Errorf("chose %+v", f)
 	}
-	if f := bestOpus(formats[:1]); f != nil {
-		t.Errorf("chose %d from a list with no opus", f.ItagNo)
+	if f := bestAudio(formats[:2]); f == nil || f.ItagNo != 140 {
+		t.Errorf("chose %+v from a list with no opus", f)
+	}
+	if f := bestAudio(formats[:1]); f != nil {
+		t.Errorf("chose %d from a list with only HE-AAC", f.ItagNo)
 	}
 }
 
@@ -184,7 +188,7 @@ func TestTheOriginalLanguageIsChosenOverADubOrAProcessedCopy(t *testing.T) {
 			with(format{}, 112788, ""),
 		}, 112788},
 	} {
-		if f := bestOpus(c.formats); f == nil || f.Bitrate != c.want {
+		if f := bestAudio(c.formats); f == nil || f.Bitrate != c.want {
 			t.Errorf("%s: chose %+v, want the one at %d", c.name, f, c.want)
 		}
 	}

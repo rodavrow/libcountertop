@@ -71,6 +71,7 @@ type Options struct {
 	Resolver *youtube.Resolver
 	Output   playback.Output
 	Skip     func() []string
+	Autoplay func() bool
 	Client   *http.Client
 	Redraw   func()
 }
@@ -123,6 +124,7 @@ func New(o Options) *App {
 		Output:   o.Output,
 		Skips:    a.skips,
 		Related:  a.related,
+		Autoplay: o.Autoplay,
 		Label:    say.T("youtube.app"),
 		Changed:  a.redraw,
 	})

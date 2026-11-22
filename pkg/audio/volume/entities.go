@@ -11,10 +11,12 @@ import (
 type Levels interface {
 	Level(schema.Stream) int
 	Set(schema.Stream, int)
+	Mute(schema.Stream, bool)
 }
 type Entities struct {
-	Numbers map[schema.Stream]*esphome.Number
-	streams []schema.Stream
+	Numbers  map[schema.Stream]*esphome.Number
+	Switches map[schema.Stream]*esphome.Switch
+	streams  []schema.Stream
 }
 
 func NewEntities(
@@ -23,8 +25,9 @@ func NewEntities(
 	deviceID uint32,
 ) *Entities {
 	e := &Entities{
-		Numbers: map[schema.Stream]*esphome.Number{},
-		streams: slices.Clone(streams),
+		Numbers:  map[schema.Stream]*esphome.Number{},
+		Switches: map[schema.Stream]*esphome.Switch{},
+		streams:  slices.Clone(streams),
 	}
 	for _, s := range streams {
 		n := &esphome.Number{
@@ -43,13 +46,36 @@ func NewEntities(
 		}
 		n.OnCommand = func(level float32) { levels.Set(s, int(level)) }
 		e.Numbers[s] = n
+
+		sw := &esphome.Switch{
+			Base: esphome.Base{
+				ObjectID: "mute_" + string(s),
+				Name:     s.Label() + " mute",
+				Icon:     "mdi:volume-off",
+				Category: esphome.CategoryConfig,
+				DeviceID: deviceID,
+			},
+		}
+		sw.OnCommand = func(on bool) { levels.Mute(s, on) }
+		sw.Set(false)
+		e.Switches[s] = sw
 	}
 	return e
 }
+
+func (e *Entities) muted(s schema.Stream, on bool) {
+	if sw := e.Switches[s]; sw != nil {
+		sw.Set(on)
+	}
+}
+
 func (e *Entities) Entities() []esphome.Entity {
-	out := make([]esphome.Entity, 0, len(e.streams))
+	out := make([]esphome.Entity, 0, 2*len(e.streams))
 	for _, s := range e.streams {
 		out = append(out, e.Numbers[s])
+	}
+	for _, s := range e.streams {
+		out = append(out, e.Switches[s])
 	}
 	return out
 }

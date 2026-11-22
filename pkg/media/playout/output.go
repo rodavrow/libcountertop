@@ -264,6 +264,7 @@ func (o *Output) releaseLocked(src playback.Source) bool {
 		o.options.Media().Release(p.card)
 	}
 	o.q.Drain()
+	o.q.Speed(1)
 	return true
 }
 
@@ -758,6 +759,9 @@ func (c *card) Now() nowplaying.Now {
 	if s.HasPrevious {
 		can |= nowplaying.CanPrevious
 	}
+	if c.fast(s) {
+		can |= nowplaying.CanFast
+	}
 	queue := make([]nowplaying.Track, 0, len(s.Upcoming))
 	var wanted []string
 	c.o.mu.Lock()
@@ -870,6 +874,23 @@ func (c *card) CanSeek() bool {
 	return ok && s.Break == nil && (s.Length > 0 || s.LiveWithin > 0)
 }
 
+func (c *card) fast(s playback.Showing) bool {
+	_, ok := c.p.src.(playback.Fast)
+	return ok && s.Break == nil && s.LiveWithin == 0
+}
+
+func (c *card) Speed(times int) {
+	if times > 1 && !c.fast(c.p.src.Showing()) {
+		return
+	}
+	c.o.mu.Lock()
+	cur := c.o.cur == c.p
+	c.o.mu.Unlock()
+	if cur {
+		c.o.q.Speed(times)
+	}
+}
+
 type standby struct{ o *Output }
 
 var _ nowplaying.Source = (*standby)(nil)
@@ -919,6 +940,7 @@ func (b *standby) Wakes() bool {
 
 func (b *standby) Seek(time.Duration)     {}
 func (b *standby) CanSeek() bool          { return false }
+func (b *standby) Speed(int)              {}
 func (b *standby) Marks() []playback.Mark { return nil }
 
 func (b *standby) Label() string {
@@ -942,6 +964,7 @@ type Queue interface {
 	Queued() int
 	Drain()
 	Adjust(func([]int16))
+	Speed(times int)
 }
 type Media interface {
 	Began(nowplaying.Source)

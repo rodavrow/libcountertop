@@ -175,9 +175,10 @@ func Fonts() []Font {
 type KeyboardSize string
 
 const (
-	KeyboardCompact  KeyboardSize = "compact"
-	KeyboardStandard KeyboardSize = "standard"
-	KeyboardLarge    KeyboardSize = "large"
+	KeyboardCompact   KeyboardSize = "compact"
+	KeyboardStandard  KeyboardSize = "standard"
+	KeyboardLarge     KeyboardSize = "large"
+	KeyboardFullWidth KeyboardSize = "full_width"
 )
 
 func (k KeyboardSize) Label() string {
@@ -188,12 +189,14 @@ func (k KeyboardSize) Label() string {
 		return say.T("keyboard.standard")
 	case KeyboardLarge:
 		return say.T("keyboard.large")
+	case KeyboardFullWidth:
+		return say.T("keyboard.full_width")
 	}
 	return string(k)
 }
 
 func KeyboardSizes() []KeyboardSize {
-	return []KeyboardSize{KeyboardCompact, KeyboardStandard, KeyboardLarge}
+	return []KeyboardSize{KeyboardCompact, KeyboardStandard, KeyboardLarge, KeyboardFullWidth}
 }
 
 const DefaultTheme = theme.Follow

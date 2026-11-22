@@ -301,7 +301,7 @@ func (t *track) openMP4(ctx context.Context, s stream) error {
 	}
 	for _, tr := range tracks {
 		if !tr.video {
-			t.length = tr.length()
+			t.length.Store(int64(tr.length()))
 		}
 		tr.seek(t.at)
 	}
