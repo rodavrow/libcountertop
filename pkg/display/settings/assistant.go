@@ -57,6 +57,9 @@ type AssistantDependencies struct {
 	Look        *LookPages
 	Shell       *shell.Shell
 	VoiceMatch  func() *shell.Page
+
+	// Announcements switches showing pushed speech as a reply.
+	Announcements Switch
 }
 
 type pipeline struct {
@@ -156,6 +159,19 @@ func (p *AssistantPages) Page() *shell.Page {
 				acts = append(acts, func(int) {
 					if err := gemini.Set(!on); err != nil {
 						slog.Error("switching gemini failed", "err", err)
+					}
+				})
+			}
+			if announcements := p.options.Announcements; announcements != nil {
+				on := announcements.On()
+				rows = append(rows, menu.Row{
+					Label: say.T("assistants.setting.animate_announcements"),
+					Kind:  menu.Toggle,
+					On:    on,
+				})
+				acts = append(acts, func(int) {
+					if err := announcements.Set(!on); err != nil {
+						slog.Error("switching animated announcements failed", "err", err)
 					}
 				})
 			}
