@@ -414,6 +414,16 @@ func (w StopWriter) Threshold(v float64) error {
 	return w.s.Update(func(c *Wake) { c.Stop.Threshold = v })
 }
 
+type AnnouncementsWriter struct{ s storage.Section[Wake] }
+
+func NewAnnouncementsWriter(s storage.Section[Wake]) AnnouncementsWriter {
+	return AnnouncementsWriter{s: s}
+}
+
+func (w AnnouncementsWriter) Animate(on bool) error {
+	return w.s.Update(func(c *Wake) { c.AnimateAnnouncements = on })
+}
+
 type PryonWriter struct{ s storage.Section[Wake] }
 
 func NewPryonWriter(s storage.Section[Wake]) PryonWriter { return PryonWriter{s: s} }

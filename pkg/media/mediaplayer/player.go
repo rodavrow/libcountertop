@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"strings"
 	"sync/atomic"
 
 	esphome "github.com/ygelfand/go-esphome-device"
@@ -36,6 +37,9 @@ type Options[P Speaker] struct {
 	Volume         Volume
 	Changed        func()
 	Device         uint32
+
+	// Announcing hears when an announcement that is speech starts and ends.
+	Announcing func(on bool)
 }
 
 type Player[P Speaker] struct {
@@ -48,6 +52,9 @@ type Player[P Speaker] struct {
 	sound  *sound.Driver[P]
 	volume Volume
 	notify func()
+
+	announcing func(bool)
+	fetch      func(context.Context, string, int) ([]int16, error)
 
 	speaking atomic.Bool
 
@@ -96,9 +103,12 @@ func New[P Speaker](o Options[P]) *Player[P] {
 			Icon:     "mdi:account-music",
 			DeviceID: o.Device,
 		}},
-		sound:  o.Sound,
-		volume: o.Volume,
-		notify: o.Changed,
+		sound: o.Sound,
+
+		announcing: o.Announcing,
+		fetch:      pcm.Fetch,
+		volume:     o.Volume,
+		notify:     o.Changed,
 		owner: ownership.New(func(s nowplaying.Source) uint8 {
 			if s == nil {
 				return uint8(nowplaying.FromQueue)
@@ -180,12 +190,21 @@ func (p *Player[P]) play(url string, announcement bool) {
 	p.stream.Play(url)
 }
 
+// Speech says whether an announcement's address is Home Assistant's text-to-speech, not a
+// chime or a sound effect.
+func Speech(url string) bool { return strings.Contains(url, "/api/tts_proxy/") }
+
 func (p *Player[P]) announce(url string) {
+	spoken := p.announcing != nil && Speech(url)
+
 	p.Sounding(true)
 	claim := p.sound.Claim("announce", func(ctx context.Context, spk P) error {
-		samples, err := pcm.Fetch(ctx, url, upsample.VoiceRate)
+		samples, err := p.fetch(ctx, url, upsample.VoiceRate)
 		if err != nil {
 			return err
+		}
+		if spoken {
+			p.announcing(true)
 		}
 		spk.PlayVoice(samples)
 		spk.PlayVoice(make([]int16, upsample.VoiceRate*pcm.Tail/1000))
@@ -194,6 +213,9 @@ func (p *Player[P]) announce(url string) {
 
 	safe.Go("announce", func() {
 		<-claim.Done()
+		if spoken {
+			p.announcing(false)
+		}
 		p.Sounding(false)
 
 		if err := claim.Err(); err != nil {

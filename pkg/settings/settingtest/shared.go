@@ -223,6 +223,7 @@ var Shared = Coverage{
 		"Wake.Pryon":                "assistants.pryon",
 		"Wake.Stop.Pryon":           "assistants.pryon_stop",
 		"Wake.Gemini":               "assistants.gemini",
+		"Wake.AnimateAnnouncements": "assistants.animate_announcements",
 		"Wake.Arbitration":          "assistants.arbitration_wait",
 		"Wake.ArbitrationOffset":    "assistants.arbitration_offset",
 	},

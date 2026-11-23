@@ -14,6 +14,7 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/assistant/activity"
 	"github.com/ygelfand/libcountertop/pkg/hook"
 	"github.com/ygelfand/libcountertop/pkg/inference/wake"
+	"github.com/ygelfand/libcountertop/pkg/media/pcm"
 	"github.com/ygelfand/libcountertop/pkg/runtime/safe"
 )
 
@@ -55,6 +56,10 @@ const (
 	evListen
 	evRelease
 	evVoice
+	evAnnounce
+	evAnnouncing
+	evAnnounced
+	evSpoken
 )
 
 type event struct {
@@ -67,6 +72,10 @@ type event struct {
 	code    string
 	msg     string
 	at      time.Time
+
+	announcement *announcement
+	on           bool
+	stopped      bool
 }
 
 type Conversation struct {
@@ -112,6 +121,17 @@ type Conversation struct {
 
 	said   string
 	answer string
+
+	announceID uint64
+	announcing *announcement
+	waiting    *announcement
+	voiced     bool
+
+	report  func(bool)
+	fetch   func(context.Context, string, int) ([]int16, error)
+	spawn   func(string, func())
+	begin   func(slot int)
+	stopped chan struct{}
 }
 
 const graceStart = 750 * time.Millisecond
@@ -145,6 +165,15 @@ func NewConversation(vs *esphome.VoiceSatellite, options Dependencies) *Conversa
 		log:     options.Log,
 		events:  make(chan event, 32),
 		out:     make(chan func() error, outDepth),
+		fetch:   pcm.Fetch,
+		spawn:   safe.Go,
+		stopped: make(chan struct{}),
+	}
+	c.begin = c.Start
+	c.report = func(ok bool) {
+		if err := vs.AnnounceFinished(ok); err != nil {
+			slog.Error("reporting the announcement failed", "err", err)
+		}
 	}
 
 	vs.OnPipelineEvent = c.pipeline
@@ -203,11 +232,23 @@ func (c *Conversation) sends(ctx context.Context) {
 	}
 }
 
-func (c *Conversation) post(e event) {
+func (c *Conversation) post(e event) { c.offer(e) }
+
+func (c *Conversation) offer(e event) bool {
 	select {
 	case c.events <- e:
+		return true
 	default:
 		slog.Warn("Conversation event dropped", "kind", e.kind, "phase", c.Phase())
+		return false
+	}
+}
+
+// deliver waits for room, for an event whose loss would leave the conversation stuck.
+func (c *Conversation) deliver(e event) {
+	select {
+	case c.events <- e:
+	case <-c.stopped:
 	}
 }
 
@@ -220,7 +261,15 @@ func (c *Conversation) Run(ctx context.Context) {
 
 	senderDone := make(chan struct{})
 	safe.Go("voice sender", func() { defer close(senderDone); c.sends(ctx) })
-	defer func() { cancel(); c.stopStreaming(); c.disarm(); c.clearPending(); <-senderDone }()
+	defer func() {
+		cancel()
+		c.stopStreaming()
+		c.disarm()
+		c.clearPending()
+		c.unsaid()
+		close(c.stopped)
+		<-senderDone
+	}()
 
 	for {
 		var expired, waited <-chan time.Time
@@ -233,6 +282,7 @@ func (c *Conversation) Run(ctx context.Context) {
 
 		select {
 		case <-ctx.Done():
+			c.unsaid()
 			c.handle(event{kind: evCancel})
 			return
 		case <-expired:
@@ -246,7 +296,25 @@ func (c *Conversation) Run(ctx context.Context) {
 }
 
 func (c *Conversation) handle(e event) {
+	c.dispatch(e)
+	c.settle()
+}
+
+func (c *Conversation) dispatch(e event) {
 	switch e.kind {
+	case evAnnounce:
+		c.unsaid()
+		c.waiting = e.announcement
+
+	case evAnnouncing:
+		c.announcingShown(e.replyID)
+
+	case evAnnounced:
+		c.announced(e.replyID, e.stopped)
+
+	case evSpoken:
+		c.spoken(e.on, e.slot)
+
 	case evStart:
 		c.start(nextTurn{slot: e.slot, heard: e.at})
 
@@ -398,6 +466,7 @@ func (c *Conversation) handle(e event) {
 
 		sounding := c.sound.Busy()
 		c.sound.Silence()
+		c.drop()
 
 		if c.phase == phaseIdle && !sounding {
 			return
@@ -407,13 +476,13 @@ func (c *Conversation) handle(e event) {
 		c.options.Cancelled()
 
 	case evListen:
-		if c.phase == phaseIdle {
+		if c.phase == phaseIdle && !c.announcementShown() {
 			c.options.Presentation.Show(Showing{Phase: phaseListening, Slot: c.slot})
 			c.options.Presentation.Phase(c.slot, phaseListening)
 		}
 
 	case evRelease:
-		if c.phase == phaseIdle {
+		if c.phase == phaseIdle && !c.announcementShown() {
 			c.present()
 		}
 
@@ -475,6 +544,7 @@ func (c *Conversation) start(n nextTurn) {
 		c.grace = time.NewTimer(graceStart)
 		return
 	}
+	c.hush()
 	c.clearPending()
 
 	if !c.vs.Subscribed() {
