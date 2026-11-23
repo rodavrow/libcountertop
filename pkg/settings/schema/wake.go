@@ -11,6 +11,9 @@ type Wake struct {
 
 	Arbitration       int `json:"arbitration"`
 	ArbitrationOffset int `json:"arbitration_offset"`
+
+	// An announcement Home Assistant pushes is shown as a reply.
+	AnimateAnnouncements bool `json:"animate_announcements"`
 }
 
 type Stop struct {
@@ -31,7 +34,13 @@ const (
 
 func DefaultStop() Stop { return Stop{Threshold: DefaultStopThreshold} }
 
-func DefaultWake() Wake { return Wake{Stop: DefaultStop(), Arbitration: DefaultArbitration} }
+func DefaultWake() Wake {
+	return Wake{
+		Stop:                 DefaultStop(),
+		Arbitration:          DefaultArbitration,
+		AnimateAnnouncements: true,
+	}
+}
 
 func (s Stop) Listening() bool { return s.Threshold < StopOff }
 

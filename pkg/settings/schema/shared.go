@@ -238,3 +238,7 @@ func (w SharedWriter[C]) Stop() StopWriter           { return NewStopWriter(w.s.
 func (w SharedWriter[C]) Pryon() PryonWriter         { return NewPryonWriter(w.s.Wake) }
 func (w SharedWriter[C]) Gemini() GeminiWriter       { return NewGeminiWriter(w.s.Wake) }
 func (w SharedWriter[C]) Weather() WeatherWriter     { return NewWeatherWriter(w.s.Weather) }
+
+func (w SharedWriter[C]) Announcements() AnnouncementsWriter {
+	return NewAnnouncementsWriter(w.s.Wake)
+}
