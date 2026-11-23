@@ -74,6 +74,18 @@ func (r Roles) All() []Color {
 	return []Color{r.Warm, r.Heat, r.Cool, r.Air, r.Motion, r.Media, r.Choice, r.Level}
 }
 
+func (r Roles) At(n int) Color {
+	all := r.All()
+	return all[((n-1)%len(all)+len(all))%len(all)]
+}
+
+func (r Roles) Or(hex string, n int) Color {
+	if c, ok := ParseColor(hex); ok {
+		return c
+	}
+	return r.At(n)
+}
+
 var (
 	ink   = rgb(0x0b0d10)
 	paper = rgb(0xf5f7fa)

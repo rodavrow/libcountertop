@@ -152,7 +152,7 @@ func (v *View) compact(
 	big := clockview.Lettering(glyph.TypefaceBold, size, ink.Text)
 	return line(
 		size*0.2,
-		v.icon(r.Condition, r.Phase, size*1.1, ink, l),
+		icon(r.Condition, r.Phase, size*1.1, ink, l),
 		gogui.Label(degrees(r), big),
 	)
 }
@@ -170,7 +170,7 @@ func (v *View) stack(
 		gogui.Label(degrees(r), big),
 		line(
 			small.Size*0.4,
-			v.icon(r.Condition, r.Phase, small.Size*1.4, ink, l),
+			icon(r.Condition, r.Phase, small.Size*1.4, ink, l),
 			gogui.Label(condition(r), small),
 		),
 	})
@@ -186,7 +186,7 @@ func (v *View) iconLook(
 	st := clockview.Lettering(glyph.TypefaceBold, size*0.7, ink.Text)
 	return stacked(l,
 		[]gogui.View{
-			v.icon(r.Condition, r.Phase, size*1.8, ink, l),
+			icon(r.Condition, r.Phase, size*1.8, ink, l),
 			gogui.Label(degrees(r), st),
 		},
 	)
@@ -229,7 +229,7 @@ func (v *View) card(
 		Spacing: gogui.SpacingPx(size * 0.3),
 		VAlign:  gogui.VAlignMiddle,
 		Content: []gogui.View{
-			v.icon(r.Condition, r.Phase, size*1.5, ink, l),
+			icon(r.Condition, r.Phase, size*1.5, ink, l),
 			gogui.Column(gogui.ContainerCfg{Padding: gogui.NoPadding, Content: words}),
 		},
 	}))
@@ -247,7 +247,7 @@ func (v *View) detail(
 	lines := []gogui.View{
 		line(
 			size*0.2,
-			v.icon(r.Condition, r.Phase, size, ink, l),
+			icon(r.Condition, r.Phase, size, ink, l),
 			gogui.Label(degrees(r), big),
 		),
 		gogui.Label(condition(r), small),
@@ -336,7 +336,11 @@ func iconColors(ink theme.Theme, l schema.WeatherLayout) tints {
 	}
 }
 
-func (v *View) icon(
+func Icon(cond string, side float32, ink theme.Theme) gogui.View {
+	return icon(cond, 0, side, ink, schema.WeatherLayout{})
+}
+
+func icon(
 	cond string,
 	p float64,
 	side float32,

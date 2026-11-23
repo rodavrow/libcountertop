@@ -280,6 +280,7 @@ func (a *App) page(w *gogui.Window, p *Screen) gogui.View {
 		w,
 		widgets.FrameOptions{
 			Title:    p.Title,
+			Head:     p.Head,
 			Fixed:    fixed,
 			Build:    build,
 			Search:   field,

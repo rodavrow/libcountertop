@@ -97,50 +97,6 @@ func (view *Renderer) homeRows() ([]menu.Row, []func(int)) {
 	return rows, taps
 }
 
-func (view *Renderer) CalendarPage() *shell.Page {
-	c := view.options.Calendar
-	c.Fetch()
-	return &shell.Page{
-		Title: say.T("calendar.app"),
-		Build: func() ([]menu.Row, []func(int)) {
-			spans := schema.CalendarSpans()
-			steps := menu.Steps(len(spans))
-			span := c.Span()
-			rows := []menu.Row{{
-				Label: say.T("calendar.setting.span"),
-				Kind:  menu.Slider,
-				Level: steps.Level(slices.Index(spans, span)),
-				Snap:  steps.Snap,
-				Value: span.Label(),
-			}}
-			taps := []func(int){func(level int) { c.SetSpan(spans[steps.Index(level)]) }}
-			list, err, fetched := c.Offered()
-			switch {
-			case !fetched:
-				return append(rows, menu.Row{Label: say.T("home.loading")}), append(taps, nil)
-			case err != nil:
-				return append(rows,
-						menu.Row{Label: say.T("home.failed"), Hint: err.Error()},
-						menu.Row{Label: say.T("home.retry")},
-					),
-					append(taps, nil, func(int) { c.Fetch() })
-			case len(list) == 0:
-				return append(rows, menu.Row{Label: say.T("calendar.none")}), append(taps, nil)
-			}
-			chosen := c.Chosen()
-			for _, e := range list {
-				rows = append(rows, menu.Row{
-					Label:  e.Name,
-					Hint:   e.ID,
-					Chosen: slices.Contains(chosen, e.ID),
-				})
-				taps = append(taps, func(int) { c.Toggle(e.ID) })
-			}
-			return rows, taps
-		},
-	}
-}
-
 func (view *Renderer) Gate(w *gogui.Window) gogui.View {
 	if title, hint, retry := view.trouble(); title != "" {
 		return Column([]gogui.View{view.blocked(w, title, hint, retry)})

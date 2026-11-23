@@ -32,6 +32,16 @@ func NewTable() *Table {
 			entityMost,
 			func(c *schema.Weather) *string { return &c.Entity },
 		),
+		setting.Words(
+			Setting{
+				Name:     "forecast",
+				Group:    Group,
+				Icon:     "mdi:calendar-weather",
+				NoEntity: true,
+			},
+			entityMost,
+			func(c *schema.Weather) *string { return &c.Forecast },
+		),
 		setting.Pick(Setting{Name: "look", Group: Group, Icon: "mdi:palette-outline"},
 			schema.WeatherLooks(), func(c *schema.Weather) *schema.WeatherLook { return &c.Look }),
 		flag("dashboard", "", "mdi:view-dashboard-outline",

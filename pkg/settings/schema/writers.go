@@ -539,6 +539,10 @@ func (w WeatherWriter) Entity(v string) error {
 	return w.s.Update(func(c *Weather) { c.Entity = v })
 }
 
+func (w WeatherWriter) Forecast(v string) error {
+	return w.s.Update(func(c *Weather) { c.Forecast = v })
+}
+
 func (w WeatherWriter) Look(v WeatherLook) error {
 	return w.s.Update(func(c *Weather) { c.Look = v })
 }

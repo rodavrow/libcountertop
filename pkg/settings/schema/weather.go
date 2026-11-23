@@ -4,6 +4,7 @@ import "github.com/ygelfand/libcountertop/pkg/say"
 
 type Weather struct {
 	Entity      string      `json:"entity"`
+	Forecast    string      `json:"forecast"`
 	Dashboard   bool        `json:"dashboard"`
 	Idle        bool        `json:"idle"`
 	Alerts      bool        `json:"alerts"`

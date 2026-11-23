@@ -3,6 +3,7 @@ package settings
 import (
 	"image"
 	"slices"
+	"strings"
 
 	"github.com/ygelfand/libcountertop/pkg/display/idleview"
 	"github.com/ygelfand/libcountertop/pkg/display/menu"
@@ -10,6 +11,7 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/display/shell"
 	"github.com/ygelfand/libcountertop/pkg/display/visual"
 	ha "github.com/ygelfand/libcountertop/pkg/homeassistant"
+	"github.com/ygelfand/libcountertop/pkg/homeassistant/weather"
 	"github.com/ygelfand/libcountertop/pkg/say"
 	config "github.com/ygelfand/libcountertop/pkg/settings/schema"
 )
@@ -53,6 +55,8 @@ type WeatherCatalog interface {
 type WeatherEntity interface {
 	Title(string) string
 	SetEntity(string)
+	SetForecast(string)
+	ForecastEntity() string
 }
 type WeatherPlaces interface {
 	SetDashboard(bool)
@@ -513,11 +517,52 @@ func (p *IdlePages) WeatherEntities() *shell.Page {
 				return []menu.Row{{Label: say.T("weather.none")}}, []func(int){nil}
 			}
 			now := p.options.Preferences.IdleState().Weather.Entity
-			rows := make([]menu.Row, 0, len(list))
-			taps := make([]func(int), 0, len(list))
+			forecast := p.options.Weather.ForecastEntity()
+			rows := []menu.Row{{
+				Label: say.T("weather.forecast"),
+				Kind:  menu.Chevron,
+				Value: p.options.Weather.Title(forecast),
+			}}
+			taps := []func(int){func(int) { p.options.Shell.Push(p.ForecastEntities()) }}
 			for _, e := range list {
 				rows = append(rows, menu.Row{Label: e.Name, Hint: e.ID, Chosen: e.ID == now})
 				taps = append(taps, func(int) { p.options.Weather.SetEntity(e.ID) })
+			}
+			return rows, taps
+		},
+	}
+}
+
+func (p *IdlePages) ForecastEntities() *shell.Page {
+	p.options.Weather.Fetch()
+	return &shell.Page{
+		Title: say.T("weather.forecast"),
+		Build: func() ([]menu.Row, []func(int)) {
+			list, _, fetched := p.options.Weather.Offered()
+			if !fetched {
+				return []menu.Row{{Label: say.T("home.loading")}}, []func(int){nil}
+			}
+			now := p.options.Weather.ForecastEntity()
+			var rows []menu.Row
+			var taps []func(int)
+			for _, e := range list {
+				kinds := weather.Kinds(e)
+				labels := make([]string, len(kinds))
+				for i, k := range kinds {
+					labels[i] = k.Label()
+				}
+				hint := strings.Join(labels, " · ")
+				if hint == "" {
+					hint = say.T("weather.forecast.none")
+				}
+				rows = append(rows, menu.Row{
+					Label: e.Name, Hint: hint, Chosen: e.ID == now, Dim: len(kinds) == 0,
+				})
+				var tap func(int)
+				if len(kinds) > 0 {
+					tap = func(int) { p.options.Weather.SetForecast(e.ID) }
+				}
+				taps = append(taps, tap)
 			}
 			return rows, taps
 		},

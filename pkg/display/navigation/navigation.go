@@ -12,6 +12,7 @@ import (
 
 type Screen struct {
 	Title        string
+	Head         func(*gui.Window) gui.View
 	Build        func(*gui.Window) gui.View
 	Foot         func(*gui.Window) gui.View
 	Settings     func()

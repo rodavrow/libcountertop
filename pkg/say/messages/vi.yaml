@@ -149,15 +149,44 @@ buttons.static: Âm lượng chính
 calendar.allday: Cả ngày
 calendar.app: Lịch
 calendar.chosen: "{{.N}} lịch"
-calendar.days: "{{.N}} ngày"
+calendar.add: Sự kiện mới
+calendar.count: "{{.N}} ngày"
+calendar.date: Ngày
+calendar.days: Số ngày
 calendar.empty: Không có gì sắp tới
+calendar.failed: Không thể thêm sự kiện
+calendar.free: Không có kế hoạch
+calendar.hour: Giờ
+calendar.hours: "{{.N}} giờ"
+calendar.hours.half: "{{.N}} giờ rưỡi"
+calendar.length: Thời lượng
+calendar.location: Địa điểm
+calendar.minute: Phút
+calendar.minutes: "{{.N}} phút"
+calendar.more: "+{{.N}} nữa"
+calendar.needs.title: Nhập tiêu đề
+calendar.notes: Ghi chú
+calendar.save: Lưu
+calendar.title: Tiêu đề
+calendar.week.start: monday
 calendar.group.calendar: Lịch
 calendar.none: Không có lịch trong Home Assistant
 calendar.off: Tắt
 calendar.pick: Chọn lịch
 calendar.example.entities: calendar.family, calendar.work
 calendar.setting.entities: Lịch
-calendar.setting.span: Số ngày hiển thị
+calendar.example.colors: calendar.family=#e8a33d, calendar.work=#3a7bd5
+calendar.setting.colors: Màu lịch
+calendar.setting.weather: Thời tiết theo ngày
+calendar.setting.opening: Mở ở chế độ
+calendar.setting.saver: Sự kiện tiếp theo trên màn hình chờ
+calendar.opening.last: Lần dùng gần nhất
+calendar.opening.day: Ngày
+calendar.opening.week: Tuần
+calendar.opening.month: Tháng
+calendar.view.day: Ngày
+calendar.view.week: Tuần
+calendar.view.month: Tháng
 calendar.today: Hôm nay
 calendar.tomorrow: Ngày mai
 call.address: Địa chỉ
@@ -1818,6 +1847,13 @@ weather.setting.animate: Hoạt ảnh thời tiết trên bảng điều khiển
 weather.setting.dashboard: Thời tiết trên bảng điều khiển
 weather.example.entity: weather.home
 weather.setting.entity: Thực thể thời tiết
+weather.example.forecast: weather.home
+weather.setting.forecast: Thực thể dự báo
+weather.forecast: Dự báo
+weather.forecast.daily: Hằng ngày
+weather.forecast.twice_daily: Hai lần mỗi ngày
+weather.forecast.hourly: Hằng giờ
+weather.forecast.none: Không có dự báo
 weather.setting.idle: Thời tiết trên màn hình chờ
 weather.setting.look: Kiểu thời tiết trên bảng điều khiển
 weather.setting.position: Vị trí dọc thời tiết trên bảng điều khiển

@@ -60,9 +60,10 @@ type Options struct {
 type Weather struct {
 	opts Options
 
-	mu     sync.Mutex
-	entity string
-	values map[string]*states.Value
+	mu       sync.Mutex
+	entity   string
+	values   map[string]*states.Value
+	forecast daily
 
 	knobs *setting.Controls[schema.Weather]
 
@@ -104,7 +105,7 @@ func (w *Weather) Fetch() {
 		defer cancel()
 		list, err := w.opts.Controller.Entities(
 			ctx,
-			homeassistant.Filter{Domains: []string{"weather"}},
+			homeassistant.Filter{Domains: []string{"weather"}, Attributes: []string{attrFeatures}},
 		)
 		w.mu.Lock()
 		w.offered, w.failed, w.fetching, w.fetched = list, err, false, true
@@ -114,6 +115,11 @@ func (w *Weather) Fetch() {
 		}
 		if err == nil && len(list) > 0 && strings.TrimSpace(w.opts.Settings.Read().Entity) == "" {
 			w.SetEntity(list[0].ID)
+		}
+		if err == nil && strings.TrimSpace(w.opts.Settings.Read().Forecast) == "" {
+			if best := bestForecast(list, w.opts.Settings.Read().Entity); best != "" {
+				w.SetForecast(best)
+			}
 		}
 		w.opts.Redraw()
 	}()
@@ -198,6 +204,10 @@ func (w *Weather) save(what string, err error) {
 func (w *Weather) set() schema.WeatherWriter { return schema.NewWeatherWriter(w.opts.Settings) }
 
 func (w *Weather) SetEntity(v string) { w.save("entity", w.set().Entity(strings.TrimSpace(v))) }
+
+func (w *Weather) SetForecast(v string) {
+	w.save("forecast", w.set().Forecast(strings.TrimSpace(v)))
+}
 
 func (w *Weather) SetLook(v schema.WeatherLook) { w.save("look", w.set().Look(v)) }
 

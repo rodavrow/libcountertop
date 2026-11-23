@@ -15,6 +15,7 @@ import (
 
 type FrameOptions struct {
 	Title    string
+	Head     func(*gogui.Window) gogui.View
 	Fixed    bool
 	Build    func(*gogui.Window) gogui.View
 	Foot     func(*gogui.Window) gogui.View
@@ -82,15 +83,20 @@ func (kit *Toolkit) PageFrame(w *gogui.Window, p FrameOptions) gogui.View {
 	if p.Foot != nil {
 		foot = append(foot, p.Foot(w))
 	}
-	head := []gogui.View{
-		LeaveButton(kit.Pressable, "back", CornerSolid, 1, p.Back),
-		gogui.Label(p.Title, t.TextStyleDisplay),
+	head := []gogui.View{LeaveButton(kit.Pressable, "back", CornerSolid, 1, p.Back)}
+	if p.Head != nil {
+		head = append(head, p.Head(w))
+	} else {
+		head = append(head, gogui.Label(p.Title, t.TextStyleDisplay))
+		if p.Settings != nil {
+			head = append(
+				head,
+				gogui.Row(gogui.ContainerCfg{Sizing: gogui.FillFit, Padding: gogui.NoPadding}),
+			)
+		}
 	}
 	if p.Settings != nil {
-		head = append(head,
-			gogui.Row(gogui.ContainerCfg{Sizing: gogui.FillFit, Padding: gogui.NoPadding}),
-			SettingsButton(kit.Pressable, "settings", CornerSolid, 1, p.Settings),
-		)
+		head = append(head, SettingsButton(kit.Pressable, "settings", CornerSolid, 1, p.Settings))
 	}
 	header := []gogui.View{gogui.Row(gogui.ContainerCfg{
 		Sizing:  gogui.FillFit,

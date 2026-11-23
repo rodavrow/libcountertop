@@ -100,6 +100,7 @@ var Shared = Coverage{
 		"Visual.Seed":               "visual.seed",
 		"Visual.Label":              "visual.label",
 		"Weather.Entity":            "weather.entity",
+		"Weather.Forecast":          "weather.forecast",
 		"Weather.Look":              "weather.look",
 		"Weather.Dashboard":         "weather.dashboard",
 		"Weather.Idle":              "weather.idle",
@@ -174,7 +175,10 @@ var Shared = Coverage{
 		"Call.VideoRing":            "call.video_ring",
 		"Call.Ringback":             "call.ringback",
 		"Calendar.Entities":         "calendar.entities",
-		"Calendar.Span":             "calendar.span",
+		"Calendar.Colors":           "calendar.colors",
+		"Calendar.Weather":          "calendar.weather",
+		"Calendar.Opening":          "calendar.opening",
+		"Calendar.Saver":            "calendar.saver",
 		"Todo.Entities":             "todo.entities",
 		"Todo.Completed":            "todo.completed",
 		"TV.Default":                "tv.default",
@@ -233,6 +237,8 @@ var Shared = Coverage{
 
 		"Radio.Favorites": "starred on the radio screen",
 		"Radio.Last":      "the station last tuned, written by the radio itself",
+
+		"Calendar.View":   "the view last shown, written by the calendar app itself",
 		"Radio.LastTitle": "the same",
 
 		"TV.Favorites": "starred in the TV app and on its Favorites page",

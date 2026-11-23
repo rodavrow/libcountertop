@@ -148,15 +148,44 @@ buttons.static: Main volume
 calendar.allday: All day
 calendar.app: Calendar
 calendar.chosen: "{{.N}} calendar{{if ne .N 1}}s{{end}}"
-calendar.days: "{{.N}} days"
+calendar.add: New event
+calendar.count: "{{.N}} day{{if ne .N 1}}s{{end}}"
+calendar.date: Date
+calendar.days: Days
 calendar.empty: Nothing coming up
+calendar.failed: Couldn't add the event
+calendar.free: Nothing planned
+calendar.hour: Hour
+calendar.hours: "{{.N}} hr"
+calendar.hours.half: "{{.N}}½ hr"
+calendar.length: Length
+calendar.location: Location
+calendar.minute: Minute
+calendar.minutes: "{{.N}} min"
+calendar.more: "+{{.N}} more"
+calendar.needs.title: Enter a title
+calendar.notes: Notes
+calendar.save: Save
+calendar.title: Title
+calendar.week.start: sunday
 calendar.group.calendar: Calendar
 calendar.none: No calendars in Home Assistant
 calendar.off: "Off"
 calendar.pick: Pick calendars
 calendar.example.entities: calendar.family, calendar.work
 calendar.setting.entities: Calendars
-calendar.setting.span: Days to show
+calendar.example.colors: calendar.family=#e8a33d, calendar.work=#3a7bd5
+calendar.setting.colors: Calendar colors
+calendar.setting.weather: Weather on days
+calendar.setting.opening: Opens on
+calendar.setting.saver: Next event on the screensaver
+calendar.opening.last: Last used
+calendar.opening.day: Day
+calendar.opening.week: Week
+calendar.opening.month: Month
+calendar.view.day: Day
+calendar.view.week: Week
+calendar.view.month: Month
 calendar.today: Today
 calendar.tomorrow: Tomorrow
 call.address: Address
@@ -1818,6 +1847,13 @@ weather.setting.animate: Animate dashboard weather
 weather.setting.dashboard: Weather on dashboard
 weather.example.entity: weather.home
 weather.setting.entity: Weather entity
+weather.example.forecast: weather.home
+weather.setting.forecast: Forecast entity
+weather.forecast: Forecast
+weather.forecast.daily: Daily
+weather.forecast.twice_daily: Twice daily
+weather.forecast.hourly: Hourly
+weather.forecast.none: No forecast
 weather.setting.idle: Weather on screen saver
 weather.setting.look: Dashboard weather look
 weather.setting.position: Dashboard weather vertical position

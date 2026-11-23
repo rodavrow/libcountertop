@@ -62,16 +62,35 @@ func Divider() gogui.View {
 
 func Beside(w *gogui.Window, aside, list gogui.View) gogui.View {
 	vw, vh := w.WindowSize()
-	cfg := gogui.ContainerCfg{
-		Sizing:  gogui.FillFit,
+	if vh > vw {
+		return gogui.Column(gogui.ContainerCfg{
+			ID:         "page-beside",
+			Sizing:     gogui.FillFill,
+			Padding:    gogui.NoPadding,
+			Spacing:    gogui.SpacingLarge,
+			Scrollable: true,
+			ScrollMode: gogui.ScrollVerticalOnly,
+			Clip:       true,
+			Content:    []gogui.View{aside, list},
+		})
+	}
+	return gogui.Row(gogui.ContainerCfg{
+		Sizing:  gogui.FillFill,
 		Padding: gogui.NoPadding,
 		Spacing: gogui.SpacingLarge,
-		Content: []gogui.View{aside, list},
-	}
-	if vh > vw {
-		return gogui.Column(cfg)
-	}
-	return gogui.Row(cfg)
+		Content: []gogui.View{
+			aside,
+			gogui.Column(gogui.ContainerCfg{
+				ID:         "page-list",
+				Sizing:     gogui.FillFill,
+				Padding:    gogui.NoPadding,
+				Scrollable: true,
+				ScrollMode: gogui.ScrollVerticalOnly,
+				Clip:       true,
+				Content:    []gogui.View{list},
+			}),
+		},
+	})
 }
 
 type Gestures struct {

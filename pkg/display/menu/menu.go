@@ -51,6 +51,7 @@ type Row struct {
 	Action string
 	Focus  bool
 	Open   func() View
+	Select func()
 }
 
 type Preview interface {

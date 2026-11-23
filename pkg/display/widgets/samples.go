@@ -12,6 +12,20 @@ func RowPreview(r menu.Row) gogui.View {
 	return gogui.ViewFunc(func(w *gogui.Window) gogui.View { return r.Preview.View(w, h*2, h) })
 }
 
+type Dot theme.Color
+
+func (d Dot) View(_ *gogui.Window, width, height float32) gogui.View {
+	side := min(width, height)
+	return gogui.Column(gogui.ContainerCfg{
+		Width:   side,
+		Height:  side,
+		Sizing:  gogui.FixedFixed,
+		Color:   Color(theme.Color(d)),
+		Radius:  gogui.RadiusPx(side / 2),
+		Padding: gogui.NoPadding,
+	})
+}
+
 func Swatch(p theme.Theme, w, h float32) gogui.View {
 	side := min(h*0.28, (w*0.8)/5)
 	var chips []gogui.View

@@ -3,9 +3,11 @@ package calendar
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log/slog"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -21,18 +23,42 @@ const (
 	fetchWait    = 10 * time.Second
 	stale        = 5 * time.Minute
 	eventsAction = "calendar.get_events"
+	createAction = "calendar.create_event"
 	eventsShape  = "{{ response | to_json }}"
 	dayLayout    = "2006-01-02"
 	wireLayout   = "2006-01-02 15:04:05"
+	features     = "supported_features"
+	canCreate    = 1
 )
 
+var ErrReadOnly = errors.New("calendar: this calendar does not take new events")
+
 type Event struct {
-	Calendar string
-	Summary  string
-	Location string
-	Start    time.Time
-	End      time.Time
-	AllDay   bool
+	Calendar    string
+	Summary     string
+	Location    string
+	Description string
+	Start       time.Time
+	End         time.Time
+	AllDay      bool
+}
+
+func (e Event) Overlaps(from, to time.Time) bool {
+	end := e.End
+	if !end.After(e.Start) {
+		end = e.Start.Add(time.Nanosecond)
+	}
+	return e.Start.Before(to) && end.After(from)
+}
+
+type Draft struct {
+	Calendar    string
+	Summary     string
+	Location    string
+	Description string
+	Start       time.Time
+	End         time.Time
+	AllDay      bool
 }
 
 type Options struct {
@@ -41,6 +67,12 @@ type Options struct {
 	Settings   storage.Section[schema.Calendar]
 	Redraw     func()
 	DeviceID   uint32
+}
+
+type window struct{ from, to time.Time }
+
+func (w window) covers(from, to time.Time) bool {
+	return !w.from.IsZero() && !from.Before(w.from) && !to.After(w.to)
 }
 
 type Calendar struct {
@@ -54,7 +86,10 @@ type Calendar struct {
 	fetched  bool
 
 	following string
+	followed  map[string]bool
 	events    []Event
+	have      window
+	want      window
 	loaded    bool
 	problem   error
 	asked     time.Time
@@ -62,7 +97,7 @@ type Calendar struct {
 }
 
 func New(opts Options) *Calendar {
-	c := &Calendar{opts: opts}
+	c := &Calendar{opts: opts, followed: map[string]bool{}}
 	c.knobs = &setting.Controls[schema.Calendar]{
 		Table:  NewTable(),
 		Device: opts.DeviceID,
@@ -91,7 +126,7 @@ func (c *Calendar) Fetch() {
 		defer cancel()
 		list, err := c.opts.Controller.Entities(
 			ctx,
-			homeassistant.Filter{Domains: []string{"calendar"}},
+			homeassistant.Filter{Domains: []string{"calendar"}, Attributes: []string{features}},
 		)
 		c.mu.Lock()
 		c.offered, c.failed, c.fetching, c.fetched = list, err, false, true
@@ -103,9 +138,9 @@ func (c *Calendar) Fetch() {
 	}()
 }
 
-func (c *Calendar) Chosen() []string { return c.opts.Settings.Read().List() }
+func (c *Calendar) Read() schema.Calendar { return c.opts.Settings.Read() }
 
-func (c *Calendar) Span() schema.CalendarSpan { return c.opts.Settings.Read().Span }
+func (c *Calendar) Chosen() []string { return c.Read().List() }
 
 func (c *Calendar) Title(entity string) string {
 	c.mu.Lock()
@@ -118,6 +153,30 @@ func (c *Calendar) Title(entity string) string {
 	return entity
 }
 
+func (c *Calendar) writable(entity string) bool {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	for _, e := range c.offered {
+		if e.ID == entity {
+			n, err := strconv.Atoi(e.Attributes[features])
+			return err == nil && n&canCreate != 0
+		}
+	}
+	return false
+}
+
+func (c *Calendar) Writable() []string {
+	var out []string
+	for _, e := range c.Chosen() {
+		if c.writable(e) {
+			out = append(out, e)
+		}
+	}
+	return out
+}
+
+func (c *Calendar) Color(entity string) (string, int) { return c.Read().Color(entity) }
+
 func (c *Calendar) Toggle(entity string) {
 	list := c.Chosen()
 	if i := slices.Index(list, entity); i >= 0 {
@@ -125,15 +184,36 @@ func (c *Calendar) Toggle(entity string) {
 	} else {
 		list = append(list, entity)
 	}
-	if err := schema.NewCalendarWriter(c.opts.Settings).Entities(list); err != nil {
-		slog.Error("saving the calendars failed", "err", err)
-	}
-	c.changed()
+	c.write("calendars", c.writer().Entities(list))
 }
 
-func (c *Calendar) SetSpan(v schema.CalendarSpan) {
-	if err := schema.NewCalendarWriter(c.opts.Settings).Span(v); err != nil {
-		slog.Error("saving the calendar span failed", "err", err)
+func (c *Calendar) SetColor(entity, hex string) {
+	c.write("calendar color", c.writer().Color(entity, hex))
+}
+
+func (c *Calendar) SetOpening(v schema.CalendarOpening) { c.change("opening", string(v)) }
+
+func (c *Calendar) SetWeather(on bool) { c.change("weather", setting.OnOff(on)) }
+
+func (c *Calendar) SetSaver(on bool) { c.change("saver", setting.OnOff(on)) }
+
+func (c *Calendar) change(name, v string) {
+	if err := c.knobs.Change(name, v); err != nil {
+		slog.Error("saving the calendar setting failed", "setting", name, "err", err)
+	}
+}
+
+func (c *Calendar) SetView(v schema.CalendarView) {
+	if err := c.writer().View(v); err != nil {
+		slog.Error("saving the calendar view failed", "err", err)
+	}
+}
+
+func (c *Calendar) writer() schema.CalendarWriter { return schema.NewCalendarWriter(c.opts.Settings) }
+
+func (c *Calendar) write(what string, err error) {
+	if err != nil {
+		slog.Error("saving the setting failed", "what", what, "err", err)
 	}
 	c.changed()
 }
@@ -146,24 +226,40 @@ func (c *Calendar) changed() {
 	c.opts.Redraw()
 }
 
-func (c *Calendar) Events() ([]Event, error, bool) {
+func (c *Calendar) Events(from, to time.Time) ([]Event, error, bool) {
 	chosen := c.Chosen()
-	if len(chosen) == 0 {
+	if len(chosen) == 0 || !to.After(from) {
 		return nil, nil, false
 	}
-	key := strings.Join(chosen, ",") + "/" + string(c.Span())
+	key := strings.Join(chosen, ",")
 	c.mu.Lock()
 	if c.following != key {
-		c.following, c.events, c.loaded, c.problem, c.asked = key, nil, false, nil, time.Time{}
-		c.mu.Unlock()
-		for _, e := range chosen {
-			c.opts.States.Follow(e, "").Changed.Listen(func(string) { c.Refresh() })
-		}
-		c.mu.Lock()
+		c.following, c.events, c.have, c.loaded, c.problem, c.asked = key, nil, window{}, false, nil, time.Time{}
 	}
-	due := !c.asking && time.Since(c.asked) > stale
-	events, problem, loaded := slices.Clone(c.events), c.problem, c.loaded
+	var follow []string
+	for _, e := range chosen {
+		if !c.followed[e] {
+			c.followed[e] = true
+			follow = append(follow, e)
+		}
+	}
+	covered := c.have.covers(from, to)
+	if !covered {
+		span := to.Sub(from)
+		c.want = window{from.Add(-span), to.Add(span)}
+	}
+	due := !c.asking && (!covered || time.Since(c.asked) > stale)
+	var events []Event
+	for _, e := range c.events {
+		if e.Overlaps(from, to) {
+			events = append(events, e)
+		}
+	}
+	problem, loaded := c.problem, c.loaded && covered
 	c.mu.Unlock()
+	for _, e := range follow {
+		c.opts.States.Follow(e, "").Changed.Listen(func(string) { c.Refresh() })
+	}
 	if due {
 		c.Refresh()
 	}
@@ -176,43 +272,80 @@ func (c *Calendar) Refresh() {
 		return
 	}
 	c.mu.Lock()
-	if c.asking {
+	if c.asking || c.want.from.IsZero() {
 		c.mu.Unlock()
 		return
 	}
 	c.asking, c.asked = true, time.Now()
-	key := c.following
+	key, want := c.following, c.want
 	c.mu.Unlock()
 
-	now := time.Now()
-	start := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
-	end := start.AddDate(0, 0, c.Span().Days())
 	go func() {
 		ctx, cancel := context.WithTimeout(context.Background(), fetchWait)
 		defer cancel()
 		raw, err := c.opts.Controller.Ask(ctx, eventsAction, map[string]string{
 			"entity_id":       strings.Join(chosen, ","),
-			"start_date_time": start.Format(wireLayout),
-			"end_date_time":   end.Format(wireLayout),
+			"start_date_time": want.from.Format(wireLayout),
+			"end_date_time":   want.to.Format(wireLayout),
 		}, nil, eventsShape)
 		var events []Event
 		if err == nil {
-			events, err = parse(raw, now.Location())
+			events, err = parse(raw, want.from.Location())
 		}
 		c.mu.Lock()
 		c.asking = false
+		again := false
 		if c.following == key {
 			if err == nil {
-				c.events = events
+				c.events, c.have = events, want
 			}
 			c.problem, c.loaded = err, true
+			again = c.want != want
 		}
 		c.mu.Unlock()
 		if err != nil {
 			slog.Info("calendar events", "err", err)
 		}
+		if again {
+			c.Refresh()
+		}
 		c.opts.Redraw()
 	}()
+}
+
+func (c *Calendar) Create(ctx context.Context, d Draft) error {
+	if !c.writable(d.Calendar) {
+		return ErrReadOnly
+	}
+	data := map[string]string{"entity_id": d.Calendar, "summary": strings.TrimSpace(d.Summary)}
+	if l := strings.TrimSpace(d.Location); l != "" {
+		data["location"] = l
+	}
+	if desc := strings.TrimSpace(d.Description); desc != "" {
+		data["description"] = desc
+	}
+	if d.AllDay {
+		end := d.End
+		if !end.After(d.Start) {
+			end = d.Start.AddDate(0, 0, 1)
+		}
+		data["start_date"], data["end_date"] = d.Start.Format(dayLayout), end.Format(dayLayout)
+	} else {
+		data["start_date_time"], data["end_date_time"] = d.Start.Format(
+			wireLayout,
+		), d.End.Format(
+			wireLayout,
+		)
+	}
+	if err := c.opts.Controller.Call(ctx, createAction, data); err != nil {
+		return fmt.Errorf("calendar: adding the event: %w", err)
+	}
+	c.mu.Lock()
+	c.asked = time.Time{}
+	c.have = window{}
+	c.mu.Unlock()
+	c.Refresh()
+	return nil
 }
 
 type wire struct {
@@ -242,12 +375,13 @@ func parse(raw json.RawMessage, loc *time.Location) ([]Event, error) {
 				end = start
 			}
 			out = append(out, Event{
-				Calendar: entity,
-				Summary:  w.Summary,
-				Location: w.Location,
-				Start:    start,
-				End:      end,
-				AllDay:   allDay,
+				Calendar:    entity,
+				Summary:     w.Summary,
+				Location:    w.Location,
+				Description: w.Description,
+				Start:       start,
+				End:         end,
+				AllDay:      allDay,
 			})
 		}
 	}

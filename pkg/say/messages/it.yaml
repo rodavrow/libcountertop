@@ -149,15 +149,44 @@ buttons.static: Volume principale
 calendar.allday: Tutto il giorno
 calendar.app: Calendario
 calendar.chosen: "{{.N}} calendar{{if ne .N 1}}i{{else}}io{{end}}"
-calendar.days: "{{.N}} giorni"
+calendar.add: Nuovo evento
+calendar.count: "{{.N}} giorn{{if ne .N 1}}i{{else}}o{{end}}"
+calendar.date: Data
+calendar.days: Giorni
 calendar.empty: Nessun impegno in arrivo
+calendar.failed: Impossibile aggiungere l'evento
+calendar.free: Niente in programma
+calendar.hour: Ora
+calendar.hours: "{{.N}} h"
+calendar.hours.half: "{{.N}} h e mezza"
+calendar.length: Durata
+calendar.location: Luogo
+calendar.minute: Minuto
+calendar.minutes: "{{.N}} min"
+calendar.more: "altri {{.N}}"
+calendar.needs.title: Inserisci un titolo
+calendar.notes: Note
+calendar.save: Salva
+calendar.title: Titolo
+calendar.week.start: monday
 calendar.group.calendar: Calendario
 calendar.none: Nessun calendario in Home Assistant
 calendar.off: "Off"
 calendar.pick: Scegli i calendari
 calendar.example.entities: calendar.family, calendar.work
 calendar.setting.entities: Calendari
-calendar.setting.span: Giorni da mostrare
+calendar.example.colors: calendar.family=#e8a33d, calendar.work=#3a7bd5
+calendar.setting.colors: Colori dei calendari
+calendar.setting.weather: Meteo sui giorni
+calendar.setting.opening: Si apre su
+calendar.setting.saver: Prossimo impegno sul salvaschermo
+calendar.opening.last: Ultima usata
+calendar.opening.day: Giorno
+calendar.opening.week: Settimana
+calendar.opening.month: Mese
+calendar.view.day: Giorno
+calendar.view.week: Settimana
+calendar.view.month: Mese
 calendar.today: Oggi
 calendar.tomorrow: Domani
 call.address: Indirizzo
@@ -1818,6 +1847,13 @@ weather.setting.animate: Animazione meteo dashboard
 weather.setting.dashboard: Meteo nella dashboard
 weather.example.entity: weather.home
 weather.setting.entity: Entità meteo
+weather.example.forecast: weather.home
+weather.setting.forecast: Entità per le previsioni
+weather.forecast: Previsioni
+weather.forecast.daily: Giornaliere
+weather.forecast.twice_daily: Due volte al giorno
+weather.forecast.hourly: Orarie
+weather.forecast.none: Nessuna previsione
 weather.setting.idle: Meteo nel salvaschermo
 weather.setting.look: Aspetto meteo dashboard
 weather.setting.position: Posizione verticale meteo dashboard

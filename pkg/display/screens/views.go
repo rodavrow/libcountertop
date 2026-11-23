@@ -58,6 +58,7 @@ func (a *App) pageScreen(p *shell.Page) *Screen {
 	s := &Screen{
 		Title: p.Title,
 		View:  p,
+		Fixed: p.Side != nil || p.Preview != nil,
 		Build: func(w *gogui.Window) gogui.View {
 			return widgets.PageBody(w, p, widgets.PageRenderer{
 				Row: a.ui.Row, Tile: a.tileView, Preview: a.livePreview, Beside: widgets.Beside,

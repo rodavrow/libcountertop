@@ -24,10 +24,34 @@ func NewTable() *Table {
 			entitiesMost,
 			func(c *schema.Calendar) *string { return &c.Entities },
 		),
+		{
+			Name:     "colors",
+			Group:    Group,
+			Icon:     "mdi:palette",
+			NoEntity: true,
+			Kind:     setting.Text,
+			Read:     func(c *schema.Calendar) string { return schema.FormatPairs(c.Colors) },
+			Write: func(c *schema.Calendar, v string) error {
+				colors, err := schema.ParseColors(v)
+				if err != nil {
+					return err
+				}
+				c.Colors = colors
+				return nil
+			},
+		},
+		setting.Flag(
+			Setting{Name: "weather", Group: Group, Icon: "mdi:weather-partly-cloudy"},
+			func(c *schema.Calendar) *bool { return &c.Weather },
+		),
 		setting.Pick(
-			Setting{Name: "span", Group: Group, Icon: "mdi:calendar-range", NoEntity: true},
-			schema.CalendarSpans(),
-			func(c *schema.Calendar) *schema.CalendarSpan { return &c.Span },
+			Setting{Name: "opening", Group: Group, Icon: "mdi:calendar-start"},
+			schema.CalendarOpenings(),
+			func(c *schema.Calendar) *schema.CalendarOpening { return &c.Opening },
+		),
+		setting.Flag(
+			Setting{Name: "saver", Group: Group, Icon: "mdi:calendar-clock"},
+			func(c *schema.Calendar) *bool { return &c.Saver },
 		),
 	}, setting.Messages{Text: say.T, Missing: say.Missing})
 }

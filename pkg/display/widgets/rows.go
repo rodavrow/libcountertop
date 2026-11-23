@@ -78,8 +78,15 @@ func (kit *Toolkit) Row(
 	var onClick func(gogui.EventCtx)
 	switch r.Kind {
 	case menu.Toggle:
-		content = append(content, kit.controls().Toggle(id+"-switch", r.On))
+		toggle := kit.controls().Toggle(id+"-switch", r.On)
 		onClick = interaction.Tapped(tap, 0)
+		if r.Select != nil {
+			toggle = kit.Pressable(gogui.Row, gogui.ContainerCfg{
+				ID: id + "-flip", Sizing: gogui.FitFit, Padding: gogui.NoPadding,
+				Content: []gogui.View{toggle},
+			}, onClick)
+		}
+		content = append(content, toggle)
 	case menu.Slider:
 		snap := r.Snap
 		says := r.Value
@@ -135,6 +142,12 @@ func (kit *Toolkit) Row(
 			content = append(content, icon(gogui.IconCheck, gogui.CurrentTheme().Cfg.ColorAccent))
 		}
 		onClick = interaction.Tapped(tap, 0)
+	}
+	if pick := r.Select; pick != nil {
+		onClick = func(e gogui.EventCtx) {
+			pick()
+			e.Consume()
+		}
 	}
 	cfg := gogui.ContainerCfg{
 		ID:       id,

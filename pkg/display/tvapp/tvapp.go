@@ -145,7 +145,7 @@ func (a *App) build(w *gogui.Window) gogui.View {
 		views = append(views, gogui.Label(problem, widgets.Secondary()))
 	}
 	views = append(views,
-		a.o.UI.Input(gogui.InputCfg{
+		a.o.UI.Search(gogui.InputCfg{
 			ID:          "tv-find",
 			Text:        filter,
 			Placeholder: say.T("tv.find"),
