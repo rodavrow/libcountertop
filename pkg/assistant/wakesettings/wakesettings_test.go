@@ -2,6 +2,7 @@ package wakesettings
 
 import (
 	"slices"
+	"strings"
 	"testing"
 
 	esphome "github.com/ygelfand/go-esphome-device"
@@ -54,11 +55,11 @@ func TestExtrasFollowTheToneOfTheirSlot(t *testing.T) {
 	})
 
 	ents := s.Entities()
-	if len(ents) != 18 {
-		t.Fatalf("%d entities, want 18", len(ents))
+	if len(ents) != 20 {
+		t.Fatalf("%d entities, want 20", len(ents))
 	}
-	if ents[3] != extra[0] || ents[12] != extra[1] {
-		t.Errorf("extras at the wrong place: %v %v", ents[3], ents[12])
+	if ents[3] != extra[0] || ents[13] != extra[1] {
+		t.Errorf("extras at the wrong place: %v %v", ents[3], ents[13])
 	}
 }
 
@@ -72,8 +73,8 @@ func TestWakeTheScreenIsOfferedOnlyWithAScreen(t *testing.T) {
 		t.Fatalf("%d entities with a screen, want %d", got, want)
 	}
 	for _, e := range blind.Entities() {
-		if _, ok := e.(*esphome.Switch); ok {
-			t.Errorf("a device without a screen offers %T", e)
+		if s, ok := e.(*esphome.Switch); ok && strings.HasPrefix(s.ObjectID, "wake_screen") {
+			t.Errorf("a device without a screen offers %s", s.ObjectID)
 		}
 	}
 	if slices.Contains(blind.Controls().Names(), "2.wake_screen") {

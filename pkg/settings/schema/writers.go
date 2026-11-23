@@ -494,6 +494,10 @@ func (w WakeWriter) WakeScreen(on bool) error {
 	return w.word(func(word *WakeWord) { word.WakeScreen = on })
 }
 
+func (w WakeWriter) KnownVoices(on bool) error {
+	return w.word(func(word *WakeWord) { word.KnownVoices = on })
+}
+
 func (w WakeWriter) Place(v LookPlace) error {
 	return w.word(func(word *WakeWord) { word.Look.Place = v })
 }

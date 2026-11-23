@@ -98,6 +98,7 @@ assistants.arbitration.offset: "{{.N}} dB"
 assistants.setting.buffer: Bộ đệm phản hồi
 assistants.setting.delivery: Phát phản hồi
 assistants.setting.follow_up: Thời gian chờ nói tiếp
+assistants.setting.known_voices: Chỉ giọng nói đã nhận diện
 assistants.setting.max_listen: Thời gian nghe tối đa
 assistants.setting.max_think: Thời gian suy nghĩ tối đa
 assistants.setting.recordings: Số bản ghi giữ lại

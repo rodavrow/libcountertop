@@ -97,6 +97,7 @@ assistants.arbitration.offset: "{{.N}} dB"
 assistants.setting.buffer: Reply buffer
 assistants.setting.delivery: Response playback
 assistants.setting.follow_up: Follow-up time
+assistants.setting.known_voices: Recognized voices only
 assistants.setting.max_listen: Max listening time
 assistants.setting.max_think: Max thinking time
 assistants.setting.recordings: Recordings kept

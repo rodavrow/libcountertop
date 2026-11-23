@@ -96,7 +96,7 @@ func TestTheTurnThatAskedHearsItsOwnAnswer(t *testing.T) {
 	var name, person string
 	var score float64
 	s.mu.Lock()
-	s.asked[at] = func(n, p string, sc float64) { name, person, score = n, p, sc }
+	s.asked[at] = func(n, p string, sc float64, _ error) { name, person, score = n, p, sc }
 	s.mu.Unlock()
 	s.heard(at.Add(time.Second), nil, []float32{1, 0})
 	if name != "" {
@@ -105,6 +105,14 @@ func TestTheTurnThatAskedHearsItsOwnAnswer(t *testing.T) {
 	s.heard(at, nil, []float32{1, 0.1})
 	if name != "Ann" || person != "person.ann" || score < 0.99 {
 		t.Errorf("answer %q %q %.2f, want Ann", name, person, score)
+	}
+	var failed error
+	s.mu.Lock()
+	s.asked[at] = func(_, _ string, _ float64, err error) { failed = err }
+	s.mu.Unlock()
+	s.missed(at, ErrNoSpeech)
+	if !errors.Is(failed, ErrNoSpeech) {
+		t.Errorf("a failed match answered %v, want %v", failed, ErrNoSpeech)
 	}
 	empty := newService(t)
 	if empty.Spoke(at, nil) {

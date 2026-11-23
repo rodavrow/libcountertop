@@ -96,12 +96,10 @@ type Service struct {
 	progress Progress
 	held     Profile
 	stop     context.CancelFunc
-	asked    map[time.Time]func(name, person string, score float64)
+	asked    map[time.Time]Told
 	outbox   []change
 	wake     func() string
-
-	// queued numbers the changes that join the outbox.
-	queued uint64
+	queued   uint64
 
 	syncing sync.Mutex
 	syncs   sync.WaitGroup
@@ -117,7 +115,7 @@ func NewService(o Options) *Service {
 	s := &Service{
 		o:     o,
 		pool:  background.New(helpers, nice),
-		asked: map[time.Time]func(name, person string, score float64){},
+		asked: map[time.Time]Told{},
 		speaker: &esphome.TextSensor{
 			Base: esphome.Base{
 				ObjectID: "last_speaker",
@@ -135,7 +133,7 @@ func NewService(o Options) *Service {
 			Decimals:   2,
 		},
 	}
-	s.matcher = New(o.Speech, s, s.heard)
+	s.matcher = New(o.Speech, s, s.heard, s.missed)
 	if raw, err := os.ReadFile(o.Profiles); err == nil {
 		if err := json.Unmarshal(raw, &s.profiles); err != nil {
 			slog.Warn("voice profiles unreadable", "path", o.Profiles, "err", err)
@@ -163,6 +161,13 @@ func (s *Service) Entities() []esphome.Entity { return []esphome.Entity{s.speake
 
 func (s *Service) Actions() []*esphome.Action {
 	return append(s.enrolActions(), &esphome.Action{
+		Name:        "voice_sync",
+		Description: "Fetch the household's voice profiles from Home Assistant.",
+		Run: func(esphome.Call) (any, error) {
+			s.Resync()
+			return nil, nil
+		},
+	}, &esphome.Action{
 		Name:        "voice_profiles",
 		Description: "Replace the voice profiles this device matches speakers against.",
 		Answers:     true,
@@ -218,7 +223,12 @@ func (s *Service) SetProfiles(ps []Profile) error {
 	return nil
 }
 
-func (s *Service) Spoke(at time.Time, told func(name, person string, score float64)) bool {
+type Told func(name, person string, score float64, err error)
+
+func (s *Service) Spoke(
+	at time.Time,
+	told func(name, person string, score float64, err error),
+) bool {
 	if len(s.Profiles()) == 0 {
 		return false
 	}
@@ -252,18 +262,28 @@ func (s *Service) heard(at time.Time, clip []int16, print []float32) {
 	slog.Info("voice match", "speaker", name, "closest", m.Profile.Name, "score", m.Score)
 	s.speaker.Set(name)
 	s.score.Set(float32(m.Score))
-	s.mu.Lock()
-	told := s.asked[at]
-	delete(s.asked, at)
-	s.mu.Unlock()
-	if told != nil {
+	if told := s.told(at); told != nil {
 		if known {
-			told(m.Profile.Name, m.Profile.Person, m.Score)
+			told(m.Profile.Name, m.Profile.Person, m.Score, nil)
 		} else {
-			told("", "", m.Score)
+			told("", "", m.Score, nil)
 		}
 	}
 	s.Identified.Emit(Identified{At: at, Match: m, Known: known})
+}
+
+func (s *Service) missed(at time.Time, err error) {
+	if told := s.told(at); told != nil {
+		told("", "", 0, err)
+	}
+}
+
+func (s *Service) told(at time.Time) Told {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	told := s.asked[at]
+	delete(s.asked, at)
+	return told
 }
 
 func (s *Service) Embed(clip []int16) ([]float32, error) {

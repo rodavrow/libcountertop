@@ -38,7 +38,12 @@ func TestTheWakeWordAndRequestAreMatched(t *testing.T) {
 
 	e := clipEmbedder{clips: make(chan []int16, 1)}
 	printed := make(chan []float32, 1)
-	New(h, e, func(_ time.Time, _ []int16, p []float32) { printed <- p }).Spoke(time.Now())
+	New(
+		h,
+		e,
+		func(_ time.Time, _ []int16, p []float32) { printed <- p },
+		func(_ time.Time, err error) { t.Errorf("missed: %v", err) },
+	).Spoke(time.Now())
 	h.Add(s[voiceprint.SampleRate*16/10 : voiceprint.SampleRate*36/10])
 	h.Add(make([]int16, voiceprint.SampleRate*3/2))
 

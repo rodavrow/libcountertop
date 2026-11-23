@@ -98,6 +98,7 @@ assistants.arbitration.offset: "{{.N}} dB"
 assistants.setting.buffer: Buffer risposta
 assistants.setting.delivery: Riproduzione risposta
 assistants.setting.follow_up: Tempo per proseguire
+assistants.setting.known_voices: Solo voci riconosciute
 assistants.setting.max_listen: Ascolto massimo
 assistants.setting.max_think: Elaborazione massima
 assistants.setting.recordings: Registrazioni conservate

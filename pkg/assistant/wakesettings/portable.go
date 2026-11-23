@@ -93,6 +93,10 @@ func (s *Settings) rows(n int) []setting.Setting[schema.Wake] {
 			func(w *schema.WakeWord) *int { return &w.Recordings },
 		),
 	}
+	rows = append(rows, setting.Flag(
+		row("known_voices"),
+		func(c *schema.Wake) *bool { return &word(c).KnownVoices },
+	))
 	if s.options.Screen {
 		rows = append(rows, setting.Flag(
 			row("wake_screen"),

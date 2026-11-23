@@ -9,18 +9,22 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
+	"strconv"
 	"time"
 
+	"github.com/ygelfand/libcountertop/pkg/homeassistant"
 	"github.com/ygelfand/libcountertop/pkg/runtime/safe"
 )
 
 const (
-	exchange  = "echolocal.voices"
-	reply     = "{{ response | to_json }}"
-	syncLimit = 30 * time.Second
-	// batchBytes is how much queued JSON one request carries, well inside what a connection takes.
-	batchBytes = 32 << 10
+	exchange     = "echolocal.voices"
+	reply        = "{{ response | to_json }}"
+	syncLimit    = 30 * time.Second
+	batchBytes   = 32 << 10
+	pageRestarts = 2
 )
+
+var errVoicesChanging = errors.New("voicematch: the household's voices kept changing during a sync")
 
 type Asker interface {
 	Ask(
@@ -35,8 +39,6 @@ type change struct {
 	Save   *Profile `json:"save,omitempty"`
 	Remove string   `json:"remove,omitempty"`
 
-	// seq tells a queued change from a later one for the same voice, so a sync clears only what
-	// it sent.
 	seq uint64
 }
 
@@ -47,8 +49,6 @@ func (c change) voice() string {
 	return c.Remove
 }
 
-// latest keeps the last change for each voice. A save carries the whole voice, so an earlier
-// change for the same one adds nothing but size.
 func latest(changes []change) []change {
 	last := make(map[string]int, len(changes))
 	for i, c := range changes {
@@ -70,71 +70,111 @@ func (s *Service) Sync(ctx context.Context) error {
 	s.syncing.Lock()
 	defer s.syncing.Unlock()
 
+	x := &exchanger{home: s.o.Home}
 	sent := 0
 	for {
 		batch, raw, more, err := s.batch()
 		if err != nil {
 			return err
 		}
-		profiles, err := s.exchange(ctx, raw)
+		got, err := x.exchange(ctx, raw, 0)
 		if err != nil {
 			return err
-		}
-		// Home Assistant's list lacks whatever is still queued, so only the last answer is whole.
-		if !more {
-			if err := s.SetProfiles(profiles); err != nil {
-				return err
-			}
 		}
 		if err := s.delivered(batch); err != nil {
 			return err
 		}
 		sent += len(batch)
-		if !more {
-			slog.Info("voices synced", "sent", sent, "voices", len(profiles))
-			return nil
+		if more {
+			continue
 		}
+		profiles, err := x.rest(ctx, got)
+		if err != nil {
+			return err
+		}
+		if err := s.SetProfiles(profiles); err != nil {
+			return err
+		}
+		slog.Info("voices synced", "sent", sent, "voices", len(profiles))
+		return nil
 	}
 }
 
-// batch takes queued changes from the front until one more would pass batchBytes, and always at
-// least one. more reports whether any were left behind.
+type answer struct {
+	Profiles []Profile `json:"profiles"`
+	Next     *int      `json:"next"`
+	Revision int       `json:"revision"`
+}
+
+type exchanger struct {
+	home    Asker
+	unpaged bool
+}
+
+func (x *exchanger) rest(ctx context.Context, got answer) ([]Profile, error) {
+	profiles := got.Profiles
+	restarts := 0
+	for got.Next != nil {
+		next, err := x.exchange(ctx, []byte("[]"), *got.Next)
+		if err != nil {
+			return nil, err
+		}
+		if next.Revision != got.Revision {
+			if restarts++; restarts > pageRestarts {
+				return nil, errVoicesChanging
+			}
+			if next, err = x.exchange(ctx, []byte("[]"), 0); err != nil {
+				return nil, err
+			}
+			profiles = nil
+		}
+		profiles = append(profiles, next.Profiles...)
+		got = next
+	}
+	return profiles, nil
+}
+
 func (s *Service) batch() (batch []change, raw []byte, more bool, err error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	batch, raw = []change{}, []byte("[]")
-	for i, c := range s.outbox {
-		grown, err := json.Marshal(append(batch, c))
+	raw = []byte{'['}
+	for _, c := range s.outbox {
+		one, err := json.Marshal(c)
 		if err != nil {
 			return nil, nil, false, err
 		}
-		if i > 0 && len(grown) > batchBytes {
-			return batch, raw, true, nil
+		if len(batch) > 0 && len(raw)+1+len(one)+1 > batchBytes {
+			return batch, append(raw, ']'), true, nil
 		}
-		batch, raw = append(batch, c), grown
+		if len(batch) > 0 {
+			raw = append(raw, ',')
+		}
+		raw, batch = append(raw, one...), append(batch, c)
 	}
-	return batch, raw, false, nil
+	return batch, append(raw, ']'), false, nil
 }
 
-func (s *Service) exchange(ctx context.Context, changes []byte) ([]Profile, error) {
-	answer, err := s.o.Home.Ask(
-		ctx,
-		exchange,
-		map[string]string{"changes": string(changes)},
-		nil,
-		reply,
-	)
+func (x *exchanger) exchange(ctx context.Context, changes []byte, page int) (answer, error) {
+	data := map[string]string{"changes": string(changes)}
+	if !x.unpaged {
+		data["page"] = strconv.Itoa(page)
+	}
+	raw, err := x.home.Ask(ctx, exchange, data, nil, reply)
+	var refused *homeassistant.Failed
+	if err != nil && !x.unpaged && errors.As(err, &refused) {
+		x.unpaged = true
+		delete(data, "page")
+		raw, err = x.home.Ask(ctx, exchange, data, nil, reply)
+	}
 	if err != nil {
-		return nil, fmt.Errorf("voicematch: syncing voices: %w", err)
+		return answer{}, fmt.Errorf("voicematch: syncing voices: %w", err)
 	}
-	var got struct {
-		Profiles []Profile `json:"profiles"`
+	var got answer
+	if err := json.Unmarshal(raw, &got); err != nil {
+		return answer{}, fmt.Errorf("voicematch: the household's voices: %w", err)
 	}
-	if err := json.Unmarshal(answer, &got); err != nil {
-		return nil, fmt.Errorf("voicematch: the household's voices: %w", err)
-	}
-	return got.Profiles, nil
+	return got, nil
 }
 
 func (s *Service) delivered(batch []change) error {
@@ -203,7 +243,6 @@ func (s *Service) loadOutbox() {
 	}
 }
 
-// numbered stamps a change as it joins the outbox. Callers hold s.mu or own s outright.
 func (s *Service) numbered(c change) change {
 	s.queued++
 	c.seq = s.queued

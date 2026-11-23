@@ -284,6 +284,11 @@ func (p *AssistantPages) Slot(slot int) *shell.Page {
 					Kind:  menu.Toggle,
 					On:    saved.WakeScreen,
 				},
+				{
+					Label: say.T("assistants.setting.known_voices"),
+					Kind:  menu.Toggle,
+					On:    saved.KnownVoices,
+				},
 			}, []func(int){
 				func(int) { p.options.Requested.Emit(slot) },
 				choose,
@@ -293,6 +298,7 @@ func (p *AssistantPages) Slot(slot int) *shell.Page {
 				p.open(func() shell.View { return p.Delivery(slot) }),
 				nil,
 				p.wakeScreen(slot, !saved.WakeScreen),
+				p.knownVoices(slot, !saved.KnownVoices),
 			}
 		},
 	}
@@ -453,6 +459,17 @@ func (p *AssistantPages) wakeScreen(slot int, on bool) func(int) {
 			func(w *config.WakeWord) { w.WakeScreen = on },
 		); err != nil {
 			slog.Error("saving wake the screen failed", "slot", slot+1, "err", err)
+		}
+	}
+}
+
+func (p *AssistantPages) knownVoices(slot int, on bool) func(int) {
+	return func(int) {
+		if err := p.options.Preferences.Word(
+			slot,
+			func(w *config.WakeWord) { w.KnownVoices = on },
+		); err != nil {
+			slog.Error("saving recognized voices only failed", "slot", slot+1, "err", err)
 		}
 	}
 }

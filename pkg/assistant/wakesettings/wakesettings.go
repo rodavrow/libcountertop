@@ -29,14 +29,15 @@ type Settings struct {
 type slot struct {
 	wake *esphome.Button
 
-	threshold  *esphome.Number
-	tone       *esphome.Select
-	delivery   *esphome.Select
-	buffer     *esphome.Number
-	followUp   *esphome.Number
-	maxListen  *esphome.Number
-	maxThink   *esphome.Number
-	wakeScreen *esphome.Switch
+	threshold   *esphome.Number
+	tone        *esphome.Select
+	delivery    *esphome.Select
+	buffer      *esphome.Number
+	followUp    *esphome.Number
+	maxListen   *esphome.Number
+	maxThink    *esphome.Number
+	knownVoices *esphome.Switch
+	wakeScreen  *esphome.Switch
 }
 
 func New(options Options) *Settings {
@@ -131,6 +132,14 @@ func (s *Settings) newSlot(n int) slot {
 			Min: 5, Max: 300, Step: 5, Unit: "s",
 			Mode: esphome.NumberBox,
 		},
+		knownVoices: &esphome.Switch{
+			Base: esphome.Base{
+				ObjectID: fmt.Sprintf("known_voices_%d", n+1),
+				Name:     "Recognized voices only",
+				Icon:     "mdi:account-lock",
+				Category: esphome.CategoryConfig,
+			},
+		},
 		wakeScreen: &esphome.Switch{
 			Base: esphome.Base{
 				ObjectID: fmt.Sprintf("wake_screen_%d", n+1),
@@ -146,7 +155,7 @@ func (s *Settings) newSlot(n int) slot {
 		for _, b := range []*esphome.Base{
 			&sl.wake.Base, &sl.threshold.Base, &sl.tone.Base, &sl.delivery.Base,
 			&sl.buffer.Base, &sl.followUp.Base, &sl.maxListen.Base, &sl.maxThink.Base,
-			&sl.wakeScreen.Base,
+			&sl.knownVoices.Base, &sl.wakeScreen.Base,
 		} {
 			b.DeviceID = on
 		}
@@ -206,6 +215,12 @@ func (s *Settings) newSlot(n int) slot {
 			slog.Error("saving the thinking limit failed", "slot", n+1, "err", err)
 		}
 	}
+	sl.knownVoices.OnCommand = func(on bool) {
+		sl.knownVoices.Set(on)
+		if err := write().KnownVoices(on); err != nil {
+			slog.Error("saving recognized voices only failed", "slot", n+1, "err", err)
+		}
+	}
 	sl.wakeScreen.OnCommand = func(on bool) {
 		sl.wakeScreen.Set(on)
 		if err := write().WakeScreen(on); err != nil {
@@ -224,7 +239,15 @@ func (s *Settings) Entities() []esphome.Entity {
 		if s.options.Extras != nil {
 			ents = append(ents, s.options.Extras(n)...)
 		}
-		ents = append(ents, sl.delivery, sl.buffer, sl.followUp, sl.maxListen, sl.maxThink)
+		ents = append(
+			ents,
+			sl.delivery,
+			sl.buffer,
+			sl.followUp,
+			sl.maxListen,
+			sl.maxThink,
+			sl.knownVoices,
+		)
 		if s.options.Screen {
 			ents = append(ents, sl.wakeScreen)
 		}
@@ -246,6 +269,7 @@ func (s *Settings) Restore(words []schema.WakeWord) {
 		sl.followUp.Set(float32(saved.FollowUp))
 		sl.maxListen.Set(float32(saved.MaxListen))
 		sl.maxThink.Set(float32(saved.MaxThink))
+		sl.knownVoices.Set(saved.KnownVoices)
 		sl.wakeScreen.Set(saved.WakeScreen)
 	}
 	slog.Info("restored", "what", "wake word settings", "slots", len(s.slots))

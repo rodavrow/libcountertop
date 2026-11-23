@@ -39,8 +39,9 @@ func (w Words) Buffer(slot int) time.Duration {
 func (w Words) ChimeLength(slot int) time.Duration {
 	return w.sound(slot).Length()
 }
-func (w Words) Delivery(slot int) string { return string(w.Settings.Read().Slot(slot).Delivery) }
-func (w Words) Tones(slot int) bool      { return !w.Settings.Read().Slot(slot).Tone.Silent() }
+func (w Words) Delivery(slot int) string  { return string(w.Settings.Read().Slot(slot).Delivery) }
+func (w Words) Tones(slot int) bool       { return !w.Settings.Read().Slot(slot).Tone.Silent() }
+func (w Words) KnownVoices(slot int) bool { return w.Settings.Read().Slot(slot).KnownVoices }
 
 func (w Words) ToneChoices() []setting.Option {
 	if w.Sounds == nil {

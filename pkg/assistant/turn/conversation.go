@@ -54,6 +54,7 @@ const (
 	evAccepted
 	evListen
 	evRelease
+	evVoice
 )
 
 type event struct {
@@ -95,6 +96,7 @@ type Conversation struct {
 
 	stopAudio func()
 	deadline  *time.Timer
+	gate      *gate
 
 	holding bool
 
@@ -254,17 +256,25 @@ func (c *Conversation) handle(e event) {
 		}
 
 	case evAccepted:
-		if c.phase == phaseListening {
-			c.present()
-			c.options.Words.Chime(c.slot)
-			if c.options.Words.Tones(c.slot) {
-				c.quietUntil.Store(
-					time.Now().
-						Add(c.options.Words.ChimeLength(c.slot) + c.options.HardwareTail).
-						UnixNano(),
-				)
-			}
+		if c.phase == phaseListening && c.gate == nil {
+			c.accept()
 		}
+
+	case evVoice:
+		if c.gate == nil || !c.gate.heard.Equal(e.at) || c.phase != phaseListening {
+			return
+		}
+		if e.text == "" {
+			slog.Info("unrecognized voice, turn dropped", "slot", c.slot+1)
+			c.clearPending()
+			c.idle("unrecognized voice", activity.Cancelled)
+			c.trouble()
+			return
+		}
+		slog.Info("recognized voice, turn sent", "slot", c.slot+1, "speaker", e.text)
+		phrase := c.gate.phrase
+		c.send("start", func() error { return c.vs.StartTurn(phrase, audioSettings()) })
+		c.gate.release()
 
 	case evContinue:
 		if c.phase != phaseIdle {
@@ -492,7 +502,11 @@ func (c *Conversation) start(n nextTurn) {
 	}
 	c.turn = c.log.Begin(slot+1, phrase)
 	c.options.Recorder.Opens(c.turn.ID(), slot)
-	c.send("start", func() error { return c.vs.StartTurn(phrase, audioSettings()) })
+	if c.recognizes(n) {
+		c.gate = &gate{heard: n.heard, phrase: phrase, send: c.sendAudio}
+	} else {
+		c.send("start", func() error { return c.vs.StartTurn(phrase, audioSettings()) })
+	}
 
 	c.said, c.answer = "", ""
 	c.enter(phaseListening)
@@ -501,8 +515,31 @@ func (c *Conversation) start(n nextTurn) {
 
 	c.arm(c.listenFor(n))
 	c.startAudio(slot, n.heard)
-	slog.Info("turn started", "slot", slot+1, "phrase", phrase, "follow_up", n.followUp)
+	if c.gate != nil {
+		c.accept()
+	}
+	slog.Info("turn started", "slot", slot+1, "phrase", phrase, "follow_up", n.followUp,
+		"recognized_only", c.gate != nil)
 }
+
+func (c *Conversation) recognizes(n nextTurn) bool {
+	return c.options.Voices != nil && !n.followUp && !n.heard.IsZero() &&
+		c.options.Words.KnownVoices(n.slot)
+}
+
+func (c *Conversation) accept() {
+	c.present()
+	c.options.Words.Chime(c.slot)
+	if c.options.Words.Tones(c.slot) {
+		c.quietUntil.Store(
+			time.Now().
+				Add(c.options.Words.ChimeLength(c.slot) + c.options.HardwareTail).
+				UnixNano(),
+		)
+	}
+}
+
+func (c *Conversation) reached() bool { return c.gate == nil || c.gate.opened() }
 
 func (c *Conversation) listenFor(n nextTurn) time.Duration {
 	if n.followUp {
@@ -560,9 +597,10 @@ func (c *Conversation) idle(why string, how activity.Outcome) {
 	c.stopStreaming()
 	c.disarm()
 
-	if was != phaseIdle {
+	if was != phaseIdle && c.reached() {
 		c.send("stop", c.vs.StopTurn)
 	}
+	c.gate = nil
 
 	kept := c.options.Recorder
 	kept.Closes()
@@ -757,17 +795,28 @@ func audioSettings() *api.VoiceAssistantAudioSettings {
 }
 
 func (c *Conversation) startAudio(slot int, heard time.Time) {
+	g := c.gate
 	if c.options.Voices != nil && !heard.IsZero() {
 		t := c.turn
-		if c.options.Voices.Spoke(heard, t.Spoke) {
+		told := func(name, person string, score float64, err error) {
+			if err == nil {
+				t.Spoke(name, person, score)
+			}
+			if g != nil {
+				c.post(event{kind: evVoice, at: g.heard, text: name})
+			}
+		}
+		if c.options.Voices.Spoke(heard, told) {
 			t.Awaits()
+		} else if g != nil {
+			c.post(event{kind: evVoice, at: g.heard})
 		}
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	done := make(chan struct{})
 	c.stopAudio = func() { cancel(); <-done }
 
-	safe.Go("turn audio", func() { defer close(done); c.stream(ctx, slot, heard) })
+	safe.Go("turn audio", func() { defer close(done); c.stream(ctx, slot, heard, g) })
 }
 
 func (c *Conversation) stopStreaming() {
@@ -777,10 +826,16 @@ func (c *Conversation) stopStreaming() {
 	c.stopAudio()
 	c.stopAudio = nil
 
-	c.send("end of audio", c.vs.EndAudio)
+	if c.reached() {
+		c.send("end of audio", c.vs.EndAudio)
+	}
 }
 
-func (c *Conversation) stream(ctx context.Context, slot int, heard time.Time) {
+func (c *Conversation) stream(ctx context.Context, slot int, heard time.Time, g *gate) {
+	deliver := c.sendAudio
+	if g != nil {
+		deliver = g.pass
+	}
 	frames, unlisten := c.source.Listen("turn")
 	defer unlisten()
 
@@ -800,7 +855,7 @@ func (c *Conversation) stream(ctx context.Context, slot int, heard time.Time) {
 		}
 		c.options.Recorder.Frame(buf)
 
-		c.sendAudio(buf)
+		deliver(buf)
 		slog.Debug("sent audio history", "ms", len(pre)*1000/voiceRate)
 	}
 
@@ -853,7 +908,7 @@ func (c *Conversation) stream(ctx context.Context, slot int, heard time.Time) {
 			}
 			c.options.Recorder.Frame(buf)
 
-			c.sendAudio(buf)
+			deliver(buf)
 		}
 	}
 }

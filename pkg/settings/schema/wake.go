@@ -58,6 +58,8 @@ type WakeWord struct {
 
 	WakeScreen bool `json:"wake_screen"`
 
+	KnownVoices bool `json:"known_voices"`
+
 	Look Look `json:"look"`
 }
 

@@ -5,11 +5,18 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
+	"slices"
+	"strconv"
 	"sync"
 	"testing"
 	"time"
+
+	esphome "github.com/ygelfand/go-esphome-device"
+
+	"github.com/ygelfand/libcountertop/pkg/homeassistant"
 )
 
 type home struct {
@@ -19,6 +26,12 @@ type home struct {
 	sizes   []int
 	offline bool
 	refused int
+
+	legacy    bool
+	pageSize  int
+	revision  int
+	pages     []string
+	interrupt func(h *home)
 }
 
 func (h *home) online(after int) {
@@ -52,6 +65,10 @@ func (h *home) Ask(
 	if data["changes"] == "null" {
 		return nil, errors.New("changes sent as null, want a list")
 	}
+	page, paged := data["page"]
+	if paged && h.legacy {
+		return nil, &homeassistant.Failed{Message: "extra keys not allowed @ data['page']"}
+	}
 	var changes []change
 	if err := json.Unmarshal([]byte(data["changes"]), &changes); err != nil {
 		return nil, err
@@ -61,18 +78,120 @@ func (h *home) Ask(
 	for _, c := range changes {
 		if c.Remove != "" {
 			delete(h.stored, c.Remove)
+			h.revision++
 		}
 		if c.Save != nil {
 			h.stored[c.Save.ID] = *c.Save
+			h.revision++
 		}
 	}
-	var out struct {
-		Profiles []Profile `json:"profiles"`
+	if paged {
+		h.pages = append(h.pages, page)
+		if h.interrupt != nil && page != "0" {
+			h.interrupt(h)
+			h.interrupt = nil
+		}
 	}
-	for _, p := range h.stored {
-		out.Profiles = append(out.Profiles, p)
+	ids := slices.Sorted(maps.Keys(h.stored))
+	out := answer{Revision: h.revision}
+	if paged && h.pageSize > 0 {
+		start, err := strconv.Atoi(page)
+		if err != nil {
+			return nil, err
+		}
+		end := min(start+h.pageSize, len(ids))
+		if end < len(ids) {
+			out.Next = &end
+		}
+		ids = ids[min(start, len(ids)):end]
+	}
+	for _, id := range ids {
+		out.Profiles = append(out.Profiles, h.stored[id])
 	}
 	return json.Marshal(out)
+}
+
+func pagedHome(size int, voices ...string) *home {
+	h := &home{stored: map[string]Profile{}, pageSize: size}
+	for _, id := range voices {
+		h.stored[id] = Profile{ID: id, Name: id, Threshold: Default, Prints: [][]float32{{1, 0}}}
+	}
+	return h
+}
+
+func ids(ps []Profile) []string {
+	out := make([]string, 0, len(ps))
+	for _, p := range ps {
+		out = append(out, p.ID)
+	}
+	slices.Sort(out)
+	return out
+}
+
+func TestTheHouseholdsVoicesArriveInPages(t *testing.T) {
+	h := pagedHome(2, "a", "b", "c", "d", "e")
+	s := synced(t, h)
+
+	if err := s.Sync(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+
+	if got := ids(s.Profiles()); !slices.Equal(got, []string{"a", "b", "c", "d", "e"}) {
+		t.Errorf("the device holds %v", got)
+	}
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	if want := []string{"0", "2", "4"}; !slices.Equal(h.pages[len(h.pages)-3:], want) {
+		t.Errorf("asked for pages %v, want %v last", h.pages, want)
+	}
+}
+
+func TestAnIntegrationWithoutPagesGetsTheWholeList(t *testing.T) {
+	h := pagedHome(2, "a", "b", "c")
+	h.legacy = true
+	s := synced(t, h)
+
+	if err := s.Sync(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+
+	if got := ids(s.Profiles()); !slices.Equal(got, []string{"a", "b", "c"}) {
+		t.Errorf("the device holds %v", got)
+	}
+}
+
+func TestAChangeDuringPagingStartsTheListAgain(t *testing.T) {
+	h := pagedHome(2, "a", "b", "c", "d")
+	h.interrupt = func(h *home) {
+		h.stored["0"] = Profile{ID: "0", Name: "0", Threshold: Default, Prints: [][]float32{{1, 0}}}
+		h.revision++
+	}
+	s := synced(t, h)
+
+	if err := s.Sync(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+
+	if got := ids(s.Profiles()); !slices.Equal(got, []string{"0", "a", "b", "c", "d"}) {
+		t.Errorf("the device holds %v", got)
+	}
+}
+
+func TestVoiceSyncFetchesTheHouseholdsVoices(t *testing.T) {
+	h := pagedHome(0, "a")
+	s := synced(t, h)
+	h.mu.Lock()
+	h.stored["b"] = Profile{ID: "b", Name: "b", Threshold: Default, Prints: [][]float32{{1, 0}}}
+	h.mu.Unlock()
+
+	if _, err := named(t, s, "voice_sync").Run(esphome.Call{}); err != nil {
+		t.Fatal(err)
+	}
+	s.syncs.Wait()
+
+	if got := ids(s.Profiles()); !slices.Equal(got, []string{"a", "b"}) {
+		t.Errorf("the device holds %v", got)
+	}
 }
 
 func synced(t *testing.T, h *home) *Service {
@@ -171,7 +290,6 @@ func (s *Service) waiting() []change {
 	return append([]change{}, s.outbox...)
 }
 
-// enrolled is a voice the size a device really holds: five prints of 192 numbers, about 10 KB.
 func enrolled(id string) Profile {
 	prints := make([][]float32, 5)
 	for i := range prints {
@@ -183,7 +301,7 @@ func enrolled(id string) Profile {
 	return Profile{ID: id, Name: id, Threshold: Default, Prints: prints}
 }
 
-func TestRegressionSavingOneVoiceRepeatedlyQueuesItOnce(t *testing.T) {
+func TestSavingOneVoiceRepeatedlyQueuesItOnce(t *testing.T) {
 	h := &home{stored: map[string]Profile{}, offline: true}
 	s := synced(t, h)
 	p := ann()
@@ -221,7 +339,7 @@ func TestARemovalReplacesAQueuedSaveOfTheSameVoice(t *testing.T) {
 	}
 }
 
-func TestRegressionABloatedOutboxIsMergedWhenLoaded(t *testing.T) {
+func TestABloatedOutboxIsMergedWhenLoaded(t *testing.T) {
 	dir := t.TempDir()
 	outbox := filepath.Join(dir, "outbox.json")
 	p := ann()
@@ -259,7 +377,7 @@ func TestRegressionABloatedOutboxIsMergedWhenLoaded(t *testing.T) {
 	}
 }
 
-func TestRegressionAnOutboxTooLargeForOneRequestIsSentInPieces(t *testing.T) {
+func TestAnOutboxTooLargeForOneRequestIsSentInPieces(t *testing.T) {
 	h := &home{stored: map[string]Profile{}, offline: true}
 	s := synced(t, h)
 	const voices = 12
@@ -298,7 +416,7 @@ func TestRegressionAnOutboxTooLargeForOneRequestIsSentInPieces(t *testing.T) {
 	}
 }
 
-func TestRegressionSavingAnUnchangedVoiceQueuesNothing(t *testing.T) {
+func TestSavingAnUnchangedVoiceQueuesNothing(t *testing.T) {
 	h := &home{stored: map[string]Profile{}}
 	s := synced(t, h)
 	if err := s.Save(ann()); err != nil {
