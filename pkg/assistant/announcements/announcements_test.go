@@ -132,9 +132,9 @@ func TestAChoiceStillInTimeOutlivesAnEarlierChoicesTimer(t *testing.T) {
 func TestTheSwitchReadsAndSavesTheSetting(t *testing.T) {
 	a, _, saved := fixture(true)
 
-	entities := a.Controls().Entities()
-	if len(entities) != 1 {
-		t.Fatalf("%d entities, want the one switch", len(entities))
+	entities := a.Entities()
+	if len(entities) != 2 || entities[1] != esphome.Entity(a.next) {
+		t.Fatalf("entities %+v, want the switch and the select", entities)
 	}
 	sw, ok := entities[0].(*esphome.Switch)
 	if !ok || sw.ObjectID != "assistants_animate_announcements" || !sw.Get() {
@@ -145,7 +145,7 @@ func TestTheSwitchReadsAndSavesTheSetting(t *testing.T) {
 	if *saved || a.Animated() || a.On() {
 		t.Fatal("switching off did not save")
 	}
-	if err := a.Set(true); err != nil || !*saved {
-		t.Fatalf("Set(true): saved %v, err %v", *saved, err)
+	if err := a.Set(true); err != nil || !*saved || !sw.Get() {
+		t.Fatalf("Set(true): saved %v, switch %v, err %v", *saved, sw.Get(), err)
 	}
 }

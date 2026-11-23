@@ -38,8 +38,9 @@ type Options struct {
 }
 
 type Announcements struct {
-	options Options
-	next    *esphome.Select
+	options  Options
+	next     *esphome.Select
+	controls *setting.Controls[schema.Wake]
 
 	mu     sync.Mutex
 	chosen int
@@ -63,6 +64,7 @@ func New(options Options) *Announcements {
 	}
 	a.next.Set(Default)
 	a.next.OnCommand = a.choose
+	a.controls = a.table()
 	return a
 }
 
@@ -79,11 +81,18 @@ func label(slot int) string { return fmt.Sprintf("Assistant %d", slot+1) }
 
 func (a *Announcements) Name() string { return "announcements" }
 
-func (a *Announcements) Entities() []esphome.Entity { return []esphome.Entity{a.next} }
+// Entities are the Animate announcements switch and the select that names the next speaker.
+func (a *Announcements) Entities() []esphome.Entity {
+	return append(a.controls.Entities(), a.next)
+}
 
 func (a *Announcements) On() bool { return a.options.Read() }
 
-func (a *Announcements) Set(on bool) error { return a.options.Save(on) }
+func (a *Announcements) Set(on bool) error {
+	err := a.options.Save(on)
+	a.controls.Publish()
+	return err
+}
 
 func (a *Announcements) Animated() bool { return a.options.Read() }
 
@@ -140,7 +149,9 @@ func (a *Announcements) forget() {
 	a.next.Set(Default)
 }
 
-func (a *Announcements) Controls() *setting.Controls[schema.Wake] {
+func (a *Announcements) Controls() *setting.Controls[schema.Wake] { return a.controls }
+
+func (a *Announcements) table() *setting.Controls[schema.Wake] {
 	return &setting.Controls[schema.Wake]{
 		Table:  Table(),
 		Device: a.options.DeviceID,
