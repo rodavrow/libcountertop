@@ -56,6 +56,14 @@ type Recorder interface {
 	Seconds(string) float64
 }
 
+// Announcements says whether speech Home Assistant pushes is shown as a reply, and as whose.
+type Announcements interface {
+	Animated() bool
+
+	// Slot is the assistant the next announcement speaks as. Asking uses the choice up.
+	Slot() int
+}
+
 type Dependencies struct {
 	Source             Microphone
 	Speaker            Speaker
@@ -71,6 +79,7 @@ type Dependencies struct {
 	Presentation       *Presentation
 	Arbiter            Arbiter
 	Voices             Voices
+	Announcements      Announcements
 	Cancelled, Failure func()
 }
 
