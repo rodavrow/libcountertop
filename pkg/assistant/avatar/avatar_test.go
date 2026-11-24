@@ -62,9 +62,16 @@ type fakeScreen struct {
 	delay   time.Duration
 	refused bool
 	z       int
+	closed  bool
 }
 
-func (s *fakeScreen) Show(rtc.Frame) { s.mu.Lock(); s.shown++; s.mu.Unlock() }
+func (s *fakeScreen) Show(rtc.Frame) {
+	s.mu.Lock()
+	if !s.closed {
+		s.shown++
+	}
+	s.mu.Unlock()
+}
 func (s *fakeScreen) Place(r display.Rect, z int) {
 	s.mu.Lock()
 	s.placed, s.hidden, s.z = r, false, z
@@ -78,7 +85,7 @@ func (s *fakeScreen) Stats() call.LayerStats {
 	defer s.mu.Unlock()
 	return call.LayerStats{Shown: s.shown}
 }
-func (s *fakeScreen) Close() {}
+func (s *fakeScreen) Close() { s.mu.Lock(); s.closed = true; s.mu.Unlock() }
 
 // liveTalking is a fake LiveTalking server.
 type liveTalking struct {
@@ -435,48 +442,146 @@ func TestASlowFirstKeyframeIsNotAStall(t *testing.T) {
 	}
 }
 
-// The board has one avatar layer; a second stream on it would close the first one's decoder and
-// the two would hide each other, leaving neither picture up.
-func TestTwoAvatarsTakeTurnsOnOneLayer(t *testing.T) {
-	r := newRig(t, always())
-	orion := always()
-	orion.URL, orion.ID = r.url, "orion"
-	r.m.wake.Words[1].Avatar = orion
-	opened := 0
-	r.a.screen = func() screen { opened++; return r.scr }
+// twoAvatars is a rig with both wake words in avatar mode, connected, where every stream opened
+// is a fresh fake, as each opens its own decoder on the device.
+func twoAvatars(t *testing.T) (r *rig, sylvia, orion *fakePeer, opened *[]*fakeScreen) {
+	t.Helper()
+	r = newRig(t, always())
+	o := always()
+	o.URL, o.ID = r.url, "orion"
+	r.m.wake.Words[1].Avatar = o
+	opened = &[]*fakeScreen{}
+	r.a.screen = func() screen {
+		s := &fakeScreen{}
+		*opened = append(*opened, s)
+		return s
+	}
 	r.a.reconcile()
 	if len(r.peers) != 2 {
 		t.Fatalf("%d sessions, want 2", len(r.peers))
 	}
-	sylvia, other := r.peers[0], r.peers[1]
+	sylvia, orion = r.peers[0], r.peers[1]
 	sylvia.report(webrtc.PeerConnectionStateConnected)
-	other.report(webrtc.PeerConnectionStateConnected)
+	orion.report(webrtc.PeerConnectionStateConnected)
+	return r, sylvia, orion, opened
+}
+
+// The board has one avatar layer. Each avatar shown gets a fresh stream on it, and the one before
+// is closed, so two sessions' frames, clocks and counts never share a decoder.
+func TestTwoAvatarsTakeTurnsOnOneLayer(t *testing.T) {
+	r, sylvia, orion, opened := twoAvatars(t)
 	box := display.Rect{W: 10, H: 10}
 
 	show := func(slot int, p, rival *fakePeer) {
 		t.Helper()
 		r.a.Showing(slot)
 		p.show(rtc.Frame{Key: true})
-		if !r.a.Place(slot, box, true) || r.scr.hidden {
-			t.Fatalf("slot %d: no picture, hidden %v", slot+1, r.scr.hidden)
+		cur := (*opened)[len(*opened)-1]
+		if !r.a.Place(slot, box, true) || cur.hidden {
+			t.Fatalf("slot %d: no picture, hidden %v", slot+1, cur.hidden)
 		}
-		before := r.scr.shown
+		for _, s := range (*opened)[:len(*opened)-1] {
+			if !s.closed {
+				t.Fatalf("slot %d: an earlier stream is still open", slot+1)
+			}
+		}
 		rival.show(rtc.Frame{Key: true})
-		if r.scr.shown != before {
-			t.Fatalf("slot %d: the other avatar still feeds the layer", slot+1)
+		if cur.shown != 1 {
+			t.Fatalf("slot %d: shown %d, want only its own frame", slot+1, cur.shown)
 		}
 		r.clock.pass(100 * time.Millisecond)
 		r.a.reconcile()
-		if r.scr.hidden {
+		if cur.hidden {
 			t.Fatalf("slot %d: the other avatar hid the picture", slot+1)
 		}
 	}
-	show(0, sylvia, other)
-	show(1, other, sylvia)
-	show(0, sylvia, other)
+	show(0, sylvia, orion)
+	show(1, orion, sylvia)
+	show(0, sylvia, orion)
 
-	if opened != 1 {
-		t.Errorf("opened %d layers, want 1", opened)
+	if len(*opened) != 3 {
+		t.Errorf("opened %d streams for three showings, want 3", len(*opened))
+	}
+}
+
+// The decoder's shown count restarts when the layer reopens for a new picture size or a broken
+// decoder; that must not keep the picture from counting as up.
+func TestAPictureCountsAfterTheLayerReopens(t *testing.T) {
+	r := newRig(t, always())
+	r.connect(t)
+	r.scr.shown = 50
+	r.a.Showing(0)
+	r.scr.shown = 0
+
+	r.peer().show(rtc.Frame{Key: true})
+
+	if !r.a.Showing(0) {
+		t.Fatal("the picture does not count after the layer reopened")
+	}
+}
+
+// An avatar that takes the layer back mid-reply gets its lip-sync delay back on the new stream.
+func TestTheLipSyncDelayFollowsTheAvatarBackOntoTheLayer(t *testing.T) {
+	r, sylvia, _, opened := twoAvatars(t)
+	sp := newSpeech(&lane{queued: 16000 / 2}, nil, r.clock.now)
+	l := r.a.links[0]
+	r.a.Showing(0)
+	sylvia.show(rtc.Frame{Key: true})
+	r.a.sync(l, sp)
+	want := (*opened)[0].delay
+	if want == 0 {
+		t.Fatal("no delay set")
+	}
+
+	r.a.Showing(1)
+	r.a.Showing(0)
+	r.a.sync(l, sp)
+
+	if got := (*opened)[len(*opened)-1].delay; got != want {
+		t.Errorf("delay %s after taking the layer back, want %s", got, want)
+	}
+}
+
+// slowScreen holds a frame inside Show until told to go on.
+type slowScreen struct {
+	*fakeScreen
+	in, out chan struct{}
+}
+
+func (s *slowScreen) Show(f rtc.Frame) {
+	if s.in != nil {
+		s.in <- struct{}{}
+		<-s.out
+	}
+	s.fakeScreen.Show(f)
+}
+
+// A frame of the previous avatar already on its way to the layer must not reach the new one's.
+func TestAStrayFrameFromThePreviousAvatarMissesTheNewStream(t *testing.T) {
+	r, _, orion, opened := twoAvatars(t)
+	var slow *slowScreen
+	r.a.screen = func() screen {
+		s := &fakeScreen{}
+		*opened = append(*opened, s)
+		if slow == nil {
+			slow = &slowScreen{fakeScreen: s}
+			return slow
+		}
+		return s
+	}
+	r.a.Showing(1)
+	orion.show(rtc.Frame{Key: true})
+	slow.in, slow.out = make(chan struct{}), make(chan struct{})
+	done := make(chan struct{})
+	go func() { orion.show(rtc.Frame{}); close(done) }()
+	<-slow.in
+
+	r.a.Showing(0)
+	close(slow.out)
+	<-done
+
+	if got := (*opened)[len(*opened)-1].shown; got != 0 {
+		t.Errorf("the new stream shows %d frames of the previous avatar", got)
 	}
 }
 
