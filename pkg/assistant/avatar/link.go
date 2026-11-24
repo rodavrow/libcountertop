@@ -73,11 +73,16 @@ type link struct {
 	closeAt time.Time
 	speech  *speech
 
+	// The decoder is fed only while someone wants the picture: primed hidden until it has one,
+	// then placed on screen.
 	scr       screen
-	staged    bool
+	feeding   bool
+	visible   bool
 	placedAt  time.Time
 	needKey   bool
 	shownAt   time.Time
+	shownBase uint64
+	pictured  bool
 	stalled   bool
 	published [2]string
 }
@@ -120,7 +125,7 @@ func (l *link) reconcile(now time.Time, cfg schema.Avatar, busy bool) {
 // hideIf takes the video off the screen when nothing placed it lately, another video needs the
 // screen, or the picture stalled; a stall holds until the next wake.
 func (l *link) hideIf(now time.Time, busy bool) {
-	if !l.staged {
+	if !l.feeding {
 		return
 	}
 	stale := now.Sub(l.placedAt) > l.a.timing.unplaced
@@ -129,10 +134,15 @@ func (l *link) hideIf(now time.Time, busy bool) {
 		l.stalled = true
 	}
 	if stale || busy || l.stalled || l.state != Connected {
-		l.staged = false
-		if l.scr != nil {
-			l.scr.Hide()
-		}
+		l.rest()
+	}
+}
+
+// rest stops feeding the decoder and takes the picture off the screen. Callers hold mu.
+func (l *link) rest() {
+	l.feeding, l.visible, l.pictured = false, false, false
+	if l.scr != nil {
+		l.scr.Hide()
 	}
 }
 
@@ -237,10 +247,9 @@ func (l *link) drop(to State, why error) peer {
 	if l.speech != nil {
 		l.speech.stop(false)
 	}
-	if l.staged && l.scr != nil {
-		l.scr.Hide()
+	if l.feeding {
+		l.rest()
 	}
-	l.staged = false
 	return p
 }
 
@@ -269,7 +278,7 @@ func (l *link) publish() {
 // frame feeds the video layer while the avatar is on screen; otherwise the decoder rests.
 func (l *link) frame(gen uint64, f rtc.Frame) {
 	l.mu.Lock()
-	if gen != l.gen || !l.staged || l.scr == nil {
+	if gen != l.gen || !l.feeding || l.scr == nil {
 		l.mu.Unlock()
 		return
 	}
@@ -287,9 +296,10 @@ func (l *link) frame(gen uint64, f rtc.Frame) {
 
 	scr.Show(f)
 
+	shown := scr.Stats().Shown
 	l.mu.Lock()
-	if scr.Stats().Shown > 0 {
-		l.shownAt = l.a.now()
+	if l.feeding && shown > l.shownBase {
+		l.shownAt, l.shownBase, l.pictured = l.a.now(), shown, true
 	}
 	l.mu.Unlock()
 }
@@ -306,9 +316,9 @@ func (l *link) heard(gen uint64, pcm []int16) {
 	}
 }
 
-// place shows the video in box and reports whether it has a picture to show; until it has, the
-// caller keeps drawing the normal look.
-func (l *link) place(box display.Rect, busy bool) bool {
+// prime feeds the decoder, hidden, so the picture is ready before it is shown; it reports whether
+// the picture is up, and until it is the caller keeps drawing the normal look.
+func (l *link) prime(busy bool) bool {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	if busy || l.stalled || l.state != Connected || !l.cfg.Ready() {
@@ -324,14 +334,30 @@ func (l *link) place(box display.Rect, busy bool) bool {
 	}
 	now := l.a.now()
 	l.placedAt = now
-	if !l.staged {
-		l.staged, l.needKey, l.shownAt = true, true, now
+	if !l.feeding {
+		l.feeding, l.visible, l.pictured, l.needKey, l.shownAt = true, false, false, true, now
+		l.shownBase = l.scr.Stats().Shown
+		l.scr.Hide()
 		if p := l.peer; p != nil {
 			l.a.spawn(p.RequestKey)
 		}
 	}
+	return l.pictured
+}
+
+// place shows the primed picture in box; false while there is none yet.
+func (l *link) place(box display.Rect, busy bool) bool {
+	if !l.prime(busy) {
+		return false
+	}
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if !l.feeding || l.scr == nil {
+		return false
+	}
+	l.visible = true
 	l.scr.Place(box)
-	return l.scr.Stats().Shown > 0 && !l.needKey
+	return true
 }
 
 func (l *link) hold() {

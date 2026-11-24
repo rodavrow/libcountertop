@@ -343,13 +343,16 @@ func TestThePictureShowsOnlyFromAKeyframeOnceStaged(t *testing.T) {
 
 	p.show(rtc.Frame{Key: true})
 	if r.scr.shown != 0 {
-		t.Fatal("fed the decoder before it was staged")
+		t.Fatal("fed the decoder before anyone wanted the picture")
 	}
-	if r.a.Place(0, box) {
-		t.Fatal("placed with no picture")
+	if r.a.Showing(0) || r.a.Place(0, box) {
+		t.Fatal("showing with no picture")
 	}
 	if p.keys.Load() == 0 {
-		t.Error("asked for no keyframe when staged")
+		t.Error("asked for no keyframe when primed")
+	}
+	if !r.scr.hidden {
+		t.Error("the primed layer is on screen")
 	}
 	p.show(rtc.Frame{})
 	if r.scr.shown != 0 {
@@ -358,8 +361,9 @@ func TestThePictureShowsOnlyFromAKeyframeOnceStaged(t *testing.T) {
 	p.show(rtc.Frame{Key: true})
 	p.show(rtc.Frame{})
 
-	if !r.a.Place(0, box) || r.scr.shown != 2 || r.scr.placed != box {
-		t.Fatalf("shown %d at %+v", r.scr.shown, r.scr.placed)
+	if !r.a.Showing(0) || !r.a.Place(0, box) || r.scr.shown != 2 || r.scr.placed != box ||
+		r.scr.hidden {
+		t.Fatalf("shown %d at %+v, hidden %v", r.scr.shown, r.scr.placed, r.scr.hidden)
 	}
 }
 
@@ -395,7 +399,7 @@ func TestAStalledPictureFallsBackUntilTheNextWake(t *testing.T) {
 	}
 
 	r.a.Wake(0)
-	r.a.Place(0, box)
+	r.a.Showing(0)
 	r.peer().show(rtc.Frame{Key: true})
 	if !r.a.Place(0, box) {
 		t.Fatal("the picture did not come back on the next wake")
@@ -544,9 +548,14 @@ func TestTheEntitiesUseTheAgreedObjectIDs(t *testing.T) {
 		"avatar_mode_2", "avatar_url_2", "avatar_id_2",
 		"avatar_connection_2", "avatar_session_2", "avatar_state_2",
 	}
+	// Home Assistant integrations find these by display name, so they stay English literals.
+	names := []string{
+		"Avatar mode", "Avatar URL", "Avatar ID",
+		"Avatar connection", "Avatar session", "Avatar state",
+	}
 	for i, e := range r.a.Entities(1) {
-		if b := baseOf(e); b.ObjectID != want[i] {
-			t.Errorf("entity %d is %q, want %q", i, b.ObjectID, want[i])
+		if b := baseOf(e); b.ObjectID != want[i] || b.Name != names[i] {
+			t.Errorf("entity %d is %q named %q, want %q named %q", i, b.ObjectID, b.Name, want[i], names[i])
 		}
 	}
 	if got := r.a.ents[0].connection.Options; len(got) != 2 || got[0] != "Always connected" ||

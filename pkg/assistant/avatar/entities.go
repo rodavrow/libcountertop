@@ -9,8 +9,9 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/settings/schema"
 )
 
-// entities are one wake word's avatar settings and status in Home Assistant. Home Assistant
-// integrations find them by object id, so the ids never change.
+// entities are one wake word's avatar settings and status in Home Assistant. Integrations find
+// them by display name within the assistant's sub-device, so the names and the connection
+// options are English literals that never change and never go through a translated setting.
 type entities struct {
 	mode       *esphome.Switch
 	url        *esphome.Text

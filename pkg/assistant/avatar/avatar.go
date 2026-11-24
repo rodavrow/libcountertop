@@ -217,6 +217,15 @@ func (a *Avatars) Chosen(slot int, on bool) {
 	a.Rest(slot)
 }
 
+// Showing readies slot's picture without showing it and reports whether it is up; while it is
+// not, the caller draws the normal look. Ask on every frame the look is wanted.
+func (a *Avatars) Showing(slot int) bool {
+	if slot < 0 || slot >= len(a.links) {
+		return false
+	}
+	return a.links[slot].prime(a.busy())
+}
+
 // Place shows slot's avatar in box, in screen coordinates, and reports whether its picture is
 // up; while it is not, the caller draws the normal look.
 func (a *Avatars) Place(slot int, box display.Rect) bool {
