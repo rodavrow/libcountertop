@@ -9,11 +9,7 @@ import (
 	"github.com/pion/webrtc/v4"
 )
 
-var watchedH264 = []string{
-	"level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f",
-	"level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=4d001f",
-	"level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=640032",
-}
+var watchedH264 = []string{"42e01f", "4d001f", "640032"}
 
 var heardAudio = []webrtc.RTPCodecParameters{
 	{
@@ -128,17 +124,8 @@ func (v *Viewer) Close() error {
 
 func viewerAPI() (*webrtc.API, error) {
 	m := &webrtc.MediaEngine{}
-	for i, fmtp := range watchedH264 {
-		if err := m.RegisterCodec(webrtc.RTPCodecParameters{
-			RTPCodecCapability: webrtc.RTPCodecCapability{
-				MimeType:    webrtc.MimeTypeH264,
-				ClockRate:   videoClock,
-				SDPFmtpLine: fmtp,
-			},
-			PayloadType: webrtc.PayloadType(h264Type + 2*i),
-		}, webrtc.RTPCodecTypeVideo); err != nil {
-			return nil, err
-		}
+	if err := registerH264(m); err != nil {
+		return nil, err
 	}
 	for _, c := range heardAudio {
 		if err := m.RegisterCodec(c, webrtc.RTPCodecTypeAudio); err != nil {

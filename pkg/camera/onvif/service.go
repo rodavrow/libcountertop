@@ -26,6 +26,7 @@ type Profile struct {
 	Width, Height int
 	FPS           int
 	Bitrate       int
+	H264Profile   string
 	Path          string
 }
 
@@ -285,7 +286,7 @@ func profileXML(tag string, p Profile) string {
 			`<tt:VideoEncoderConfiguration token="%s_enc"><tt:Name>%s</tt:Name><tt:UseCount>1</tt:UseCount>`+
 			`<tt:Encoding>H264</tt:Encoding><tt:Resolution><tt:Width>%d</tt:Width><tt:Height>%d</tt:Height></tt:Resolution>`+
 			`<tt:Quality>5</tt:Quality><tt:RateControl><tt:FrameRateLimit>%d</tt:FrameRateLimit><tt:EncodingInterval>1</tt:EncodingInterval>`+
-			`<tt:BitrateLimit>%d</tt:BitrateLimit></tt:RateControl><tt:H264><tt:GovLength>%d</tt:GovLength><tt:H264Profile>Baseline</tt:H264Profile></tt:H264>`+
+			`<tt:BitrateLimit>%d</tt:BitrateLimit></tt:RateControl><tt:H264><tt:GovLength>%d</tt:GovLength><tt:H264Profile>%s</tt:H264Profile></tt:H264>`+
 			`<tt:SessionTimeout>PT60S</tt:SessionTimeout></tt:VideoEncoderConfiguration></%s>`,
 		tag,
 		escape(p.Token),
@@ -301,6 +302,7 @@ func profileXML(tag string, p Profile) string {
 		p.FPS,
 		p.Bitrate/1000,
 		max(p.FPS*2, 1),
+		escape(p.H264Profile),
 		tag,
 	)
 }

@@ -36,10 +36,8 @@ extern int codec_idr(void *codec) __asm__("_ZN7android10MediaCodec15requestIDRFr
 #define COLOR_FORMAT_YUV420SP 21
 #define COLOR_FORMAT_YUV420P 19
 #define CARD_FPS 2
-#define AVC_PROFILE_BASELINE 0x01
-#define AVC_PROFILE_HIGH 0x08
 #define AVC_LEVEL_31 0x200
-#define AVC_LEVEL_51 0x4000
+#define AVC_LEVEL_5 0x4000
 #define USER_SWITCHED 1
 #define VIDEO_BUFFER_QUEUE 2
 #define MAIN 0
@@ -77,6 +75,7 @@ typedef struct {
 	cam2 *c2;
 	int recording;
 	uint32_t w, h;
+	uint32_t profile;
 	int still;
 	int want;
 	uint8_t *card[2];
@@ -266,24 +265,12 @@ static int open_encoder(session *s, int at, uint32_t w, uint32_t h, uint32_t fps
 	AMediaFormat_setInt32(f, AMEDIAFORMAT_KEY_BIT_RATE, (int32_t)bitrate);
 	AMediaFormat_setInt32(f, AMEDIAFORMAT_KEY_FRAME_RATE, (int32_t)fps);
 	AMediaFormat_setInt32(f, AMEDIAFORMAT_KEY_I_FRAME_INTERVAL, (int32_t)keyframe);
-	AMediaFormat_setInt32(f, "profile", AVC_PROFILE_HIGH);
-	AMediaFormat_setInt32(f, "level", AVC_LEVEL_51);
+	AMediaFormat_setInt32(f, "profile", (int32_t)s->profile);
+	AMediaFormat_setInt32(f, "level", s->profile == AVC_PROFILE_HIGH ? AVC_LEVEL_5 : AVC_LEVEL_31);
 	media_status_t st = AMediaCodec_configure(*codec, f, NULL, NULL, AMEDIACODEC_CONFIGURE_FLAG_ENCODE);
-	if (st != AMEDIA_OK) {
-		logw("encoder refused high profile: %d", st);
-		AMediaCodec_delete(*codec);
-		*codec = AMediaCodec_createEncoderByType("video/avc");
-		if (!*codec) {
-			AMediaFormat_delete(f);
-			return ERR_ENCODER;
-		}
-		AMediaFormat_setInt32(f, "profile", AVC_PROFILE_BASELINE);
-		AMediaFormat_setInt32(f, "level", AVC_LEVEL_31);
-		st = AMediaCodec_configure(*codec, f, NULL, NULL, AMEDIACODEC_CONFIGURE_FLAG_ENCODE);
-	}
 	AMediaFormat_delete(f);
 	if (st != AMEDIA_OK) {
-		logw("encoder configure %dx%d@%u: %d", w, h, fps, st);
+		logw("encoder configure %dx%d@%u profile %u: %d", w, h, fps, s->profile, st);
 		return ERR_ENCODER;
 	}
 	if (color != COLOR_FORMAT_SURFACE) return AMediaCodec_start(*codec) == AMEDIA_OK ? OK : ERR_ENCODER;
@@ -625,9 +612,9 @@ static void serve(int conn) {
 	if (read_full(conn, req, sizeof req) < 0 || req[0] != MAGIC) return;
 
 	uint32_t w = req[2], h = req[3], fps = req[4], bitrate = req[5], keyframe = req[6];
-	uint32_t sw = req[7], sh = req[8], sbitrate = req[9], quarters = req[10], mode = req[11];
+	uint32_t sw = req[7], sh = req[8], sbitrate = req[9], quarters = req[10], mode = req[11], profile = req[12];
 	uint32_t st = OK;
-	session s = {.want = WANT_MAIN | WANT_SUB};
+	session s = {.want = WANT_MAIN | WANT_SUB, .profile = profile};
 	uint32_t n = 0;
 	int locked = 0;
 	if (req[1] == VERSION) {
@@ -644,6 +631,7 @@ static void serve(int conn) {
 	if (req[1] != VERSION) st = ERR_VERSION;
 	else if (!w || !h || !fps || !bitrate || w > 4096 || h > 4096 || fps > 120) st = ERR_ARGS;
 	else if (sw && (!sh || !sbitrate || sw > 4096 || sh > 4096)) st = ERR_ARGS;
+	else if (profile != AVC_PROFILE_BASELINE && profile != AVC_PROFILE_HIGH) st = ERR_ARGS;
 	s.w = w;
 	s.h = h;
 	if (st == OK && mode == MODE_CARD) {

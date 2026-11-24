@@ -166,13 +166,14 @@ func TestTheServicesDescribeTheCamera(t *testing.T) {
 			Profiles: func() []Profile {
 				return []Profile{
 					{
-						Token:   "main",
-						Name:    "Main",
-						Width:   2592,
-						Height:  1944,
-						FPS:     30,
-						Bitrate: 6_000_000,
-						Path:    "main",
+						Token:       "main",
+						Name:        "Main",
+						Width:       2592,
+						Height:      1944,
+						FPS:         30,
+						Bitrate:     6_000_000,
+						H264Profile: "High",
+						Path:        "main",
 					},
 					{
 						Token:   "sub",
@@ -208,7 +209,7 @@ func TestTheServicesDescribeTheCamera(t *testing.T) {
 		{dev, "tds:GetNetworkInterfaces", "", []string{"aa:bb:cc:dd:ee:ff"}},
 		{media, "trt:GetProfiles", "", []string{`token="main"`, `token="sub"`, "<tt:Width>1280</tt:Width>", "<tt:Encoding>H264</tt:Encoding>"}},
 		{media, "trt:GetStreamUri", "<trt:ProfileToken>sub</trt:ProfileToken>", []string{"rtsp://" + name + ":8554/sub"}},
-		{media, "trt:GetProfile", "<trt:ProfileToken>main</trt:ProfileToken>", []string{"<tt:Width>2592</tt:Width>"}},
+		{media, "trt:GetProfile", "<trt:ProfileToken>main</trt:ProfileToken>", []string{"<tt:Width>2592</tt:Width>", "<tt:H264Profile>High</tt:H264Profile>"}},
 	} {
 		code, body := soap(t, c.url, c.op, c.inner)
 		if code != 200 {

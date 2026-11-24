@@ -9,6 +9,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/ygelfand/libcountertop/pkg/media/h264"
 )
 
 var socket string
@@ -37,11 +39,11 @@ func fake(t *testing.T, status uint32, frames [][]byte) chan []uint32 {
 			return
 		}
 		defer c.Close()
-		req := make([]uint32, 13)
+		req := make([]uint32, 14)
 		if err := binary.Read(c, binary.LittleEndian, req); err != nil {
 			return
 		}
-		extra := make([]byte, req[12])
+		extra := make([]byte, req[13])
 		if _, err := io.ReadFull(c, extra); err != nil {
 			return
 		}
@@ -87,6 +89,7 @@ func TestOpenAsksForWhatWasConfiguredAndFramesComeBackWhole(t *testing.T) {
 		FPS:        30,
 		Bitrate:    4000000,
 		Keyframe:   2,
+		Profile:    h264.High,
 		SubWidth:   640,
 		SubHeight:  480,
 		SubBitrate: 1000000,
@@ -107,7 +110,8 @@ func TestOpenAsksForWhatWasConfiguredAndFramesComeBackWhole(t *testing.T) {
 		req[9] != 1000000 ||
 		req[10] != 3 ||
 		req[11] != modeCamera ||
-		req[12] != 21 {
+		req[12] != uint32(h264.High) ||
+		req[13] != 21 {
 		t.Errorf("asked for %v", req)
 	}
 

@@ -8,6 +8,7 @@ import (
 
 	"github.com/ygelfand/libcountertop/pkg/camera/camerafeed"
 	camerasession "github.com/ygelfand/libcountertop/pkg/camera/session"
+	"github.com/ygelfand/libcountertop/pkg/media/h264"
 	"github.com/ygelfand/libcountertop/pkg/media/rtc"
 	"github.com/ygelfand/libcountertop/pkg/runtime/safe"
 	config "github.com/ygelfand/libcountertop/pkg/settings/schema"
@@ -26,10 +27,11 @@ func (c *Camera) Select(stream config.CallStream) (int, Size, bool) {
 
 type Camera struct {
 	sessions *camerasession.Hub
+	profile  h264.Profile
 }
 
-func NewCamera(sessions *camerasession.Hub) *Camera {
-	return &Camera{sessions: sessions}
+func NewCamera(sessions *camerasession.Hub, profile h264.Profile) *Camera {
+	return &Camera{sessions: sessions, profile: profile}
 }
 
 func (c *Camera) Key() {
@@ -115,3 +117,4 @@ type camera struct {
 
 func (c camera) Frames() (<-chan rtc.Frame, func()) { return c.source.Frames(c.at, c.sized) }
 func (c camera) Key()                               { c.source.Key() }
+func (c camera) LevelID() string                    { return c.source.profile.LevelID() }

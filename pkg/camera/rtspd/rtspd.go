@@ -9,6 +9,7 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/camera/camerafeed"
 	"github.com/ygelfand/libcountertop/pkg/camera/onvif"
 	"github.com/ygelfand/libcountertop/pkg/camera/session"
+	"github.com/ygelfand/libcountertop/pkg/media/h264"
 	"github.com/ygelfand/libcountertop/pkg/media/rtsp"
 	"github.com/ygelfand/libcountertop/pkg/network/digest"
 )
@@ -36,6 +37,7 @@ type Options struct {
 	Helper   string
 	Served   func() []int
 	FPS      int
+	Profile  h264.Profile
 	Bitrate  func(width, height int) int
 	ONVIF    func() onvif.Config
 	Auth     digest.Credentials
@@ -62,13 +64,14 @@ func (s *Server) Profiles() []onvif.Profile {
 	for _, i := range s.options.Served() {
 		sz := sizes[i]
 		out = append(out, onvif.Profile{
-			Token:   paths[i],
-			Name:    StreamName(i),
-			Width:   sz.Width,
-			Height:  sz.Height,
-			FPS:     s.options.FPS,
-			Bitrate: s.options.Bitrate(sz.Width, sz.Height),
-			Path:    paths[i],
+			Token:       paths[i],
+			Name:        StreamName(i),
+			Width:       sz.Width,
+			Height:      sz.Height,
+			FPS:         s.options.FPS,
+			Bitrate:     s.options.Bitrate(sz.Width, sz.Height),
+			H264Profile: s.options.Profile.String(),
+			Path:        paths[i],
 		})
 	}
 	return out

@@ -57,6 +57,10 @@ func EngineArgs() []string {
 // which need none of EngineArgs' web-security exceptions.
 func LocalEngineArgs() []string {
 	return []string{
+		"--enable-logging=stderr",
+		"--log-level=0",
+		"--v=0",
+		"--vmodule=*/media/*=1,*/cdm/*=2,*/eme/*=1",
 		"--autoplay-policy=no-user-gesture-required",
 		"--user-agent=Mozilla/5.0 (X11; Linux armv7l) AppleWebKit/537.36 (KHTML, like Gecko) " +
 			"Chrome/150.0.0.0 Safari/537.36 CrKey/1.56.500000",

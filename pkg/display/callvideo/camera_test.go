@@ -9,6 +9,7 @@ import (
 
 	"github.com/ygelfand/libcountertop/pkg/camera/camerafeed"
 	camerasession "github.com/ygelfand/libcountertop/pkg/camera/session"
+	"github.com/ygelfand/libcountertop/pkg/media/h264"
 	"github.com/ygelfand/libcountertop/pkg/settings/schema"
 )
 
@@ -56,7 +57,7 @@ func TestRTCCameraWithoutResizeSubscriberSendsConfiguredKeyframes(t *testing.T) 
 		Open: func(camerafeed.Config) (camerasession.Transport, error) { return transport, nil },
 	})
 	t.Cleanup(hub.Close)
-	source := NewCamera(hub)
+	source := NewCamera(hub, h264.High)
 	frames, release := (camera{source: source}).Frames()
 	t.Cleanup(release)
 	select {
@@ -77,6 +78,20 @@ func TestRTCCameraWithoutResizeSubscriberSendsConfiguredKeyframes(t *testing.T) 
 	release()
 	if _, ok := <-frames; ok {
 		t.Fatal("released camera still sends frames")
+	}
+}
+
+func TestTheCallAdvertisesTheBoardsProfile(t *testing.T) {
+	for _, tc := range []struct {
+		profile h264.Profile
+		want    string
+	}{
+		{h264.Baseline, "42e01f"},
+		{h264.High, "640032"},
+	} {
+		if got := (camera{source: NewCamera(nil, tc.profile)}).LevelID(); got != tc.want {
+			t.Errorf("%s call advertises %s, want %s", tc.profile, got, tc.want)
+		}
 	}
 }
 
@@ -107,7 +122,7 @@ func TestCallCameraSelectsAvailableStreams(t *testing.T) {
 				return camerasession.Snapshot{Config: cfg}
 			}})
 			t.Cleanup(hub.Close)
-			c := NewCamera(hub)
+			c := NewCamera(hub, h264.High)
 			at, size, ok := c.Select(tc.stream)
 			if at != tc.at || size != tc.size || ok != tc.ok {
 				t.Fatalf("Select = %d, %+v, %v", at, size, ok)

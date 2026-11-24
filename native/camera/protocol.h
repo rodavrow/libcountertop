@@ -3,14 +3,16 @@
 #define SOCKET_PATH "/dev/socket/" SOCKET_NAME
 
 #define MAGIC 0x4d434e4c
-#define VERSION 6
+#define VERSION 7
 
-#define OPEN_WORDS 12
+#define OPEN_WORDS 13
 #define MODE_CAMERA 0
 #define MODE_CARD 1
 #define CARD_MS 500
 #define NO_TURN 0xffffffffu
 #define TURN_MIRROR 0x100
+#define AVC_PROFILE_BASELINE 0x01
+#define AVC_PROFILE_HIGH 0x08
 #define REPLY_WORDS 4
 #define FRAME_WORDS 4
 

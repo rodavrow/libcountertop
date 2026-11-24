@@ -6,12 +6,14 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/ygelfand/libcountertop/pkg/media/h264"
 	setting "github.com/ygelfand/libcountertop/pkg/settings"
 )
 
 const StreamGroup setting.Group = "Streams"
 
 type Streams struct {
+	Profile     h264.Profile
 	Main        []string
 	MainDefault string
 	Sub         []int

@@ -52,6 +52,7 @@ type Frame struct {
 type Camera interface {
 	Frames() (<-chan Frame, func())
 	Key()
+	LevelID() string
 }
 
 type Screen interface {
@@ -71,10 +72,24 @@ type Media struct {
 	Received func(Message)
 }
 
-var h264 = webrtc.RTPCodecCapability{
-	MimeType:    webrtc.MimeTypeH264,
-	ClockRate:   videoClock,
-	SDPFmtpLine: "level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=42e01f",
+func h264(levelID string) webrtc.RTPCodecCapability {
+	return webrtc.RTPCodecCapability{
+		MimeType:    webrtc.MimeTypeH264,
+		ClockRate:   videoClock,
+		SDPFmtpLine: "level-asymmetry-allowed=1;packetization-mode=1;profile-level-id=" + levelID,
+	}
+}
+
+func registerH264(m *webrtc.MediaEngine) error {
+	for i, id := range watchedH264 {
+		if err := m.RegisterCodec(webrtc.RTPCodecParameters{
+			RTPCodecCapability: h264(id),
+			PayloadType:        webrtc.PayloadType(h264Type + 2*i),
+		}, webrtc.RTPCodecTypeVideo); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 type Stats struct {
@@ -134,10 +149,7 @@ func api() (*webrtc.API, error) {
 	}, webrtc.RTPCodecTypeAudio); err != nil {
 		return nil, err
 	}
-	if err := m.RegisterCodec(
-		webrtc.RTPCodecParameters{RTPCodecCapability: h264, PayloadType: h264Type},
-		webrtc.RTPCodecTypeVideo,
-	); err != nil {
+	if err := registerH264(m); err != nil {
 		return nil, err
 	}
 	reg := &interceptor.Registry{}
@@ -195,7 +207,7 @@ func NewWithStreamID(
 	l.worker(func() { l.drain(sender) })
 	switch {
 	case m.Camera != nil:
-		l.video, err = webrtc.NewTrackLocalStaticSample(h264, "video", streamID)
+		l.video, err = webrtc.NewTrackLocalStaticSample(h264(m.Camera.LevelID()), "video", streamID)
 		if err == nil {
 			var vs *webrtc.RTPSender
 			if vs, err = pc.AddTrack(l.video); err == nil {

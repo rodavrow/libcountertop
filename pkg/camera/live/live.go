@@ -13,6 +13,7 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/camera/card"
 	"github.com/ygelfand/libcountertop/pkg/camera/session"
 	"github.com/ygelfand/libcountertop/pkg/hook"
+	"github.com/ygelfand/libcountertop/pkg/media/h264"
 	setting "github.com/ygelfand/libcountertop/pkg/settings"
 	"github.com/ygelfand/libcountertop/pkg/settings/schema"
 )
@@ -118,6 +119,7 @@ func (c *Camera) snapshot() session.Snapshot {
 		FPS:      FPS,
 		Bitrate:  bitrateFor(k, sizes[0].Width, sizes[0].Height),
 		Keyframe: k.Keyframe,
+		Profile:  c.options.Streams.Profile,
 		Params:   c.Params(k),
 		Turn:     q,
 		Mirror:   c.options.Mirror,
@@ -147,6 +149,8 @@ func (c *Camera) Close() error {
 func (c *Camera) Sessions() *session.Hub { return c.hub }
 
 func (c *Camera) Sizes() []session.Size { return c.hub.Sizes() }
+
+func (c *Camera) Profile() h264.Profile { return c.options.Streams.Profile }
 
 func (c *Camera) Bitrate(w, h int) int { return bitrateFor(c.Saved(), w, h) }
 

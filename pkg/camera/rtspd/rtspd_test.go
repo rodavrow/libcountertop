@@ -7,6 +7,7 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/camera/camerafeed"
 	"github.com/ygelfand/libcountertop/pkg/camera/onvif"
 	"github.com/ygelfand/libcountertop/pkg/camera/session"
+	"github.com/ygelfand/libcountertop/pkg/media/h264"
 )
 
 type sizes []session.Size
@@ -23,27 +24,30 @@ func TestEachServedStreamIsAProfile(t *testing.T) {
 		Source:  sizes{{Width: 1280, Height: 720}, {Width: 640, Height: 368}},
 		Served:  func() []int { return []int{0, 1} },
 		FPS:     30,
+		Profile: h264.Baseline,
 		Bitrate: func(w, h int) int { return w * h },
 	})
 
 	want := []onvif.Profile{
 		{
-			Token:   "main",
-			Name:    "main",
-			Width:   1280,
-			Height:  720,
-			FPS:     30,
-			Bitrate: 1280 * 720,
-			Path:    "main",
+			Token:       "main",
+			Name:        "main",
+			Width:       1280,
+			Height:      720,
+			FPS:         30,
+			Bitrate:     1280 * 720,
+			H264Profile: "Baseline",
+			Path:        "main",
 		},
 		{
-			Token:   "sub",
-			Name:    "sub",
-			Width:   640,
-			Height:  368,
-			FPS:     30,
-			Bitrate: 640 * 368,
-			Path:    "sub",
+			Token:       "sub",
+			Name:        "sub",
+			Width:       640,
+			Height:      368,
+			FPS:         30,
+			Bitrate:     640 * 368,
+			H264Profile: "Baseline",
+			Path:        "sub",
 		},
 	}
 	if got := s.Profiles(); !reflect.DeepEqual(got, want) {

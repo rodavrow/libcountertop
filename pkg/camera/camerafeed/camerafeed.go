@@ -7,11 +7,13 @@ import (
 	"io"
 	"net"
 	"time"
+
+	"github.com/ygelfand/libcountertop/pkg/media/h264"
 )
 
 const (
 	magic   = 0x4d434e4c
-	version = 6
+	version = 7
 
 	modeCamera = 0
 	modeCard   = 1
@@ -43,6 +45,8 @@ var errs = map[uint32]string{
 
 type Config struct {
 	Width, Height, FPS, Bitrate, Keyframe int
+
+	Profile h264.Profile
 
 	SubWidth, SubHeight, SubBitrate int
 
@@ -98,6 +102,7 @@ func Open(socket string, cfg Config) (*Stream, error) {
 		uint32(cfg.SubBitrate),
 		turnWord(cfg.Turn, cfg.Mirror),
 		cfg.mode(),
+		uint32(cfg.Profile),
 	}
 	if cfg.mode() == modeCard && (len(cfg.Card[0]) != cfg.Width*cfg.Height ||
 		len(cfg.Card[1]) != cfg.SubWidth*cfg.SubHeight) {
