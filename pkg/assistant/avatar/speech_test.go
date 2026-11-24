@@ -162,6 +162,23 @@ func TestTheVideoDelayOnlyGrowsWithinAReply(t *testing.T) {
 	}
 }
 
+type timedLane struct {
+	lane
+	left time.Duration
+}
+
+func (l *timedLane) QueuedFor() time.Duration { return l.left }
+
+func TestALaneThatTimesItsQueueIsBelievedOverItsCount(t *testing.T) {
+	// 48 kHz frames would read three times too long as 16 kHz samples.
+	l := &timedLane{lane: lane{queued: 48000}, left: time.Second}
+	s := newSpeech(l, nil, time.Now)
+
+	if got, want := s.latency(), jitter+time.Second; got != want {
+		t.Fatalf("latency %v, want %v", got, want)
+	}
+}
+
 func TestLatencyCountsTheJitterBufferAndTheQueue(t *testing.T) {
 	l := &lane{queued: voiceRate / 2}
 	s := newSpeech(l, nil, time.Now)

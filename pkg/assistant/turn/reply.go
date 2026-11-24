@@ -131,6 +131,8 @@ func heldSamples(d time.Duration) int {
 
 type VoiceSink interface {
 	PlayVoice([]int16)
+	// Queued is how much the lane still has to play, in the lane's own unit; zero means it is
+	// empty. A lane whose unit is not 16 kHz samples should also say QueuedFor as a duration.
 	Queued() int
 }
 

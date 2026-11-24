@@ -21,9 +21,14 @@ const (
 	voiceRate = 16000
 )
 
-// Sink is the speaker's voice lane, as the conversation plays replies into it; Queued counts
-// 16 kHz samples.
+// Sink is the speaker's voice lane, as the conversation plays replies into it.
 type Sink = turn.VoiceSink
+
+// TimedSink is a voice lane that says how long its queue takes to play. Without it Queued is
+// taken as 16 kHz samples, which a lane counting at its own rate gets wrong.
+type TimedSink interface {
+	QueuedFor() time.Duration
+}
 
 // NativeSink is a voice lane that takes PCM at another rate and channel count, so the
 // avatar's 48 kHz stereo is not narrowed to 16 kHz mono and back.
@@ -128,6 +133,9 @@ func (s *speech) heard() (first, last time.Time) {
 // latency is how long a chunk arriving now waits before it is heard, not counting the board's
 // own output delay.
 func (s *speech) latency() time.Duration {
+	if t, ok := s.sink.(TimedSink); ok {
+		return jitter + t.QueuedFor()
+	}
 	queued := time.Duration(s.sink.Queued()) * time.Second / voiceRate
 	return jitter + queued
 }
