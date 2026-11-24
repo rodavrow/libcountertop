@@ -435,6 +435,51 @@ func TestASlowFirstKeyframeIsNotAStall(t *testing.T) {
 	}
 }
 
+// The board has one avatar layer; a second stream on it would close the first one's decoder and
+// the two would hide each other, leaving neither picture up.
+func TestTwoAvatarsTakeTurnsOnOneLayer(t *testing.T) {
+	r := newRig(t, always())
+	orion := always()
+	orion.URL, orion.ID = r.url, "orion"
+	r.m.wake.Words[1].Avatar = orion
+	opened := 0
+	r.a.screen = func() screen { opened++; return r.scr }
+	r.a.reconcile()
+	if len(r.peers) != 2 {
+		t.Fatalf("%d sessions, want 2", len(r.peers))
+	}
+	sylvia, other := r.peers[0], r.peers[1]
+	sylvia.report(webrtc.PeerConnectionStateConnected)
+	other.report(webrtc.PeerConnectionStateConnected)
+	box := display.Rect{W: 10, H: 10}
+
+	show := func(slot int, p, rival *fakePeer) {
+		t.Helper()
+		r.a.Showing(slot)
+		p.show(rtc.Frame{Key: true})
+		if !r.a.Place(slot, box, true) || r.scr.hidden {
+			t.Fatalf("slot %d: no picture, hidden %v", slot+1, r.scr.hidden)
+		}
+		before := r.scr.shown
+		rival.show(rtc.Frame{Key: true})
+		if r.scr.shown != before {
+			t.Fatalf("slot %d: the other avatar still feeds the layer", slot+1)
+		}
+		r.clock.pass(100 * time.Millisecond)
+		r.a.reconcile()
+		if r.scr.hidden {
+			t.Fatalf("slot %d: the other avatar hid the picture", slot+1)
+		}
+	}
+	show(0, sylvia, other)
+	show(1, other, sylvia)
+	show(0, sylvia, other)
+
+	if opened != 1 {
+		t.Errorf("opened %d layers, want 1", opened)
+	}
+}
+
 func TestOtherVideoTakesTheScreen(t *testing.T) {
 	r := newRig(t, always())
 	r.connect(t)
