@@ -10,7 +10,7 @@ import (
 
 // heldStage holds a full-screen avatar and has staged nothing lately, as between the screen's
 // once-a-second redraws.
-type heldStage struct{ released int }
+type heldStage struct{ released, began int }
 
 func (s *heldStage) Above(ui.Rect, assistant.Showing) {}
 func (s *heldStage) Below(ui.Rect, assistant.Showing) {}
@@ -24,6 +24,7 @@ func (s *heldStage) Held() (assistant.Showing, bool) {
 	return assistant.Showing{Showing: voice.Showing{Phase: voice.Idle}, Down: 1}, true
 }
 func (s *heldStage) Release() bool { s.released++; return true }
+func (s *heldStage) Began()        { s.began++ }
 
 func TestAHeldFullScreenAvatarKeepsTheScreenSeeThrough(t *testing.T) {
 	a := &App{o: Options{Assistant: assistant.New(assistant.Dependencies{}), Stage: &heldStage{}}}
@@ -33,15 +34,24 @@ func TestAHeldFullScreenAvatarKeepsTheScreenSeeThrough(t *testing.T) {
 	}
 }
 
-// A show still on screen when its reply was held must not let the hold go: the avatar's reply
-// ends before its show does.
-func TestAShowOnScreenLeavesTheHoldAlone(t *testing.T) {
+// A show on screen tells the stage it began and never lets the hold go itself: the avatars know
+// whether the hold was made under this show or is waiting for it.
+func TestAShowOnScreenTellsTheStageItBegan(t *testing.T) {
 	st := &heldStage{}
 	as := assistant.New(assistant.Dependencies{})
 	as.Show(voice.Showing{Phase: voice.Thinking})
 	a := &App{o: Options{Assistant: as, Stage: st}}
 
-	if _, ok := a.showing(); !ok || st.released != 0 {
-		t.Fatalf("showing %v, released %d: the show let the hold go", ok, st.released)
+	if _, ok := a.showing(); !ok || st.released != 0 || st.began == 0 {
+		t.Fatalf("showing %v, released %d, began %d", ok, st.released, st.began)
+	}
+}
+
+func TestAHeldAvatarWithNoShowHasNotBegunOne(t *testing.T) {
+	st := &heldStage{}
+	a := &App{o: Options{Assistant: assistant.New(assistant.Dependencies{}), Stage: st}}
+
+	if _, ok := a.showing(); !ok || st.began != 0 {
+		t.Fatalf("showing %v, began %d", ok, st.began)
 	}
 }

@@ -51,6 +51,8 @@ type AvatarScreen interface {
 	Held() (slot int, ok bool)
 	// Release lets the held avatar go and reports whether one was held.
 	Release() bool
+	// Began says a turn's or announcement's show is on screen, taking a held avatar's place.
+	Began()
 }
 
 type StageDependencies struct {
@@ -215,6 +217,13 @@ func (s *Stage) Held() (Showing, bool) {
 	}
 	idle := voice.Showing{Phase: voice.Idle, Slot: slot}
 	return Showing{Showing: idle, Down: 1, At: time.Now()}, true
+}
+
+// Began says a turn's or announcement's show is on screen; a held avatar waiting for it goes.
+func (s *Stage) Began() {
+	if s.deps.Avatar != nil {
+		s.deps.Avatar.Began()
+	}
 }
 
 // Release lets the avatar held between announcements go, as a touch does, and reports whether
