@@ -566,3 +566,17 @@ func TestAnInvalidURLFromHomeAssistantIsNotSaved(t *testing.T) {
 		t.Fatalf("saved %+v", got)
 	}
 }
+
+func TestNamingTheNextAnnouncementsAssistantConnectsItsAvatar(t *testing.T) {
+	r := newRig(t, woken())
+
+	r.a.Chosen(0, true)
+	r.connect(t)
+	r.a.Chosen(0, false)
+	r.clock.pass(defaults.linger + time.Second)
+	r.a.reconcile()
+
+	if !r.peer().closed.Load() {
+		t.Fatal("the session stayed open after the choice was released")
+	}
+}

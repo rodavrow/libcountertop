@@ -207,6 +207,16 @@ func (a *Avatars) Rest(slot int) {
 	a.poke()
 }
 
+// Chosen opens slot's session as soon as Home Assistant names it for the next announcement, and
+// lets it go when that choice is used or forgotten; pass it as announcements.Options.Chosen.
+func (a *Avatars) Chosen(slot int, on bool) {
+	if on {
+		a.Wake(slot)
+		return
+	}
+	a.Rest(slot)
+}
+
 // Place shows slot's avatar in box, in screen coordinates, and reports whether its picture is
 // up; while it is not, the caller draws the normal look.
 func (a *Avatars) Place(slot int, box display.Rect) bool {

@@ -149,3 +149,64 @@ func TestTheSwitchReadsAndSavesTheSetting(t *testing.T) {
 		t.Fatalf("Set(true): saved %v, switch %v, err %v", *saved, sw.Get(), err)
 	}
 }
+
+type told struct {
+	slot int
+	on   bool
+}
+
+func listening(on bool) (*Announcements, *clock, *[]told) {
+	a, c, _ := fixture(on)
+	heard := &[]told{}
+	a.options.Chosen = func(slot int, on bool) { *heard = append(*heard, told{slot, on}) }
+	return a, c, heard
+}
+
+func TestUsingAChoiceTellsChosenOnThenOffOnce(t *testing.T) {
+	a, _, heard := listening(true)
+
+	choose(a, "Assistant 2")
+	a.Slot()
+	a.Slot()
+
+	if want := []told{{1, true}, {1, false}}; !slices.Equal(*heard, want) {
+		t.Fatalf("told %v, want %v", *heard, want)
+	}
+}
+
+func TestChangingTheChoiceReleasesTheFirst(t *testing.T) {
+	a, _, heard := listening(true)
+
+	choose(a, "Assistant 1")
+	choose(a, "Assistant 2")
+	choose(a, Default)
+
+	want := []told{{0, true}, {0, false}, {1, true}, {1, false}}
+	if !slices.Equal(*heard, want) {
+		t.Fatalf("told %v, want %v", *heard, want)
+	}
+}
+
+func TestAnExpiredChoiceIsReleased(t *testing.T) {
+	a, c, heard := listening(true)
+
+	choose(a, "Assistant 2")
+	c.at = c.at.Add(Kept + time.Second)
+	a.expire()
+	a.Slot()
+
+	if want := []told{{1, true}, {1, false}}; !slices.Equal(*heard, want) {
+		t.Fatalf("told %v, want %v", *heard, want)
+	}
+}
+
+func TestAChoiceWithAnimationOffIsNotTold(t *testing.T) {
+	a, _, heard := listening(false)
+
+	choose(a, "Assistant 2")
+	a.Slot()
+
+	if len(*heard) != 0 {
+		t.Fatalf("told %v with animation off", *heard)
+	}
+}
