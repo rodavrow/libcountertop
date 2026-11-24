@@ -424,21 +424,26 @@ func (l *Link) receive(t *webrtc.TrackRemote, _ *webrtc.RTPReceiver) {
 	case t.Kind() != webrtc.RTPCodecTypeAudio:
 		return
 	}
-	hear(t, &l.count, l.media.Audio.Play)
+	hear(t, &l.count, l.media.Audio.Play, nil)
 }
 
-func hear(t *webrtc.TrackRemote, count *counters, play func([]int16)) {
+// hear decodes a track's audio into play; while deaf reports true packets are counted but not
+// decoded. A nil deaf always decodes.
+func hear(t *webrtc.TrackRemote, count *counters, play func([]int16), deaf func() bool) {
+	if deaf == nil {
+		deaf = func() bool { return false }
+	}
 	switch t.Codec().MimeType {
 	case webrtc.MimeTypePCMU:
-		hearG711(t, count, play, ulaw)
+		hearG711(t, count, play, ulaw, deaf)
 	case webrtc.MimeTypePCMA:
-		hearG711(t, count, play, alaw)
+		hearG711(t, count, play, alaw, deaf)
 	default:
-		hearOpus(t, count, play)
+		hearOpus(t, count, play, deaf)
 	}
 }
 
-func hearOpus(t *webrtc.TrackRemote, count *counters, play func([]int16)) {
+func hearOpus(t *webrtc.TrackRemote, count *counters, play func([]int16), deaf func() bool) {
 	dec, err := opus.NewDecoderWithOutput(PlayRate, PlayChannels)
 	if err != nil {
 		slog.Error("call decoder", "err", err)
@@ -471,6 +476,9 @@ func hearOpus(t *webrtc.TrackRemote, count *counters, play func([]int16)) {
 		}
 		started, last = true, p.SequenceNumber
 		count.audioRecv.Add(1)
+		if deaf() {
+			continue
+		}
 		n, err := dec.DecodeToInt16(p.Payload, out)
 		if err != nil {
 			slog.Debug("call decode", "err", err)
@@ -485,6 +493,7 @@ func hearG711(
 	count *counters,
 	play func([]int16),
 	decode func(byte) int16,
+	deaf func() bool,
 ) {
 	var last int16
 	for {
@@ -493,6 +502,9 @@ func hearG711(
 			return
 		}
 		count.audioRecv.Add(1)
+		if deaf() {
+			continue
+		}
 		narrow := make([]int16, len(p.Payload))
 		for i, b := range p.Payload {
 			narrow[i] = decode(b)

@@ -103,3 +103,51 @@ func TestWidenFillsSixStereoSamplesPerInput(t *testing.T) {
 		t.Fatalf("widened ramp %v", out)
 	}
 }
+
+func TestADeafViewerCountsAudioButDecodesNone(t *testing.T) {
+	screen, speaker := &wall{}, &ear{}
+	v, err := NewViewer(screen.Show, speaker.Play, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer v.Close()
+	v.Deafen(true)
+	camera, err := New(Media{Audio: &tone{freq: 440}, Camera: &film{}}, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer camera.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	offer, err := v.Offer(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	answer, err := camera.Accept(ctx, offer)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := v.Answered(answer); err != nil {
+		t.Fatal(err)
+	}
+
+	deadline := time.Now().Add(8 * time.Second)
+	for time.Now().Before(deadline) && v.Heard() < 10 {
+		time.Sleep(100 * time.Millisecond)
+	}
+	if v.Heard() < 10 {
+		t.Fatalf("viewer counted %d audio packets", v.Heard())
+	}
+	if n := speaker.samples(); n != 0 {
+		t.Fatalf("a deaf viewer played %d samples", n)
+	}
+
+	v.Deafen(false)
+	for time.Now().Before(deadline) && speaker.samples() == 0 {
+		time.Sleep(100 * time.Millisecond)
+	}
+	if speaker.samples() == 0 {
+		t.Fatal("the viewer stayed deaf after Deafen(false)")
+	}
+}
