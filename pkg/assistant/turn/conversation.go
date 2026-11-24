@@ -130,6 +130,8 @@ type Conversation struct {
 	waiting    *announcement
 	voiced     bool
 	voicedSlot int
+	// announcingNow mirrors announcing != nil for readers off the conversation's goroutine.
+	announcingNow atomic.Bool
 
 	report  func(bool)
 	fetch   func(context.Context, string, int) ([]int16, error)
@@ -862,6 +864,10 @@ func (c *Conversation) Listen() (release func()) {
 }
 
 func (c *Conversation) Busy() bool { return c.Phase() != phaseIdle }
+
+// Engaged reports a turn or an announcement under way: anything that losing the connection to
+// Home Assistant would cut short.
+func (c *Conversation) Engaged() bool { return c.Busy() || c.announcingNow.Load() }
 
 func audioSettings() *api.VoiceAssistantAudioSettings {
 	return &api.VoiceAssistantAudioSettings{

@@ -51,6 +51,9 @@ type Dependencies struct {
 	Adoption     Adoption
 	Logs         LogSource
 	OnSubscribed func()
+	// Busy reports a turn or announcement under way. Re-registering closes the connection to
+	// Home Assistant, which would end it, so a re-register waits for it. Nil never waits.
+	Busy func() bool
 }
 
 type Server struct {
@@ -206,6 +209,10 @@ func (a *Server) Run(ctx context.Context) error {
 		go func() {
 			select {
 			case <-a.reconnect:
+				slog.Info("re-registering with Home Assistant")
+				if waitIdle(serving, a.deps.Busy, busyEvery, busyMost) {
+					slog.Info("re-registering waited for the turn or announcement to end")
+				}
 			case <-serving.Done():
 			}
 			stop()
