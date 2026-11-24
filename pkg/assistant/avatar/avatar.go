@@ -262,6 +262,13 @@ func (a *Avatars) Wants(slot int) bool {
 // Wake holds slot's session open for a turn or an announcement, opening it if need be; every
 // Wake is paired with a Rest.
 func (a *Avatars) Wake(slot int) {
+	// A turn or announcement beginning takes over from an avatar held since the last one.
+	a.letGo(a.heldSlot(), "the next turn or announcement")
+	a.open(slot)
+}
+
+// open holds slot's session open without touching the avatar held on screen.
+func (a *Avatars) open(slot int) {
 	if slot < 0 || slot >= len(a.links) {
 		return
 	}
@@ -282,7 +289,8 @@ func (a *Avatars) Rest(slot int) {
 // lets it go when that choice is used or forgotten; pass it as announcements.Options.Chosen.
 func (a *Avatars) Chosen(slot int, on bool) {
 	if on {
-		a.Wake(slot)
+		// Only naming the assistant: the avatar held on screen stays until it speaks.
+		a.open(slot)
 		return
 	}
 	a.Rest(slot)
@@ -446,6 +454,14 @@ func (a *Avatars) follow(
 	t := time.NewTicker(a.timing.poll)
 	defer t.Stop()
 	interrupt := func() { interruptNow(srv, id, l.slot) }
+	speaking := func() (bool, error) {
+		pctx, cancel := context.WithTimeout(ctx, time.Second)
+		defer cancel()
+		return srv.speaking(pctx, id)
+	}
+	// began is that LiveTalking has said it is speaking the clip. Until then, for as long as it
+	// may take to start, sound on the stream is not the reply and a quiet moment is not its end.
+	began := false
 	for {
 		select {
 		case <-ctx.Done():
@@ -464,6 +480,12 @@ func (a *Avatars) follow(
 			return true, errLost
 		}
 		a.sync(l, sp)
+		starting := !began && now.Sub(sent) <= a.timing.firstSound
+		if starting {
+			if on, err := speaking(); err == nil && on {
+				began, starting = true, false
+			}
+		}
 		switch {
 		case first.IsZero() && now.Sub(sent) > a.timing.firstSound:
 			slog.Warn("avatar sent no sound, speaking locally", "slot", l.slot+1)
@@ -475,14 +497,14 @@ func (a *Avatars) follow(
 		case now.Sub(sent) > a.timing.most:
 			interrupt()
 			return true, fmt.Errorf("avatar: still speaking after %s", a.timing.most)
+		case starting:
+			continue
 		case now.Sub(last) > a.timing.silent:
 			return true, nil
 		case now.Sub(last) < a.timing.quiet:
 			continue
 		}
-		pctx, cancel := context.WithTimeout(ctx, time.Second)
-		on, err := srv.speaking(pctx, id)
-		cancel()
+		on, err := speaking()
 		if err != nil {
 			slog.Debug("avatar is_speaking", "slot", l.slot+1, "err", err)
 			continue

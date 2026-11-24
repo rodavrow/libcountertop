@@ -768,3 +768,41 @@ func TestNamingTheNextAnnouncementsAssistantConnectsItsAvatar(t *testing.T) {
 		t.Fatal("the session stayed open after the choice was released")
 	}
 }
+
+// Sound left over on the stream is not the reply: until LiveTalking says it is speaking the clip,
+// a quiet moment does not end it, or a line would count as spoken before it began.
+func TestAReplyIsNotOverBeforeLiveTalkingStartsIt(t *testing.T) {
+	r := newRig(t, always())
+	r.connect(t)
+	realTime(r)
+	r.a.timing.firstSound = 2 * time.Second
+	p := r.peer()
+
+	done := make(chan bool, 1)
+	go func() {
+		handled, _ := r.a.Speak(context.Background(), 0, r.url+"/clip.mp3", &lane{}, nil)
+		done <- handled
+	}()
+	<-r.uploaded
+	p.play(chunk(4000))
+	select {
+	case <-done:
+		t.Fatal("the reply ended on leftover sound, before LiveTalking began speaking")
+	case <-time.After(10 * r.a.timing.quiet):
+	}
+
+	r.lt.mu.Lock()
+	r.lt.speaking = true
+	r.lt.mu.Unlock()
+	for range 10 {
+		p.play(chunk(4000))
+		time.Sleep(5 * time.Millisecond)
+	}
+	r.lt.mu.Lock()
+	r.lt.speaking = false
+	r.lt.mu.Unlock()
+
+	if !<-done {
+		t.Fatal("the reply was not handled")
+	}
+}

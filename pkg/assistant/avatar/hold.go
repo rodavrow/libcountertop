@@ -83,6 +83,7 @@ func (a *Avatars) spoke(slot int) {
 	h.slot, h.until = slot, a.now().Add(a.timing.hold)
 	h.mu.Unlock()
 	if changed {
+		slog.Info("avatar held", "slot", slot+1)
 		a.HeldChanged.Emit(struct{}{})
 	}
 }
@@ -98,7 +99,7 @@ func (a *Avatars) heldSlot() int {
 }
 
 // letGo stops holding slot, if it is the one held, and reports whether it was.
-func (a *Avatars) letGo(slot int) bool {
+func (a *Avatars) letGo(slot int, why string) bool {
 	h := &a.hold
 	h.mu.Lock()
 	had := slot >= 0 && h.slot == slot
@@ -107,6 +108,7 @@ func (a *Avatars) letGo(slot int) bool {
 	}
 	h.mu.Unlock()
 	if had {
+		slog.Info("avatar let go", "slot", slot+1, "why", why)
 		a.poke()
 		a.HeldChanged.Emit(struct{}{})
 	}
@@ -130,7 +132,7 @@ func (a *Avatars) Held() (slot int, ok bool) {
 	if a.holdable(slot) {
 		return slot, true
 	}
-	a.letGo(slot)
+	a.letGo(slot, "it can no longer show")
 	return -1, false
 }
 
@@ -142,7 +144,7 @@ func (a *Avatars) Release() bool {
 		return false
 	}
 	shown := a.links[slot].onScreen()
-	return a.letGo(slot) && shown
+	return a.letGo(slot, "touched") && shown
 }
 
 // checkHold lets go of a held avatar that can no longer show, and turns the hold off once its
@@ -150,7 +152,7 @@ func (a *Avatars) Release() bool {
 // cannot keep the avatar up.
 func (a *Avatars) checkHold(now time.Time) {
 	if slot := a.heldSlot(); slot >= 0 && slot < len(a.links) && !a.holdable(slot) {
-		a.letGo(slot)
+		a.letGo(slot, "it can no longer show")
 	}
 	h := &a.hold
 	h.mu.Lock()

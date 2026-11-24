@@ -129,6 +129,7 @@ type Conversation struct {
 	announcing *announcement
 	waiting    *announcement
 	voiced     bool
+	voicedSlot int
 
 	report  func(bool)
 	fetch   func(context.Context, string, int) ([]int16, error)

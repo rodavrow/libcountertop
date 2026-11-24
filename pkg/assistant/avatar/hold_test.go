@@ -16,6 +16,8 @@ import (
 func spokeOnScreen(t *testing.T, r *rig) {
 	t.Helper()
 	realTime(r)
+	// The fake never says it is speaking; do not wait long for it to start.
+	r.a.timing.firstSound = 60 * time.Millisecond
 	p := r.peer()
 	r.a.Showing(0)
 	p.show(rtc.Frame{Key: true})
@@ -303,5 +305,24 @@ func TestReleasingAHeldAvatarThatIsNotOnScreenTakesNoTouch(t *testing.T) {
 	}
 	if r.a.heldSlot() != -1 {
 		t.Error("still held")
+	}
+}
+
+// The reply ends while its show is still on screen, and the screen redraws at once; the hold
+// must last until the next turn or announcement wakes an avatar.
+func TestAHoldLastsUntilTheNextTurnOrAnnouncement(t *testing.T) {
+	r := newRig(t, always())
+	r.connect(t)
+	holdOn(r)
+	spokeOnScreen(t, r)
+
+	r.a.Chosen(1, true)
+	if _, ok := r.a.Held(); !ok {
+		t.Fatal("naming the next announcement's assistant let the held avatar go")
+	}
+	r.a.Wake(1)
+
+	if _, ok := r.a.Held(); ok {
+		t.Fatal("still held after the next turn began")
 	}
 }
