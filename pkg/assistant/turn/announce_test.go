@@ -562,3 +562,23 @@ func TestAnAnnouncementLeavesAsTheAssistantThatSpokeIt(t *testing.T) {
 		t.Fatalf("after the announcement: shown %+v, want the second assistant idle", got)
 	}
 }
+
+// Home Assistant's connection must not be re-made under an announcement, which is played with no
+// turn going; Engaged is how the API server knows to wait.
+func TestAnAnnouncementKeepsTheConversationEngagedUntilItEnds(t *testing.T) {
+	a := announcer(t)
+	if a.Engaged() {
+		t.Fatal("engaged with nothing under way")
+	}
+
+	a.hears(esphome.Announce{MediaID: "speech", Text: "Dinner"})
+	a.plays()
+	if !a.Engaged() {
+		t.Fatal("not engaged during the announcement")
+	}
+	a.ends()
+
+	if a.Engaged() {
+		t.Fatal("still engaged after the announcement")
+	}
+}

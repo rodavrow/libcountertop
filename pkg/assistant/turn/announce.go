@@ -98,6 +98,7 @@ func (c *Conversation) say(an *announcement) {
 	an.id = c.announceID
 	id := an.id
 	c.announcing = an
+	c.announcingNow.Store(true)
 
 	c.player.Sounding(true)
 	if c.options.Avatar != nil {
@@ -146,6 +147,7 @@ func (c *Conversation) announced(id uint64, stopped bool) {
 		return
 	}
 	c.announcing = nil
+	c.announcingNow.Store(false)
 	c.player.Sounding(false)
 	if an.shown && c.phase == phaseIdle && !c.voiced {
 		c.unshow(an.slot)
@@ -209,6 +211,7 @@ func (c *Conversation) drop() {
 		slot = c.announcing.slot
 	}
 	c.announcing, c.voiced = nil, false
+	c.announcingNow.Store(false)
 	if shown && c.phase == phaseIdle {
 		c.unshow(slot)
 	}
