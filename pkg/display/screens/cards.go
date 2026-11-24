@@ -13,11 +13,11 @@ import (
 
 const priorityNotice = 20
 
-// showing is the assistant on screen: the turn or announcement going, which lets a held avatar
-// go, or else the avatar held between announcements.
+// showing is the assistant on screen: the turn or announcement going, or else the avatar held
+// between announcements. A show never lets the hold go, as a held reply ends before its show
+// does; the next turn or announcement does that when it wakes its avatar.
 func (a *App) showing() (assistant.Showing, bool) {
 	if show, ok := a.o.Assistant.Now(); ok {
-		a.o.Stage.Release()
 		return show, true
 	}
 	return a.o.Stage.Held()

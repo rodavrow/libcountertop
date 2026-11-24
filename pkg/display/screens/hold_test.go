@@ -33,13 +33,15 @@ func TestAHeldFullScreenAvatarKeepsTheScreenSeeThrough(t *testing.T) {
 	}
 }
 
-func TestATurnLetsTheHeldAvatarGo(t *testing.T) {
+// A show still on screen when its reply was held must not let the hold go: the avatar's reply
+// ends before its show does.
+func TestAShowOnScreenLeavesTheHoldAlone(t *testing.T) {
 	st := &heldStage{}
 	as := assistant.New(assistant.Dependencies{})
 	as.Show(voice.Showing{Phase: voice.Thinking})
 	a := &App{o: Options{Assistant: as, Stage: st}}
 
-	if _, ok := a.showing(); !ok || st.released == 0 {
-		t.Fatalf("showing %v, released %d: the turn did not take over", ok, st.released)
+	if _, ok := a.showing(); !ok || st.released != 0 {
+		t.Fatalf("showing %v, released %d: the show let the hold go", ok, st.released)
 	}
 }
