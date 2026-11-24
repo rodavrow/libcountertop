@@ -129,7 +129,9 @@ func (l *link) hideIf(now time.Time, busy bool) {
 		return
 	}
 	stale := now.Sub(l.placedAt) > l.a.timing.unplaced
-	if !l.stalled && now.Sub(l.shownAt) > l.a.timing.stall {
+	// Only a picture that was up and stopped is a stall; until the first keyframe arrives the
+	// normal look simply stays.
+	if !l.stalled && l.pictured && now.Sub(l.shownAt) > l.a.timing.stall {
 		slog.Warn("avatar video stalled, showing the normal look", "slot", l.slot+1)
 		l.stalled = true
 	}
