@@ -3,6 +3,7 @@ package assistant
 import (
 	"testing"
 
+	"github.com/ygelfand/libcountertop/pkg/assistant/avatar"
 	voice "github.com/ygelfand/libcountertop/pkg/assistant/turn"
 	"github.com/ygelfand/libcountertop/pkg/display/geometry"
 	"github.com/ygelfand/libcountertop/pkg/display/ui"
@@ -101,5 +102,13 @@ func TestNoAvatarIsShownWhenIdle(t *testing.T) {
 	idle := Showing{Showing: voice.Showing{Phase: voice.Phase(99)}}
 	if custom, _ := s.Look(idle); custom {
 		t.Fatal("an avatar shows outside a turn")
+	}
+}
+
+// A full-screen avatar takes the full-screen look's place, so it must sit at its depth: any
+// lower and the photo screen's GPU layer covers it.
+func TestAFullScreenAvatarSitsAtTheFullScreenLooksDepth(t *testing.T) {
+	if avatar.DefaultZ != belowUI {
+		t.Fatalf("avatar depth %d, full-screen look depth %d", avatar.DefaultZ, belowUI)
 	}
 }

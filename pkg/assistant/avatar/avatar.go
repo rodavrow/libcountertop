@@ -23,8 +23,10 @@ import (
 const (
 	// DefaultLayer is the avatar's hardware video layer; calls, cameras and doorbells use others.
 	DefaultLayer = 940
-	// DefaultZ keeps the avatar below call video and the interface.
-	DefaultZ = -3
+	// DefaultZ is the full-screen avatar's depth: where the full-screen look sits, below the
+	// interface and above the photo screen's GPU layer (-1). It gives way to call and camera
+	// video through VideoBusy rather than by depth.
+	DefaultZ = 1
 	// DefaultZAbove is the assistant look's depth over the interface.
 	DefaultZAbove = 6
 
