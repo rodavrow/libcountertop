@@ -25,7 +25,7 @@ type fakeAvatar struct {
 	primed             int
 	held               int
 	released           bool
-	began              int
+	began, beganSlot   int
 }
 
 func (a *fakeAvatar) Wants(int) bool { return a.wants }
@@ -40,7 +40,7 @@ func (a *fakeAvatar) Held() (int, bool) {
 	}
 	return a.held - 1, true
 }
-func (a *fakeAvatar) Began() { a.began++ }
+func (a *fakeAvatar) Began(slot int) { a.began, a.beganSlot = a.began+1, slot }
 func (a *fakeAvatar) Release() bool {
 	had := a.held != 0
 	a.held, a.released = 0, true
@@ -191,10 +191,10 @@ func TestAShowBeginningIsPassedToTheAvatars(t *testing.T) {
 	av := &fakeAvatar{held: 1}
 	s := NewStage(StageDependencies{Wake: plainLook{schema.LookFull}, Avatar: av})
 
-	s.Began()
+	s.Began(1)
 
-	if av.began != 1 {
-		t.Fatalf("began %d, want 1", av.began)
+	if av.began != 1 || av.beganSlot != 1 {
+		t.Fatalf("began %d for slot %d, want once for slot 1", av.began, av.beganSlot)
 	}
-	NewStage(StageDependencies{Wake: plainLook{schema.LookFull}}).Began()
+	NewStage(StageDependencies{Wake: plainLook{schema.LookFull}}).Began(1)
 }

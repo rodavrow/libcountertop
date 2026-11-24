@@ -316,7 +316,7 @@ func TestAHoldLastsUntilTheNextShowBegins(t *testing.T) {
 	holdOn(r)
 	spokeOnScreen(t, r)
 
-	r.a.Began()
+	r.a.Began(0)
 	if _, ok := r.a.Held(); !ok {
 		t.Fatal("the show the reply was held under let it go")
 	}
@@ -325,7 +325,7 @@ func TestAHoldLastsUntilTheNextShowBegins(t *testing.T) {
 	if _, ok := r.a.Held(); !ok {
 		t.Fatal("the next announcement arriving let the held avatar go before its show")
 	}
-	r.a.Began()
+	r.a.Began(1)
 
 	if _, ok := r.a.Held(); ok {
 		t.Fatal("still held after the next show began")

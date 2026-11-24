@@ -7,7 +7,6 @@ import (
 	"log/slog"
 	"net/http"
 	neturl "net/url"
-	"sync"
 	"time"
 
 	"github.com/pion/webrtc/v4"
@@ -22,8 +21,9 @@ import (
 )
 
 const (
-	// DefaultLayer is the avatar's hardware video layer; calls, cameras and doorbells use others.
-	DefaultLayer = 940
+	// DefaultLayer is the first wake word's hardware video layer, and each next wake word's is
+	// one higher; calls, cameras and doorbells use others, the doorbell 940.
+	DefaultLayer = 950
 	// DefaultZ is the full-screen avatar's depth: where the full-screen look sits, below the
 	// interface and above the photo screen's GPU layer (-1). It gives way to call and camera
 	// video through VideoBusy rather than by depth.
@@ -101,16 +101,10 @@ type Avatars struct {
 
 	now       func() time.Time
 	dial      dialer
-	screen    func() screen
+	screen    func(slot int) screen
 	spawn     func(func())
 	published func(slot int, s State, session string)
 	changed   chan struct{}
-
-	// The avatars share one hardware layer, as a second stream on it would close the first
-	// one's decoder; owner is the link whose stream scr is.
-	vmu   sync.Mutex
-	scr   screen
-	owner *link
 
 	hold hold
 
@@ -119,45 +113,35 @@ type Avatars struct {
 	HeldChanged hook.Hook[struct{}]
 }
 
-// claim hands l the shared layer and stops whichever avatar drove it before; nil when there is
-// no display. A new owner gets a fresh stream: the last one's queued frames, clock, shown count
-// and lip-sync delay belong to another session, and closing it takes its picture down.
-func (a *Avatars) claim(l *link) screen {
-	a.vmu.Lock()
-	prev := a.owner
-	if prev != l && a.scr != nil {
-		a.scr.Close()
-		a.scr, a.owner = nil, nil
+// placed makes l the avatar on screen and retires every other, closing its decoder, so two run
+// only while one hands over to the other.
+func (a *Avatars) placed(l *link) {
+	for _, other := range a.links {
+		if other != l {
+			other.retire()
+		}
 	}
-	if a.scr == nil {
-		a.scr = a.screen()
-	}
-	if a.scr != nil {
-		a.owner = l
-	}
-	scr := a.scr
-	a.vmu.Unlock()
-	if prev != nil && prev != l {
-		prev.yield()
-	}
-	return scr
 }
 
-// owns reports whether l drives the shared layer.
-func (a *Avatars) owns(l *link) bool {
-	a.vmu.Lock()
-	defer a.vmu.Unlock()
-	return a.owner == l
+// makeRoom closes the other avatars' decoders for l, whose own could not open: a board with one
+// decoder to spare hands over with a short gap instead. It reports whether one was closed.
+func (a *Avatars) makeRoom(l *link) bool {
+	closed := false
+	for _, other := range a.links {
+		if other != l && other.retire() {
+			slog.Warn("avatar second stream refused, closing the first",
+				"slot", l.slot+1, "first", other.slot+1)
+			closed = true
+		}
+	}
+	return closed
 }
 
-func (a *Avatars) closeScreen() {
-	a.vmu.Lock()
-	scr := a.scr
-	a.scr, a.owner = nil, nil
-	a.vmu.Unlock()
-	if scr != nil {
-		scr.Close()
-	}
+// lingering reports that slot's picture stays up, though nothing holds or places it, because
+// the avatar taking over is still readying its own.
+func (a *Avatars) lingering(slot int, now time.Time, busy bool) bool {
+	next, ok := a.links[slot].successor(now)
+	return ok && next >= 0 && next < len(a.links) && a.links[next].ready(busy)
 }
 
 func New(o Options) *Avatars {
@@ -177,7 +161,7 @@ func New(o Options) *Avatars {
 	}
 	a.screen = a.stream
 	for n := range o.Slots {
-		a.links = append(a.links, &link{slot: n, a: a, state: Off})
+		a.links = append(a.links, &link{slot: n, a: a, state: Off, next: -1})
 		a.ents = append(a.ents, a.newEntities(n))
 	}
 	a.newHold()
@@ -193,11 +177,11 @@ func dialViewer(
 	return rtc.NewViewer(show, play, report)
 }
 
-func (a *Avatars) stream() screen {
+func (a *Avatars) stream(slot int) screen {
 	if a.o.Display == nil {
 		return nil
 	}
-	return callvideo.NewStream(a.o.Display, surface.AVC, a.o.Layer, a.o.Z)
+	return callvideo.NewStream(a.o.Display, surface.AVC, a.o.Layer+uint32(slot), a.o.Z)
 }
 
 func (a *Avatars) Name() string { return "avatars" }
@@ -223,7 +207,6 @@ func (a *Avatars) Run(ctx context.Context) {
 		for _, l := range a.links {
 			l.shut()
 		}
-		a.closeScreen()
 	}()
 	for {
 		a.reconcile()
@@ -242,7 +225,8 @@ func (a *Avatars) reconcile() {
 	held := a.heldSlot()
 	wake := a.o.Read()
 	for n, l := range a.links {
-		l.reconcile(now, wake.Slot(n).Avatar, busy, n == held)
+		keep := n == held || a.lingering(n, now, busy)
+		l.reconcile(now, wake.Slot(n).Avatar, busy, keep)
 	}
 }
 
@@ -435,7 +419,7 @@ func (a *Avatars) detach(l *link, sp *speech) {
 	if l.peer != nil {
 		l.peer.Deafen(true)
 	}
-	if l.scr != nil && a.owns(l) {
+	if l.scr != nil {
 		l.scr.Delay(0)
 	}
 	l.delayOn = nil
@@ -538,7 +522,7 @@ func (a *Avatars) sync(l *link, sp *speech) {
 	scr := l.scr
 	fresh := scr != l.delayOn
 	l.mu.Unlock()
-	if scr == nil || !a.owns(l) {
+	if scr == nil {
 		return
 	}
 	// A stream the reply has not delayed yet, after taking the layer back, needs the delay

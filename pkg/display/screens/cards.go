@@ -18,7 +18,7 @@ const priorityNotice = 20
 // before it arrived, but not of one held under this same show, whose reply ends before it does.
 func (a *App) showing() (assistant.Showing, bool) {
 	if show, ok := a.o.Assistant.Now(); ok {
-		a.o.Stage.Began()
+		a.o.Stage.Began(show.Slot)
 		return show, true
 	}
 	return a.o.Stage.Held()

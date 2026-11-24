@@ -84,6 +84,10 @@ type link struct {
 	shownBase uint64
 	pictured  bool
 	stalled   bool
+	// next is the avatar taking over from this one, -1 for none; until nextUntil this picture
+	// stays up while that one readies its own.
+	next      int
+	nextUntil time.Time
 	// primedAt is when the decoder started being fed for this showing.
 	primedAt time.Time
 	// delayOn is the stream the reply's lip-sync delay was last set on.
@@ -99,10 +103,10 @@ func (l *link) snapshot() (State, string) {
 
 // reconcile moves the session toward what the settings and the holds want, and keeps the video
 // honest. It runs on every tick and after every change.
-func (l *link) reconcile(now time.Time, cfg schema.Avatar, busy, held bool) {
+func (l *link) reconcile(now time.Time, cfg schema.Avatar, busy, keep bool) {
 	l.mu.Lock()
 	wanted := cfg.Ready() &&
-		(cfg.Connection.Always() || l.holds > 0 || now.Before(l.closeAt) || held)
+		(cfg.Connection.Always() || l.holds > 0 || now.Before(l.closeAt) || keep)
 	open := l.state == Connecting || l.state == Connected
 	moved := cfg.URL != l.cfg.URL || cfg.ID != l.cfg.ID
 	var closing peer
@@ -118,7 +122,7 @@ func (l *link) reconcile(now time.Time, cfg schema.Avatar, busy, held bool) {
 	if wanted && (l.state == Off || (l.state == Failed && !now.Before(l.retryAt))) {
 		start = l.connect(now, cfg)
 	}
-	l.hideIf(now, busy, held)
+	l.hideIf(now, busy, keep)
 	l.mu.Unlock()
 	l.close(closing)
 	l.publish()
@@ -127,17 +131,17 @@ func (l *link) reconcile(now time.Time, cfg schema.Avatar, busy, held bool) {
 	}
 }
 
-// hideIf takes the video off the screen when nothing placed it lately, unless it is held between
-// announcements, another video needs the screen, or the picture stalled; a stall holds until the
-// next wake.
-func (l *link) hideIf(now time.Time, busy, held bool) {
+// hideIf takes the video off the screen when nothing placed it lately, another video needs the
+// screen, or the picture stalled; a stall holds until the next wake. keep is that the picture is
+// held between announcements or waits for the next avatar's.
+func (l *link) hideIf(now time.Time, busy, keep bool) {
 	if !l.feeding {
 		return
 	}
-	// A held picture is placed only at the screen's slower redraws; one the screen stopped
+	// A kept picture is placed only at the screen's slower redraws; one the screen stopped
 	// placing, under an alarm or an app, still goes.
 	unplaced := l.a.timing.unplaced
-	if held {
+	if keep {
 		unplaced = l.a.timing.heldUnplaced
 	}
 	stale := now.Sub(l.placedAt) > unplaced
@@ -152,20 +156,52 @@ func (l *link) hideIf(now time.Time, busy, held bool) {
 	}
 }
 
-// rest stops feeding the decoder and takes the picture off the screen, unless another avatar
-// drives it now. Callers hold mu.
+// rest stops feeding the decoder and takes the picture off the screen. Callers hold mu.
 func (l *link) rest() {
 	l.feeding, l.visible, l.pictured = false, false, false
-	if l.scr != nil && l.a.owns(l) {
+	l.next, l.nextUntil = -1, time.Time{}
+	if l.scr != nil {
 		l.scr.Hide()
 	}
 }
 
-// yield stops feeding the shared layer because another avatar took it; that avatar places it.
-func (l *link) yield() {
+// retire takes the picture down and closes its decoder, because another avatar is on screen or
+// needs the decoder. It reports whether there was a stream to close.
+func (l *link) retire() bool {
 	l.mu.Lock()
-	l.feeding, l.visible, l.pictured = false, false, false
+	l.rest()
+	scr := l.scr
+	l.scr, l.delayOn = nil, nil
 	l.mu.Unlock()
+	if scr == nil {
+		return false
+	}
+	scr.Close()
+	return true
+}
+
+// stays counts the picture as just placed, for the moment between its hold ending and its own
+// show placing it.
+func (l *link) stays(now time.Time) {
+	l.mu.Lock()
+	l.placedAt = now
+	l.mu.Unlock()
+}
+
+// handOver keeps the picture up until slot next has its own, or until then at the latest.
+func (l *link) handOver(next int, until time.Time) {
+	l.mu.Lock()
+	if l.visible {
+		l.next, l.nextUntil = next, until
+	}
+	l.mu.Unlock()
+}
+
+// successor is the avatar this one's picture is waiting for, if it still is.
+func (l *link) successor(now time.Time) (int, bool) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	return l.next, l.visible && l.next >= 0 && now.Before(l.nextUntil)
 }
 
 // connect marks the link connecting and returns the work that opens it, to run once mu is
@@ -318,8 +354,27 @@ func (l *link) frame(gen uint64, f rtc.Frame) {
 
 	scr.Show(f)
 
+	// A decoder refused outright, not one only slow to start, may be one too many for the
+	// board. With the other avatar's closed, this stream, refused for good, is dropped too, and
+	// the next frame the look is wanted makes a new one and asks for a keyframe.
+	if scr.Refused() && l.a.makeRoom(l) {
+		l.mu.Lock()
+		if l.scr == scr {
+			l.scr, l.delayOn = nil, nil
+			l.feeding, l.visible, l.pictured = false, false, false
+		}
+		l.mu.Unlock()
+		scr.Close()
+		return
+	}
 	shown := scr.Stats().Shown
 	l.mu.Lock()
+	if l.scr != scr {
+		// Retired, and perhaps readied again, while the frame was shown; the count is not this
+		// stream's.
+		l.mu.Unlock()
+		return
+	}
 	first := false
 	if shown < l.shownBase {
 		// The layer reopened, for a new size or a broken decoder, and its count restarted.
@@ -350,20 +405,19 @@ func (l *link) heard(gen uint64, pcm []int16) {
 // prime feeds the decoder, hidden, so the picture is ready before it is shown; it reports whether
 // the picture is up, and until it is the caller keeps drawing the normal look.
 func (l *link) prime(busy bool) bool {
-	if !l.ready(busy) {
-		return false
-	}
-	scr := l.a.claim(l)
-	if scr == nil || scr.Refused() {
-		return false
-	}
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	// Another avatar may have taken the layer, or the session gone, since the claim.
-	if !l.readyLocked(busy) || !l.a.owns(l) {
+	if !l.readyLocked(busy) {
 		return false
 	}
-	l.scr = scr
+	if l.scr == nil {
+		if l.scr = l.a.screen(l.slot); l.scr == nil {
+			return false
+		}
+	}
+	if l.scr.Refused() {
+		return false
+	}
 	now := l.a.now()
 	l.placedAt = now
 	if !l.feeding {
@@ -395,11 +449,11 @@ func (l *link) showable(now time.Time, busy bool, grace time.Duration) bool {
 	return l.pictured || l.feeding && now.Sub(l.primedAt) < grace
 }
 
-// onScreen reports that the picture is placed on the shared layer.
+// onScreen reports that the picture is placed on screen.
 func (l *link) onScreen() bool {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	return l.visible && l.a.owns(l)
+	return l.visible
 }
 
 func (l *link) ready(busy bool) bool {
@@ -418,12 +472,16 @@ func (l *link) place(box display.Rect, z int, busy bool) bool {
 		return false
 	}
 	l.mu.Lock()
-	defer l.mu.Unlock()
-	if !l.feeding || l.scr == nil || !l.a.owns(l) {
+	if !l.feeding || l.scr == nil {
+		l.mu.Unlock()
 		return false
 	}
 	l.visible = true
+	l.next, l.nextUntil = -1, time.Time{}
 	l.scr.Place(box, z)
+	l.mu.Unlock()
+	// Now that this picture is up, the avatar that was on screen goes.
+	l.a.placed(l)
 	return true
 }
 
@@ -448,7 +506,11 @@ func (l *link) release(linger time.Duration) {
 func (l *link) shut() {
 	l.mu.Lock()
 	closing := l.drop(Off, nil)
+	scr := l.scr
 	l.scr = nil
 	l.mu.Unlock()
 	l.close(closing)
+	if scr != nil {
+		scr.Close()
+	}
 }

@@ -10,7 +10,7 @@ import (
 
 // heldStage holds a full-screen avatar and has staged nothing lately, as between the screen's
 // once-a-second redraws.
-type heldStage struct{ released, began int }
+type heldStage struct{ released, began, beganSlot int }
 
 func (s *heldStage) Above(ui.Rect, assistant.Showing) {}
 func (s *heldStage) Below(ui.Rect, assistant.Showing) {}
@@ -23,8 +23,8 @@ func (s *heldStage) Look(assistant.Showing) (bool, bool) {
 func (s *heldStage) Held() (assistant.Showing, bool) {
 	return assistant.Showing{Showing: voice.Showing{Phase: voice.Idle}, Down: 1}, true
 }
-func (s *heldStage) Release() bool { s.released++; return true }
-func (s *heldStage) Began()        { s.began++ }
+func (s *heldStage) Release() bool  { s.released++; return true }
+func (s *heldStage) Began(slot int) { s.began, s.beganSlot = s.began+1, slot }
 
 func TestAHeldFullScreenAvatarKeepsTheScreenSeeThrough(t *testing.T) {
 	a := &App{o: Options{Assistant: assistant.New(assistant.Dependencies{}), Stage: &heldStage{}}}
@@ -39,11 +39,12 @@ func TestAHeldFullScreenAvatarKeepsTheScreenSeeThrough(t *testing.T) {
 func TestAShowOnScreenTellsTheStageItBegan(t *testing.T) {
 	st := &heldStage{}
 	as := assistant.New(assistant.Dependencies{})
-	as.Show(voice.Showing{Phase: voice.Thinking})
+	as.Show(voice.Showing{Phase: voice.Thinking, Slot: 1})
 	a := &App{o: Options{Assistant: as, Stage: st}}
 
-	if _, ok := a.showing(); !ok || st.released != 0 || st.began == 0 {
-		t.Fatalf("showing %v, released %d, began %d", ok, st.released, st.began)
+	if _, ok := a.showing(); !ok || st.released != 0 || st.began == 0 || st.beganSlot != 1 {
+		t.Fatalf("showing %v, released %d, began %d for slot %d",
+			ok, st.released, st.began, st.beganSlot)
 	}
 }
 

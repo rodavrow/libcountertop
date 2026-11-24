@@ -111,20 +111,31 @@ func (a *Avatars) arrived() {
 	}
 }
 
-// Began tells the avatars that a turn's or announcement's show is on screen. A held avatar
-// waiting for one is let go, as that show takes its place; a show the hold was made under,
-// still up after its reply ended, changes nothing. Call it on every frame a show is drawn.
-func (a *Avatars) Began() {
+// Began tells the avatars that slot's turn or announcement is on screen. A held avatar waiting
+// for one is let go, as that show takes its place; when the show is another avatar's, the held
+// picture stays up until that one has its own. A show the hold was made under, still up after
+// its reply ended, changes nothing. Call it on every frame a show is drawn.
+func (a *Avatars) Began(slot int) {
 	h := &a.hold
 	h.mu.Lock()
-	slot := -1
+	held := -1
 	if h.on && h.next {
-		slot = h.slot
+		held = h.slot
 	}
 	h.mu.Unlock()
-	if slot >= 0 {
-		a.letGo(slot, "the next turn or announcement")
+	if held < 0 || held >= len(a.links) {
+		return
 	}
+	other := slot != held && slot >= 0 && slot < len(a.links)
+	switch {
+	case slot == held:
+		// Its own show places it from this frame on; a held picture was last placed up to a
+		// second ago.
+		a.links[held].stays(a.now())
+	case other && a.Wants(slot) && a.links[slot].ready(a.busy()):
+		a.links[held].handOver(slot, a.now().Add(a.timing.pending))
+	}
+	a.letGo(held, "the next turn or announcement")
 }
 
 // letGo stops holding slot, if it is the one held, and reports whether it was.
