@@ -148,7 +148,7 @@ func (c *Conversation) announced(id uint64, stopped bool) {
 	c.announcing = nil
 	c.player.Sounding(false)
 	if an.shown && c.phase == phaseIdle && !c.voiced {
-		c.present()
+		c.unshow(an.slot)
 	}
 
 	if an.StartConversation && !stopped {
@@ -163,15 +163,22 @@ func (c *Conversation) spoken(on bool, slot int) {
 		}
 		c.voiced = false
 		if c.phase == phaseIdle && !c.announcementShown() {
-			c.present()
+			c.unshow(c.voicedSlot)
 		}
 		return
 	}
 	if c.phase != phaseIdle || c.pending != nil || c.announcing != nil {
 		return
 	}
-	c.voiced = true
+	c.voiced, c.voicedSlot = true, slot
 	c.showReply(slot, "")
+}
+
+// unshow ends an announcement's show as the assistant that spoke it. The last turn's assistant
+// may be another one, whose look or avatar would otherwise come up as the announcement leaves.
+func (c *Conversation) unshow(slot int) {
+	c.options.Presentation.Show(Showing{Phase: c.phase, Slot: slot})
+	c.options.Presentation.Phase(slot, c.phase)
 }
 
 func (c *Conversation) showReply(slot int, text string) {
@@ -196,12 +203,14 @@ func (c *Conversation) hush() {
 // drop forgets the announcement being played; whoever stopped its sound calls it.
 func (c *Conversation) drop() {
 	shown := c.announcementShown()
+	slot := c.voicedSlot
 	if c.announcing != nil {
 		c.player.Sounding(false)
+		slot = c.announcing.slot
 	}
 	c.announcing, c.voiced = nil, false
 	if shown && c.phase == phaseIdle {
-		c.present()
+		c.unshow(slot)
 	}
 }
 

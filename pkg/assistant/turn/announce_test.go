@@ -547,3 +547,18 @@ func TestAWakeWordInterruptsSpeechFromAnotherPlayer(t *testing.T) {
 		t.Fatalf("shown %+v, want idle", got)
 	}
 }
+
+// The closing show belongs to the assistant that spoke, not to whichever had the last turn;
+// otherwise the other assistant's look, or avatar, comes up as the announcement leaves.
+func TestAnAnnouncementLeavesAsTheAssistantThatSpokeIt(t *testing.T) {
+	a := announcer(t)
+	a.choice.slot = 1
+
+	a.hears(esphome.Announce{MediaID: "speech", Text: "Dinner"})
+	a.plays()
+	a.ends()
+
+	if got := a.last(t); got.Phase != Idle || got.Slot != 1 {
+		t.Fatalf("after the announcement: shown %+v, want the second assistant idle", got)
+	}
+}
