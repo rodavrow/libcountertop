@@ -140,12 +140,20 @@ func (l *link) hideIf(now time.Time, busy bool) {
 	}
 }
 
-// rest stops feeding the decoder and takes the picture off the screen. Callers hold mu.
+// rest stops feeding the decoder and takes the picture off the screen, unless another avatar
+// drives it now. Callers hold mu.
 func (l *link) rest() {
 	l.feeding, l.visible, l.pictured = false, false, false
-	if l.scr != nil {
+	if l.scr != nil && l.a.owns(l) {
 		l.scr.Hide()
 	}
+}
+
+// yield stops feeding the shared layer because another avatar took it; that avatar places it.
+func (l *link) yield() {
+	l.mu.Lock()
+	l.feeding, l.visible, l.pictured = false, false, false
+	l.mu.Unlock()
 }
 
 // connect marks the link connecting and returns the work that opens it, to run once mu is
@@ -321,19 +329,20 @@ func (l *link) heard(gen uint64, pcm []int16) {
 // prime feeds the decoder, hidden, so the picture is ready before it is shown; it reports whether
 // the picture is up, and until it is the caller keeps drawing the normal look.
 func (l *link) prime(busy bool) bool {
+	if !l.ready(busy) {
+		return false
+	}
+	scr := l.a.claim(l)
+	if scr == nil || scr.Refused() {
+		return false
+	}
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	if busy || l.stalled || l.state != Connected || !l.cfg.Ready() {
+	// Another avatar may have taken the layer, or the session gone, since the claim.
+	if !l.readyLocked(busy) || !l.a.owns(l) {
 		return false
 	}
-	if l.scr == nil {
-		if l.scr = l.a.screen(); l.scr == nil {
-			return false
-		}
-	}
-	if l.scr.Refused() {
-		return false
-	}
+	l.scr = scr
 	now := l.a.now()
 	l.placedAt = now
 	if !l.feeding {
@@ -347,6 +356,16 @@ func (l *link) prime(busy bool) bool {
 	return l.pictured
 }
 
+func (l *link) ready(busy bool) bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	return l.readyLocked(busy)
+}
+
+func (l *link) readyLocked(busy bool) bool {
+	return !busy && !l.stalled && l.state == Connected && l.cfg.Ready()
+}
+
 // place shows the primed picture in box at depth z; false while there is none yet.
 func (l *link) place(box display.Rect, z int, busy bool) bool {
 	if !l.prime(busy) {
@@ -354,7 +373,7 @@ func (l *link) place(box display.Rect, z int, busy bool) bool {
 	}
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	if !l.feeding || l.scr == nil {
+	if !l.feeding || l.scr == nil || !l.a.owns(l) {
 		return false
 	}
 	l.visible = true
@@ -383,11 +402,7 @@ func (l *link) release(linger time.Duration) {
 func (l *link) shut() {
 	l.mu.Lock()
 	closing := l.drop(Off, nil)
-	scr := l.scr
 	l.scr = nil
 	l.mu.Unlock()
 	l.close(closing)
-	if scr != nil {
-		scr.Close()
-	}
 }

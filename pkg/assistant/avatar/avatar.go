@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"net/http"
 	neturl "net/url"
+	"sync"
 	"time"
 
 	"github.com/pion/webrtc/v4"
@@ -96,6 +97,50 @@ type Avatars struct {
 	spawn     func(func())
 	published func(slot int, s State, session string)
 	changed   chan struct{}
+
+	// The avatars share one hardware layer, as a second stream on it would close the first
+	// one's decoder; owner is the link that last drove it.
+	vmu   sync.Mutex
+	scr   screen
+	owner *link
+}
+
+// claim hands l the shared layer and stops whichever avatar drove it before; nil when there is
+// no display.
+func (a *Avatars) claim(l *link) screen {
+	a.vmu.Lock()
+	if a.scr == nil {
+		a.scr = a.screen()
+	}
+	prev := a.owner
+	if a.scr != nil {
+		a.owner = l
+	}
+	scr := a.scr
+	a.vmu.Unlock()
+	if prev != nil && prev != l {
+		prev.yield()
+		// The last avatar's lip-sync delay is not this one's.
+		scr.Delay(0)
+	}
+	return scr
+}
+
+// owns reports whether l drives the shared layer.
+func (a *Avatars) owns(l *link) bool {
+	a.vmu.Lock()
+	defer a.vmu.Unlock()
+	return a.owner == l
+}
+
+func (a *Avatars) closeScreen() {
+	a.vmu.Lock()
+	scr := a.scr
+	a.scr, a.owner = nil, nil
+	a.vmu.Unlock()
+	if scr != nil {
+		scr.Close()
+	}
 }
 
 func New(o Options) *Avatars {
@@ -160,6 +205,7 @@ func (a *Avatars) Run(ctx context.Context) {
 		for _, l := range a.links {
 			l.shut()
 		}
+		a.closeScreen()
 	}()
 	for {
 		a.reconcile()
@@ -337,7 +383,7 @@ func (a *Avatars) detach(l *link, sp *speech) {
 	if l.peer != nil {
 		l.peer.Deafen(true)
 	}
-	if l.scr != nil {
+	if l.scr != nil && a.owns(l) {
 		l.scr.Delay(0)
 	}
 }
@@ -424,7 +470,7 @@ func (a *Avatars) sync(l *link, sp *speech) {
 	l.mu.Lock()
 	scr := l.scr
 	l.mu.Unlock()
-	if scr == nil {
+	if scr == nil || !a.owns(l) {
 		return
 	}
 	if d, grew := sp.delay(sp.latency() + a.o.OutputLatency); grew {
