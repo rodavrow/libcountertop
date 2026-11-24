@@ -41,8 +41,9 @@ type AvatarScreen interface {
 	Wants(slot int) bool
 	// Showing readies the picture and reports whether it is up.
 	Showing(slot int) bool
-	// Place shows the picture in a box in screen coordinates.
-	Place(slot int, box geometry.Rect) bool
+	// Place shows the picture in a box in screen coordinates, over the interface (above) for a
+	// look in a panel or under it for one across the screen.
+	Place(slot int, box geometry.Rect, above bool) bool
 }
 
 type StageDependencies struct {
@@ -167,7 +168,8 @@ func (s *Stage) avatar(at ui.Rect, full bool, show Showing) bool {
 	if !s.avatarUp(show) || at.W <= 0 || at.H <= 0 {
 		return false
 	}
-	if !s.deps.Avatar.Place(show.Slot, geometry.Rect{X: at.X, Y: at.Y, W: at.W, H: at.H}) {
+	box := geometry.Rect{X: at.X, Y: at.Y, W: at.W, H: at.H}
+	if !s.deps.Avatar.Place(show.Slot, box, !full) {
 		return false
 	}
 	s.Unstage()

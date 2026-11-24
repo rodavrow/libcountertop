@@ -69,17 +69,17 @@ func TestTheFirstAudibleChunkStartsTheReplyAndIsHeldForJitter(t *testing.T) {
 	s := newSpeech(l, func() { started++ }, c.now)
 
 	s.hear(chunk(4000))
-	if started != 1 {
-		t.Fatalf("started %d times", started)
+	if started != 0 || l.voice != 0 {
+		t.Fatalf("started %d times, played %d samples before the jitter buffer filled", started, l.voice)
 	}
-	if l.voice != 0 {
-		t.Fatalf("played %d samples before the jitter buffer filled", l.voice)
+	if first, _ := s.heard(); first.IsZero() {
+		t.Fatal("the first audible chunk was not noticed")
 	}
 	for range int(jitter / (20 * time.Millisecond)) {
 		s.hear(chunk(4000))
 	}
-	if l.voice == 0 {
-		t.Fatal("nothing played once the jitter buffer filled")
+	if l.voice == 0 || started != 1 {
+		t.Fatalf("played %d samples, started %d times once the jitter buffer filled", l.voice, started)
 	}
 	s.hear(chunk(0))
 	if started != 1 {
@@ -142,6 +142,23 @@ func TestStoppingDropsWhatIsHeldAndCanDrainTheLane(t *testing.T) {
 
 	if l.voice != 0 || !l.drained {
 		t.Fatalf("played %d samples after stop, drained %v", l.voice, l.drained)
+	}
+}
+
+func TestTheVideoDelayOnlyGrowsWithinAReply(t *testing.T) {
+	s := newSpeech(&lane{}, nil, time.Now)
+
+	for _, c := range []struct {
+		want, got time.Duration
+		grew      bool
+	}{
+		{200 * time.Millisecond, 200 * time.Millisecond, true},
+		{150 * time.Millisecond, 200 * time.Millisecond, false},
+		{300 * time.Millisecond, 300 * time.Millisecond, true},
+	} {
+		if got, grew := s.delay(c.want); got != c.got || grew != c.grew {
+			t.Errorf("asked %v: %v (grew %v), want %v (grew %v)", c.want, got, grew, c.got, c.grew)
+		}
 	}
 }
 

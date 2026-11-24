@@ -20,6 +20,7 @@ func (p plainLook) Read() schema.Wake {
 type fakeAvatar struct {
 	wants, up bool
 	placed    []geometry.Rect
+	above     []bool
 	primed    int
 }
 
@@ -28,8 +29,8 @@ func (a *fakeAvatar) Showing(int) bool {
 	a.primed++
 	return a.up
 }
-func (a *fakeAvatar) Place(_ int, box geometry.Rect) bool {
-	a.placed = append(a.placed, box)
+func (a *fakeAvatar) Place(_ int, box geometry.Rect, above bool) bool {
+	a.placed, a.above = append(a.placed, box), append(a.above, above)
 	return a.up
 }
 
@@ -59,7 +60,7 @@ func TestTheAvatarTakesTheLooksPlaceOnceItHasAPicture(t *testing.T) {
 	if !custom || !full {
 		t.Fatalf("custom %v, full %v", custom, full)
 	}
-	if len(av.placed) != 1 || av.placed[0] != (geometry.Rect{W: 1280, H: 800}) {
+	if len(av.placed) != 1 || av.placed[0] != (geometry.Rect{W: 1280, H: 800}) || av.above[0] {
 		t.Fatalf("placed %+v", av.placed)
 	}
 	if !s.Staged() || !s.StagedFull() {
@@ -67,6 +68,17 @@ func TestTheAvatarTakesTheLooksPlaceOnceItHasAPicture(t *testing.T) {
 	}
 	if s.running {
 		t.Fatal("a GPU visual runs under the avatar")
+	}
+}
+
+func TestAnAvatarInAPanelSitsOverTheInterface(t *testing.T) {
+	av := &fakeAvatar{wants: true, up: true}
+	s := NewStage(StageDependencies{Wake: plainLook{schema.LookPanel}, Avatar: av})
+
+	s.Above(ui.Rect{X: 100, Y: 500, W: 400, H: 250}, replying(1))
+
+	if len(av.above) != 1 || !av.above[0] {
+		t.Fatalf("placed above %v, want over the interface", av.above)
 	}
 }
 

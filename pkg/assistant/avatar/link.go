@@ -46,7 +46,7 @@ type dialer func(
 // screen is the hardware video layer the avatar is shown on; callvideo.Stream in the device.
 type screen interface {
 	Show(rtc.Frame)
-	Place(display.Rect)
+	Place(display.Rect, int)
 	Hide()
 	Delay(time.Duration)
 	Refused() bool
@@ -345,8 +345,8 @@ func (l *link) prime(busy bool) bool {
 	return l.pictured
 }
 
-// place shows the primed picture in box; false while there is none yet.
-func (l *link) place(box display.Rect, busy bool) bool {
+// place shows the primed picture in box at depth z; false while there is none yet.
+func (l *link) place(box display.Rect, z int, busy bool) bool {
 	if !l.prime(busy) {
 		return false
 	}
@@ -356,7 +356,7 @@ func (l *link) place(box display.Rect, busy bool) bool {
 		return false
 	}
 	l.visible = true
-	l.scr.Place(box)
+	l.scr.Place(box, z)
 	return true
 }
 

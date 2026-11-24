@@ -146,6 +146,24 @@ func TestAnAvatarTakesWholeClipsEvenWhenTheSlotStreams(t *testing.T) {
 	}
 }
 
+func TestTheWholeClipChoiceHoldsForTheTurn(t *testing.T) {
+	a := announcer(t)
+	words := a.options.Words.Settings.(*wakeSection)
+	words.wake.Words[0].Delivery = schema.DeliveryStream
+	av := withAvatar(a, 0)
+
+	a.holdAvatar(0)
+	av.wants[0] = false
+
+	if a.streams(0) {
+		t.Fatal("turning avatar mode off mid-turn switched the reply to a stream")
+	}
+	a.restAvatar()
+	if !a.streams(0) {
+		t.Fatal("the next turn does not stream")
+	}
+}
+
 func TestATurnHoldsItsAvatarUntilItEnds(t *testing.T) {
 	a := announcer(t)
 	av := withAvatar(a)

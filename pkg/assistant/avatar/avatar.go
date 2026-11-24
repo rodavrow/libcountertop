@@ -22,8 +22,10 @@ import (
 const (
 	// DefaultLayer is the avatar's hardware video layer; calls, cameras and doorbells use others.
 	DefaultLayer = 940
-	// DefaultZ keeps the avatar below call video.
+	// DefaultZ keeps the avatar below call video and the interface.
 	DefaultZ = -3
+	// DefaultZAbove is the assistant look's depth over the interface.
+	DefaultZAbove = 6
 
 	maxClip = 32 << 20
 )
@@ -36,14 +38,17 @@ type Options struct {
 	// DeviceID puts slot's entities on its assistant sub-device.
 	DeviceID func(slot int) uint32
 
-	// Client reaches LiveTalking and fetches reply clips; pass the device's routed client so
-	// local-only Internet keeps working.
+	// Client reaches LiveTalking and fetches reply clips. Give it a timeout, as fetch.Client
+	// does, or a hung server holds a reply until it is stopped; pass the device's routed client
+	// so local-only Internet keeps working.
 	Client *http.Client
 
 	// Display is where the video goes; nil plays the avatar's voice with the normal look.
 	Display callvideo.Display
 	Layer   uint32
-	Z       int
+	// Z is the avatar's depth below the interface, for a look across the screen; ZAbove its
+	// depth over the interface, for a look in a panel.
+	Z, ZAbove int
 
 	// OutputLatency is how long the board's speaker takes to sound what the voice lane queued,
 	// beyond the queue itself; the video waits as long to stay in sync with the lips.
@@ -95,7 +100,7 @@ type Avatars struct {
 
 func New(o Options) *Avatars {
 	if o.Layer == 0 {
-		o.Layer, o.Z = DefaultLayer, DefaultZ
+		o.Layer, o.Z, o.ZAbove = DefaultLayer, DefaultZ, DefaultZAbove
 	}
 	if o.Client == nil {
 		o.Client = http.DefaultClient
@@ -227,12 +232,17 @@ func (a *Avatars) Showing(slot int) bool {
 }
 
 // Place shows slot's avatar in box, in screen coordinates, and reports whether its picture is
-// up; while it is not, the caller draws the normal look.
-func (a *Avatars) Place(slot int, box display.Rect) bool {
+// up; while it is not, the caller draws the normal look. above puts it over the interface, for
+// a look in a panel; otherwise it sits below, where the interface is clear.
+func (a *Avatars) Place(slot int, box display.Rect, above bool) bool {
 	if slot < 0 || slot >= len(a.links) {
 		return false
 	}
-	return a.links[slot].place(box, a.busy())
+	z := a.o.Z
+	if above {
+		z = a.o.ZAbove
+	}
+	return a.links[slot].place(box, z, a.busy())
 }
 
 // Speak has slot's avatar say the clip at url, playing its voice into sink, and returns once it
@@ -408,13 +418,17 @@ func (a *Avatars) lost(l *link, gen uint64) bool {
 	return gen != l.gen || l.state != Connected
 }
 
-// sync holds the video back as long as the voice takes to reach the speaker.
+// sync holds the video back as long as the voice takes to reach the speaker. Within a reply the
+// delay only grows, so the picture never jumps back and stutters.
 func (a *Avatars) sync(l *link, sp *speech) {
 	l.mu.Lock()
 	scr := l.scr
 	l.mu.Unlock()
-	if scr != nil {
-		scr.Delay(sp.latency() + a.o.OutputLatency)
+	if scr == nil {
+		return
+	}
+	if d, grew := sp.delay(sp.latency() + a.o.OutputLatency); grew {
+		scr.Delay(d)
 	}
 }
 

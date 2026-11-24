@@ -18,7 +18,7 @@ func TestAPlacedStreamFitsInsideItsBox(t *testing.T) {
 	s.l.size = Size{Width: 512, Height: 512}
 	box := display.Rect{X: 100, Y: 50, W: 400, H: 300}
 
-	s.Place(box)
+	s.Place(box, 6)
 
 	got, ok := s.Fitted(1280, 800)
 	if !ok || !inside(got, box) || got.H != box.H {
@@ -30,7 +30,7 @@ func TestHidingAStreamKeepsItsPlace(t *testing.T) {
 	s := NewStream(noHelper{}, surface.AVC, 940, -3)
 	s.l.size = Size{Width: 512, Height: 512}
 	box := display.Rect{X: 10, Y: 10, W: 200, H: 200}
-	s.Place(box)
+	s.Place(box, -3)
 
 	s.Hide()
 
@@ -40,8 +40,8 @@ func TestHidingAStreamKeepsItsPlace(t *testing.T) {
 	if got, _ := s.Fitted(1280, 800); got != box {
 		t.Errorf("hidden stream moved to %+v", got)
 	}
-	s.Place(box)
-	if s.l.hidden {
+	s.Place(box, 6)
+	if s.l.hidden || s.l.z != 6 {
 		t.Error("placing the stream again leaves it hidden")
 	}
 }

@@ -122,7 +122,8 @@ type Conversation struct {
 	said   string
 	answer string
 
-	avatarHeld *int
+	avatarHeld  *int
+	avatarWhole bool
 
 	announceID uint64
 	announcing *announcement
@@ -1011,8 +1012,12 @@ func (c *Conversation) reported(dry time.Time) {
 }
 
 // streams reports whether slot's reply arrives as a stream; a wake word in avatar mode takes
-// whole clips, as LiveTalking speaks a file.
+// whole clips, as LiveTalking speaks a file. The choice is made once for the turn, so turning
+// avatar mode on or off mid-reply cannot split the reply between both paths.
 func (c *Conversation) streams(slot int) bool {
+	if c.avatarHeld != nil && *c.avatarHeld == slot {
+		return !c.avatarWhole && c.options.Words.Delivery(slot) == "stream"
+	}
 	if a := c.options.Avatar; a != nil && a.Wants(slot) {
 		return false
 	}
@@ -1026,7 +1031,7 @@ func (c *Conversation) holdAvatar(slot int) {
 	}
 	c.restAvatar()
 	c.options.Avatar.Wake(slot)
-	c.avatarHeld = &slot
+	c.avatarHeld, c.avatarWhole = &slot, c.options.Avatar.Wants(slot)
 }
 
 func (c *Conversation) restAvatar() {
@@ -1034,5 +1039,5 @@ func (c *Conversation) restAvatar() {
 		return
 	}
 	c.options.Avatar.Rest(*c.avatarHeld)
-	c.avatarHeld = nil
+	c.avatarHeld, c.avatarWhole = nil, false
 }

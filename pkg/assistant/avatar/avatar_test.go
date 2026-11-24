@@ -61,12 +61,13 @@ type fakeScreen struct {
 	hidden  bool
 	delay   time.Duration
 	refused bool
+	z       int
 }
 
 func (s *fakeScreen) Show(rtc.Frame) { s.mu.Lock(); s.shown++; s.mu.Unlock() }
-func (s *fakeScreen) Place(r display.Rect) {
+func (s *fakeScreen) Place(r display.Rect, z int) {
 	s.mu.Lock()
-	s.placed, s.hidden = r, false
+	s.placed, s.hidden, s.z = r, false, z
 	s.mu.Unlock()
 }
 func (s *fakeScreen) Hide()                 { s.mu.Lock(); s.hidden = true; s.mu.Unlock() }
@@ -345,7 +346,7 @@ func TestThePictureShowsOnlyFromAKeyframeOnceStaged(t *testing.T) {
 	if r.scr.shown != 0 {
 		t.Fatal("fed the decoder before anyone wanted the picture")
 	}
-	if r.a.Showing(0) || r.a.Place(0, box) {
+	if r.a.Showing(0) || r.a.Place(0, box, true) {
 		t.Fatal("showing with no picture")
 	}
 	if p.keys.Load() == 0 {
@@ -361,16 +362,27 @@ func TestThePictureShowsOnlyFromAKeyframeOnceStaged(t *testing.T) {
 	p.show(rtc.Frame{Key: true})
 	p.show(rtc.Frame{})
 
-	if !r.a.Showing(0) || !r.a.Place(0, box) || r.scr.shown != 2 || r.scr.placed != box ||
-		r.scr.hidden {
+	if !r.a.Showing(0) || !r.a.Place(0, box, true) || r.scr.shown != 2 || r.scr.placed != box ||
+		r.scr.hidden || r.scr.z != DefaultZAbove {
 		t.Fatalf("shown %d at %+v, hidden %v", r.scr.shown, r.scr.placed, r.scr.hidden)
+	}
+}
+
+func TestAFullScreenAvatarSitsBelowTheInterface(t *testing.T) {
+	r := newRig(t, always())
+	r.connect(t)
+	r.a.Showing(0)
+	r.peer().show(rtc.Frame{Key: true})
+
+	if !r.a.Place(0, display.Rect{W: 10, H: 10}, false) || r.scr.z != DefaultZ {
+		t.Fatalf("placed at z %d, want %d", r.scr.z, DefaultZ)
 	}
 }
 
 func TestAnUnplacedAvatarHidesAndStopsFeeding(t *testing.T) {
 	r := newRig(t, always())
 	r.connect(t)
-	r.a.Place(0, display.Rect{W: 10, H: 10})
+	r.a.Place(0, display.Rect{W: 10, H: 10}, true)
 	r.peer().show(rtc.Frame{Key: true})
 
 	r.clock.pass(defaults.unplaced + time.Millisecond)
@@ -386,22 +398,22 @@ func TestAStalledPictureFallsBackUntilTheNextWake(t *testing.T) {
 	r := newRig(t, always())
 	r.connect(t)
 	box := display.Rect{W: 10, H: 10}
-	r.a.Place(0, box)
+	r.a.Place(0, box, true)
 	r.peer().show(rtc.Frame{Key: true})
 
 	for range 30 {
 		r.clock.pass(100 * time.Millisecond)
-		r.a.Place(0, box)
+		r.a.Place(0, box, true)
 		r.a.reconcile()
 	}
-	if r.a.Place(0, box) || !r.scr.hidden {
+	if r.a.Place(0, box, true) || !r.scr.hidden {
 		t.Fatal("a stalled picture stays up")
 	}
 
 	r.a.Wake(0)
 	r.a.Showing(0)
 	r.peer().show(rtc.Frame{Key: true})
-	if !r.a.Place(0, box) {
+	if !r.a.Place(0, box, true) {
 		t.Fatal("the picture did not come back on the next wake")
 	}
 }
@@ -411,7 +423,7 @@ func TestOtherVideoTakesTheScreen(t *testing.T) {
 	r.connect(t)
 	r.busy.Store(true)
 
-	if r.a.Place(0, display.Rect{W: 10, H: 10}) {
+	if r.a.Place(0, display.Rect{W: 10, H: 10}, true) {
 		t.Fatal("placed while another video has the screen")
 	}
 }

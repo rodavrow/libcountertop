@@ -41,19 +41,19 @@ type speech struct {
 	narrow *resample.Rational
 	now    func() time.Time
 
-	mu       sync.Mutex
-	held     [][]int16
-	heldFor  time.Duration
-	flowing  bool
-	stopped  bool
-	firstAt  time.Time
-	loudAt   time.Time
-	started  func()
-	startedC chan struct{}
+	mu      sync.Mutex
+	held    [][]int16
+	heldFor time.Duration
+	flowing bool
+	stopped bool
+	firstAt time.Time
+	loudAt  time.Time
+	started func()
+	delayed time.Duration
 }
 
 func newSpeech(sink Sink, started func(), now func() time.Time) *speech {
-	s := &speech{sink: sink, now: now, started: started, startedC: make(chan struct{})}
+	s := &speech{sink: sink, now: now, started: started}
 	if n, ok := sink.(NativeSink); ok {
 		s.native = n
 	} else {
@@ -79,10 +79,6 @@ func (s *speech) hear(pcm []int16) {
 			return
 		}
 		s.firstAt = now
-		if s.started != nil {
-			s.started()
-		}
-		close(s.startedC)
 	}
 	if s.flowing {
 		s.play(pcm)
@@ -94,6 +90,10 @@ func (s *speech) hear(pcm []int16) {
 		return
 	}
 	s.flowing = true
+	// The reply starts when its sound does, after the jitter buffer, so captions match it.
+	if s.started != nil {
+		s.started()
+	}
 	for _, h := range s.held {
 		s.play(h)
 	}
@@ -130,6 +130,17 @@ func (s *speech) heard() (first, last time.Time) {
 func (s *speech) latency() time.Duration {
 	queued := time.Duration(s.sink.Queued()) * time.Second / voiceRate
 	return jitter + queued
+}
+
+// delay keeps the largest video delay asked for in this reply and reports whether it grew.
+func (s *speech) delay(want time.Duration) (time.Duration, bool) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if want <= s.delayed {
+		return s.delayed, false
+	}
+	s.delayed = want
+	return want, true
 }
 
 func downmix(pcm []int16) []int16 {

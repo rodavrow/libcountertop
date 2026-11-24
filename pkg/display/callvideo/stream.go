@@ -41,11 +41,12 @@ func (s *Stream) Refused() bool {
 	return st.Shown == 0 && errors.Is(st.Failed, surface.Broken)
 }
 
-// Place fits the stream inside box, in screen coordinates for the current orientation, and
-// shows it once it has a picture.
-func (s *Stream) Place(box display.Rect) {
+// Place fits the stream inside box, in screen coordinates for the current orientation, at depth
+// z, and shows it once it has a picture. A positive z puts it above the interface.
+func (s *Stream) Place(box display.Rect, z int) {
 	s.l.mu.Lock()
 	s.l.box = func(int, int) display.Rect { return box }
+	s.l.z = z
 	sz := s.l.size
 	s.l.mu.Unlock()
 	s.l.update(sz, false)
