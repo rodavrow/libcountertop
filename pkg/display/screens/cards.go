@@ -13,8 +13,18 @@ import (
 
 const priorityNotice = 20
 
+// showing is the assistant on screen: the turn or announcement going, which lets a held avatar
+// go, or else the avatar held between announcements.
+func (a *App) showing() (assistant.Showing, bool) {
+	if show, ok := a.o.Assistant.Now(); ok {
+		a.o.Stage.Release()
+		return show, true
+	}
+	return a.o.Stage.Held()
+}
+
 func (a *App) assistantPanel(w *gogui.Window) gogui.View {
-	show, ok := a.o.Assistant.Now()
+	show, ok := a.showing()
 	if !ok {
 		return nil
 	}
@@ -218,12 +228,18 @@ func (a *App) speaker(w *gogui.Window, show assistant.Showing) gogui.View {
 }
 
 func (a *App) fullLook() bool {
-	show, ok := a.o.Assistant.Now()
+	if show, ok := a.o.Assistant.Now(); ok {
+		custom, full := a.o.Stage.Look(show)
+		return custom && full && a.o.Stage.Staged()
+	}
+	// A held avatar is placed only at the screen's slower redraws, so it counts as staged
+	// without the stage's short grace.
+	held, ok := a.o.Stage.Held()
 	if !ok {
 		return false
 	}
-	custom, full := a.o.Stage.Look(show)
-	return custom && full && a.o.Stage.Staged()
+	custom, full := a.o.Stage.Look(held)
+	return custom && full
 }
 
 const priorityMarks = 100

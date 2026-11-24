@@ -44,6 +44,13 @@ type AvatarScreen interface {
 	// Place shows the picture in a box in screen coordinates, over the interface (above) for a
 	// look in a panel or under it for one across the screen.
 	Place(slot int, box geometry.Rect, above bool) bool
+	// Pending reports that the picture is being readied and is due in a moment, so the look's
+	// place stays empty rather than flash the normal look first.
+	Pending(slot int) bool
+	// Held reports the avatar kept on screen between announcements, if any.
+	Held() (slot int, ok bool)
+	// Release lets the held avatar go and reports whether one was held.
+	Release() bool
 }
 
 type StageDependencies struct {
@@ -123,7 +130,7 @@ func (s *Stage) lookFor(show Showing) look {
 
 func (s *Stage) Look(show Showing) (custom, full bool) {
 	l := s.lookFor(show)
-	if s.avatarUp(show) {
+	if s.avatarUp(show) || s.avatarPending(show) {
 		return true, l.place == schema.LookFull
 	}
 	return l.custom(), l.place == schema.LookFull
@@ -163,13 +170,30 @@ func (s *Stage) avatarUp(show Showing) bool {
 	return a.Showing(show.Slot)
 }
 
-// avatar puts the avatar's picture where the look would be, in place of the GPU visual.
+// avatarPending reports that show's wake word has its avatar picture on its way.
+func (s *Stage) avatarPending(show Showing) bool {
+	a := s.deps.Avatar
+	if a == nil {
+		return false
+	}
+	if _, ok := stageOf(show.Phase); !ok || !a.Wants(show.Slot) {
+		return false
+	}
+	return a.Pending(show.Slot)
+}
+
+// avatar puts the avatar's picture where the look would be, in place of the GPU visual. While
+// the picture is on its way it keeps the place empty, so the normal look does not flash first.
 func (s *Stage) avatar(at ui.Rect, full bool, show Showing) bool {
-	if !s.avatarUp(show) || at.W <= 0 || at.H <= 0 {
+	if at.W <= 0 || at.H <= 0 {
+		return false
+	}
+	up := s.avatarUp(show)
+	if !up && !s.avatarPending(show) {
 		return false
 	}
 	box := geometry.Rect{X: at.X, Y: at.Y, W: at.W, H: at.H}
-	if !s.deps.Avatar.Place(show.Slot, box, !full) {
+	if up && !s.deps.Avatar.Place(show.Slot, box, !full) && !s.avatarPending(show) {
 		return false
 	}
 	s.Unstage()
@@ -177,6 +201,25 @@ func (s *Stage) avatar(at ui.Rect, full bool, show Showing) bool {
 	s.avatarFull.Store(full)
 	return true
 }
+
+// Held is what to show for the avatar kept on screen between announcements: its wake word,
+// idle, with no captions.
+func (s *Stage) Held() (Showing, bool) {
+	a := s.deps.Avatar
+	if a == nil {
+		return Showing{}, false
+	}
+	slot, ok := a.Held()
+	if !ok {
+		return Showing{}, false
+	}
+	idle := voice.Showing{Phase: voice.Idle, Slot: slot}
+	return Showing{Showing: idle, Down: 1, At: time.Now()}, true
+}
+
+// Release lets the avatar held between announcements go, as a touch does, and reports whether
+// one was held.
+func (s *Stage) Release() bool { return s.deps.Avatar != nil && s.deps.Avatar.Release() }
 
 func (s *Stage) avatarShown() bool {
 	at := s.avatarAt.Load()

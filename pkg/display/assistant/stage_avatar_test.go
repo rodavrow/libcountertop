@@ -19,16 +19,30 @@ func (p plainLook) Read() schema.Wake {
 }
 
 type fakeAvatar struct {
-	wants, up bool
-	placed    []geometry.Rect
-	above     []bool
-	primed    int
+	wants, up, pending bool
+	placed             []geometry.Rect
+	above              []bool
+	primed             int
+	held               int
+	released           bool
 }
 
 func (a *fakeAvatar) Wants(int) bool { return a.wants }
 func (a *fakeAvatar) Showing(int) bool {
 	a.primed++
 	return a.up
+}
+func (a *fakeAvatar) Pending(int) bool { return a.pending }
+func (a *fakeAvatar) Held() (int, bool) {
+	if a.held == 0 {
+		return -1, false
+	}
+	return a.held - 1, true
+}
+func (a *fakeAvatar) Release() bool {
+	had := a.held != 0
+	a.held, a.released = 0, true
+	return had
 }
 func (a *fakeAvatar) Place(_ int, box geometry.Rect, above bool) bool {
 	a.placed, a.above = append(a.placed, box), append(a.above, above)
@@ -110,5 +124,63 @@ func TestNoAvatarIsShownWhenIdle(t *testing.T) {
 func TestAFullScreenAvatarSitsAtTheFullScreenLooksDepth(t *testing.T) {
 	if avatar.DefaultZ != belowUI {
 		t.Fatalf("avatar depth %d, full-screen look depth %d", avatar.DefaultZ, belowUI)
+	}
+}
+
+func TestAPendingAvatarLeavesTheLooksPlaceEmptyInsteadOfTheNormalLook(t *testing.T) {
+	av := &fakeAvatar{wants: true, pending: true}
+	s := NewStage(StageDependencies{Wake: plainLook{schema.LookFull}, Avatar: av})
+
+	custom, full := s.Look(replying(1))
+	s.Below(ui.Rect{W: 1280, H: 800}, replying(1))
+
+	if !custom || !full {
+		t.Fatalf("custom %v, full %v: want the avatar's place kept", custom, full)
+	}
+	if s.running {
+		t.Fatal("the normal look's GPU visual runs while the avatar readies")
+	}
+	if !s.Staged() || !s.StagedFull() {
+		t.Fatalf("staged %v, full %v: the screen behind shows while the avatar readies",
+			s.Staged(), s.StagedFull())
+	}
+}
+
+func TestAnAvatarPendingInAPanelDrawsNoNormalLook(t *testing.T) {
+	av := &fakeAvatar{wants: true, pending: true}
+	s := NewStage(StageDependencies{Wake: plainLook{schema.LookPanel}, Avatar: av})
+
+	s.Above(ui.Rect{X: 100, Y: 500, W: 400, H: 250}, replying(1))
+
+	if s.running {
+		t.Fatal("the normal look's GPU visual runs while the avatar readies")
+	}
+}
+
+func TestTheHeldAvatarShowsIdleWithNoCaptions(t *testing.T) {
+	av := &fakeAvatar{held: 2}
+	s := NewStage(StageDependencies{Wake: plainLook{schema.LookFull}, Avatar: av})
+
+	show, ok := s.Held()
+
+	if !ok || show.Slot != 1 || show.Phase != voice.Idle {
+		t.Fatalf("held %+v %v, want wake word 2 idle", show, ok)
+	}
+	if show.Said != "" || show.Reply != "" || show.Speaker.Name != "" {
+		t.Errorf("captions on a held avatar: %+v", show)
+	}
+	if !s.Release() || !av.released {
+		t.Error("release did not reach the avatar")
+	}
+	if _, ok := s.Held(); ok {
+		t.Error("still held after release")
+	}
+}
+
+func TestNothingIsHeldWithoutAvatars(t *testing.T) {
+	s := NewStage(StageDependencies{Wake: plainLook{schema.LookFull}})
+
+	if _, ok := s.Held(); ok || s.Release() {
+		t.Fatal("held without avatars")
 	}
 }

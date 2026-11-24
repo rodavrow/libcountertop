@@ -84,6 +84,8 @@ type link struct {
 	shownBase uint64
 	pictured  bool
 	stalled   bool
+	// primedAt is when the decoder started being fed for this showing.
+	primedAt time.Time
 	// delayOn is the stream the reply's lip-sync delay was last set on.
 	delayOn   screen
 	published [2]string
@@ -97,9 +99,10 @@ func (l *link) snapshot() (State, string) {
 
 // reconcile moves the session toward what the settings and the holds want, and keeps the video
 // honest. It runs on every tick and after every change.
-func (l *link) reconcile(now time.Time, cfg schema.Avatar, busy bool) {
+func (l *link) reconcile(now time.Time, cfg schema.Avatar, busy, held bool) {
 	l.mu.Lock()
-	wanted := cfg.Ready() && (cfg.Connection.Always() || l.holds > 0 || now.Before(l.closeAt))
+	wanted := cfg.Ready() &&
+		(cfg.Connection.Always() || l.holds > 0 || now.Before(l.closeAt) || held)
 	open := l.state == Connecting || l.state == Connected
 	moved := cfg.URL != l.cfg.URL || cfg.ID != l.cfg.ID
 	var closing peer
@@ -115,7 +118,7 @@ func (l *link) reconcile(now time.Time, cfg schema.Avatar, busy bool) {
 	if wanted && (l.state == Off || (l.state == Failed && !now.Before(l.retryAt))) {
 		start = l.connect(now, cfg)
 	}
-	l.hideIf(now, busy)
+	l.hideIf(now, busy, held)
 	l.mu.Unlock()
 	l.close(closing)
 	l.publish()
@@ -124,13 +127,20 @@ func (l *link) reconcile(now time.Time, cfg schema.Avatar, busy bool) {
 	}
 }
 
-// hideIf takes the video off the screen when nothing placed it lately, another video needs the
-// screen, or the picture stalled; a stall holds until the next wake.
-func (l *link) hideIf(now time.Time, busy bool) {
+// hideIf takes the video off the screen when nothing placed it lately, unless it is held between
+// announcements, another video needs the screen, or the picture stalled; a stall holds until the
+// next wake.
+func (l *link) hideIf(now time.Time, busy, held bool) {
 	if !l.feeding {
 		return
 	}
-	stale := now.Sub(l.placedAt) > l.a.timing.unplaced
+	// A held picture is placed only at the screen's slower redraws; one the screen stopped
+	// placing, under an alarm or an app, still goes.
+	unplaced := l.a.timing.unplaced
+	if held {
+		unplaced = l.a.timing.heldUnplaced
+	}
+	stale := now.Sub(l.placedAt) > unplaced
 	// Only a picture that was up and stopped is a stall; until the first keyframe arrives the
 	// normal look simply stays.
 	if !l.stalled && l.pictured && now.Sub(l.shownAt) > l.a.timing.stall {
@@ -358,6 +368,7 @@ func (l *link) prime(busy bool) bool {
 	l.placedAt = now
 	if !l.feeding {
 		l.feeding, l.visible, l.pictured, l.needKey, l.shownAt = true, false, false, true, now
+		l.primedAt = now
 		l.shownBase = l.scr.Stats().Shown
 		l.scr.Hide()
 		if p := l.peer; p != nil {
@@ -365,6 +376,30 @@ func (l *link) prime(busy bool) bool {
 		}
 	}
 	return l.pictured
+}
+
+// pending reports that the picture is primed but not up yet, within grace of priming.
+func (l *link) pending(now time.Time, busy bool, grace time.Duration) bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	return l.readyLocked(busy) && l.feeding && !l.pictured && now.Sub(l.primedAt) < grace
+}
+
+// showable reports that the picture is up, or primed and due within grace.
+func (l *link) showable(now time.Time, busy bool, grace time.Duration) bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if !l.readyLocked(busy) {
+		return false
+	}
+	return l.pictured || l.feeding && now.Sub(l.primedAt) < grace
+}
+
+// onScreen reports that the picture is placed on the shared layer.
+func (l *link) onScreen() bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	return l.visible && l.a.owns(l)
 }
 
 func (l *link) ready(busy bool) bool {

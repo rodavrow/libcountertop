@@ -16,6 +16,7 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/display/callvideo"
 	display "github.com/ygelfand/libcountertop/pkg/display/geometry"
 	"github.com/ygelfand/libcountertop/pkg/display/surface"
+	"github.com/ygelfand/libcountertop/pkg/hook"
 	"github.com/ygelfand/libcountertop/pkg/media/rtc"
 	"github.com/ygelfand/libcountertop/pkg/settings/schema"
 )
@@ -66,6 +67,7 @@ type timing struct {
 	linger, unplaced, stall        time.Duration
 	waitLink, firstSound, poll     time.Duration
 	quiet, silent, most            time.Duration
+	pending, hold, heldUnplaced    time.Duration
 }
 
 var defaults = timing{
@@ -82,6 +84,10 @@ var defaults = timing{
 	quiet:      300 * time.Millisecond,
 	silent:     3 * time.Second,
 	most:       10 * time.Minute,
+	pending:    time.Second,
+	hold:       time.Minute,
+	// The screen redraws a held avatar only once a second.
+	heldUnplaced: 2 * time.Second,
 }
 
 var _ turn.Avatar = (*Avatars)(nil)
@@ -105,6 +111,12 @@ type Avatars struct {
 	vmu   sync.Mutex
 	scr   screen
 	owner *link
+
+	hold hold
+
+	// HeldChanged fires when the avatar held between announcements changes or is let go, so the
+	// screen redraws at once rather than at its next tick.
+	HeldChanged hook.Hook[struct{}]
 }
 
 // claim hands l the shared layer and stops whichever avatar drove it before; nil when there is
@@ -168,6 +180,7 @@ func New(o Options) *Avatars {
 		a.links = append(a.links, &link{slot: n, a: a, state: Off})
 		a.ents = append(a.ents, a.newEntities(n))
 	}
+	a.newHold()
 	a.published = a.show
 	return a
 }
@@ -225,9 +238,11 @@ func (a *Avatars) Run(ctx context.Context) {
 
 func (a *Avatars) reconcile() {
 	now, busy := a.now(), a.busy()
+	a.checkHold(now)
+	held := a.heldSlot()
 	wake := a.o.Read()
 	for n, l := range a.links {
-		l.reconcile(now, wake.Slot(n).Avatar, busy)
+		l.reconcile(now, wake.Slot(n).Avatar, busy, n == held)
 	}
 }
 
@@ -273,6 +288,16 @@ func (a *Avatars) Chosen(slot int, on bool) {
 	a.Rest(slot)
 }
 
+// Pending reports that slot's picture is being readied and should be up within a moment, so the
+// caller can leave the look's place empty rather than flash the normal look first. It turns false
+// once the picture is up, when it takes too long, or when the link cannot show it.
+func (a *Avatars) Pending(slot int) bool {
+	if slot < 0 || slot >= len(a.links) || !a.Wants(slot) {
+		return false
+	}
+	return a.links[slot].pending(a.now(), a.busy(), a.timing.pending)
+}
+
 // Showing readies slot's picture without showing it and reports whether it is up; while it is
 // not, the caller draws the normal look. Ask on every frame the look is wanted.
 func (a *Avatars) Showing(slot int) bool {
@@ -312,6 +337,8 @@ func (a *Avatars) Speak(
 		return false, nil
 	}
 	l := a.links[slot]
+	a.replying(true)
+	defer a.replying(false)
 	id, gen, ok := a.connected(ctx, l)
 	if !ok {
 		slog.Info("avatar not connected, speaking locally", "slot", slot+1)
@@ -347,6 +374,9 @@ func (a *Avatars) Speak(
 	if handled {
 		slog.Info("avatar spoke", "slot", slot+1, "session", id, "took", a.now().Sub(sent),
 			"err", err)
+	}
+	if handled && err == nil && ctx.Err() == nil && l.onScreen() {
+		a.spoke(slot)
 	}
 	return handled, err
 }
