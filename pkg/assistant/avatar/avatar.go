@@ -101,20 +101,25 @@ type Avatars struct {
 	changed   chan struct{}
 
 	// The avatars share one hardware layer, as a second stream on it would close the first
-	// one's decoder; owner is the link that last drove it.
+	// one's decoder; owner is the link whose stream scr is.
 	vmu   sync.Mutex
 	scr   screen
 	owner *link
 }
 
 // claim hands l the shared layer and stops whichever avatar drove it before; nil when there is
-// no display.
+// no display. A new owner gets a fresh stream: the last one's queued frames, clock, shown count
+// and lip-sync delay belong to another session, and closing it takes its picture down.
 func (a *Avatars) claim(l *link) screen {
 	a.vmu.Lock()
+	prev := a.owner
+	if prev != l && a.scr != nil {
+		a.scr.Close()
+		a.scr, a.owner = nil, nil
+	}
 	if a.scr == nil {
 		a.scr = a.screen()
 	}
-	prev := a.owner
 	if a.scr != nil {
 		a.owner = l
 	}
@@ -122,8 +127,6 @@ func (a *Avatars) claim(l *link) screen {
 	a.vmu.Unlock()
 	if prev != nil && prev != l {
 		prev.yield()
-		// The last avatar's lip-sync delay is not this one's.
-		scr.Delay(0)
 	}
 	return scr
 }
@@ -396,6 +399,7 @@ func (a *Avatars) detach(l *link, sp *speech) {
 	if l.scr != nil && a.owns(l) {
 		l.scr.Delay(0)
 	}
+	l.delayOn = nil
 }
 
 // follow waits for the reply to end: LiveTalking says it stopped and nothing audible came for a
@@ -479,12 +483,18 @@ func (a *Avatars) lost(l *link, gen uint64) bool {
 func (a *Avatars) sync(l *link, sp *speech) {
 	l.mu.Lock()
 	scr := l.scr
+	fresh := scr != l.delayOn
 	l.mu.Unlock()
 	if scr == nil || !a.owns(l) {
 		return
 	}
-	if d, grew := sp.delay(sp.latency() + a.o.OutputLatency); grew {
+	// A stream the reply has not delayed yet, after taking the layer back, needs the delay
+	// already reached, not only growth.
+	if d, grew := sp.delay(sp.latency() + a.o.OutputLatency); grew || fresh {
 		scr.Delay(d)
+		l.mu.Lock()
+		l.delayOn = scr
+		l.mu.Unlock()
 	}
 }
 

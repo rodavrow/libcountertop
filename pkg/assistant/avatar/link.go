@@ -84,6 +84,8 @@ type link struct {
 	shownBase uint64
 	pictured  bool
 	stalled   bool
+	// delayOn is the stream the reply's lip-sync delay was last set on.
+	delayOn   screen
 	published [2]string
 }
 
@@ -309,6 +311,10 @@ func (l *link) frame(gen uint64, f rtc.Frame) {
 	shown := scr.Stats().Shown
 	l.mu.Lock()
 	first := false
+	if shown < l.shownBase {
+		// The layer reopened, for a new size or a broken decoder, and its count restarted.
+		l.shownBase = 0
+	}
 	if l.feeding && shown > l.shownBase {
 		first = !l.pictured
 		l.shownAt, l.shownBase, l.pictured = l.a.now(), shown, true
