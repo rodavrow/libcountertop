@@ -454,6 +454,14 @@ func (a *Avatars) follow(
 	t := time.NewTicker(a.timing.poll)
 	defer t.Stop()
 	interrupt := func() { interruptNow(srv, id, l.slot) }
+	speaking := func() (bool, error) {
+		pctx, cancel := context.WithTimeout(ctx, time.Second)
+		defer cancel()
+		return srv.speaking(pctx, id)
+	}
+	// began is that LiveTalking has said it is speaking the clip. Until then, for as long as it
+	// may take to start, sound on the stream is not the reply and a quiet moment is not its end.
+	began := false
 	for {
 		select {
 		case <-ctx.Done():
@@ -472,6 +480,12 @@ func (a *Avatars) follow(
 			return true, errLost
 		}
 		a.sync(l, sp)
+		starting := !began && now.Sub(sent) <= a.timing.firstSound
+		if starting {
+			if on, err := speaking(); err == nil && on {
+				began, starting = true, false
+			}
+		}
 		switch {
 		case first.IsZero() && now.Sub(sent) > a.timing.firstSound:
 			slog.Warn("avatar sent no sound, speaking locally", "slot", l.slot+1)
@@ -483,14 +497,14 @@ func (a *Avatars) follow(
 		case now.Sub(sent) > a.timing.most:
 			interrupt()
 			return true, fmt.Errorf("avatar: still speaking after %s", a.timing.most)
+		case starting:
+			continue
 		case now.Sub(last) > a.timing.silent:
 			return true, nil
 		case now.Sub(last) < a.timing.quiet:
 			continue
 		}
-		pctx, cancel := context.WithTimeout(ctx, time.Second)
-		on, err := srv.speaking(pctx, id)
-		cancel()
+		on, err := speaking()
 		if err != nil {
 			slog.Debug("avatar is_speaking", "slot", l.slot+1, "err", err)
 			continue

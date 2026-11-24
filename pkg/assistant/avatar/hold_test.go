@@ -16,6 +16,8 @@ import (
 func spokeOnScreen(t *testing.T, r *rig) {
 	t.Helper()
 	realTime(r)
+	// The fake never says it is speaking; do not wait long for it to start.
+	r.a.timing.firstSound = 60 * time.Millisecond
 	p := r.peer()
 	r.a.Showing(0)
 	p.show(rtc.Frame{Key: true})
