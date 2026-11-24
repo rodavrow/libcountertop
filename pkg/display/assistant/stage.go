@@ -8,6 +8,7 @@ import (
 	"time"
 
 	voice "github.com/ygelfand/libcountertop/pkg/assistant/turn"
+	"github.com/ygelfand/libcountertop/pkg/display/geometry"
 	"github.com/ygelfand/libcountertop/pkg/display/gpu"
 	"github.com/ygelfand/libcountertop/pkg/display/livevisual"
 	"github.com/ygelfand/libcountertop/pkg/display/ui"
@@ -35,12 +36,23 @@ type WakeSettings interface {
 	Read() schema.Wake
 }
 
+// AvatarScreen is a wake word's avatar video, shown in its look's place while its picture is up.
+type AvatarScreen interface {
+	Wants(slot int) bool
+	// Showing readies the picture and reports whether it is up.
+	Showing(slot int) bool
+	// Place shows the picture in a box in screen coordinates.
+	Place(slot int, box geometry.Rect) bool
+}
+
 type StageDependencies struct {
 	Screen  *Assistant
 	GPU     livevisual.Layers
 	Display livevisual.Oriented
 	Visuals Visuals
 	Wake    WakeSettings
+	// Avatar is nil on boards without avatars.
+	Avatar AvatarScreen
 }
 
 type look struct {
@@ -76,6 +88,10 @@ type Stage struct {
 	shown atomic.Bool
 	full  atomic.Bool
 
+	// avatarAt is when the avatar's picture was last placed, in unix nanoseconds.
+	avatarAt   atomic.Int64
+	avatarFull atomic.Bool
+
 	mu      sync.Mutex
 	want    ui.Rect
 	z       int
@@ -106,16 +122,64 @@ func (s *Stage) lookFor(show Showing) look {
 
 func (s *Stage) Look(show Showing) (custom, full bool) {
 	l := s.lookFor(show)
+	if s.avatarUp(show) {
+		return true, l.place == schema.LookFull
+	}
 	return l.custom(), l.place == schema.LookFull
 }
 
-func (s *Stage) Above(at ui.Rect, show Showing) { s.stage(at, aboveUI, s.lookFor(show)) }
+func (s *Stage) Above(at ui.Rect, show Showing) {
+	if !s.avatar(at, false, show) {
+		s.stage(at, aboveUI, s.lookFor(show))
+	}
+}
 
-func (s *Stage) Below(at ui.Rect, show Showing) { s.stage(at, belowUI, s.lookFor(show)) }
+func (s *Stage) Below(at ui.Rect, show Showing) {
+	if !s.avatar(at, true, show) {
+		s.stage(at, belowUI, s.lookFor(show))
+	}
+}
 
-func (s *Stage) Staged() bool { return s.shown.Load() }
+func (s *Stage) Staged() bool { return s.shown.Load() || s.avatarShown() }
 
-func (s *Stage) StagedFull() bool { return s.Staged() && s.full.Load() }
+func (s *Stage) StagedFull() bool {
+	if s.avatarShown() {
+		return s.avatarFull.Load()
+	}
+	return s.shown.Load() && s.full.Load()
+}
+
+// avatarUp reports whether show's wake word has its avatar picture up, readying it if not; the
+// look is drawn as usual until it is.
+func (s *Stage) avatarUp(show Showing) bool {
+	a := s.deps.Avatar
+	if a == nil {
+		return false
+	}
+	if _, ok := stageOf(show.Phase); !ok || !a.Wants(show.Slot) {
+		return false
+	}
+	return a.Showing(show.Slot)
+}
+
+// avatar puts the avatar's picture where the look would be, in place of the GPU visual.
+func (s *Stage) avatar(at ui.Rect, full bool, show Showing) bool {
+	if !s.avatarUp(show) || at.W <= 0 || at.H <= 0 {
+		return false
+	}
+	if !s.deps.Avatar.Place(show.Slot, geometry.Rect{X: at.X, Y: at.Y, W: at.W, H: at.H}) {
+		return false
+	}
+	s.Unstage()
+	s.avatarAt.Store(time.Now().UnixNano())
+	s.avatarFull.Store(full)
+	return true
+}
+
+func (s *Stage) avatarShown() bool {
+	at := s.avatarAt.Load()
+	return at != 0 && time.Since(time.Unix(0, at)) <= stageGrace
+}
 
 func (s *Stage) stage(at ui.Rect, z int, l look) {
 	if !l.custom() || at.W <= 0 || at.H <= 0 {
