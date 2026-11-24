@@ -303,6 +303,7 @@ func (a *Avatars) Speak(
 ) (handled bool, err error) {
 	cfg, ok := a.slot(slot)
 	if !ok || !cfg.Ready() || url == "" {
+		slog.Info("avatar not ready, speaking locally", "slot", slot+1, "clip", url != "")
 		return false, nil
 	}
 	l := a.links[slot]
@@ -320,6 +321,7 @@ func (a *Avatars) Speak(
 	sp := newSpeech(sink, started, a.now)
 	p := a.attach(l, gen, sp)
 	if p == nil {
+		slog.Info("avatar session changed, speaking locally", "slot", slot+1)
 		return false, nil
 	}
 	defer a.detach(l, sp)
@@ -335,7 +337,13 @@ func (a *Avatars) Speak(
 		slog.Warn("avatar refused the reply, speaking locally", "slot", slot+1, "err", err)
 		return false, nil
 	}
-	return a.follow(ctx, l, srv, id, gen, sp)
+	sent := a.now()
+	handled, err = a.follow(ctx, l, srv, id, gen, sp)
+	if handled {
+		slog.Info("avatar spoke", "slot", slot+1, "session", id, "took", a.now().Sub(sent),
+			"err", err)
+	}
+	return handled, err
 }
 
 // connected waits a little for a session that is still connecting.

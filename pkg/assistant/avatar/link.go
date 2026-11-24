@@ -308,10 +308,15 @@ func (l *link) frame(gen uint64, f rtc.Frame) {
 
 	shown := scr.Stats().Shown
 	l.mu.Lock()
+	first := false
 	if l.feeding && shown > l.shownBase {
+		first = !l.pictured
 		l.shownAt, l.shownBase, l.pictured = l.a.now(), shown, true
 	}
 	l.mu.Unlock()
+	if first {
+		slog.Info("avatar picture up", "slot", l.slot+1)
+	}
 }
 
 func (l *link) heard(gen uint64, pcm []int16) {
