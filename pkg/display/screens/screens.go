@@ -113,6 +113,10 @@ type Stage interface {
 	Placer
 	Staging
 	Look(assistant.Showing) (custom, full bool)
+	// Held is the avatar kept on screen between announcements, shown with no turn going.
+	Held() (assistant.Showing, bool)
+	// Release lets the held avatar go and reports whether one was held.
+	Release() bool
 }
 
 type Weather interface {
@@ -442,6 +446,8 @@ func (a *App) Run(ctx context.Context) error {
 		open bool
 	}
 	starts := map[int]start{}
+	released := map[int]bool{}
+	redraw := func() { w.QueueCommand(func(w *gogui.Window) { w.InvalidateLayout() }) }
 	sh := a.o.Shell
 
 	stopTouch := a.o.Touch.Contacts.Listen(func(t touch.Contact) {
@@ -455,7 +461,20 @@ func (a *App) Run(ctx context.Context) error {
 				})
 			}
 		}
+		// A touch on a held avatar only lets it go; the interface under it, see-through, is
+		// not what was touched.
+		if released[t.ID] {
+			if t.Phase == touch.Up {
+				delete(released, t.ID)
+			}
+			return
+		}
 		if _, held := a.wakeBy(); held {
+			return
+		}
+		if t.Phase == touch.Down && a.o.Stage.Release() {
+			released[t.ID] = true
+			redraw()
 			return
 		}
 		at := image.Pt(t.X, t.Y)
@@ -537,8 +556,6 @@ func (a *App) Run(ctx context.Context) error {
 		})
 		defer stopTurn()
 	}
-
-	redraw := func() { w.QueueCommand(func(w *gogui.Window) { w.InvalidateLayout() }) }
 
 	stopShell := sh.Redrawn.Listen(func(struct{}) { redraw() })
 	defer stopShell()
