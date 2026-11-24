@@ -7,6 +7,7 @@ import (
 	"sync/atomic"
 
 	"github.com/pion/interceptor"
+	"github.com/pion/rtcp"
 	"github.com/pion/webrtc/v4"
 )
 
@@ -48,6 +49,7 @@ type Viewer struct {
 	workers sync.WaitGroup
 	closed  sync.Once
 	deaf    atomic.Bool
+	video   atomic.Uint32
 }
 
 func NewViewer(
@@ -80,6 +82,7 @@ func NewViewer(
 	pc.OnTrack(func(t *webrtc.TrackRemote, _ *webrtc.RTPReceiver) {
 		switch {
 		case t.Kind() == webrtc.RTPCodecTypeVideo:
+			v.video.Store(uint32(t.SSRC()))
 			v.workers.Go(func() { follow(t, pc, &v.count, show) })
 		case t.Kind() == webrtc.RTPCodecTypeAudio && play != nil:
 			slog.Info("camera audio", "codec", t.Codec().MimeType, "rate", t.Codec().ClockRate)
@@ -117,6 +120,20 @@ func (v *Viewer) Answered(answer string) error {
 
 // Deafen stops decoding the stream's audio until it is turned off again; packets keep arriving.
 func (v *Viewer) Deafen(on bool) { v.deaf.Store(on) }
+
+// RequestKey asks the sender for a keyframe, for a decoder that skipped frames.
+func (v *Viewer) RequestKey() {
+	ssrc := v.video.Load()
+	if ssrc == 0 {
+		return
+	}
+	v.count.keysRequested.Add(1)
+	if err := v.pc.WriteRTCP(
+		[]rtcp.Packet{&rtcp.PictureLossIndication{MediaSSRC: ssrc}},
+	); err != nil {
+		slog.Debug("viewer keyframe request", "err", err)
+	}
+}
 
 // Heard is how many audio packets arrived, decoded or not.
 func (v *Viewer) Heard() uint64 { return v.count.audioRecv.Load() }

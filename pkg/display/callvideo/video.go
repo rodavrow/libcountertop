@@ -114,6 +114,7 @@ type layer struct {
 	size    Size
 	box     func(vw, vh int) display.Rect
 	broken  func()
+	lag     time.Duration
 
 	mu      sync.Mutex
 	zoom    display.Zoom
@@ -208,7 +209,11 @@ func (l *layer) Show(f rtc.Frame) {
 	}
 	l.frames++
 	l.decoded = uint64(played.Shown)
-	if err := c.VideoClock(l.id, f.PTS-videoLag, true); err != nil {
+	lag := videoLag
+	if l.lag > 0 {
+		lag = l.lag
+	}
+	if err := c.VideoClock(l.id, f.PTS-lag, true); err != nil {
 		slog.Debug("call video clock", "layer", l.id, "err", err)
 	}
 	if !l.shown {
