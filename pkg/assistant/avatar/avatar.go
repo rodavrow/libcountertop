@@ -11,6 +11,7 @@ import (
 
 	"github.com/pion/webrtc/v4"
 
+	"github.com/ygelfand/libcountertop/pkg/assistant/turn"
 	"github.com/ygelfand/libcountertop/pkg/display/callvideo"
 	display "github.com/ygelfand/libcountertop/pkg/display/geometry"
 	"github.com/ygelfand/libcountertop/pkg/display/surface"
@@ -74,6 +75,8 @@ var defaults = timing{
 	silent:     3 * time.Second,
 	most:       10 * time.Minute,
 }
+
+var _ turn.Avatar = (*Avatars)(nil)
 
 // Avatars are the wake words' LiveTalking avatars.
 type Avatars struct {

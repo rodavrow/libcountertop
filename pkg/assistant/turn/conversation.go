@@ -122,6 +122,8 @@ type Conversation struct {
 	said   string
 	answer string
 
+	avatarHeld *int
+
 	announceID uint64
 	announcing *announcement
 	waiting    *announcement
@@ -374,7 +376,7 @@ func (c *Conversation) dispatch(e event) {
 		c.player.Sounding(true)
 
 	case evStreamStart:
-		if c.phase != phaseIdle && c.options.Words.Delivery(c.slot) == "stream" {
+		if c.phase != phaseIdle && c.streams(c.slot) {
 			c.speak("")
 		}
 
@@ -382,13 +384,13 @@ func (c *Conversation) dispatch(e event) {
 		if c.phase == phaseIdle {
 			return
 		}
-		if c.options.Words.Delivery(c.slot) == "stream" {
+		if c.streams(c.slot) {
 			return
 		}
 		c.speak(e.url)
 
 	case evStreamAudio:
-		if c.phase == phaseIdle || c.reply.url != "" {
+		if c.phase == phaseIdle || c.reply.url != "" || !c.streams(c.slot) {
 			return
 		}
 		if c.phase != phaseReplying {
@@ -563,6 +565,7 @@ func (c *Conversation) start(n nextTurn) {
 
 	c.slot = slot
 	c.followUp = n.followUp
+	c.holdAvatar(slot)
 
 	c.hold(true)
 
@@ -636,8 +639,9 @@ func (c *Conversation) speak(url string) {
 
 	c.player.Sounding(true)
 
+	slot := c.slot
 	errand := func(ctx context.Context, p Speaker) error {
-		return c.play(ctx, url, func() { c.post(event{kind: evPlaying, replyID: id}) })
+		return c.voice(ctx, slot, url, func() { c.post(event{kind: evPlaying, replyID: id}) })
 	}
 	if url == "" {
 		s := NewReply(c.speaker.Splices(), c.speaker.Underruns(), c.options.Words.Buffer(c.slot))
@@ -683,6 +687,7 @@ func (c *Conversation) idle(why string, how activity.Outcome) {
 	c.reply = reply{}
 	c.hold(c.pending != nil)
 
+	c.restAvatar()
 	if was != phaseIdle {
 		slog.Info("turn ended", "was", was, "slot", c.slot+1, "why", why)
 		c.Ended.Emit(struct{}{})
@@ -1003,4 +1008,31 @@ func (c *Conversation) reported(dry time.Time) {
 		"underruns", c.speaker.Underruns()-s.Stats().UnderrunsAt,
 		"clipped", c.speaker.Clipped(),
 		"dropped", dropped(c.source))
+}
+
+// streams reports whether slot's reply arrives as a stream; a wake word in avatar mode takes
+// whole clips, as LiveTalking speaks a file.
+func (c *Conversation) streams(slot int) bool {
+	if a := c.options.Avatar; a != nil && a.Wants(slot) {
+		return false
+	}
+	return c.options.Words.Delivery(slot) == "stream"
+}
+
+// holdAvatar keeps slot's avatar session open for the turn, so it connects while listening.
+func (c *Conversation) holdAvatar(slot int) {
+	if c.options.Avatar == nil {
+		return
+	}
+	c.restAvatar()
+	c.options.Avatar.Wake(slot)
+	c.avatarHeld = &slot
+}
+
+func (c *Conversation) restAvatar() {
+	if c.options.Avatar == nil || c.avatarHeld == nil {
+		return
+	}
+	c.options.Avatar.Rest(*c.avatarHeld)
+	c.avatarHeld = nil
 }

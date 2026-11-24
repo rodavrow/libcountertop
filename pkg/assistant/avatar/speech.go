@@ -4,6 +4,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/ygelfand/libcountertop/pkg/assistant/turn"
 	"github.com/ygelfand/libcountertop/pkg/audio/resample"
 	"github.com/ygelfand/libcountertop/pkg/media/rtc"
 )
@@ -20,12 +21,9 @@ const (
 	voiceRate = 16000
 )
 
-// Sink is the speaker's voice lane, as the conversation plays replies into it.
-type Sink interface {
-	PlayVoice([]int16)
-	// Queued is the voice audio waiting to be heard, in 16 kHz samples.
-	Queued() int
-}
+// Sink is the speaker's voice lane, as the conversation plays replies into it; Queued counts
+// 16 kHz samples.
+type Sink = turn.VoiceSink
 
 // NativeSink is a voice lane that takes PCM at another rate and channel count, so the
 // avatar's 48 kHz stereo is not narrowed to 16 kHz mono and back.
