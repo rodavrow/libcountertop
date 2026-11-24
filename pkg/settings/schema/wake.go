@@ -70,6 +70,8 @@ type WakeWord struct {
 	KnownVoices bool `json:"known_voices"`
 
 	Look Look `json:"look"`
+
+	Avatar Avatar `json:"avatar"`
 }
 
 const (

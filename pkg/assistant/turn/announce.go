@@ -100,6 +100,9 @@ func (c *Conversation) say(an *announcement) {
 	c.announcing = an
 
 	c.player.Sounding(true)
+	if c.options.Avatar != nil {
+		c.options.Avatar.Wake(an.slot)
+	}
 	claim := c.sound.Claim("announce", func(ctx context.Context, _ Speaker) error {
 		if an.PreannounceMediaID != "" {
 			if err := c.play(ctx, an.PreannounceMediaID, nil); err != nil {
@@ -109,13 +112,16 @@ func (c *Conversation) say(an *announcement) {
 		if an.MediaID == "" {
 			return nil
 		}
-		return c.play(ctx, an.MediaID, func() {
+		return c.voice(ctx, an.slot, an.MediaID, func() {
 			c.post(event{kind: evAnnouncing, replyID: id})
 		})
 	})
 
 	c.spawn("announce", func() {
 		<-claim.Done()
+		if c.options.Avatar != nil {
+			c.options.Avatar.Rest(an.slot)
+		}
 
 		if err := claim.Err(); err != nil {
 			slog.Error("playing the announcement failed", "err", err)
@@ -207,6 +213,18 @@ func (c *Conversation) unsaid() {
 	slog.Info("announcement dropped before it played", "text", c.waiting.Text)
 	c.waiting = nil
 	c.spawn("announcement report", func() { c.report(false) })
+}
+
+// voice has slot's avatar speak the clip at url when it is in avatar mode, and plays it on the
+// speaker when it is not or the avatar cannot.
+func (t *Conversation) voice(ctx context.Context, slot int, url string, started func()) error {
+	if a := t.options.Avatar; a != nil && a.Wants(slot) {
+		handled, err := a.Speak(ctx, slot, url, t.speaker, started)
+		if handled || ctx.Err() != nil {
+			return err
+		}
+	}
+	return t.play(ctx, url, started)
 }
 
 func (t *Conversation) play(ctx context.Context, url string, started func()) error {

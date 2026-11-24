@@ -35,6 +35,10 @@ type Options struct {
 	DeviceID uint32
 	Read     func() bool
 	Save     func(bool) error
+
+	// Chosen hears an animated announcement's assistant being picked (on) and the choice being
+	// used up, expiring or cleared (off), once each, so its avatar can get ready in time.
+	Chosen func(slot int, on bool)
 }
 
 type Announcements struct {
@@ -46,6 +50,7 @@ type Announcements struct {
 	chosen int
 	until  time.Time
 	expiry *time.Timer
+	told   int
 
 	now func() time.Time
 }
@@ -108,45 +113,66 @@ func (a *Announcements) choose(option string) {
 	}
 
 	a.mu.Lock()
-	defer a.mu.Unlock()
-	a.forget()
+	released := a.forget()
 	if slot == 0 {
+		a.mu.Unlock()
+		a.tell(released, false)
 		return
 	}
 	a.chosen, a.until = slot, a.now().Add(Kept)
 	a.expiry = time.AfterFunc(Kept, a.expire)
 	a.next.Set(label(slot - 1))
+	picked := 0
+	if a.options.Chosen != nil && a.Animated() {
+		a.told, picked = slot, slot
+	}
+	a.mu.Unlock()
+	a.tell(released, false)
+	a.tell(picked, true)
+}
+
+// tell passes a choice to Chosen; slot counts from 1 and 0 is none.
+func (a *Announcements) tell(slot int, on bool) {
+	if slot > 0 && a.options.Chosen != nil {
+		a.options.Chosen(slot-1, on)
+	}
 }
 
 // Slot is the assistant the next announcement speaks as, counted from 0. Asking uses the
 // choice up, so the announcement after it is the first assistant's again.
 func (a *Announcements) Slot() int {
 	a.mu.Lock()
-	defer a.mu.Unlock()
-
 	slot := 0
 	if a.chosen > 0 && a.chosen <= a.options.Slots && a.now().Before(a.until) {
 		slot = a.chosen - 1
 	}
-	a.forget()
+	released := a.forget()
+	a.mu.Unlock()
+	a.tell(released, false)
 	return slot
 }
 
 func (a *Announcements) expire() {
 	a.mu.Lock()
-	defer a.mu.Unlock()
+	released := 0
 	if a.chosen > 0 && !a.now().Before(a.until) {
-		a.forget()
+		released = a.forget()
 	}
+	a.mu.Unlock()
+	a.tell(released, false)
 }
 
-func (a *Announcements) forget() {
+// forget clears the choice and returns the slot, from 1, whose Chosen must now hear off.
+func (a *Announcements) forget() int {
 	if a.expiry != nil {
 		a.expiry.Stop()
 		a.expiry = nil
 	}
 	a.chosen, a.until = 0, time.Time{}
 	a.next.Set(Default)
+	told := a.told
+	a.told = 0
+	return told
 }
 
 func (a *Announcements) Controls() *setting.Controls[schema.Wake] { return a.controls }

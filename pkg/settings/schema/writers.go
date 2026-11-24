@@ -525,6 +525,28 @@ func (w WakeWriter) Visual(s Stage, kind string) error {
 	})
 }
 
+func (w WakeWriter) AvatarOn(on bool) error {
+	return w.word(func(word *WakeWord) { word.Avatar.On = on })
+}
+
+func (w WakeWriter) AvatarURL(v string) error {
+	if err := ValidAvatarURL(v); err != nil {
+		return err
+	}
+	return w.word(func(word *WakeWord) { word.Avatar.URL = v })
+}
+
+func (w WakeWriter) AvatarID(v string) error {
+	if err := ValidAvatarID(v); err != nil {
+		return err
+	}
+	return w.word(func(word *WakeWord) { word.Avatar.ID = v })
+}
+
+func (w WakeWriter) AvatarConnection(v AvatarConnection) error {
+	return w.word(func(word *WakeWord) { word.Avatar.Connection = v })
+}
+
 func (w WakeWriter) Apply(f func(*WakeWord)) error { return w.word(f) }
 
 func (w WakeWriter) word(f func(*WakeWord)) error {

@@ -64,6 +64,20 @@ type Announcements interface {
 	Slot() int
 }
 
+// Avatar speaks a wake word's replies through its LiveTalking avatar instead of the speaker.
+type Avatar interface {
+	// Wants reports whether slot's replies go to its avatar, which needs whole clips.
+	Wants(slot int) bool
+
+	// Wake holds slot's avatar session open for a turn or announcement; Rest lets it go.
+	Wake(slot int)
+	Rest(slot int)
+
+	// Speak has slot's avatar say the clip at url, its voice going into sink. handled is false
+	// when the caller should play the clip itself.
+	Speak(ctx context.Context, slot int, url string, sink VoiceSink, started func()) (handled bool, err error)
+}
+
 type Dependencies struct {
 	Source             Microphone
 	Speaker            Speaker
@@ -80,6 +94,7 @@ type Dependencies struct {
 	Arbiter            Arbiter
 	Voices             Voices
 	Announcements      Announcements
+	Avatar             Avatar
 	Cancelled, Failure func()
 }
 

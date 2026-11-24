@@ -2,6 +2,7 @@ package callvideo
 
 import (
 	"errors"
+	"time"
 
 	"github.com/bluenviron/mediacommon/v2/pkg/codecs/h264"
 	"github.com/bluenviron/mediacommon/v2/pkg/codecs/h265"
@@ -38,6 +39,34 @@ func (s *Stream) Show(f rtc.Frame) {
 func (s *Stream) Refused() bool {
 	st := s.l.stats()
 	return st.Shown == 0 && errors.Is(st.Failed, surface.Broken)
+}
+
+// Place fits the stream inside box, in screen coordinates for the current orientation, at depth
+// z, and shows it once it has a picture. A positive z puts it above the interface.
+func (s *Stream) Place(box display.Rect, z int) {
+	s.l.mu.Lock()
+	s.l.box = func(int, int) display.Rect { return box }
+	s.l.z = z
+	sz := s.l.size
+	s.l.mu.Unlock()
+	s.l.update(sz, false)
+}
+
+// Delay shows each frame d after it arrives instead of the usual lag, to wait for audio that
+// takes a longer path to the speaker.
+func (s *Stream) Delay(d time.Duration) {
+	s.l.mu.Lock()
+	s.l.lag = d
+	s.l.mu.Unlock()
+}
+
+// Hide keeps decoding but takes the picture off the screen, so showing it again needs no
+// keyframe.
+func (s *Stream) Hide() {
+	s.l.mu.Lock()
+	sz := s.l.size
+	s.l.mu.Unlock()
+	s.l.update(sz, true)
 }
 
 func (s *Stream) Reorient() { s.l.reorient() }
