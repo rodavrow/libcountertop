@@ -40,6 +40,25 @@ func (s *Stream) Refused() bool {
 	return st.Shown == 0 && errors.Is(st.Failed, surface.Broken)
 }
 
+// Place fits the stream inside box, in screen coordinates for the current orientation, and
+// shows it once it has a picture.
+func (s *Stream) Place(box display.Rect) {
+	s.l.mu.Lock()
+	s.l.box = func(int, int) display.Rect { return box }
+	sz := s.l.size
+	s.l.mu.Unlock()
+	s.l.update(sz, false)
+}
+
+// Hide keeps decoding but takes the picture off the screen, so showing it again needs no
+// keyframe.
+func (s *Stream) Hide() {
+	s.l.mu.Lock()
+	sz := s.l.size
+	s.l.mu.Unlock()
+	s.l.update(sz, true)
+}
+
 func (s *Stream) Reorient() { s.l.reorient() }
 
 func (s *Stream) Fitted(vw, vh int) (display.Rect, bool) {
