@@ -149,6 +149,26 @@ func NewAuthority(name string) (*Authority, error) {
 	return &Authority{device: deviceKey, deviceDER: deviceDER, intermediate: icaDER}, nil
 }
 
+func NewPeer(name string, now time.Time) ([]byte, *ecdsa.PrivateKey, error) {
+	key, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	if err != nil {
+		return nil, nil, fmt.Errorf("cast: making the peer key: %w", err)
+	}
+	from := now.Add(-time.Hour)
+	peer := &x509.Certificate{
+		Subject:     pkix.Name{CommonName: name},
+		NotBefore:   from,
+		NotAfter:    from.Add(PeerLife),
+		KeyUsage:    x509.KeyUsageDigitalSignature,
+		ExtKeyUsage: []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
+	}
+	der, err := sign(peer, peer, &key.PublicKey, key)
+	if err != nil {
+		return nil, nil, err
+	}
+	return der, key, nil
+}
+
 func (a *Authority) Issue(name string, now time.Time) (*Credentials, error) {
 	key, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {

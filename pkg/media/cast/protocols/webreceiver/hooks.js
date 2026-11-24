@@ -58,7 +58,7 @@
     send(out);
   };
   const connect = () => {
-    link = new WebSocket("ws://127.0.0.1:" + port + "/media");
+    link = new WebSocket("ws://127.0.0.1:" + port + "/countertop-bridge");
     link.binaryType = "arraybuffer";
     link.onopen = () => { for (const m of queue.splice(0)) link.send(m); };
     link.onmessage = (e) => {
@@ -97,6 +97,35 @@
       order({ op: "lounge", name: sc, fields });
     }
   };
+  let identity = null;
+  let fetchingIdentity = false;
+  const identityReady = (o) => o && o.headers && Object.keys(o.headers).length > 0;
+  const fetchIdentity = () => {
+    if (fetchingIdentity) return;
+    fetchingIdentity = true;
+    try {
+      const x = new XMLHttpRequest();
+      x.open("GET", base + "/cast-identity", false);
+      x.send();
+      identity = JSON.parse(x.responseText);
+    } catch (e) {
+    } finally {
+      fetchingIdentity = false;
+    }
+  };
+  const castHeads = (url) => {
+    try {
+      const host = new URL(url, location.href).hostname;
+      if (host === "127.0.0.1" || host === "localhost") return null;
+      if (!identity) fetchIdentity();
+      if (!identity || !identity.hosts || !identity.hosts.includes(host)) return null;
+      if (!identityReady(identity)) fetchIdentity();
+      return identityReady(identity) ? identity.headers : null;
+    } catch (e) {
+      return null;
+    }
+  };
+
   const xopen = XMLHttpRequest.prototype.open;
   const xsend = XMLHttpRequest.prototype.send;
   XMLHttpRequest.prototype.open = function (method, url, ...rest) {
@@ -105,11 +134,20 @@
   };
   XMLHttpRequest.prototype.send = function (body) {
     lounge(this.__url, body);
+    const heads = castHeads(this.__url);
+    if (heads) for (const k in heads) { try { this.setRequestHeader(k, heads[k]); } catch (e) {} }
     return xsend.call(this, body);
   };
   const xfetch = window.fetch;
   window.fetch = function (input, init) {
-    lounge(typeof input === "string" ? input : input && input.url, init && init.body);
+    const url = typeof input === "string" ? input : input && input.url;
+    lounge(url, init && init.body);
+    const heads = castHeads(url);
+    if (heads) {
+      const req = new Request(input, init);
+      for (const k in heads) req.headers.set(k, heads[k]);
+      return xfetch.call(this, req);
+    }
     return xfetch.apply(this, arguments);
   };
 

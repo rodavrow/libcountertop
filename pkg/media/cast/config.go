@@ -16,9 +16,12 @@ import (
 const appConfigURL = "https://clients3.google.com/cast/chromecast/device/app?a="
 
 type AppConfig struct {
-	URL  string
-	Name string
-	Icon string
+	URL           string
+	Name          string
+	Icon          string
+	Whitelist     []string
+	PrivateData   string
+	ClaimTemplate string
 }
 
 func (c AppConfig) Page(friendlyName, postData string) string {
@@ -52,6 +55,21 @@ func Describe(ctx context.Context, client *http.Client, app string) (AppConfig, 
 	return c, nil
 }
 
+func claimTemplate(raw json.RawMessage) string {
+	raw = bytes.TrimSpace(raw)
+	if len(raw) == 0 {
+		return ""
+	}
+	if raw[0] == '"' {
+		var s string
+		if json.Unmarshal(raw, &s) == nil {
+			return s
+		}
+		return ""
+	}
+	return string(raw)
+}
+
 func fetchConfig(ctx context.Context, client *http.Client, app string) (AppConfig, error) {
 	if client == nil {
 		return AppConfig{}, errors.New("cast: no client to fetch app config")
@@ -79,6 +97,11 @@ func fetchConfig(ctx context.Context, client *http.Client, app string) (AppConfi
 			Icon   string `json:"icon_url"`
 			Locale string `json:"locale"`
 		} `json:"promo_assets"`
+		Whitelisting struct {
+			PrivateData   string          `json:"private_data"`
+			Servers       []string        `json:"whitelisted_servers"`
+			ClaimTemplate json.RawMessage `json:"claim_set_template"`
+		} `json:"whitelisting"`
 	}
 	if err := json.Unmarshal(
 		bytes.TrimSpace(bytes.TrimPrefix(body, []byte(")]}'"))),
@@ -86,7 +109,13 @@ func fetchConfig(ctx context.Context, client *http.Client, app string) (AppConfi
 	); err != nil {
 		return AppConfig{}, fmt.Errorf("cast: app config: %w", err)
 	}
-	c := AppConfig{URL: cfg.URL, Name: cfg.DisplayName}
+	c := AppConfig{
+		URL:           cfg.URL,
+		Name:          cfg.DisplayName,
+		Whitelist:     cfg.Whitelisting.Servers,
+		PrivateData:   cfg.Whitelisting.PrivateData,
+		ClaimTemplate: claimTemplate(cfg.Whitelisting.ClaimTemplate),
+	}
 	for _, a := range cfg.Promo {
 		if a.Icon != "" && (c.Icon == "" || a.Locale == "") {
 			c.Icon = a.Icon

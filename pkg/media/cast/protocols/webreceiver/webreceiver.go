@@ -8,8 +8,10 @@ import (
 	"image"
 	"log/slog"
 	"maps"
+	"math"
 	"net"
 	"net/http"
+	"slices"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -84,6 +86,9 @@ type Receiver struct {
 	page         *websocket.Conn
 	asked        cast.App
 	app          cast.Application
+	config       cast.AppConfig
+	attestFor    string
+	attestHeads  map[string]string
 	title        string
 	began        time.Time
 	pending      []frame
@@ -168,6 +173,10 @@ func (r *Receiver) run(ctx context.Context) error {
 		}
 	}
 
+	if r.env.VolumeChanged != nil {
+		defer r.env.VolumeChanged(r.volumeMoved)()
+	}
+
 	r.mu.Lock()
 	r.tools = page
 	asked := r.asked
@@ -204,11 +213,52 @@ func (r *Receiver) serve() (*http.Server, error) {
 	return srv, nil
 }
 
+func (r *Receiver) castHeaders(ctx context.Context) map[string]string {
+	r.mu.Lock()
+	cfg := r.config
+	appID, sessionID := r.app.AppID, r.app.SessionID
+	cached, cachedFor := r.attestHeads, r.attestFor
+	r.mu.Unlock()
+
+	if appID == "" || sessionID == "" || r.env.Attest == nil || len(cfg.Whitelist) == 0 {
+		return nil
+	}
+	if cached != nil && cachedFor == sessionID {
+		return cached
+	}
+	heads, err := r.env.Attest(ctx, appID, sessionID, cfg.PrivateData, cfg.ClaimTemplate)
+	if err != nil {
+		slog.Warn("the cast app could not be attested", "app", appID, "err", err)
+		return nil
+	}
+	r.mu.Lock()
+	r.attestFor, r.attestHeads = sessionID, heads
+	r.mu.Unlock()
+	slog.Debug("built cast identity headers", "app", appID,
+		"jwt", len(heads["CAST-JWT"]), "cert", len(heads["CAST-CERT"]),
+		"chain", len(heads["CAST-CERT-CHAIN"]), "headers", len(heads))
+	return heads
+}
+
+func (r *Receiver) identity(w http.ResponseWriter, _ *http.Request) {
+	r.mu.Lock()
+	hosts := slices.Clone(r.config.Whitelist)
+	r.mu.Unlock()
+	body := struct {
+		Hosts   []string          `json:"hosts"`
+		Headers map[string]string `json:"headers"`
+	}{Hosts: hosts, Headers: r.castHeaders(context.Background())}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(body)
+}
+
 func (r *Receiver) handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/v2/ipc", r.bus)
-	mux.HandleFunc("/media", r.media.serve)
+	mux.HandleFunc("/countertop-bridge", r.media.serve)
 	mux.HandleFunc("/plays", r.plays)
+	mux.HandleFunc("/cast-identity", r.identity)
 	mux.HandleFunc("/keys", func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		_, _ = fmt.Fprint(w, r.keys.available())
@@ -271,6 +321,7 @@ func (r *Receiver) launch(a cast.App) {
 	title, logo := firstOf(page.Name, a.Name), firstOf(page.Icon, a.Icon)
 	r.mu.Lock()
 	r.title, r.began = title, time.Now()
+	r.config, r.attestFor, r.attestHeads = page, "", nil
 	r.mu.Unlock()
 	if r.env.Output != nil {
 		r.env.Output.Attend(
@@ -470,12 +521,19 @@ func (r *Receiver) fromPage(c *websocket.Conn, f frame) {
 		var h struct {
 			Type             string   `json:"type"`
 			ActiveNamespaces []string `json:"activeNamespaces"`
+			Level            *float64 `json:"level"`
+			Muted            *bool    `json:"muted"`
 		}
-		if json.Unmarshal([]byte(f.Data), &h) != nil || h.Type != "ready" {
+		if json.Unmarshal([]byte(f.Data), &h) != nil {
 			return
 		}
-		r.ready(c, app, h.ActiveNamespaces)
-		r.pictured()
+		switch h.Type {
+		case "ready":
+			r.ready(c, app, h.ActiveNamespaces)
+			r.pictured()
+		case "setvolume":
+			r.setVolume(h.Level, h.Muted)
+		}
 		return
 	case cast.NSMedia:
 		r.watch(f.Data)
@@ -555,10 +613,49 @@ func (r *Receiver) ready(c *websocket.Conn, app cast.Application, namespaces []s
 		return
 	}
 	_ = c.WriteJSON(reply)
+	if v, ok := r.volume(); ok {
+		_ = c.WriteJSON(v)
+	}
 	for _, f := range r.pending {
 		_ = c.WriteJSON(f)
 	}
 	r.pending = nil
+}
+
+func (r *Receiver) volume() (frame, bool) {
+	if r.env.Volume == nil {
+		return frame{}, false
+	}
+	muted := r.env.Muted != nil && r.env.Muted()
+	return system(map[string]any{
+		"type":  "volumechanged",
+		"level": float64(r.env.Volume()) / 100,
+		"muted": muted,
+	}), true
+}
+
+func (r *Receiver) setVolume(level *float64, muted *bool) {
+	if level != nil && r.env.SetVolume != nil {
+		r.env.SetVolume(int(math.Round(*level * 100)))
+	}
+	if muted != nil && r.env.SetMuted != nil {
+		r.env.SetMuted(*muted)
+	}
+}
+
+func (r *Receiver) volumeMoved() {
+	v, ok := r.volume()
+	if !ok {
+		return
+	}
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	if r.page == nil {
+		return
+	}
+	if err := r.page.WriteJSON(v); err != nil {
+		slog.Debug("the cast page did not take a message", "err", err)
+	}
 }
 
 func (r *Receiver) watch(data string) {

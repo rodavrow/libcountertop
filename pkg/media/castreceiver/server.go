@@ -42,6 +42,7 @@ type Config struct {
 	AppDir          string
 	Oracle          func() string
 	Bundle          func() string
+	Forecast        func() string
 	Synced          func(do func()) (stop func())
 	Credentials     func(*cast.Credentials)
 	Notice          func(title, body string)
@@ -125,6 +126,7 @@ func (s *Server) keyed(name string) error {
 	k.oracle = s.config.Oracle
 	k.bundle = s.config.Bundle
 	k.cloud = s.cloud
+	k.forecast = s.config.Forecast
 	k.synced = s.config.Synced
 	k.changed = s.config.Credentials
 	s.config.Credentials(k.Current())
@@ -136,6 +138,13 @@ func (s *Server) Prepare() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	return s.keyed(s.config.Name())
+}
+
+func (s *Server) profileFor(c *cast.Credentials) cast.Profile {
+	if s.config.Video == nil || cast.AudioOnly(c) {
+		return cast.SmartSpeaker
+	}
+	return cast.SmartDisplay
 }
 
 func (s *Server) Up() error {
@@ -156,16 +165,26 @@ func (s *Server) Up() error {
 		return fmt.Errorf("cast: listening on %d: %w", cast.Port, err)
 	}
 
-	profile := cast.SmartDisplay
-	if s.config.Video == nil {
-		profile = cast.SmartSpeaker
-	}
-	device := cast.Identify(s.config.Hardware(), name, s.config.Model, profile)
+	device := cast.Identify(
+		s.config.Hardware(),
+		name,
+		s.config.Model,
+		s.profileFor(s.keys.Current()),
+	)
 
 	advert, err := cast.NewAdvertiser(device, cast.Port)
 	if err != nil {
 		_ = listener.Close()
 		return err
+	}
+
+	s.keys.changed = func(c *cast.Credentials) {
+		d := advert.Device()
+		d.Profile = s.profileFor(c)
+		advert.Update(d)
+		if s.config.Credentials != nil {
+			s.config.Credentials(c)
+		}
 	}
 
 	service := cast.NewService(cast.NewReceiver(name))
@@ -206,7 +225,7 @@ func (s *Server) Up() error {
 	service.Receiver.Volume = s.loud.asked
 	service.Receiver.Credentials = s.keys.Current
 	service.Receiver.CRL = s.keys.CRL
-	service.Receiver.Identity = func() cast.Device { return device }
+	service.Receiver.Identity = advert.Device
 	service.Receiver.Available = s.refused.allows
 	service.Receiver.Refused = s.tellRefused
 	if s.protocols == nil {
@@ -230,7 +249,7 @@ func (s *Server) Up() error {
 	}
 	started := time.Now()
 	service.Receiver.Eureka = func() cast.Eureka {
-		e := cast.NewEureka(device, s.config.Manufacturer, s.config.Version)
+		e := cast.NewEureka(advert.Device(), s.config.Manufacturer, s.config.Version)
 		e.IP = s.config.Address()
 		e.Timezone = s.config.Timezone()
 		e.Uptime = time.Since(started).Seconds()
@@ -309,15 +328,41 @@ func (s *Server) Up() error {
 func (s *Server) env(name string, device cast.Device) cast.Env {
 	v := s.config.Volume
 	return cast.Env{
-		Name:      name,
-		Model:     s.config.Model,
-		Device:    device,
-		HTTP:      fetch.Client(30 * time.Second),
-		Long:      fetch.Client(0),
-		Cloud:     s.cloud,
-		Video:     s.config.Video,
+		Name:   name,
+		Model:  s.config.Model,
+		Device: device,
+		HTTP:   fetch.Client(30 * time.Second),
+		Long:   fetch.Client(0),
+		Cloud:  s.cloud,
+		Video:  s.config.Video,
+		Attest: func(ctx context.Context, appID, sessionID, privateData, claimTemplate string) (map[string]string, error) {
+			base := s.config.Forecast()
+			if base == "" {
+				return nil, errors.New("cast: no forecast signer configured")
+			}
+			f := cast.Forecast{URL: base, Client: fetch.Client(30 * time.Second)}
+			peer, key, err := cast.NewPeer(name, time.Now())
+			if err != nil {
+				return nil, err
+			}
+			creds, _, err := f.Sign(ctx, peer, nil, []cast.Hash{cast.SHA256}, key)
+			if err != nil {
+				return nil, fmt.Errorf("cast: forecast identity: %w", err)
+			}
+			return cast.AttestHeaders(ctx, cast.AttestInput{
+				DeviceID:      device.ID,
+				AppID:         appID,
+				SessionID:     sessionID,
+				Prod:          "chromecast",
+				PrivateData:   privateData,
+				ClaimTemplate: claimTemplate,
+				Creds:         creds,
+			}, f.SignInput)
+		},
 		Volume:    v.Level,
+		Muted:     v.Muted,
 		SetVolume: v.SetLevel,
+		SetMuted:  v.Mute,
 		VolumeChanged: func(do func()) func() {
 			return v.Listen(func(int) { do() })
 		},

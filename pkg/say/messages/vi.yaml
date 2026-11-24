@@ -392,12 +392,18 @@ camera.muted: Micrô đang tắt tiếng
 camera.shutter: Cửa chập camera đang đóng
 cast.entity.receiver: Bộ nhận Cast
 cast.entity.youtube.skip: Danh mục YouTube SponsorBlock
+cast.entity.oracle: Cast oracle
+cast.entity.bundle: Cast bundle
+cast.entity.forecast: Cast forecast
 cast.group.cast: Cast
 cast.starting: Đang khởi động {{.Name}}…
 cast.refused: "Chromecast: {{.Name}} không thể phát trên thiết bị này"
 cast.setting.receiver: Bộ nhận
 cast.example.youtube.skip: sponsor, selfpromo, intro
 cast.setting.youtube.skip: Danh mục SponsorBlock
+cast.setting.oracle: Oracle
+cast.setting.bundle: Bundle
+cast.setting.forecast: Forecast
 chime.chirp: Líu lo
 chime.ding: Keng
 chime.none: Không

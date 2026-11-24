@@ -1,6 +1,7 @@
 package cast
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/ygelfand/libcountertop/pkg/media/cast/preferences"
@@ -21,7 +22,9 @@ type Env struct {
 	Video func() playback.Target
 
 	Volume        func() int
+	Muted         func() bool
 	SetVolume     func(level int)
+	SetMuted      func(on bool)
 	VolumeChanged func(do func()) (stop func())
 
 	Publish   func(control Controls, p *Published)
@@ -36,6 +39,8 @@ type Env struct {
 	Resample func(from int) func(stereo []int16) []int16
 
 	Preferences preferences.Provider
+
+	Attest func(ctx context.Context, appID, sessionID, privateData, claimTemplate string) (map[string]string, error)
 }
 
 type Kept interface {

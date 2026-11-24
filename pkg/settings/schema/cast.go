@@ -5,8 +5,9 @@ import "encoding/json"
 type Cast struct {
 	Receiver bool `json:"receiver"`
 
-	Oracle string `json:"oracle,omitempty"`
-	Bundle string `json:"bundle,omitempty"`
+	Oracle   string `json:"oracle,omitempty"`
+	Bundle   string `json:"bundle,omitempty"`
+	Forecast string `json:"forecast,omitempty"`
 
 	YouTube YouTube `json:"youtube,omitzero"`
 }

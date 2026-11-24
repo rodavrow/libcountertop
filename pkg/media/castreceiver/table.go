@@ -43,6 +43,16 @@ func rows(table func() *Table) []Setting {
 			},
 		}
 	}
+	url := func(name, id string, field func(*schema.Cast) *string) Setting {
+		return Setting{
+			Name: name, Group: Group, ID: id, Icon: "mdi:certificate", Kind: setting.Text,
+			Read: func(c *schema.Cast) string { return *field(c) },
+			Write: func(c *schema.Cast, v string) error {
+				*field(c) = strings.TrimSpace(v)
+				return nil
+			},
+		}
+	}
 	return []Setting{
 		toggle("receiver", Group, "mdi:cast", func(c *schema.Cast) *bool { return &c.Receiver }),
 		{
@@ -57,5 +67,8 @@ func rows(table func() *Table) []Setting {
 				return nil
 			},
 		},
+		url("oracle", "cast_oracle", func(c *schema.Cast) *string { return &c.Oracle }),
+		url("bundle", "cast_bundle", func(c *schema.Cast) *string { return &c.Bundle }),
+		url("forecast", "cast_forecast", func(c *schema.Cast) *string { return &c.Forecast }),
 	}
 }

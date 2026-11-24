@@ -51,6 +51,9 @@ var Shared = Coverage{
 		"Photos.Immich.Memories":    "photos.immich.memories",
 		"Cast.Receiver":             "cast.receiver",
 		"Cast.YouTube.Skip":         "cast.youtube.skip",
+		"Cast.Oracle":               "cast.oracle",
+		"Cast.Bundle":               "cast.bundle",
+		"Cast.Forecast":             "cast.forecast",
 		"Sendspin.Enabled":          "media.sendspin",
 		"AirPlay.Enabled":           "media.airplay",
 		"AirPlay.Audio":             "media.airplay_audio_mode",
@@ -258,8 +261,6 @@ var Shared = Coverage{
 		"Screen.Volume": "not wired yet",
 		"Time.Home":     "not wired yet",
 		"Time.Chosen":   "not wired yet",
-		"Cast.Oracle":   "Home Assistant's text entity",
-		"Cast.Bundle":   "Home Assistant's text entity",
 
 		"YouTubeAccounts.Device":   "the YouTube app's sign-in device id, made at the first sign-in",
 		"YouTubeAccounts.Chosen":   "the YouTube app's account picker",

@@ -96,6 +96,10 @@ func (w CastWriter) Bundle(url string) error {
 	return w.s.Update(func(c *Cast) { c.Bundle = url })
 }
 
+func (w CastWriter) Forecast(url string) error {
+	return w.s.Update(func(c *Cast) { c.Forecast = url })
+}
+
 type LoungeWriter struct{ s storage.Section[Lounge] }
 
 func NewLoungeWriter(s storage.Section[Lounge]) LoungeWriter { return LoungeWriter{s: s} }

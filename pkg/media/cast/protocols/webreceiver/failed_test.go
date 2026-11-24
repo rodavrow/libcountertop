@@ -22,7 +22,7 @@ func TestAStreamTheServerClosedEndsAndABrokenOneErrs(t *testing.T) {
 	srv := httptest.NewServer(r.handler())
 	defer srv.Close()
 	c, _, err := websocket.DefaultDialer.Dial(
-		"ws"+strings.TrimPrefix(srv.URL, "http")+"/media",
+		"ws"+strings.TrimPrefix(srv.URL, "http")+"/countertop-bridge",
 		nil,
 	)
 	if err != nil {

@@ -118,6 +118,7 @@ func TestTheSwitchIsPublished(t *testing.T) {
 		"youtube_sponsorblock",
 		"cast_oracle",
 		"cast_bundle",
+		"cast_forecast",
 		"cast_credentials",
 		"cast_credentials_expire",
 	}

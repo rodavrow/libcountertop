@@ -391,12 +391,18 @@ camera.muted: Microphones are muted
 camera.shutter: Camera shutter is closed
 cast.entity.receiver: Cast receiver
 cast.entity.youtube.skip: YouTube SponsorBlock categories
+cast.entity.oracle: Cast oracle
+cast.entity.bundle: Cast bundle
+cast.entity.forecast: Cast forecast
 cast.group.cast: Cast
 cast.starting: Starting {{.Name}}…
 cast.refused: "Chromecast: {{.Name}} can't play on this device"
 cast.setting.receiver: Receiver
 cast.example.youtube.skip: sponsor, selfpromo, intro
 cast.setting.youtube.skip: SponsorBlock categories
+cast.setting.oracle: Oracle
+cast.setting.bundle: Bundle
+cast.setting.forecast: Forecast
 chime.chirp: Chirp
 chime.ding: Ding
 chime.none: None

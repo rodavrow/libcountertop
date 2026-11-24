@@ -44,6 +44,7 @@ type keys struct {
 	changed  func(*cast.Credentials)
 	oracle   func() string
 	bundle   func() string
+	forecast func() string
 	synced   func(do func()) (stop func())
 	cloud    func() bool
 
@@ -223,6 +224,11 @@ func (k *keys) step(ctx context.Context, bundle, oracle string) time.Duration {
 			return wait
 		}
 	}
+	if oracle == "" && k.forecast != nil {
+		if url := k.forecast(); url != "" {
+			return k.fromForecast(ctx, url)
+		}
+	}
 	wait := k.fromOracle(ctx, oracle)
 	if k.dry.url == bundle && !k.dry.until.IsZero() {
 		wait = min(wait, time.Until(k.dry.until))
@@ -271,6 +277,40 @@ func (k *keys) loadBundle(ctx context.Context, url string) (*cast.Bundle, error)
 		slog.Warn("removing the kept cast bundle", "err", err)
 	}
 	return k.fetchBundle(ctx, url)
+}
+
+func (k *keys) fromForecast(ctx context.Context, url string) time.Duration {
+	now := time.Now()
+	h := k.held.Load()
+	if h.creds.Remote && h.from == url && now.Before(h.creds.NotAfter) {
+		return h.creds.NotAfter.Sub(now)
+	}
+
+	peer, key, err := cast.NewPeer(k.name, now)
+	if err != nil {
+		slog.Warn("making a cast forecast peer", "err", err)
+		return retry
+	}
+	f := cast.Forecast{URL: url, Client: fetch.Client(30 * time.Second)}
+	creds, theirs, err := f.Sign(ctx, peer, nil, []cast.Hash{cast.SHA1, cast.SHA256}, key)
+	if err != nil {
+		slog.Warn("asking the cast forecast", "err", err)
+		return retry
+	}
+	if until := now.Add(cast.PeerLife); until.Before(creds.NotAfter) {
+		creds.NotAfter = until
+	}
+	if d := now.Sub(theirs); d > drift || d < -drift {
+		slog.Warn("the clock disagrees with the cast forecast", "ours", now, "theirs", theirs)
+	}
+	if !creds.NotAfter.After(theirs) {
+		slog.Warn("the cast forecast certificate is not current",
+			"notAfter", creds.NotAfter, "now", theirs)
+		return retry
+	}
+
+	k.set(creds, url)
+	return creds.NotAfter.Sub(now)
 }
 
 func (k *keys) fromOracle(ctx context.Context, url string) time.Duration {
