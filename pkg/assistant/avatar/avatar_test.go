@@ -418,6 +418,23 @@ func TestAStalledPictureFallsBackUntilTheNextWake(t *testing.T) {
 	}
 }
 
+func TestASlowFirstKeyframeIsNotAStall(t *testing.T) {
+	r := newRig(t, always())
+	r.connect(t)
+	box := display.Rect{W: 10, H: 10}
+
+	for range 40 {
+		r.clock.pass(100 * time.Millisecond)
+		r.a.Showing(0)
+		r.a.reconcile()
+	}
+	r.peer().show(rtc.Frame{Key: true})
+
+	if !r.a.Place(0, box, true) {
+		t.Fatal("a picture that took four seconds to arrive is not shown")
+	}
+}
+
 func TestOtherVideoTakesTheScreen(t *testing.T) {
 	r := newRig(t, always())
 	r.connect(t)
