@@ -25,6 +25,7 @@ type fakeAvatar struct {
 	primed             int
 	held               int
 	released           bool
+	began              int
 }
 
 func (a *fakeAvatar) Wants(int) bool { return a.wants }
@@ -39,6 +40,7 @@ func (a *fakeAvatar) Held() (int, bool) {
 	}
 	return a.held - 1, true
 }
+func (a *fakeAvatar) Began() { a.began++ }
 func (a *fakeAvatar) Release() bool {
 	had := a.held != 0
 	a.held, a.released = 0, true
@@ -183,4 +185,16 @@ func TestNothingIsHeldWithoutAvatars(t *testing.T) {
 	if _, ok := s.Held(); ok || s.Release() {
 		t.Fatal("held without avatars")
 	}
+}
+
+func TestAShowBeginningIsPassedToTheAvatars(t *testing.T) {
+	av := &fakeAvatar{held: 1}
+	s := NewStage(StageDependencies{Wake: plainLook{schema.LookFull}, Avatar: av})
+
+	s.Began()
+
+	if av.began != 1 {
+		t.Fatalf("began %d, want 1", av.began)
+	}
+	NewStage(StageDependencies{Wake: plainLook{schema.LookFull}}).Began()
 }

@@ -117,6 +117,8 @@ type Stage interface {
 	Held() (assistant.Showing, bool)
 	// Release lets the held avatar go and reports whether one was held.
 	Release() bool
+	// Began says a turn's or announcement's show is on screen.
+	Began()
 }
 
 type Weather interface {

@@ -14,7 +14,10 @@ type hold struct {
 	mu sync.Mutex
 	on bool
 	// slot is the held avatar, -1 for none.
-	slot  int
+	slot int
+	// next is that a later turn or announcement has arrived; the held avatar stays up until
+	// that one's show begins, which can be a second or more after it arrives.
+	next  bool
 	until time.Time
 	// speaking counts avatar replies under way; the safety timeout waits for them.
 	speaking int
@@ -80,7 +83,7 @@ func (a *Avatars) spoke(slot int) {
 		return
 	}
 	changed := h.slot != slot
-	h.slot, h.until = slot, a.now().Add(a.timing.hold)
+	h.slot, h.next, h.until = slot, false, a.now().Add(a.timing.hold)
 	h.mu.Unlock()
 	if changed {
 		slog.Info("avatar held", "slot", slot+1)
@@ -98,13 +101,39 @@ func (a *Avatars) heldSlot() int {
 	return h.slot
 }
 
+// arrived notes that a later turn or announcement has arrived for the avatar held, if any.
+func (a *Avatars) arrived() {
+	h := &a.hold
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	if h.on && h.slot >= 0 {
+		h.next = true
+	}
+}
+
+// Began tells the avatars that a turn's or announcement's show is on screen. A held avatar
+// waiting for one is let go, as that show takes its place; a show the hold was made under,
+// still up after its reply ended, changes nothing. Call it on every frame a show is drawn.
+func (a *Avatars) Began() {
+	h := &a.hold
+	h.mu.Lock()
+	slot := -1
+	if h.on && h.next {
+		slot = h.slot
+	}
+	h.mu.Unlock()
+	if slot >= 0 {
+		a.letGo(slot, "the next turn or announcement")
+	}
+}
+
 // letGo stops holding slot, if it is the one held, and reports whether it was.
 func (a *Avatars) letGo(slot int, why string) bool {
 	h := &a.hold
 	h.mu.Lock()
 	had := slot >= 0 && h.slot == slot
 	if had {
-		h.slot = -1
+		h.slot, h.next = -1, false
 	}
 	h.mu.Unlock()
 	if had {

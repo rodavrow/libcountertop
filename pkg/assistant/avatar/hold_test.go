@@ -308,21 +308,26 @@ func TestReleasingAHeldAvatarThatIsNotOnScreenTakesNoTouch(t *testing.T) {
 	}
 }
 
-// The reply ends while its show is still on screen, and the screen redraws at once; the hold
-// must last until the next turn or announcement wakes an avatar.
-func TestAHoldLastsUntilTheNextTurnOrAnnouncement(t *testing.T) {
+// The reply ends while its show is still on screen, and the next line arrives a second or more
+// before its own show starts. The held avatar stays up through both, until that show begins.
+func TestAHoldLastsUntilTheNextShowBegins(t *testing.T) {
 	r := newRig(t, always())
 	r.connect(t)
 	holdOn(r)
 	spokeOnScreen(t, r)
 
-	r.a.Chosen(1, true)
+	r.a.Began()
 	if _, ok := r.a.Held(); !ok {
-		t.Fatal("naming the next announcement's assistant let the held avatar go")
+		t.Fatal("the show the reply was held under let it go")
 	}
+	r.a.Chosen(1, true)
 	r.a.Wake(1)
+	if _, ok := r.a.Held(); !ok {
+		t.Fatal("the next announcement arriving let the held avatar go before its show")
+	}
+	r.a.Began()
 
 	if _, ok := r.a.Held(); ok {
-		t.Fatal("still held after the next turn began")
+		t.Fatal("still held after the next show began")
 	}
 }

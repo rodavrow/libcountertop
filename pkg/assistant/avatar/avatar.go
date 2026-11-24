@@ -262,8 +262,9 @@ func (a *Avatars) Wants(slot int) bool {
 // Wake holds slot's session open for a turn or an announcement, opening it if need be; every
 // Wake is paired with a Rest.
 func (a *Avatars) Wake(slot int) {
-	// A turn or announcement beginning takes over from an avatar held since the last one.
-	a.letGo(a.heldSlot(), "the next turn or announcement")
+	// A turn or announcement arriving takes over from an avatar held since the last one, once
+	// its show begins.
+	a.arrived()
 	a.open(slot)
 }
 
