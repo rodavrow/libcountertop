@@ -242,3 +242,5 @@ func (w SharedWriter[C]) Weather() WeatherWriter     { return NewWeatherWriter(w
 func (w SharedWriter[C]) Announcements() AnnouncementsWriter {
 	return NewAnnouncementsWriter(w.s.Wake)
 }
+
+func (w SharedWriter[C]) Captions() CaptionsWriter { return NewCaptionsWriter(w.s.Wake) }

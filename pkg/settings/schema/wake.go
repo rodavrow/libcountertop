@@ -14,6 +14,9 @@ type Wake struct {
 
 	// An announcement Home Assistant pushes is shown as a reply.
 	AnimateAnnouncements bool `json:"animate_announcements"`
+
+	// What an assistant heard and replies is shown as text.
+	ShowCaptions bool `json:"show_captions"`
 }
 
 type Stop struct {
@@ -39,6 +42,7 @@ func DefaultWake() Wake {
 		Stop:                 DefaultStop(),
 		Arbitration:          DefaultArbitration,
 		AnimateAnnouncements: true,
+		ShowCaptions:         true,
 	}
 }
 

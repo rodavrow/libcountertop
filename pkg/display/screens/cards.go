@@ -19,9 +19,17 @@ const priorityNotice = 20
 func (a *App) showing() (assistant.Showing, bool) {
 	if show, ok := a.o.Assistant.Now(); ok {
 		a.o.Stage.Began(show.Slot)
-		return show, true
+		return a.captioned(show), true
 	}
 	return a.o.Stage.Held()
+}
+
+// captioned is the show with its text, or without it when captions are switched off.
+func (a *App) captioned(show assistant.Showing) assistant.Showing {
+	if a.o.Captions != nil && !a.o.Captions() {
+		show.Said, show.Reply = "", ""
+	}
+	return show
 }
 
 func (a *App) assistantPanel(w *gogui.Window) gogui.View {

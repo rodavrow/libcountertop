@@ -181,6 +181,8 @@ type Options struct {
 	Messages  *message.Messages
 	Assistant *assistant.Assistant
 	Stage     Stage
+	// Captions tells whether what was heard and the reply are shown as text; nil shows them.
+	Captions func() bool
 	Badge     func(id, name string, size float32) gogui.View
 	Timers    *timer.Timers
 	Poster    *poster.Poster
