@@ -428,6 +428,14 @@ func (w AnnouncementsWriter) Animate(on bool) error {
 	return w.s.Update(func(c *Wake) { c.AnimateAnnouncements = on })
 }
 
+type CaptionsWriter struct{ s storage.Section[Wake] }
+
+func NewCaptionsWriter(s storage.Section[Wake]) CaptionsWriter { return CaptionsWriter{s: s} }
+
+func (w CaptionsWriter) Show(on bool) error {
+	return w.s.Update(func(c *Wake) { c.ShowCaptions = on })
+}
+
 type PryonWriter struct{ s storage.Section[Wake] }
 
 func NewPryonWriter(s storage.Section[Wake]) PryonWriter { return PryonWriter{s: s} }

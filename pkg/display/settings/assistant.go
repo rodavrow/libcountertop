@@ -60,6 +60,9 @@ type AssistantDependencies struct {
 
 	// Announcements switches showing pushed speech as a reply.
 	Announcements Switch
+
+	// Captions switches showing what was heard and the reply as text.
+	Captions Switch
 }
 
 type pipeline struct {
@@ -172,6 +175,19 @@ func (p *AssistantPages) Page() *shell.Page {
 				acts = append(acts, func(int) {
 					if err := announcements.Set(!on); err != nil {
 						slog.Error("switching animated announcements failed", "err", err)
+					}
+				})
+			}
+			if captions := p.options.Captions; captions != nil {
+				on := captions.On()
+				rows = append(rows, menu.Row{
+					Label: say.T("assistants.setting.show_captions"),
+					Kind:  menu.Toggle,
+					On:    on,
+				})
+				acts = append(acts, func(int) {
+					if err := captions.Set(!on); err != nil {
+						slog.Error("switching captions failed", "err", err)
 					}
 				})
 			}
