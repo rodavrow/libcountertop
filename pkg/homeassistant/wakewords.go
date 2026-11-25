@@ -74,6 +74,13 @@ func slotSelect(mac, base string, slot int) string {
 	return findSelect(mac, base, slot) + `{{ ns.e }}`
 }
 
+// selectOption is an option only Home Assistant's own select of that kind offers. Other selects
+// of the device may have ids that end the same way.
+var selectOption = map[string]string{
+	"_assistant": PreferredPipeline,
+	"_wake_word": NoWakeWord,
+}
+
 func findSelect(mac, base string, slot int) string {
 	suffix := base
 	if slot > 0 {
@@ -81,6 +88,7 @@ func findSelect(mac, base string, slot int) string {
 	}
 	return `{%- set ns = namespace(e='') -%}` +
 		`{%- for e in integration_entities('esphome') if e is match('select[.].*` + suffix + `$') and '` +
-		strings.ToLower(mac) + `' in (device_attr(e, 'connections') | string) -%}` +
+		strings.ToLower(mac) + `' in (device_attr(e, 'connections') | string) and '` +
+		selectOption[base] + `' in (state_attr(e, 'options') or []) -%}` +
 		`{%- set ns.e = e -%}{%- endfor -%}`
 }
