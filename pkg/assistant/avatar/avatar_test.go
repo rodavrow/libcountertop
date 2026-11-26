@@ -139,6 +139,12 @@ type liveTalking struct {
 	failing int
 	// gate holds the clip's first bytes back until it is closed.
 	gate chan struct{}
+	// clip replaces the clip's body, served as audio/wav; pause holds its second half back until
+	// it is closed, as Home Assistant does while a tool runs.
+	clip  []byte
+	pause chan struct{}
+	// holding is /is_speaking's holding flag.
+	holding bool
 }
 
 func (lt *liveTalking) set(f func(*liveTalking)) {
@@ -150,17 +156,28 @@ func (lt *liveTalking) set(f func(*liveTalking)) {
 func (lt *liveTalking) handler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/clip.mp3" {
 		lt.mu.Lock()
-		gate := lt.gate
+		gate, clip, pause := lt.gate, lt.clip, lt.pause
 		lt.mu.Unlock()
 		if gate != nil {
 			<-gate
 		}
+		if clip == nil {
+			_, _ = io.WriteString(w, "ID3 clip")
+			return
+		}
+		w.Header().Set("Content-Type", "audio/wav")
+		half := len(clip) / 2
+		_, _ = w.Write(clip[:half])
+		w.(http.Flusher).Flush()
+		if pause != nil {
+			<-pause
+		}
+		_, _ = w.Write(clip[half:])
+		return
 	}
 	lt.mu.Lock()
 	defer lt.mu.Unlock()
 	switch r.URL.Path {
-	case "/clip.mp3":
-		_, _ = io.WriteString(w, "ID3 clip")
 	case "/offer":
 		var o offerRequest
 		_ = json.NewDecoder(r.Body).Decode(&o)
@@ -191,7 +208,8 @@ func (lt *liveTalking) handler(w http.ResponseWriter, r *http.Request) {
 		if lt.reply != "" {
 			reply = `"` + lt.reply + `"`
 		}
-		_, _ = fmt.Fprintf(w, `{"code":0,"data":%t,"reply_id":%s}`, lt.speaking, reply)
+		_, _ = fmt.Fprintf(w, `{"code":0,"data":%t,"reply_id":%s,"holding":%t}`,
+			lt.speaking, reply, lt.holding)
 	default:
 		http.NotFound(w, r)
 	}

@@ -131,10 +131,29 @@ func TestTheStatusNamesTheOpenStreamedReply(t *testing.T) {
 	} {
 		s := serve(t, func(w http.ResponseWriter, _ *http.Request) { _, _ = io.WriteString(w, body) })
 
-		on, reply, err := s.status(context.Background(), "42")
+		st, err := s.status(context.Background(), "42")
 
-		if err != nil || !on || reply != want {
-			t.Errorf("%s: speaking %v, reply %q, err %v; want %q", body, on, reply, err, want)
+		if err != nil || !st.on || st.reply != want {
+			t.Errorf("%s: speaking %v, reply %q, err %v; want %q", body, st.on, st.reply, err, want)
+		}
+	}
+}
+
+// A reply paused at its source is holding; the last of the audio before the pause still plays,
+// so holding counts only once it has.
+func TestTheStatusSaysWhenTheReplyIsHolding(t *testing.T) {
+	for body, want := range map[string]bool{
+		`{"code":0,"data":false,"reply_id":"r1","holding":true}`:  true,
+		`{"code":0,"data":true,"reply_id":"r1","holding":true}`:   false,
+		`{"code":0,"data":false,"reply_id":"r1","holding":false}`: false,
+		`{"code":0,"data":false,"reply_id":"r1"}`:                 false,
+	} {
+		s := serve(t, func(w http.ResponseWriter, _ *http.Request) { _, _ = io.WriteString(w, body) })
+
+		st, err := s.status(context.Background(), "42")
+
+		if err != nil || st.holding != want {
+			t.Errorf("%s: holding %v, err %v; want %v", body, st.holding, err, want)
 		}
 	}
 }

@@ -3,9 +3,7 @@ package avatar
 import (
 	"context"
 	"fmt"
-	"io"
 	"log/slog"
-	"net/http"
 	"time"
 
 	"github.com/ygelfand/libcountertop/pkg/settings/schema"
@@ -22,8 +20,8 @@ func (a *Avatars) Fed(slot int) bool {
 	return ok && cfg.Ready() && cfg.Fed
 }
 
-// speakFed follows a reply Home Assistant streams into the session itself, and the device
-// speaks the rest of the clip at url when the stream breaks off. With no streamed reply open
+// speakFed follows a reply Home Assistant streams into the session itself. When the stream breaks
+// off, it returns the rest of the clip at url for the device to speak. With no streamed reply open
 // (a cached reply, an announcement, a chat line) the clip goes to the avatar as before.
 func (a *Avatars) speakFed(
 	ctx context.Context,
@@ -34,81 +32,81 @@ func (a *Avatars) speakFed(
 	url string,
 	sink Sink,
 	started func(),
-) (handled bool, from time.Duration, err error) {
+) (handled bool, rest []int16, err error) {
 	srv := a.server(cfg)
 	// Listen before deciding: a streamed reply may already be speaking.
 	sp := newSpeech(sink, started, a.now)
 	if a.attach(l, gen, sp) == nil {
 		slog.Info("avatar session changed, speaking locally", "slot", l.slot+1)
-		return false, 0, nil
+		return false, nil, nil
 	}
 
-	reply := a.openReply(ctx, l, srv, id, url)
+	b := a.fetchBackup(ctx, url, a.timing.backup)
+	defer b.stop()
+	reply := a.openReply(ctx, l, srv, id, b)
 	if ctx.Err() != nil {
 		sp.stop(true)
 		a.detach(l, sp)
 		interruptNow(srv, id, l.slot)
-		return true, 0, nil
+		return true, nil, nil
 	}
 	if reply == "" {
 		sp.stop(false)
 		a.detach(l, sp)
+		b.stop()
 		slog.Info("no streamed avatar reply, sending the clip", "slot", l.slot+1)
 		handled, err = a.speakClip(ctx, l, cfg, id, gen, url, sink, started)
-		return handled, 0, err
+		return handled, nil, err
 	}
-	defer a.detach(l, sp)
 	l.follows(reply)
 	slog.Info("avatar following the streamed reply", "slot", l.slot+1, "reply", reply)
-	return a.followFed(ctx, l, srv, id, gen, reply, sp)
+	handled, from, err := a.followFed(ctx, l, srv, id, gen, reply, sp)
+	a.detach(l, sp)
+	if handled {
+		return true, nil, err
+	}
+	rest, err = b.rest(ctx, from)
+	switch {
+	case err == nil:
+		return false, rest, nil
+	case ctx.Err() != nil:
+		return true, nil, nil
+	case from == 0:
+		// Nothing was said yet: the device fetches the clip again itself.
+		slog.Warn("avatar backup clip", "slot", l.slot+1, "err", err)
+		return false, nil, nil
+	default:
+		// What the avatar said is not said again, so the rest of this reply is lost.
+		slog.Warn("avatar backup clip lost, the rest of the reply is not spoken",
+			"slot", l.slot+1, "from", from, "err", err)
+		return true, nil, err
+	}
 }
 
 // openReply is the new streamed reply open on the session, or empty for none. It asks once the
 // clip's first bytes arrive: ha-vam opens its stream before Home Assistant has them, so a reply
 // not open by then is not fed at all. One already followed is an earlier reply's.
-func (a *Avatars) openReply(ctx context.Context, l *link, srv server, id, url string) string {
-	if err := a.firstBytes(ctx, url); err != nil && ctx.Err() == nil {
-		slog.Warn("avatar backup clip", "slot", l.slot+1, "err", err)
-	}
-	if ctx.Err() != nil {
+func (a *Avatars) openReply(ctx context.Context, l *link, srv server, id string, b *backup) string {
+	select {
+	case <-b.first:
+	case <-ctx.Done():
 		return ""
 	}
 	pctx, cancel := context.WithTimeout(ctx, time.Second)
 	defer cancel()
-	_, reply, err := srv.status(pctx, id)
+	st, err := srv.status(pctx, id)
 	if err != nil {
 		slog.Warn("avatar status", "slot", l.slot+1, "err", err)
 		return ""
 	}
-	if reply == l.lastFollowed() {
+	if st.reply == l.lastFollowed() {
 		return ""
 	}
-	return reply
+	return st.reply
 }
 
-// firstBytes waits until the clip at url starts to arrive.
-func (a *Avatars) firstBytes(ctx context.Context, url string) error {
-	ctx, cancel := context.WithTimeout(ctx, a.timing.backup)
-	defer cancel()
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
-	if err != nil {
-		return err
-	}
-	resp, err := a.o.Client.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("%s: %s", url, resp.Status)
-	}
-	var one [1]byte
-	_, err = io.ReadFull(resp.Body, one[:])
-	return err
-}
-
-// followFed plays the streamed reply until LiveTalking closes it. When it breaks off, the device
-// takes over from a little before where the voice stopped.
+// followFed plays the streamed reply until LiveTalking closes it. When it breaks off, from is how
+// far into the clip the device should take over, a little before where the voice stopped.
 func (a *Avatars) followFed(
 	ctx context.Context,
 	l *link,
@@ -131,6 +129,8 @@ func (a *Avatars) followFed(
 		return false, from, nil
 	}
 	failed := 0
+	// held is when the reply was last seen paused at its source: its silence is not a dropout.
+	var held time.Time
 	for {
 		select {
 		case <-ctx.Done():
@@ -146,7 +146,7 @@ func (a *Avatars) followFed(
 		}
 		a.sync(l, sp)
 		pctx, cancel := context.WithTimeout(ctx, time.Second)
-		on, open, err := srv.status(pctx, id)
+		st, err := srv.status(pctx, id)
 		cancel()
 		if err != nil {
 			if failed++; failed >= failedPolls {
@@ -155,8 +155,12 @@ func (a *Avatars) followFed(
 			continue
 		}
 		failed = 0
+		if st.holding && st.reply == reply {
+			held = now
+			continue
+		}
 		switch {
-		case first.IsZero() && now.Sub(opened) > a.timing.fedFirstSound:
+		case first.IsZero() && now.Sub(later(opened, held)) > a.timing.fedFirstSound:
 			slog.Warn(
 				"avatar sent no sound for the streamed reply, speaking locally",
 				"slot",
@@ -168,20 +172,27 @@ func (a *Avatars) followFed(
 		case now.Sub(opened) > a.timing.most:
 			interrupt()
 			return true, 0, fmt.Errorf("avatar: still speaking after %s", a.timing.most)
-		case open != reply:
+		case st.reply != reply:
 			// LiveTalking closes the reply once its last frame has played; the tail may still be
 			// on its way.
 			if first.IsZero() {
 				return false, 0, nil
 			}
-			if on || now.Sub(last) < a.timing.quiet {
+			if st.on || now.Sub(last) < a.timing.quiet {
 				continue
 			}
 			return true, 0, nil
 		case first.IsZero():
 			continue
-		case now.Sub(last) > a.timing.fedSilent:
+		case now.Sub(later(last, held)) > a.timing.fedSilent:
 			return brokeOff("silent")
 		}
 	}
+}
+
+func later(a, b time.Time) time.Time {
+	if b.After(a) {
+		return b
+	}
+	return a
 }
