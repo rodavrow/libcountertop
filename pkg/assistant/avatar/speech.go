@@ -55,8 +55,9 @@ type speech struct {
 	loudAt  time.Time
 	started func()
 	delayed time.Duration
-	// handed is how much of the reply went to the voice lane.
-	handed time.Duration
+	// handed is how much of the reply went to the voice lane; flowingAt is when it started to.
+	handed    time.Duration
+	flowingAt time.Time
 }
 
 func newSpeech(sink Sink, started func(), now func() time.Time) *speech {
@@ -96,7 +97,7 @@ func (s *speech) hear(pcm []int16) {
 	if s.heldFor < jitter {
 		return
 	}
-	s.flowing = true
+	s.flowing, s.flowingAt = true, now
 	// The reply starts when its sound does, after the jitter buffer, so captions match it.
 	if s.started != nil {
 		s.started()
@@ -133,6 +134,14 @@ func (s *speech) spoken() time.Duration {
 	handed := s.handed
 	s.mu.Unlock()
 	return max(handed-(s.latency()-jitter), 0)
+}
+
+// voiced is when audible audio first arrived, when it started to reach the voice lane, and how
+// much of it did: zero times for a reply that stayed silent.
+func (s *speech) voiced() (first, flowing time.Time, handed time.Duration) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.firstAt, s.flowingAt, s.handed
 }
 
 // heard reports when audible audio first and last arrived; zero when it has not.

@@ -439,6 +439,14 @@ func (a *Avatars) attach(l *link, gen uint64, sp *speech) peer {
 }
 
 func (a *Avatars) detach(l *link, sp *speech) {
+	// One line per reply, to tell a reply that lost its opening on the device from one that
+	// arrived without it.
+	if first, flowing, handed := sp.voiced(); !first.IsZero() {
+		slog.Info("avatar voice", "slot", l.slot+1,
+			"first_audible", first.UTC().Format("15:04:05.000"),
+			"speaker_from", flowing.UTC().Format("15:04:05.000"),
+			"handed", handed.Round(10*time.Millisecond))
+	}
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	if l.speech != sp {
