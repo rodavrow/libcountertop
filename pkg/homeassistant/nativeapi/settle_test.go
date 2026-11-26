@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/binary"
 	"errors"
+	"io"
 	"net"
 	"sync/atomic"
 	"testing"
@@ -28,6 +29,7 @@ func settleRig(t *testing.T, satellite bool, busy func() bool) (string, *settle)
 		info.VoiceFeatures = 1
 	}
 	srv := &esphome.Server{Info: info, Handler: esphome.Chain(s)}
+	s.gaveUp = func() { _ = srv.FireEvent(voiceNotSubscribed, nil) }
 	ln, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		t.Fatal(err)
@@ -80,6 +82,35 @@ func (c *client) send(msgs ...proto.Message) {
 func (c *client) listed() {
 	c.send(&api.HelloRequest{ClientInfo: "Home Assistant"}, &api.DeviceInfoRequest{},
 		&api.ListEntitiesRequest{})
+}
+
+// event waits up to d for the device to fire an event, and names it.
+func (c *client) event(d time.Duration) string {
+	c.t.Helper()
+	if err := c.nc.SetReadDeadline(time.Now().Add(d)); err != nil {
+		c.t.Fatal(err)
+	}
+	for {
+		var head [3]uint64
+		for i := range head {
+			v, err := binary.ReadUvarint(c.r)
+			if err != nil {
+				return ""
+			}
+			head[i] = v
+		}
+		data := make([]byte, head[1])
+		if _, err := io.ReadFull(c.r, data); err != nil {
+			return ""
+		}
+		msg, ok := esphome.NewMessage(uint32(head[2]))
+		if !ok || proto.Unmarshal(data, msg) != nil {
+			continue
+		}
+		if ev, ok := msg.(*api.HomeassistantActionRequest); ok && ev.GetIsEvent() {
+			return ev.GetService()
+		}
+	}
 }
 
 // closedWithin reports whether the device dropped the connection within d.
@@ -161,6 +192,25 @@ func TestRegressionMissingVoiceIsRetriedOnlyOnce(t *testing.T) {
 	second.send(&api.SubscribeStatesRequest{})
 	if second.closedWithin(4 * settleTest) {
 		t.Fatal("kept dropping a Home Assistant that does not subscribe to voice")
+	}
+}
+
+// Giving up tells Home Assistant, so an automation there can reload the device's entry.
+func TestGivingUpOnVoiceFiresAnEvent(t *testing.T) {
+	addr, _ := settleRig(t, true, nil)
+	first := dial(t, addr)
+	first.listed()
+	first.send(&api.SubscribeStatesRequest{})
+	if !first.closedWithin(20 * settleTest) {
+		t.Fatal("did not retry a setup that never subscribed to voice")
+	}
+
+	second := dial(t, addr)
+	second.listed()
+	second.send(&api.SubscribeStatesRequest{})
+
+	if got := second.event(20 * settleTest); got != voiceNotSubscribed {
+		t.Fatalf("event %q, want %q", got, voiceNotSubscribed)
 	}
 }
 

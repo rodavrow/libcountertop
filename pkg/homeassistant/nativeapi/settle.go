@@ -11,6 +11,10 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+// voiceNotSubscribed is the event fired when the device stops waiting for Home Assistant to
+// subscribe to its voice turns. Home Assistant adds the device id.
+const voiceNotSubscribed = "esphome.voice_not_subscribed"
+
 const (
 	// settleWithin is how long Home Assistant gets from listing the entities to subscribing to what
 	// it set up. It takes a few seconds even on a busy start.
@@ -26,10 +30,14 @@ const (
 //
 // A satellite's setup also subscribes to voice turns. Missing that is retried only once:
 // Home Assistant does the same when its assist satellite is turned off, and a stall it keeps
-// across connections needs its ESPHome entry reloaded.
+// across connections needs its ESPHome entry reloaded, which an automation can do on the
+// voiceNotSubscribed event.
 type settle struct {
 	within, most, every time.Duration
 	busy                func() bool
+	// gaveUp tells Home Assistant that the device stopped waiting for its voice subscription,
+	// so an automation there can reload the entry. Nil tells nothing.
+	gaveUp func()
 
 	mu         sync.Mutex
 	satellite  bool
@@ -110,16 +118,28 @@ func (s *settle) settled(c *esphome.Conn, p *setup) {
 }
 
 func (s *settle) check(c *esphome.Conn) {
+	drop, tell := s.verdict(c)
+	if tell && s.gaveUp != nil {
+		s.gaveUp()
+	}
+	if drop {
+		_ = c.Close()
+	}
+}
+
+// verdict decides what a setup that has not settled in time gets: dropped, or after a retry for
+// voice, Home Assistant told.
+func (s *settle) verdict(c *esphome.Conn) (drop, tell bool) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	p, ok := s.connecting[c]
 	if !ok {
-		return
+		return false, false
 	}
 	// Closing ends a turn under way; voice may work while states do not.
 	if s.busy != nil && s.busy() {
 		p.timer.Reset(s.every)
-		return
+		return false, false
 	}
 	delete(s.connecting, c)
 	switch {
@@ -127,15 +147,16 @@ func (s *settle) check(c *esphome.Conn) {
 		slog.Warn("Home Assistant never subscribed to the entities' states, reconnecting",
 			"client", c.ClientInfo(), "waited", s.wait)
 		s.wait = min(2*s.wait, s.most)
+		return true, false
 	case s.retried:
 		slog.Warn("Home Assistant still has not subscribed to voice turns; if the assist "+
 			"satellite is meant to be on, reload the device's ESPHome entry in Home Assistant",
-			"client", c.ClientInfo())
-		return
+			"client", c.ClientInfo(), "event", voiceNotSubscribed)
+		return false, true
 	default:
 		slog.Warn("Home Assistant never subscribed to voice turns, reconnecting once",
 			"client", c.ClientInfo(), "waited", s.wait)
 		s.retried = true
+		return true, false
 	}
-	_ = c.Close()
 }
