@@ -113,7 +113,7 @@ func (l *link) reconcile(now time.Time, cfg schema.Avatar, busy, keep bool) {
 		(cfg.Connection.Always() || l.holds > 0 || now.Before(l.closeAt) || keep)
 	open := l.state == Connecting || l.state == Connected
 	moved := cfg.URL != l.cfg.URL || cfg.ID != l.cfg.ID
-	var closing peer
+	var closing ended
 	switch {
 	case open && (!wanted || moved):
 		closing = l.drop(Off, nil)
@@ -292,7 +292,7 @@ func (l *link) failed(gen uint64, err error) {
 }
 
 // fail ends the session and schedules a retry with backoff. Callers hold mu.
-func (l *link) fail(err error) peer {
+func (l *link) fail(err error) ended {
 	slog.Warn("avatar connection failed", "slot", l.slot+1, "err", err)
 	closing := l.drop(Failed, err)
 	l.backoff = min(max(2*l.backoff, l.a.timing.retry), l.a.timing.maxRetry)
@@ -300,10 +300,18 @@ func (l *link) fail(err error) peer {
 	return closing
 }
 
-// drop forgets the session and returns its peer for the caller to close after unlocking, as
-// closing waits for the callbacks that take mu. Callers hold mu.
-func (l *link) drop(to State, why error) peer {
-	p := l.peer
+// ended is what a dropped session leaves for the caller to close once mu is released.
+type ended struct {
+	peer peer
+	scr  screen
+}
+
+// drop forgets the session and returns its peer and stream for the caller to close after
+// unlocking, as closing waits for the callbacks that take mu. The stream goes with the session:
+// the next one is a new video stream, which a decoder left from the old one does not show.
+// Callers hold mu.
+func (l *link) drop(to State, why error) ended {
+	e := ended{peer: l.peer, scr: l.scr}
 	l.gen++
 	l.peer, l.session, l.state, l.why = nil, "", to, why
 	if l.speech != nil {
@@ -312,15 +320,19 @@ func (l *link) drop(to State, why error) peer {
 	if l.feeding {
 		l.rest()
 	}
-	return p
+	l.scr, l.delayOn = nil, nil
+	return e
 }
 
-func (l *link) close(p peer) {
-	if p == nil {
+func (l *link) close(e ended) {
+	if e.scr != nil {
+		e.scr.Close()
+	}
+	if e.peer == nil {
 		return
 	}
 	l.a.spawn(func() {
-		if err := p.Close(); err != nil {
+		if err := e.peer.Close(); err != nil {
 			slog.Debug("avatar close", "slot", l.slot+1, "err", err)
 		}
 	})
@@ -527,11 +539,6 @@ func (l *link) release(linger time.Duration) {
 func (l *link) shut() {
 	l.mu.Lock()
 	closing := l.drop(Off, nil)
-	scr := l.scr
-	l.scr = nil
 	l.mu.Unlock()
 	l.close(closing)
-	if scr != nil {
-		scr.Close()
-	}
 }

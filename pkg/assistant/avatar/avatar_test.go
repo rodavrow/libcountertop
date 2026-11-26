@@ -353,6 +353,43 @@ func TestALostConnectionRetriesWithBackoff(t *testing.T) {
 	}
 }
 
+// A new session is a new video stream: fed into the decoder left from the old one, it showed
+// one stale frame and stalled on the first wake after LiveTalking restarted.
+func TestRegressionAReconnectOpensANewStream(t *testing.T) {
+	r := newRig(t, always())
+	var opened []*fakeScreen
+	r.a.screen = func(slot int) screen {
+		s := &fakeScreen{slot: slot}
+		opened = append(opened, s)
+		return s
+	}
+	r.connect(t)
+	r.a.Showing(0)
+	r.peer().show(rtc.Frame{Key: true})
+
+	r.peer().report(webrtc.PeerConnectionStateDisconnected)
+	if len(opened) != 1 || !opened[0].isClosed() {
+		t.Fatal("the lost session's stream stayed open")
+	}
+	r.clock.pass(defaults.retry)
+	r.a.reconcile()
+	again := r.peer()
+	again.report(webrtc.PeerConnectionStateConnected)
+	keys := again.keys.Load()
+
+	r.a.Showing(0)
+	if len(opened) != 2 {
+		t.Fatalf("%d streams, want a new one for the new session", len(opened))
+	}
+	if again.keys.Load() == keys {
+		t.Error("asked the new session for no keyframe")
+	}
+	again.show(rtc.Frame{Key: true})
+	if !r.a.Place(0, display.Rect{W: 10, H: 10}, false) {
+		t.Fatal("the first wake after the reconnect got no picture")
+	}
+}
+
 func TestAChangedURLReconnects(t *testing.T) {
 	r := newRig(t, always())
 	r.connect(t)
