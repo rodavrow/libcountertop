@@ -623,6 +623,79 @@ func TestABoardWithOneDecoderStillHandsOver(t *testing.T) {
 	}
 }
 
+// A lone avatar whose decoder broke before its first frame has no other to make room for it. The
+// dead stream must still go, so a later showing opens a new one rather than staying audio only.
+func TestRegressionALoneAvatarRefusedOnceGetsANewStream(t *testing.T) {
+	r := newRig(t, always())
+	var opened []*fakeScreen
+	r.a.screen = func(slot int) screen {
+		s := &fakeScreen{slot: slot}
+		opened = append(opened, s)
+		return s
+	}
+	r.connect(t)
+	sylvia := r.peer()
+	r.a.Showing(0)
+	if len(opened) != 1 {
+		t.Fatalf("%d streams after the first showing, want 1", len(opened))
+	}
+	opened[0].failed = surface.Broken
+
+	sylvia.show(rtc.Frame{Key: true})
+	if !opened[0].closed {
+		t.Fatal("the refused stream stayed open")
+	}
+	r.a.Showing(0)
+	if len(opened) != 1 {
+		t.Fatal("a new stream opened at once, with no pause after the refusal")
+	}
+
+	r.clock.pass(defaults.retry)
+	keys := sylvia.keys.Load()
+	r.a.Showing(0)
+	if len(opened) != 2 {
+		t.Fatalf("%d streams after the pause, want a new one", len(opened))
+	}
+	if sylvia.keys.Load() == keys {
+		t.Error("asked for no keyframe for the new stream")
+	}
+	sylvia.show(rtc.Frame{Key: true})
+	if !r.a.Place(0, display.Rect{W: 10, H: 10}, false) {
+		t.Fatal("the avatar never came up on the new stream")
+	}
+}
+
+// Each refusal in a row waits longer before the next stream, up to the longest retry.
+func TestRepeatedRefusalsBackOff(t *testing.T) {
+	r := newRig(t, always())
+	var opened []*fakeScreen
+	r.a.screen = func(slot int) screen {
+		// Blocked by a decoder that never closes, each breaks on its first frame.
+		s := &fakeScreen{slot: slot, blockedBy: &fakeScreen{}}
+		opened = append(opened, s)
+		return s
+	}
+	r.connect(t)
+	sylvia := r.peer()
+	r.a.Showing(0)
+	sylvia.show(rtc.Frame{Key: true})
+
+	r.clock.pass(defaults.retry)
+	r.a.Showing(0)
+	sylvia.show(rtc.Frame{Key: true})
+	r.clock.pass(defaults.retry)
+	r.a.Showing(0)
+
+	if len(opened) != 2 {
+		t.Fatalf("%d streams, want the second refusal to wait longer than the first", len(opened))
+	}
+	r.clock.pass(defaults.retry)
+	r.a.Showing(0)
+	if len(opened) != 3 {
+		t.Fatalf("%d streams, want a third once the longer pause is over", len(opened))
+	}
+}
+
 // A decoder that is slow to start turns samples away for a moment. That is not a refusal, and
 // must not cost the avatar still on screen its picture.
 func TestASlowSecondDecoderDoesNotCloseTheFirst(t *testing.T) {
