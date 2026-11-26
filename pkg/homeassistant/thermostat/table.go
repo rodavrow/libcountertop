@@ -16,6 +16,11 @@ type (
 
 func NewTable() *Table {
 	return setting.NewTable("thermostat", []setting.Group{Group}, []Setting{
+		setting.Items(
+			Setting{Name: "entities", Group: Group, Icon: "mdi:thermostat", NoEntity: true},
+			schema.ThermostatsMost,
+			func(c *schema.Thermostat) *[]string { return &c.Entities },
+		),
 		setting.Pick(
 			Setting{Name: "look", Group: Group, Icon: "mdi:palette"},
 			schema.ThermostatLooks(),

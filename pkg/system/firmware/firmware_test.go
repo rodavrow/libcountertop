@@ -89,15 +89,28 @@ func TestAnUnknownSavedChannelFallsBackToTheFirst(t *testing.T) {
 	if got := u.Channel(); got != "stable" {
 		t.Errorf("channel = %q, want stable", got)
 	}
-	if got := u.channel.Get(); got != "stable" {
-		t.Errorf("select shows %q, want stable", got)
+	if got, err := u.Controls().Value("channel"); err != nil || got != "stable" {
+		t.Errorf("update.channel shows %q (%v), want stable", got, err)
 	}
 }
 
 func TestChoosingAnUnknownChannelChangesNothing(t *testing.T) {
 	saved := &settings{schema.Update{Channel: "dev"}}
 	u := build(&source{}, saved)
-	u.Choose("nightly")
+	if err := u.Controls().Change("channel", "nightly"); err == nil {
+		t.Error("an unknown channel was taken")
+	}
+	if saved.Update.Channel != "dev" {
+		t.Errorf("saved channel = %q, want dev", saved.Update.Channel)
+	}
+}
+
+func TestChoosingAChannelSavesIt(t *testing.T) {
+	saved := &settings{schema.Update{Channel: "stable"}}
+	u := build(&source{}, saved)
+	if err := u.Controls().Change("channel", "dev"); err != nil {
+		t.Fatalf("choosing dev said %v", err)
+	}
 	if saved.Update.Channel != "dev" {
 		t.Errorf("saved channel = %q, want dev", saved.Update.Channel)
 	}

@@ -8,6 +8,7 @@ export type Field = {
   kind: "toggle" | "number" | "choice" | "pair" | "triple" | "list" | "text" | "secret" | "credential";
   value: string;
   example?: string;
+  help?: string;
   unit?: string;
   min?: number;
   max?: number;

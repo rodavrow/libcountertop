@@ -16,21 +16,22 @@ type GeminiOptions struct {
 }
 
 type GeminiSwitch struct {
-	engine  *Engine
-	options GeminiOptions
+	engine   *Engine
+	options  GeminiOptions
+	controls *setting.Controls[schema.Wake]
 }
 
 func NewGeminiSwitch(engine *Engine, options GeminiOptions) *GeminiSwitch {
-	return &GeminiSwitch{engine: engine, options: options}
-}
-
-func (g *GeminiSwitch) Controls() *setting.Controls[schema.Wake] {
-	return &setting.Controls[schema.Wake]{
+	g := &GeminiSwitch{engine: engine, options: options}
+	g.controls = &setting.Controls[schema.Wake]{
 		Table: GeminiTable(),
-		Read:  func() schema.Wake { return schema.Wake{Gemini: g.options.Read()} },
+		Read:  func() schema.Wake { return schema.Wake{Gemini: options.Read()} },
 		Save:  g.save,
 	}
+	return g
 }
+
+func (g *GeminiSwitch) Controls() *setting.Controls[schema.Wake] { return g.controls }
 
 func GeminiTable() *setting.Table[schema.Wake] {
 	return setting.NewTable(
@@ -63,6 +64,7 @@ func (g *GeminiSwitch) Set(on bool) error {
 		g.engine.ClearKind(wake.KindGemini)
 	}
 	g.options.Changed()
+	g.controls.Publish()
 	return nil
 }
 

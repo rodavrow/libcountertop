@@ -2,6 +2,7 @@ package settings
 
 import (
 	"log/slog"
+	"slices"
 
 	gogui "github.com/go-gui-org/go-gui/gui"
 
@@ -42,14 +43,27 @@ func VoicePage(c *setting.Controls[schema.Voice], hacs Integrated, sh *shell.She
 					rows, taps = append(rows, row), append(taps, tap)
 				}
 			}
-			master := members[0].On(&at)
+			first := slices.IndexFunc(members, func(s setting.Setting[schema.Voice]) bool {
+				return s.Kind == setting.Toggle
+			})
+			master := first < 0 || members[first].On(&at)
 			for i, s := range members {
+				if s.Kind == setting.Choice {
+					rows = append(rows, menu.Row{
+						Label: s.Title(),
+						Kind:  menu.Chevron,
+						Value: s.LabelOf(s.Read(&at)),
+						Dim:   i > first && !master,
+					})
+					taps = append(taps, func(int) { sh.Push(voiceChoice(c, s, sh)) })
+					continue
+				}
 				on := s.On(&at)
 				rows = append(rows, menu.Row{
 					Label: s.Title(),
 					Kind:  menu.Toggle,
 					On:    on,
-					Dim:   i > 0 && !master,
+					Dim:   i > first && !master,
 				})
 				taps = append(taps, func(int) {
 					if err := c.Change(s.Name, setting.OnOff(!on)); err != nil {
@@ -63,6 +77,34 @@ func VoicePage(c *setting.Controls[schema.Voice], hacs Integrated, sh *shell.She
 					}
 				})
 			}
+		}
+		return rows, taps
+	}}
+}
+
+func voiceChoice(
+	c *setting.Controls[schema.Voice],
+	s setting.Setting[schema.Voice],
+	sh *shell.Shell,
+) *shell.Page {
+	return &shell.Page{Title: s.Title(), Build: func() ([]menu.Row, []func(int)) {
+		at := c.Read()
+		now := s.Read(&at)
+		var (
+			rows []menu.Row
+			taps []func(int)
+		)
+		for _, o := range s.Choices() {
+			rows = append(
+				rows,
+				menu.Row{Label: s.Label(o), Kind: menu.Plain, Chosen: o.Value == now},
+			)
+			taps = append(taps, func(int) {
+				if err := c.Change(s.Name, o.Value); err != nil {
+					slog.Error("saving a setting failed", "setting", "voice."+s.Name, "err", err)
+				}
+				sh.Pop()
+			})
 		}
 		return rows, taps
 	}}

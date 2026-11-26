@@ -507,45 +507,36 @@ func (h *Controller) Relay(
 	if !req.IsEvent {
 		return h.call(ctx, req)
 	}
-	if err := sendable(req); err != nil {
-		return nil, err
-	}
 	h.mu.Lock()
 	targets, err := h.targets()
 	h.mu.Unlock()
 	if err != nil {
 		return nil, err
 	}
-	h.deliver(targets, req)
+	if refused, err := h.deliver(targets, req); len(refused) == len(targets) {
+		return nil, err
+	}
 	return nil, nil
 }
 
-// maxRequest is the most one Noise frame carries: 65,535 bytes less a 4-byte header and a
-// 16-byte tag.
-const maxRequest = 0xffff - 4 - 16
-
-// sendable refuses a request no connection can carry. A failed send is how a dead connection is
-// told from a live one, so a request that fails on its own account must never reach one.
-func sendable(req *api.HomeassistantActionRequest) error {
-	raw, err := proto.Marshal(req)
-	if err != nil {
-		return fmt.Errorf("homeassistant: %s: %w", req.GetService(), err)
-	}
-	if len(raw) > maxRequest {
-		return fmt.Errorf("%w: %s is %d bytes, at most %d",
-			ErrTooLarge, req.GetService(), len(raw), maxRequest)
-	}
-	return nil
-}
-
-func (h *Controller) deliver(targets []sender, req *api.HomeassistantActionRequest) {
+func (h *Controller) deliver(
+	targets []sender,
+	req *api.HomeassistantActionRequest,
+) (refused []sender, err error) {
 	for _, t := range targets {
-		if err := t.Send(req); err != nil {
+		sent := t.Send(req)
+		switch {
+		case sent == nil:
+		case errors.Is(sent, esphome.ErrFrameTooLarge):
+			refused = append(refused, t)
+			err = fmt.Errorf("homeassistant: %s: %w", req.GetService(), sent)
+		default:
 			slog.Warn("Home Assistant link dropped, sending to it failed",
-				"action", req.GetService(), "err", err)
+				"action", req.GetService(), "err", sent)
 			h.lost(t)
 		}
 	}
+	return refused, err
 }
 
 func (h *Controller) targets() ([]sender, error) {
@@ -589,10 +580,17 @@ func (h *Controller) send(
 	}()
 
 	req.CallId = id
-	if err := sendable(req); err != nil {
-		return nil, err
+	if refused, err := h.deliver(targets, req); len(refused) > 0 {
+		h.mu.Lock()
+		for _, t := range refused {
+			delete(p.to, t)
+		}
+		none := len(p.to) == 0
+		h.mu.Unlock()
+		if none {
+			return nil, err
+		}
 	}
-	h.deliver(targets, req)
 
 	select {
 	case r := <-p.ch:

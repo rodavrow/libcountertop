@@ -19,6 +19,7 @@ type Options struct {
 	Wake     func(slot int)
 	Extras   func(slot int) []esphome.Entity
 	Tones    func() []setting.Option
+	Looks    []setting.Option
 }
 
 type Settings struct {

@@ -309,8 +309,12 @@ func (s Setting[T]) Object(domain string) string {
 
 func (s Setting[T]) Title() string { return s.messages.text(s.domain + ".setting." + s.Name) }
 
-func (s Setting[T]) Example() string {
-	key := s.domain + ".example." + s.Name
+func (s Setting[T]) Example() string { return s.about("example") }
+
+func (s Setting[T]) Help() string { return s.about("help") }
+
+func (s Setting[T]) about(part string) string {
+	key := s.domain + ".setting." + s.Name + "." + part
 	if s.messages.missing(key) {
 		return ""
 	}

@@ -157,6 +157,7 @@ func New(o Options) *Alarm {
 		Save: func(s Setting, v string) error {
 			err := setting.Store(o.Settings, s, v)
 			a.follow()
+			a.Updated.Emit(struct{}{})
 			return err
 		},
 	}

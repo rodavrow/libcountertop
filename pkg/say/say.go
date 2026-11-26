@@ -25,6 +25,9 @@ var (
 	local  *i18n.Localizer
 	chosen string
 
+	spoken *i18n.Localizer
+	voice  string
+
 	names = map[string]string{}
 
 	// go-i18n Localize falls back to the default language and never reports a missing string.
@@ -58,6 +61,7 @@ func init() {
 
 	local = i18n.NewLocalizer(bundle, English.String())
 	chosen = English.String()
+	spoken, voice = local, chosen
 }
 
 func Use(want string) string {
@@ -180,14 +184,14 @@ func Languages() []string {
 	return append([]string{English.String()}, out...)
 }
 
-func T(id string) string { return look(id, &i18n.LocalizeConfig{MessageID: id}) }
+func T(id string) string { return look(&local, id, &i18n.LocalizeConfig{MessageID: id}) }
 
 func F(id string, with map[string]any) string {
-	return look(id, &i18n.LocalizeConfig{MessageID: id, TemplateData: with})
+	return look(&local, id, &i18n.LocalizeConfig{MessageID: id, TemplateData: with})
 }
 
 func N(id string, count int) string {
-	return look(id, &i18n.LocalizeConfig{
+	return look(&local, id, &i18n.LocalizeConfig{
 		MessageID:    id,
 		PluralCount:  count,
 		TemplateData: map[string]any{"Count": count},
@@ -195,14 +199,15 @@ func N(id string, count int) string {
 }
 
 // go-i18n returns the default language's text alongside an error for a missing identifier.
-func look(id string, what *i18n.LocalizeConfig) string {
+func look(in **i18n.Localizer, id string, what *i18n.LocalizeConfig) string {
 	mu.RLock()
-	if local == nil {
+	l := *in
+	if l == nil {
 		mu.RUnlock()
 		return id
 	}
 
-	out, err := local.Localize(what)
+	out, err := l.Localize(what)
 	mu.RUnlock()
 	if out != "" {
 		return out

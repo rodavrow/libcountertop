@@ -47,6 +47,7 @@ func TestSharedFlattensIntoTheEmbeddingStruct(t *testing.T) {
 		"idle",
 		"lock",
 		"lovelace",
+		"mealie",
 		"media",
 		"network",
 		"own",

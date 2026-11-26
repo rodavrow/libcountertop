@@ -1,1959 +1,3134 @@
-# Shared English catalogue for all Countertop devices.
-# Missing translations fall back to English.
-
-about.built: Built
-about.commit: Commit
-about.name: Name
-about.title: About
-about.version: Version
-access.group.access: Access
-access.setting.adb: ADB over network
-media.group.airplay: AirPlay
-media.setting.airplay: AirPlay
-media.setting.airplay_audio_mode: AirPlay audio mode
-media.option.airplay_audio_mode.instant: Instant
-media.option.airplay_audio_mode.synced: Synced with video
-alarm.add: Add alarm
-alarm.app: Alarms
-alarm.daily: Every day
-alarm.day.fri: Friday
-alarm.day.mon: Monday
-alarm.day.sat: Saturday
-alarm.day.sun: Sunday
-alarm.day.thu: Thursday
-alarm.day.tue: Tuesday
-alarm.day.wed: Wednesday
-alarm.delete: Delete alarm
-alarm.edit: Alarm
-alarm.hour: Hour
-alarm.light: Wake light
-alarm.minute: Minute
-alarm.minutes: "{{.N}} min"
-alarm.name: Name
-alarm.off: "Off"
-alarm.on: Alarm on
-alarm.once: Once
-alarm.ramp: Gentle start
-alarm.repeat: Repeat
-alarm.save: Save
-alarm.seconds: "{{.N}} s"
-alarm.snooze: Snooze
-alarm.snooze_for: "Snooze {{.N}} min"
-alarm.snoozed: "Snoozed until {{.T}}"
-alarm.stop: Stop
-alarm.sound: Sound
-alarm.state.off: "Off"
-alarm.state.on: "On"
-alarm.volume: Volume
-alarm.volume.gentle: Gentle
-alarm.volume.silent: Silent
-alarm.volume.static: Steady
-alarm.weekdays: Weekdays
-alarm.weekends: Weekends
-alerts.group.alerts: Alerts & Alarms
-alerts.page: Alerts & Alarms
-alerts.setting.alert: Alert chime
-alerts.setting.info: Info chime
-alerts.setting.ring_for: Timer rings for
-alerts.setting.success: Success chime
-alerts.setting.timer: Timer sound
-alerts.setting.wake: Wake light
-alerts.setting.warning: Warning chime
-alertstyle.banner: Banner
-alertstyle.screen: Same as screen
-alertstyle.none: None
-alertstyle.answer: Auto answer
-alertstyle.card: Card
-alertstyle.full: Full screen
-alertstyle.toast: Toast
-align.center: Center
-align.left: Left
-align.random: Random
-align.right: Right
-access.group.api: Home Assistant
-access.setting.adopted: Adopted by Home Assistant
-apps.group.apps: Apps
-apps.empty: No apps
-apps.hint: Tap the star to keep an app in the dock. Hold a tile, then drag it to move it.
-apps.setting.dock: Apps in the dock
-apps.setting.order: App order
-apps.title: Apps
-assistants.off: "Off"
-assistants.pipeline: Pipeline
-assistants.pipeline.preferred: Preferred
-assistants.reply: Response playback
-assistants.group.pryon: Pryon
-assistants.setting.pryon: Amazon wake words
-assistants.setting.pryon_stop: Amazon stop word
-assistants.group.gemini: Gemini
-assistants.setting.gemini: Gemini wake word
-assistants.group.announcements: Announcements
-assistants.setting.animate_announcements: Animate announcements
-assistants.group.captions: Captions
-assistants.setting.show_captions: Show captions
-assistants.group.stopword: Stop word
-assistants.setting.stop_sensitivity: Stop word sensitivity
-assistants.group.arbitration: Arbitration
-assistants.setting.arbitration_wait: Arbitration wait
-assistants.arbitration.value: "{{.N}} ms"
-assistants.setting.arbitration_offset: Arbitration offset
-assistants.arbitration.offset: "{{.N}} dB"
-assistants.setting.buffer: Reply buffer
-assistants.setting.delivery: Response playback
-assistants.setting.follow_up: Follow-up time
-assistants.setting.known_voices: Recognized voices only
-assistants.setting.max_listen: Max listening time
-assistants.setting.max_think: Max thinking time
-assistants.setting.recordings: Recordings kept
-assistants.setting.threshold: Wake word sensitivity
-assistants.setting.tone: Wake sound
-assistants.setting.wake_screen: Wake the screen
-assistants.slot: Assistant {{.N}}
-assistants.talk: Talk now
-assistants.talk.hint: Without the wake word
-assistants.threshold: Wake word sensitivity
-assistants.threshold.hint: Higher wakes more easily
-assistants.title: Voice assistants
-assistants.tone: Wake sound
-assistants.unset: Set the wake word in Home Assistant
-assistants.waiting: Waiting for the model
-assistants.word: Wake word
-assistants.word.ha: Enable actions or pick in Home Assistant
-bluetooth.group.bluetooth: Bluetooth
-ring.group.ring: Ring
-ring.setting.effect: Wake light
-ring.setting.incoming: Incoming call light
-ring.setting.muted: Muted light
-ring.setting.reaction: Room reaction
-ring.setting.replying_effect: Replying light
-ring.setting.talking: In-call light
-ring.setting.thinking_effect: Thinking light
-ring.setting.trouble: Failure light
-speaker.group.speaker: Speaker
-speaker.setting.eq: Speaker EQ
-speaker.setting.resampling: Voice resampling
-speaker.setting.speaker_output: Speaker
-speaker.setting.headphone_output: Headphone jack
-speaker.setting.speaker_gain: Speaker gain
-bluetooth.setting.proxy: Bluetooth proxy
-bluetooth.setting.scan: Bluetooth scanning
-bluetooth.setting.speaker: Bluetooth speaker
-bluetooth.connected_sources: Connected devices
-bluetooth.source_auto: Automatic source switching
-bluetooth.source_empty: No Bluetooth devices connected
-bluetooth.source_selected: Selected source
-boot.leaving: Restarting
-boot.skip: Skip
-broadcast.from: "From {{.Peer}}"
-broadcast.title: Broadcast
-boot.stranded: Lost contact with the screen
-buttons.dynamic: What's playing
-buttons.static: Main volume
-calendar.allday: All day
-calendar.app: Calendar
-calendar.chosen: "{{.N}} calendar{{if ne .N 1}}s{{end}}"
-calendar.add: New event
-calendar.count: "{{.N}} day{{if ne .N 1}}s{{end}}"
-calendar.date: Date
-calendar.days: Days
-calendar.empty: Nothing coming up
-calendar.failed: Couldn't add the event
-calendar.free: Nothing planned
-calendar.hour: Hour
-calendar.hours: "{{.N}} hr"
-calendar.hours.half: "{{.N}}½ hr"
-calendar.length: Length
-calendar.location: Location
-calendar.minute: Minute
-calendar.minutes: "{{.N}} min"
-calendar.more: "+{{.N}} more"
-calendar.needs.title: Enter a title
-calendar.notes: Notes
-calendar.save: Save
-calendar.title: Title
-calendar.week.start: sunday
-calendar.group.calendar: Calendar
-calendar.none: No calendars in Home Assistant
-calendar.off: "Off"
-calendar.pick: Pick calendars
-calendar.example.entities: calendar.family, calendar.work
-calendar.setting.entities: Calendars
-calendar.example.colors: calendar.family=#e8a33d, calendar.work=#3a7bd5
-calendar.setting.colors: Calendar colors
-calendar.setting.weather: Weather on days
-calendar.setting.opening: Opens on
-calendar.setting.saver: Next event on the screensaver
-calendar.opening.last: Last used
-calendar.opening.day: Day
-calendar.opening.week: Week
-calendar.opening.month: Month
-calendar.view.day: Day
-calendar.view.week: Week
-calendar.view.month: Month
-calendar.today: Today
-calendar.tomorrow: Tomorrow
-call.address: Address
-call.caps: Can do
-call.answer.count: "{{.N}} selected"
-call.answer.everyone: Everyone
-call.answer.from: Answer from
-call.answer.peers: Panels
-call.answer.users: Users
-call.answer.selected: Selected
-call.auto: Auto-answer
-call.auto.hint: Answers at once
-call.autovideo: Auto-answer with camera on
-call.busy: Busy
-call.calling: Calling…
-call.camera.off: Camera off
-call.camera.on: Camera on
-call.connected: Connected
-call.declined: Declined
-call.dropped: Call dropped
-call.empty: No other devices found
-call.users.empty: No Home Assistant users found
-cameras.app: Cameras
-cameras.group.cameras: Cameras
-cameras.failed: Couldn't list the cameras in Home Assistant
-cameras.loading: Loading cameras
-cameras.none: No cameras selected
-cameras.nosite: Home Assistant's address isn't known. Set Home Assistant URL in Settings → Home control → Cameras
-cameras.off: "Off"
-cameras.pick: Select
-cameras.seconds: "{{.N}} s"
-cameras.why.display: Live video isn't supported on this display
-cameras.why.failed: Live video unavailable
-cameras.why.format: Video format not supported
-cameras.why.lost: Connection lost
-cameras.why.nopicture: No video from the camera
-cameras.why.pictures: No live stream in Home Assistant
-cameras.why.refused: "Home Assistant: {{.Message}}"
-cameras.why.slow: Home Assistant timed out
-cameras.why.webrtc: Install the EchoLocal integration for live video
-cameras.setting.refresh: Refresh
-cameras.setting.rotate: Auto paginate
-cameras.setting.scale: Thumbnail size
-cameras.setting.tab: Dashboard tab
-certs.entity.cert: Cert Warden certificate name
-certs.entity.cert_api_key: Cert Warden certificate API key
-certs.entity.key_api_key: Cert Warden key API key
-certs.entity.server: Cert Warden server
-certs.example.cert: kitchen-display
-certs.example.server: https://certs.example.com
-certs.group.certificate: Certificate
-certs.setting.cert: Certificate name
-certs.setting.cert_api_key: Certificate API key
-certs.setting.key_api_key: Key API key
-certs.setting.server: Cert Warden server
-certs.status.expired: Expired
-certs.status.fetching: Fetching
-certs.status.refused: Wrong API key
-certs.status.unreachable: Can't reach Cert Warden
-certs.status.unset: Self-signed
-certs.status.valid: "{{.Name}}, valid until {{.Date}}"
-cameras.example.url: http://homeassistant.local:8123
-cameras.setting.url: Home Assistant URL
-peer.cap.audio: Calls
-peer.cap.broadcast: Broadcasts
-peer.cap.sync: Settings sync
-peer.cap.video: Video calls
-peer.checking: Checking
-peer.foreign: Not in this home
-peer.home: In this home
-peer.open: No home key
-call.failed: Call failed
-call.group.calls: Intercom
-call.gone: No longer on the network
-call.incoming: Incoming call
-call.incoming.allow: Incoming calls
-call.incoming.video: Incoming video call
-call.model: Model
-call.mute: Mute
-call.no: "No"
-call.pausewake: Pause wake word during calls
-call.reconnecting: Reconnecting…
-call.ring: Ring
-call.ringback: Ringback
-call.seen: Last seen
-call.setting.answer_api: Auto-answer API calls
-call.setting.answer_from: Auto-answer from
-call.setting.answer_peers: Auto-answer panels
-call.setting.answer_users: Auto-answer users
-call.setting.auto_answer: Auto-answer calls
-call.setting.auto_video: Auto-answer with camera on
-call.setting.broadcasts: Receive broadcasts
-call.setting.incoming: Incoming calls
-call.setting.pause_wake: Pause wake word during calls
-call.setting.ring: Ring tone
-call.setting.ringback: Ringback tone
-call.setting.stream: Call video stream
-call.setting.video_ring: Video ring tone
-call.settings: Intercom
-call.settings.hint: Incoming calls and auto-answer
-call.standing: Home
-call.stream: Video stream
-call.stream.hint: Sub uses less bandwidth; falls back to main when the sub stream is off
-call.stream.main: Main
-call.stream.sub: Sub
-call.tab: Intercom
-call.unanswered: No answer
-call.unavailable: Not taking calls
-call.unreachable: Can't be reached
-call.unmute: Unmute
-call.version: Version
-call.videoring: Video ring
-call.volume: Volume
-camera.group.exposure: Exposure
-camera.group.picture: Picture
-camera.group.streams: Streams
-camera.group.whitebalance: White Balance
-camera.option.banding.50hz: 50 Hz
-camera.option.banding.60hz: 60 Hz
-camera.option.banding.auto: Auto
-camera.option.banding.off: Off
-camera.option.brightness.high: High
-camera.option.brightness.low: Low
-camera.option.brightness.middle: Medium
-camera.option.contrast.high: High
-camera.option.contrast.low: Low
-camera.option.contrast.middle: Medium
-camera.option.effect.aqua: Aqua
-camera.option.effect.blackboard: Blackboard
-camera.option.effect.mono: Mono
-camera.option.effect.negative: Negative
-camera.option.effect.none: None
-camera.option.effect.posterize: Posterize
-camera.option.effect.sepia: Sepia
-camera.option.effect.solarize: Solarize
-camera.option.effect.whiteboard: Whiteboard
-camera.option.hue.high: High
-camera.option.hue.low: Low
-camera.option.hue.middle: Medium
-camera.option.noise.fast: Fast
-camera.option.noise.high_quality: High quality
-camera.option.noise.minimal: Minimal
-camera.option.noise.off: Off
-camera.option.quality.high: High
-camera.option.quality.low: Low
-camera.option.quality.standard: Standard
-camera.option.saturation.high: High
-camera.option.saturation.low: Low
-camera.option.saturation.middle: Medium
-camera.option.scene.action: Action
-camera.option.scene.auto: Auto
-camera.option.scene.beach: Beach
-camera.option.scene.candlelight: Candlelight
-camera.option.scene.fireworks: Fireworks
-camera.option.scene.hdr: HDR
-camera.option.scene.landscape: Landscape
-camera.option.scene.night: Night
-camera.option.scene.night-portrait: Night portrait
-camera.option.scene.party: Party
-camera.option.scene.portrait: Portrait
-camera.option.scene.snow: Snow
-camera.option.scene.sports: Sports
-camera.option.scene.steadyphoto: Steady photo
-camera.option.scene.sunset: Sunset
-camera.option.scene.theatre: Theatre
-camera.option.sharpness.high: High
-camera.option.sharpness.low: Low
-camera.option.sharpness.middle: Medium
-camera.option.whitebalance.auto: Auto
-camera.option.whitebalance.cloudy-daylight: Cloudy
-camera.option.whitebalance.daylight: Daylight
-camera.option.whitebalance.fluorescent: Fluorescent
-camera.option.whitebalance.incandescent: Incandescent
-camera.option.whitebalance.shade: Shade
-camera.option.whitebalance.twilight: Twilight
-camera.option.whitebalance.warm-fluorescent: Warm fluorescent
-camera.reset: Reset to defaults
-camera.reset.confirm: Tap again to reset
-camera.setting.banding: Anti-banding
-camera.setting.brightness: Brightness
-camera.setting.contrast: Contrast
-camera.setting.effect: Effect
-camera.setting.ev: Exposure compensation
-camera.setting.framerate: Frame rate
-camera.setting.framerate_auto: Auto frame rate
-camera.setting.hue: Hue
-camera.setting.iso: ISO
-camera.setting.keyframe: Keyframe interval
-camera.setting.main_on: Main stream
-camera.setting.main_size: Main resolution
-camera.setting.noise: Noise reduction
-camera.setting.quality: Quality
-camera.setting.saturation: Saturation
-camera.setting.scene: Scene
-camera.setting.sharpness: Sharpness
-camera.setting.sub_on: Sub stream
-camera.setting.sub_size: Sub resolution
-camera.setting.whitebalance: White balance
-camera.starting: Starting the camera
-camera.muted: Microphones are muted
-camera.shutter: Camera shutter is closed
-cast.entity.receiver: Cast receiver
-cast.entity.youtube.skip: YouTube SponsorBlock categories
-cast.entity.oracle: Cast oracle
-cast.entity.bundle: Cast bundle
-cast.entity.forecast: Cast forecast
-cast.group.cast: Cast
-cast.starting: Starting {{.Name}}…
-cast.refused: "Chromecast: {{.Name}} can't play on this device"
-cast.setting.receiver: Receiver
-cast.example.youtube.skip: sponsor, selfpromo, intro
-cast.setting.youtube.skip: SponsorBlock categories
-cast.setting.oracle: Oracle
-cast.setting.bundle: Bundle
-cast.setting.forecast: Forecast
-chime.chirp: Chirp
-chime.ding: Ding
-chime.none: None
-chime.ring: Ring
-chime.ringback: Ringback
-chime.rise: Rise
-chime.timer: Timer
-chime.trouble: Trouble
-clock.group.clock: Clock
-clock.backing: Backing
-clock.backing.card: Card
-clock.backing.none: None
-clock.backing.shade: Shade
-clock.color: Color
-clock.color.title: Clock color
-clock.date: Show date
-clock.face: Clock face
-clock.hours: Use 24-hour format
-clock.setting.align: Clock horizontal position
-clock.setting.backing: Clock backing
-clock.setting.color: Clock color
-clock.setting.date: Clock date
-clock.setting.face: Clock face
-clock.setting.hours: Clock format
-clock.setting.position: Clock vertical position
-clock.setting.size: Clock size
-clock.title: Clock
-clock.zone: Time zone
-controls.dock: Dock position
-controls.dock.hide: Hide dock after
-controls.volume: Volume panel position
-datetime.title: Date & time
-dashboard.title: Dashboard
-debug.fps: Visual frame rate limit
-diag.group.diagnostics: Diagnostics
-diag.setting.interval: Metrics interval
-diag.setting.min_cores: Minimum CPU cores
-diag.setting.low_memory: Low memory mode
-diag.setting.page_memory: Page memory limit
-diag.option.page_memory.none: No limit
-debug.fps.value: "{{.N}} fps"
-debug.page_memory.value: "{{.N}} MB"
-debug.seed: Visual seed
-debug.seed.random: Random
-debug.seed.value: "#{{.N}}"
-debug.title: Developer options
-debug.touches: "Fingers down: {{.N}}"
-debug.touches.gesture: "Last gesture: {{.Name}}"
-debug.visuals: Visuals
-delay.10m: 10 minutes
-delay.10s: 10 seconds
-delay.15m: 15 minutes
-delay.15s: 15 seconds
-delay.1m: 1 minute
-delay.2m: 2 minutes
-delay.30m: 30 minutes
-delay.30s: 30 seconds
-delay.45s: 45 seconds
-delay.3m: 3 minutes
-delay.5m: 5 minutes
-delay.5s: 5 seconds
-delay.never: Never
-delivery.stream: Stream
-delivery.whole: Download first
-display.alerts: Alert style
-display.auto: Adaptive brightness
-display.brightness: Brightness
-display.clock: Clock
-display.idle: Screen saver
-display.marks: Privacy indicators
-display.poster: Wallpaper
-display.presence: Sensors
-display.size: Size
-display.style: Style
-display.font: Font
-display.theme: Theme
-display.timer: Timer style
-display.title: Display
-edge.bottom: Bottom
-edge.left: Left
-edge.right: Right
-edge.top: Top
-face.analog: Analog
-face.analog-seconds: Analog seconds
-face.cards: Cards
-face.none: None
-face.overlap: Overlap
-face.roman: Roman
-face.railway: Railway
-face.flip: Flip
-face.nixie: Nixie
-face.octagon: Octagon
-face.atomic: Atomic
-face.spoken: Spoken
-face.math: Math
-face.smiley: Smiley
-face.neon: Neon
-face.bars: Bars
-face.reel: Reel
-face.binary: Binary
-face.plain: Plain
-face.segments: Segments
-face.stack: Stack
-face.words: Words
-features.cast: Cast receiver
-features.cast.hint: Cast from a phone or an app
-features.proxy: Bluetooth proxy
-features.proxy.hint: Bluetooth LE proxy for Home Assistant
-features.rtsp: Camera stream
-features.rtsp.hint: RTSP and ONVIF, for Home Assistant and recorders
-features.airplay: AirPlay
-features.airplay.hint: Mirror from a Mac or iPhone
-airplay.code: "Enter this code on {{.Client}}"
-features.sendspin: Sendspin
-features.sendspin.hint: Whole-home audio
-features.speaker: Bluetooth speaker
-features.speaker.hint: Play from a phone over Bluetooth
-features.title: Connected services
-home.all: All
-home.area.count: "{{.N}} of {{.Of}}"
-home.check: Check again
-home.checking: Checking Home Assistant…
-home.combine: Include switches
-home.devices: Select devices
-home.empty: Nothing to show
-home.enable: Enable
-home.enabled: Enable home control
-home.everything.cameras: All cameras
-home.everything.lights: All lights
-home.everything.switches: All switches
-home.failed: Couldn't load from Home Assistant
-home.group: Group by area
-home.group.all: Every area on one card
-home.group.from: "Areas with {{.N}} or more devices"
-home.group.home: Home control
-home.group.none: Every device on its own card
-home.label.count: "{{.N}} device{{if ne .N 1}}s{{end}}"
-home.loading: Loading…
-home.dashboard: Mode
-home.saver: Screen saver
-home.saver.off: Turn on Auto standby in Tessera's screen settings to use its screen saver
-mode.native: Native
-mode.tessera: Tessera
-mode.tessera_native: Tessera native
-mode.firmware: Tessera
-mode.lovelace: HA
-mode.rings: Rings
-rings.look: Look
-rings.look.wheel: Wheel
-rings.look.icicle: Icicle
-rings.look.burst: Burst
-rings.depth: Depth
-rings.group: Group by
-rings.group.room: Room
-rings.group.system: System
-home.setting.rings.group: "Rings: group by"
-home.setting.rings.depth: Rings depth
-card.light.brightness: Brightness
-card.light.hue: Color
-card.light.warmth: Color temperature
-card.light.waiting: Waiting
-card.lock.lock: Lock
-card.lock.unlock: Unlock
-card.lock.open: Open
-rings.side: Details
-rings.side.left: Left / top
-rings.side.right: Right / bottom
-home.setting.rings.side: "Rings: details side"
-rings.home: Home
-rings.nofloor: No floor
-rings.floors: Floors
-rings.areas: Areas
-rings.kinds: Types
-rings.summary: "{{.On}} on · {{.N}} device{{if ne .N 1}}s{{end}}"
-rings.kind.lights: Lights
-rings.kind.switches: Switches
-rings.kind.media: Media
-rings.kind.climate: Climate
-rings.kind.fans: Fans
-rings.kind.covers: Covers
-rings.kind.locks: Locks
-rings.kind.access: Access
-rings.kind.presence: Presence
-rings.kind.cameras: Cameras
-home.setting.rings.look: Rings look
-home.setting.rings.hidden_floors: "Rings: hidden floors"
-home.setting.rings.hidden_areas: "Rings: hidden areas"
-home.setting.rings.hidden_kinds: "Rings: hidden types"
-home.setting.rings.labels: "Rings: labels"
-home.noarea: No area
-home.none: None
-home.off: Home Assistant is off
-home.off.hint: Turn on home control in Settings → Home control
-home.picked.areas: "{{.N}} area{{if ne .N 1}}s{{end}}"
-home.picked.entities: "{{.N}} device{{if ne .N 1}}s{{end}}"
-home.picked.labels: "{{.N}} label{{if ne .N 1}}s{{end}}"
-home.refused: Actions not allowed
-home.refused.hint: Open ESPHome, press the settings cog on {{.Name}}, and enable “Allow the device to perform Home Assistant actions.”
-home.retry: Try again
-home.search: Search
-home.selection.cameras: Cameras
-home.selection.lights: Lights
-home.selection.switches: Switches
-home.setting.combine: Include switches
-home.setting.control.lights: Control lights
-home.setting.control.switches: Control switches
-home.setting.enabled: Enable home control
-home.setting.group.lights: Group lights from
-home.setting.group.switches: Group switches from
-home.setting.dashboard: Dashboard
-home.setting.tessera.columns: Tessera tiles along the long side
-home.setting.tessera.home_after_idle: "Tessera: back to the home page after the screensaver"
-home.setting.tessera.landscape: "Tessera: landscape screen"
-home.setting.tessera.portrait: "Tessera: portrait screen"
-home.setting.tessera.rows: Tessera tiles along the short side
-home.setting.tessera.themed: "Tessera: use this device's theme"
-home.setting.tessera.turn: "Tessera: page transition"
-home.setting.tessera.bottom: "Tessera: swipe up from the bottom"
-home.setting.tessera.follow: "Tessera: page follows finger"
-home.tab.labels: Labels
-home.tab.manual: Manual
-home.tessera.grid: Grid
-home.tessera.columns: Long side
-home.tessera.landscape: Enable landscape
-home.tessera.portrait: Enable portrait
-home.tessera.return: Go back to the home page after the screensaver
-home.tessera.rows: Short side
-home.tessera.themed: Use this device's theme
-home.tessera.turn: Page transition
-home.tessera.bottom: Swipe up from the bottom
-home.tessera.follow: Page follows finger
-home.tile.all.off: All off
-home.tile.all.on: All on
-home.tile.area: "{{.N}} of {{.Of}} on"
-home.tile.level: "{{.N}}%"
-home.tile.off: "Off"
-home.tile.on: "On"
-home.tile.unavailable: Unavailable
-home.title: Home control
-home.reconnecting: Reconnecting to Home Assistant…
-home.unconnected: Not connected
-home.unconnected.hint: Add {{.Name}} to Home Assistant
-hours.12: 12 hour
-hours.24: 24 hour
-idle.group.idle: Screen saver
-idle.after: Start after
-idle.after.title: Start after
-idle.face: Clock face
-idle.label: Visual label
-idle.media: Close paused player after
-idle.media.hint: Audio and video players
-idle.night: Night mode
-idle.night.after: Starts after
-idle.night.hint: When the room is dark
-idle.night.lux: Darker than
-idle.night.lux.value: "{{.N}} lx"
-idle.night.mode: Mode
-idle.none: None
-idle.off: Screen off
-idle.setting.after: Idle screen after
-idle.setting.align: Idle clock horizontal position
-idle.setting.backing: Idle clock backing
-idle.setting.face: Idle clock face
-idle.setting.media: Close paused player after
-idle.setting.night: Night mode
-idle.setting.night.after: Night mode after
-idle.setting.night.lux: Night mode below
-idle.setting.wake: Wake gesture
-idle.setting.position: Idle clock vertical position
-idle.setting.saver: Screen saver mode
-idle.setting.size: Idle clock size
-idle.setting.visual1: Idle visual 1
-idle.setting.visual1.source: Idle visual 1 listens to
-idle.setting.visual2: Idle visual 2
-idle.setting.visual2.source: Idle visual 2 listens to
-idle.source1: Visual 1 audio
-idle.source2: Visual 2 audio
-idle.title: Screen saver
-idle.setting.photo_every: Next photo every
-idle.entity.photo_every: Screen saver next photo every
-idle.setting.photo_fit: Photo fit
-idle.entity.photo_fit: Screen saver photo fit
-idle.setting.photo_transition: Transition
-idle.entity.photo_transition: Screen saver photo transition
-idle.visual1: Visual 1
-idle.visual2: Visual 2
-ink.amber: Amber
-ink.blue: Blue
-ink.cyan: Cyan
-ink.green: Green
-ink.pink: Pink
-ink.red: Red
-ink.theme: Theme
-ink.violet: Violet
-keyboard.cancel: Cancel
-keyboard.code_expired: Code expired
-message.close: Close
-keyboard.compact: Compact
-keyboard.enter: Enter
-keyboard.full_width: Full width
-keyboard.hide: Hide
-keyboard.large: Large
-keyboard.refresh: Refresh
-keyboard.save: Save
-keyboard.search: Search
-keyboard.size: Keyboard size
-keyboard.standard: Standard
-language.name: English
-look.default: Default
-look.full: Full screen
-look.panel: In the panel
-look.place: Placement
-look.stage.listening: Listening
-look.stage.responding: Responding
-look.stage.waiting: Waiting
-look.title: Visuals
-media.entity.buttons: Volume buttons
-media.entity.duck: Music ducking
-media.group.media: Media
-media.setting.autoplay: Autoplay
-media.setting.background: Background play
-media.setting.buttons: Volume buttons
-media.setting.duck: Ducking depth
-media.setting.mini: Mini player
-media.setting.player: Player on start
-microphone.group.microphone: Microphone
-microphone.setting.cancel: Microphone echo cancellation
-microphone.setting.denoise: Noise suppression
-microphone.setting.gain: Microphone gain
-microphone.setting.leveling: Microphone leveling
-microphone.setting.mixing: Microphone mixing
-microphone.setting.mute_led: Mute LED brightness
-microphone.setting.sensitivity: Room sensitivity
-mirror.app: Mirror
-mode.auto: Automatic
-mode.manual: Manual
-network.group.network: Network & internet
-network.address: IP address
-network.address.none: None
-network.lease: Lease renews
-network.lease.hours: "{{.N}} h"
-network.lease.minutes: "{{.N}} min"
-network.lease.now: Now
-network.mac: MAC address
-network.router: Router
-network.setting.home_key: Home key
-network.setting.internet: Internet access
-network.internet.open: Open
-network.internet.quiet: Quiet
-network.internet.local: Local only
-network.internet.hint: Local only blocks everything outside your network
-network.setting.verify: Verify certificates
-network.setting.via_home: Download through Home Assistant
-network.ssid: Wi-Fi network
-network.title: Network & internet
-network.via_home.hint: Updates fetched by Home Assistant
-night.clock: Dim to a clock
-gesture.tap: Tap
-gesture.double-tap: Double tap
-gesture.hold: Hold
-gesture.swipe-up: Swipe up
-gesture.swipe-down: Swipe down
-gesture.swipe-left: Swipe left
-gesture.swipe-right: Swipe right
-gesture.pinch-in: Pinch in
-gesture.pinch-out: Pinch out
-gesture.fingers: "{{.Move}} with {{.N}} fingers"
-night.dim: Dim
-night.none: Nothing
-night.off: Turn off the screen
-onboard.add: Scan the code, then add
-onboard.hint: Scan the code, then enter this address.
-onboard.or: or enter this address
-onboard.title: Add me to Home Assistant
-homealarm.app: Home alarm
-homealarm.group.homealarm: Home alarm
-homealarm.setting.entity: Alarm panel
-homealarm.setting.look: Look
-homealarm.entity.look: Home alarm look
-homealarm.setting.tab: Dashboard tab
-homealarm.entity.tab: Home alarm dashboard tab
-homealarm.setting.triggered.show: Show when triggered
-homealarm.entity.triggered.show: Home alarm show when triggered
-homealarm.setting.triggered.sound: Triggered sound
-homealarm.entity.triggered.sound: Home alarm triggered sound
-homealarm.setting.pending.show: Show during entry delay
-homealarm.entity.pending.show: Home alarm show during entry delay
-homealarm.setting.pending.sound: Entry delay sound
-homealarm.entity.pending.sound: Home alarm entry delay sound
-homealarm.setting.arming.show: Show while arming
-homealarm.entity.arming.show: Home alarm show while arming
-homealarm.setting.arming.sound: Arming sound
-homealarm.entity.arming.sound: Home alarm arming sound
-homealarm.setting.settled.show: Show when armed or disarmed
-homealarm.entity.settled.show: Home alarm show when armed or disarmed
-homealarm.setting.settled.for: Hide after
-homealarm.entity.settled.for: Home alarm hide after
-homealarm.setting.settled.sound: Armed and disarmed sound
-homealarm.entity.settled.sound: Home alarm armed and disarmed sound
-homealarm.look.keypad: Keypad
-homealarm.look.shield: Shield
-homealarm.look.card: Card
-homealarm.look.ring: Ring
-homealarm.look.dial: Dial
-homealarm.look.neon: Neon
-homealarm.look.hardware: Hardware
-homealarm.look.flip: Flip board
-homealarm.look.terminal: Terminal
-homealarm.look.console: Console
-homealarm.look.minimal: Minimal
-homealarm.look.blueprint: Blueprint
-homealarm.look.matrix: Matrix
-homealarm.look.vault: Vault
-homealarm.blueprint.sheet: Sheet
-homealarm.blueprint.date: Date
-homealarm.blueprint.time: Time
-homealarm.blueprint.link: Link
-homealarm.blueprint.log: State log
-homealarm.status.unset: No alarm panel
-homealarm.status.waiting: Waiting for Home Assistant
-homealarm.status.unavailable: Unavailable
-homealarm.status.disarmed: Disarmed
-homealarm.status.armed_home: Armed home
-homealarm.status.armed_away: Armed away
-homealarm.status.armed_night: Armed night
-homealarm.status.armed_vacation: Armed vacation
-homealarm.status.armed_custom_bypass: Armed bypass
-homealarm.status.arming: Arming
-homealarm.status.disarming: Disarming
-homealarm.status.pending: Entry delay
-homealarm.status.triggered: Triggered
-homealarm.mode.armed_home: Home
-homealarm.mode.armed_away: Away
-homealarm.mode.armed_night: Night
-homealarm.mode.armed_vacation: Vacation
-homealarm.mode.armed_custom_bypass: Bypass
-homealarm.arm: Arm
-homealarm.disarm: Disarm
-homealarm.emergency: Emergency
-homealarm.panic: Panic
-homealarm.hold: Hold to trigger
-homealarm.code.first: Enter your code first
-homealarm.code.enter: Enter code
-homealarm.code.title: Enter code
-homealarm.sending: Sending…
-homealarm.refused: Home Assistant refused that
-homealarm.none: No alarm panels in Home Assistant
-homealarm.pick: Pick one
-homealarm.cancel: Cancel
-homealarm.ok: OK
-homealarm.recent: Recent
-homealarm.chip.ready: Ready
-homealarm.chip.armed: Armed
-homealarm.chip.delay: Delay
-homealarm.chip.alarm: Alarm
-homealarm.plate.time: Local time
-homealarm.plate.link: Link
-homealarm.plate.lost: Lost
-homealarm.plate.normal: Normal
-homealarm.plate.system: System
-homealarm.plate.mode: System mode
-homealarm.plate.idle: Idle
-homealarm.plate.exit: Exit
-homealarm.plate.entry: Entry
-homealarm.neon.state: System state
-homealarm.flip.time: Time
-homealarm.flip.state: State
-homealarm.terminal.status: System status
-homealarm.terminal.command: Command
-homealarm.console.log: Event log
-homealarm.console.by: by
-homealarm.console.prompt: Enter code or select function
-homealarm.zone.lost: Lost
-homealarm.zone.bypassed: Bypassed
-homealarm.zone.active: Active
-homealarm.zone.idle: Idle
-homealarm.zone.fault: Fault
-homealarm.zone.clear: Clear
-homealarm.zone.open: Open
-homealarm.zone.closed: Closed
-homealarm.zone.battery: Low battery
-homealarm.zone.tamper: Tamper
-homealarm.zone.trouble: Trouble
-homealarm.notready.one: "Not ready: {{.Zone}} open"
-homealarm.notready.many: "Not ready: {{.N}} zones open"
-homealarm.zones: Zones
-homealarm.faults: Faults
-homealarm.rehearsal: Rehearsal, nothing sent
-thermostat.app: Thermostat
-thermostat.group.thermostat: Thermostat
-thermostat.setting.look: Look
-thermostat.entity.look: Thermostat look
-thermostat.setting.tab: Dashboard tab
-thermostat.entity.tab: Thermostat dashboard tab
-thermostat.setting.entities: Thermostats
-thermostat.chosen: "{{.N}} of {{.Of}}"
-thermostat.full: "Up to {{.N}}; turn one off first"
-thermostat.look.dial: Dial
-thermostat.look.column: Column
-thermostat.look.wheel: Wheel
-thermostat.look.bars: Bars
-thermostat.look.split: Split
-thermostat.look.terminal: Terminal
-thermostat.look.brass: Brass
-thermostat.look.mission: Mission
-thermostat.choose.mode: Mode
-thermostat.choose.preset: Preset
-thermostat.choose.fan: Fan
-thermostat.inside: Inside
-thermostat.outside: Outside
-thermostat.set: Set
-thermostat.setpoint: Set point
-thermostat.low: Low
-thermostat.high: High
-thermostat.no-preset: No preset
-thermostat.action.heating: Heating
-thermostat.action.cooling: Cooling
-thermostat.action.drying: Drying
-thermostat.action.fan: Fan
-thermostat.action.idle: Idle
-thermostat.action.off: "Off"
-thermostat.lamp.fan: Fan run
-thermostat.environment: Environmental control
-thermostat.preset.none: None
-thermostat.preset.away: Away
-thermostat.preset.eco: Eco
-thermostat.preset.home: Home
-thermostat.preset.sleep: Sleep
-thermostat.preset.comfort: Comfort
-thermostat.preset.boost: Boost
-thermostat.preset.activity: Activity
-thermostat.fanmode.auto: Auto
-thermostat.fanmode.on: "On"
-thermostat.fanmode.off: "Off"
-thermostat.fanmode.low: Low
-thermostat.fanmode.medium: Medium
-thermostat.fanmode.middle: Middle
-thermostat.fanmode.high: High
-thermostat.fanmode.focus: Focus
-thermostat.fanmode.diffuse: Diffuse
-thermostat.none: No thermostats chosen
-thermostat.waiting: Waiting for Home Assistant
-thermostat.unavailable: Unavailable
-thermostat.off: "Off"
-thermostat.between: Keeping between
-thermostat.heating: Heating to
-thermostat.cooling: Cooling to
-thermostat.drying: Drying
-thermostat.fanning: Fan running
-thermostat.holding: Holding at
-thermostat.in: In
-thermostat.out: Out
-thermostat.humidity: Humidity
-thermostat.fan: Fan
-thermostat.temperature: Temperature
-thermostat.target: Target
-thermostat.status: Status
-thermostat.temp: Temp
-thermostat.dial: Setting
-thermostat.refused: Home Assistant refused that
-thermostat.mode.off: "Off"
-thermostat.mode.heat: Heat
-thermostat.mode.cool: Cool
-thermostat.mode.heat_cool: Auto
-thermostat.mode.auto: Auto
-thermostat.mode.dry: Dry
-thermostat.mode.fan_only: Fan
-homealarm.zones.count: "{{.Secure}} secure / {{.Open}} open"
-homealarm.setting.zones: Zones shown
-homealarm.zones.shown: "{{.N}} of {{.Of}}"
-homealarm.zones.page: "Zones {{.From}}–{{.To}} / {{.Of}}"
-homealarm.blueprint.location: Location
-homealarm.blueprint.type: Type
-homealarm.class.door: Door
-homealarm.class.window: Window
-homealarm.class.garage_door: Garage door
-homealarm.class.opening: Opening
-homealarm.class.motion: Motion
-homealarm.class.occupancy: Occupancy
-homealarm.class.presence: Presence
-homealarm.class.vibration: Vibration
-homealarm.class.tamper: Tamper
-homealarm.class.smoke: Smoke
-homealarm.class.moisture: Water
-homealarm.class.gas: Gas
-homealarm.class.carbon_monoxide: CO
-homealarm.class.sound: Sound
-homealarm.class.safety: Safety
-homealarm.on: "On"
-homealarm.off: "Off"
-doorbell.entity.chime: Doorbell ring sound
-doorbell.group.doorbell: Doorbell
-doorbell.setting.chime: Ring sound
-doorbell.entity.notify: Doorbell notification sound
-doorbell.setting.notify: Notification sound
-doorbell.entity.ring_for: Doorbell ring for
-doorbell.setting.ring_for: Ring for
-doorbell.entity.live_for: Doorbell live view open for
-doorbell.setting.live_for: Keep live view open
-doorbell.entity.style: Doorbell notification style
-doorbell.setting.style: Notification style
-doorbell.entity.visitor: Doorbell ring style
-doorbell.setting.visitor: Ring style
-doorbell.entity.tab: Doorbell dashboard tab
-doorbell.setting.tab: Dashboard tab
-doorbell.add: Add doorbell
-doorbell.app: Doorbell
-doorbell.camera.pictures: Event pictures from
-doorbell.camera.pictures.hint: A Home Assistant camera that shows this door
-doorbell.camera.title: Home Assistant camera
-doorbell.cancel: Cancel
-doorbell.field.host: IP address or hostname
-doorbell.field.host_port: Add :port to skip discovery
-doorbell.field.name: Name
-doorbell.field.password: Password
-doorbell.field.rtsp: RTSP URL
-doorbell.field.uid: UID
-doorbell.field.user: User
-doorbell.forget: Remove
-doorbell.added: Added
-doorbell.entity.door.events: "Doorbell {{.N}} event source"
-doorbell.entity.door.name: "Doorbell {{.N}} name"
-doorbell.entity.door.talk: "Doorbell {{.N}} talkback source"
-doorbell.entity.door.video: "Doorbell {{.N}} video source"
-doorbell.field.stream: Stream
-doorbell.setting.door.events: Events
-doorbell.setting.door.name: Name
-doorbell.setting.door.talk: Talkback
-doorbell.setting.door.video: Video
-doorbell.autosetup: Auto setup
-doorbell.cameras: "{{.N}} cameras"
-doorbell.channel: "Channel {{.N}}"
-doorbell.connect: Connect
-doorbell.connecting: Connecting…
-doorbell.events.via: "{{.State}} via {{.Source}}"
-doorbell.offline: Offline
-doorbell.sensor.animal: Animal sensor
-doorbell.sensor.motion: Motion sensor
-doorbell.sensor.none: None
-doorbell.sensor.package: Package sensor
-doorbell.sensor.person: Person sensor
-doorbell.sensor.vehicle: Vehicle sensor
-doorbell.sensor.visitor: Ring sensor
-doorbell.source.ha_reolink: Home Assistant (Reolink integration)
-doorbell.source.nvr: Reolink NVR
-doorbell.status.events: Events
-doorbell.status.video: Video
-doorbell.video.connecting: "Connecting via {{.Source}}"
-doorbell.video.failed: "{{.Why}} ({{.Source}})"
-doorbell.tried: "{{.Source}} failed: {{.Why}}"
-doorbell.video.working: "Working via {{.Source}}"
-doorbell.lock: Lock
-doorbell.lock.confirm: Tap again to unlock
-doorbell.looking: Looking in Home Assistant…
-doorbell.manual: Manual
-doorbell.needs: Enter a UID or an IP address or hostname
-doorbell.needs.host: Enter an IP address or hostname
-doorbell.needs.rtsp: Enter an RTSP URL
-doorbell.none: No doorbells set up
-doorbell.save: Save
-doorbell.checking: Checking…
-doorbell.notsaved: Not saved
-doorbell.saved: Saved
-doorbell.ok: OK
-doorbell.fellback: "{{.Line}} (Reolink failed)"
-doorbell.slot: "Doorbell {{.N}}"
-doorbell.watch: Watch
-doorbell.why.camera: No live video for this doorbell
-doorbell.why.lock: "Can't change the lock: {{.Why}}"
-doorbell.why.lost: Lost the doorbell, retrying
-doorbell.why.talk: "Can't talk: {{.Why}}"
-doorbell.why.fallback: Showing Home Assistant video, no talkback
-doorbell.why.toobig: The main stream is too large for this screen, showing the sub stream
-doorbell.why.decoder: This screen can't play this doorbell's video
-doorbell.why.nopassword: Enter the doorbell's password
-doorbell.why.nocamera: Pick a Home Assistant camera
-doorbell.why.refused: "Login refused (code {{.Code}})"
-doorbell.why.other: A different doorbell answers at that address
-doorbell.why.unreachable: Can't reach the doorbell
-doorbell.stream.main: Main
-doorbell.stream.sub: Sub
-doorbell.source.auto: Automatic
-doorbell.source.ha: Home Assistant
-doorbell.source.onvif: ONVIF
-doorbell.source.reolink: Reolink
-doorbell.source.rtsp: RTSP
-doorbell.status.connected: Connected
-doorbell.status.connecting: Connecting…
-doorbell.status.login: Wrong user or password
-doorbell.status.none: No doorbells in Home Assistant
-doorbell.status.ready: "{{.Count}} connected"
-doorbell.status.unreachable: Can't reach the doorbells
-doorbell.status.unset: Not set up
-doorbell.status.unsupported: Not available from this source
-doorbell.event.visitor: "Someone's at the {{.Door}}"
-doorbell.event.people: "Person at the {{.Door}}"
-doorbell.event.package: "Package at the {{.Door}}"
-doorbell.event.vehicle: "Vehicle by the {{.Door}}"
-doorbell.event.dog_cat: "Animal at the {{.Door}}"
-doorbell.event.motion: "Motion at the {{.Door}}"
-photos.entity.immich.albums: Immich albums
-photos.entity.immich.enabled: Immich photos
-photos.entity.immich.favorites: Immich favorites only
-photos.entity.immich.key: Immich API key
-photos.entity.immich.memories: Immich memories first
-photos.entity.immich.people: Immich people
-photos.entity.immich.server: Immich server
-photos.entity.immich.tags: Immich tags
-photos.entity.status: "Photos {{.Source}} status"
-photos.group.immich: Immich
-photos.google: Google Photos
-photos.group.google: Google Photos
-photos.setting.google.enabled: Enable
-photos.entity.google.enabled: Google Photos
-photos.setting.google.album1: Album 1 link
-photos.entity.google.album1: Google Photos album 1 link
-photos.example.google.album1: https://photos.app.goo.gl/…
-photos.setting.google.album1.weight: Album 1 share
-photos.entity.google.album1.weight: Google Photos album 1 share
-photos.setting.google.album2: Album 2 link
-photos.entity.google.album2: Google Photos album 2 link
-photos.example.google.album2: https://photos.app.goo.gl/…
-photos.setting.google.album2.weight: Album 2 share
-photos.entity.google.album2.weight: Google Photos album 2 share
-photos.setting.google.album3: Album 3 link
-photos.entity.google.album3: Google Photos album 3 link
-photos.example.google.album3: https://photos.app.goo.gl/…
-photos.setting.google.album3.weight: Album 3 share
-photos.entity.google.album3.weight: Google Photos album 3 share
-photos.setting.google.album4: Album 4 link
-photos.entity.google.album4: Google Photos album 4 link
-photos.example.google.album4: https://photos.app.goo.gl/…
-photos.setting.google.album4.weight: Album 4 share
-photos.entity.google.album4.weight: Google Photos album 4 share
-photos.group.photos: Photos
-photos.setting.app.every: Photos app next photo every
-photos.entity.app.every: Photos app next photo every
-photos.setting.app.fit: Photos app fit
-photos.entity.app.fit: Photos app fit
-photos.setting.app.transition: Photos app transition
-photos.entity.app.transition: Photos app transition
-phototransition.cut: None
-phototransition.fade: Fade
-phototransition.slide: Slide
-phototransition.zoom: Zoom
-phototransition.wipe: Wipe
-phototransition.dissolve: Dissolve
-photos.setting.immich.quality: Quality
-photos.entity.immich.quality: Immich quality
-photos.quality.preview: Preview
-photos.quality.fullsize: Full size
-photofit.auto: Auto
-photofit.cover: Fill
-photofit.contain: Fit, blurred edges
-photofit.bars: Fit, plain edges
-photofit.framed: Framed
-photofit.kenburns: Slow pan
-photos.app: Photos
-photos.example.immich.albums: Family, Summer 2026
-photos.example.immich.people: Alex, Sam
-photos.example.immich.server: https://photos.example.com
-photos.example.immich.tags: kitchen, favorites
-photos.immich: Immich
-photos.page: Photos
-photos.sources: Sources
-photos.status: Status
-photos.setting.immich.albums: Albums
-photos.setting.immich.enabled: Enable
-photos.setting.immich.favorites: Favorites only
-photos.setting.immich.key: API key
-photos.setting.immich.memories: Memories first
-photos.setting.immich.people: People
-photos.setting.immich.server: Server
-photos.setting.immich.tags: Tags
-photos.status.off: "Off"
-photos.status.connecting: Connecting…
-photos.status.empty: No photos match
-photos.status.key: Wrong API key
-photos.status.permission: "API key needs {{.Name}}"
-photos.status.old: "Immich {{.Version}}: needs 3.2 or newer"
-photos.status.ready: Connected
-photos.status.unknown: "Nothing named {{.Name}}"
-photos.status.unreachable: Can't reach the server
-photos.status.unset: Not set up
-place.horizontal: Horizontal position
-place.size: Size
-place.vertical: Vertical position
-player.ad: Ad
-player.ad_clip: Ad {{.Clip}} of {{.Clips}}
-player.full: Full player
-player.live: LIVE
-player.lyrics: Lyrics
-player.next: Up next
-player.none: Nothing
-player.now: Now playing
-music.app: Music
-music.now: Playing
-music.speakers: Speakers
-music.quiet: Nothing playing
-music.none: No Music Assistant speakers
-music.unavailable: Music Assistant is not reachable
-music.integration: Update the EchoLocal integration in Home Assistant
-music.find: Find a speaker
-music.starting: Starting…
-music.home: Home
-music.search: Search
-music.library: Library
-music.searching: Search Music Assistant
-music.nothing: Nothing here
-music.recent: Recently played
-music.playlists: Playlists
-music.albums: Albums
-music.artists: Artists
-music.radio: Radio
-music.play: Play
-music.next: Play next
-music.add: Add to queue
-music.similar: Similar
-music.back: Back
-music.kind.artist: Artist
-music.kind.album: Album
-music.kind.track: Track
-music.kind.playlist: Playlist
-music.kind.radio: Radio station
-music.kind.podcast: Podcast
-music.kind.audiobook: Audiobook
-music.group: Group
-music.here: Move here
-music.queue: Up next
-position.bottom: Bottom
-position.center: Center
-position.random: Random
-position.top: Top
-poster.daily: Daily
-poster.entity.every: Wallpaper changes
-poster.entity.on: Wallpaper
-poster.every: Change every
-poster.group.poster: Wallpaper
-poster.hourly: Hourly
-poster.never: Never
-poster.off: Off
-poster.setting.every: Change every
-poster.setting.fit: Fit
-poster.entity.fit: Wallpaper fit
-poster.setting.transition: Transition
-poster.entity.transition: Wallpaper transition
-poster.setting.on: Show wallpaper
-poster.show: Show wallpaper
-poster.wake: On each wake
-power.reboot: Restart device
-power.reboot.what: Everything comes back in about a minute.
-power.restart: Restart app
-power.restart.what: The screen goes dark for a few seconds.
-power.title: Restart
-presence.group.presence: Presence
-presence.setting.range: Detection range
-presence.setting.wake: Wake on motion
-radar.app: Radar
-radar.credit.nws: "Imagery: NASA GIBS · Radar: NWS via Iowa Environmental Mesonet"
-radar.credit.rainviewer: "Imagery: NASA GIBS · Radar: RainViewer"
-radar.failed: Radar is unavailable right now
-radar.miles: "{{.N}} mi"
-radar.source.auto: Auto
-radar.source.nws: NWS
-radar.source.rainviewer: RainViewer
-radar.updating: Updating…
-radar.forecast: "Forecast {{.Time}}"
-radio.app: Radio
-radio.empty: Star a station to put it on the dial
-radio.idle: Pick a station
-radio.local: Local stations
-radio.more: "{{.N}} more not shown"
-radio.nothing: No stations here
-radio.playing: Playing
-radio.popular: Popular
-radio.stopped: Stopped
-radio.unavailable: Radio Browser is not set up in Home Assistant
-rail.media: Media
-rail.sleep: Sleep
-reply.download: Starts later, never gaps
-reply.stream: Starts sooner, can gap
-reply.title: Response playback
-actions.broadcast: Broadcast a message
-actions.alarm: Manage alarms
-actions.alarm.time: Say a time such as seven thirty AM, optionally followed by every weekday, every weekend, every day, or on named weekdays
-actions.alarm.exists: "{{.Alarm}} already exists"
-actions.alarm.set: "Set {{.Alarm}}"
-actions.alarm.empty: You have no saved alarms
-actions.alarm.off: "{{.Alarm}}, disabled"
-actions.alarm.none: You have no upcoming alarm
-actions.alarm.next: "Your next alarm is {{.Alarm}}, {{.When}}"
-actions.alarm.enable: "Enabled {{.Alarm}}"
-actions.alarm.disable: "Disabled {{.Alarm}}"
-actions.alarm.delete: "Deleted {{.Alarm}}"
-actions.alarm.not_ringing: No alarm is ringing
-actions.alarm.stopped: Alarm stopped
-actions.alarm.not_snoozed: No ringing alarm can be snoozed
-actions.alarm.snoozed: Alarm snoozed
-actions.alarm.target: Say the alarm name, time, or next alarm
-actions.alarm.missing: No saved alarm matches that name or time
-actions.alarm.ambiguous: More than one alarm matches; say its name
-actions.alarm.once: one time
-actions.broadcast.ask: Go ahead after the tone
-actions.broadcast.text: Broadcasting typed text needs the Home Assistant integration
-actions.call: Call a device
-actions.call.busy: Already in a call
-actions.call.foreign: "{{.Peer}} isn't in this home"
-actions.call.unknown: "There's no device called {{.Peer}}"
-actions.call.unreachable: "{{.Peer}} can't be reached"
-actions.call_answer: Answer a call
-actions.call_answer.none: No incoming call to answer
-actions.call_answer.done: Answering the call
-actions.call_hangup: Hang up a call
-actions.call_hangup.none: No call to hang up
-actions.call_hangup.done: Call ended
-actions.youtube_tv: Watch YouTube TV
-actions.youtube_tv.channel: Say a channel or a show
-actions.youtube_tv.unknown: "I looked for {{.Channel}} on YouTube TV, but it either isn't available or can't be played right now"
-actions.youtube_tv.device: "There's no device called {{.Device}}"
-actions.youtube_tv.nowhere: Choose a default TV in the TV app
-actions.youtube_tv.here: "Playing {{.Show}} on {{.Channel}}"
-actions.youtube_tv.here.channel: "Playing {{.Channel}}"
-actions.youtube_tv.watching: "Playing {{.Show}} on {{.Channel}} on {{.Device}}"
-actions.youtube_tv.watching.channel: "Playing {{.Channel}} on {{.Device}}"
-actions.youtube_tv.airing: "{{.Channel}} is showing {{.Title}}"
-actions.youtube_tv.nothing: "Nothing is listed on {{.Channel}} right now"
-lock.again: Enter it again
-lock.change: Change PIN
-lock.clear: Remove PIN
-lock.clear.what: Are you sure? This will unlock settings.
-lock.enter: Enter the PIN
-lock.mismatch: The PINs didn't match. Enter a new PIN
-lock.new: Enter a new PIN, 4 to 8 digits
-lock.next: Next
-lock.off: "Off"
-lock.on: "On"
-lock.set: Set PIN
-lock.entity.pin: Settings Lock
-screen.group.lock: Lock
-screen.setting.lock_pin: Settings Lock
-lock.title: Settings
-lock.wait: "Try again in {{.Seconds}} s"
-lock.wrong: Wrong PIN
-lovelace.default: Default dashboard
-lovelace.first: First view
-lovelace.hint.integration: Install the EchoLocal integration in Home Assistant
-lovelace.hint.allow: Allow a user under the EchoLocal integration's options in Home Assistant
-lovelace.hint.user: Choose a user under Settings › Dashboard
-lovelace.loading: Loading Home Assistant
-lovelace.unreachable: Home Assistant isn't reachable
-lovelace.unreachable.retry: Trying again automatically · tap to try now
-lovelace.group.lovelace: Home Assistant dashboard
-lovelace.entity.user: Dashboard user
-lovelace.setting.user: Show as
-lovelace.entity.dashboard: Dashboard
-lovelace.setting.dashboard: Dashboard
-lovelace.entity.view: Dashboard view
-lovelace.setting.view: View
-lovelace.entity.theme: Dashboard theme
-lovelace.setting.theme: Theme
-lovelace.theme.default: Home Assistant default
-lovelace.entity.saver_dashboard: Screensaver dashboard
-lovelace.setting.saver_dashboard: Screensaver dashboard
-lovelace.entity.saver_view: Screensaver view
-lovelace.setting.saver_view: Screensaver view
-lovelace.entity.scale: Dashboard render scale
-lovelace.setting.scale: Render scale
-lovelace.entity.saver_scale: Screensaver render scale
-lovelace.setting.saver_scale: Screensaver render scale
-lovelace.scale.value: "{{.N}}%"
-rtsp.entity.audio: RTSP audio
-rtsp.entity.password: RTSP password
-rtsp.entity.username: RTSP username
-rtsp.group.rtsp: RTSP
-rtsp.example.username: viewer
-rtsp.setting.audio: Include audio
-rtsp.setting.enabled: RTSP server
-rtsp.setting.password: Password
-rtsp.setting.username: Username
-screen.group.panel: Display
-screen.setting.alert: Alert style
-screen.setting.auto: Auto brightness
-screen.setting.backlight: Brightness
-screen.setting.drawer: Dock location
-screen.setting.drawer.hide: Hide dock after
-screen.setting.keyboard: Keyboard size
-screen.setting.language: Language
-screen.setting.marks: Privacy marks
-screen.setting.size: Size
-screen.setting.font: Font
-screen.setting.style: Style
-screen.setting.touches: Show touches
-touches.off: "Off"
-touches.dots: Dots
-touches.details: Details
-screen.setting.theme: Theme
-screen.setting.timer: Timer style
-screen.setting.custom.background: Custom theme background
-screen.setting.custom.surface: Custom theme cards
-screen.setting.custom.text: Custom theme text
-screen.setting.custom.muted: Custom theme secondary text
-screen.setting.custom.accent: Custom theme accent
-screen.setting.custom.accent2: Custom theme second accent
-media.group.sendspin: Sendspin
-media.setting.sendspin: Sendspin
-settings.about: About
-settings.assistants: Voice assistants
-settings.camera: Camera
-settings.debug: Developer options
-settings.display: Display
-settings.features: Connected services
-settings.language: Language
-settings.media: Media
-settings.network: Network & internet
-settings.power: Restart
-settings.sync: Config sync
-settings.system: System
-settings.title: Settings
-settings.search: Search settings
-settings.search.empty: Type to find a setting
-settings.search.none: No matching settings
-settings.volume: Sound
-size.large: Large
-size.medium: Medium
-size.micro: Micro
-size.mini: Mini
-size.nano: Nano
-size.small: Small
-sound.alerts: Alarm volume
-sound.feedback: System sounds
-sound.main: Main volume
-sound.media: Media volume
-sound.mute.alerts: Mute alarms
-sound.mute.feedback: Mute system sounds
-sound.mute.main: Mute all sound
-sound.mute.media: Mute media
-sound.mute.voice: Mute assistant
-sound.voice: Assistant volume
-source.both: Microphone and speaker
-source.mic: Microphone
-source.speaker: Speaker
-stream.alerts: Alerts
-stream.feedback: Feedback
-stream.main: Main
-stream.media: Media
-stream.voice: Voice
-style.eink: E-ink
-style.glass: Glass
-style.hifi: Hi-fi
-style.material: Material You
-style.metro: Metro
-style.neon: Neon
-style.skeuo: Skeuo
-style.standard: Standard
-style.terminal: Terminal
-style.title: Style
-font.title: Font
-font.style: Style default
-sync.busy: "{{.Peer}} is busy"
-sync.cancelled: Sync cancelled
-sync.empty: No other devices to sync with
-sync.enter: "Enter the code shown on {{.Peer}}"
-sync.expired: The code expired
-sync.failed: Sync failed
-sync.matched: "Already matched {{.Peer}}"
-sync.received: "{{.N}} settings applied from {{.Peer}}"
-sync.receiving: Receiving settings…
-sync.sending: Sending settings…
-sync.sent: "Settings sent to {{.Peer}}"
-sync.show: "Enter this code on {{.Peer}}"
-sync.title: Config sync
-sync.tries: Too many wrong codes
-sync.wrong: "Wrong code, {{.N}} tries left"
-system.adb: ADB over network
-system.adb.hint: Unauthenticated root shell on 5555
-system.certificates: Verify certificates
-system.certificates.hint: TLS certificate validation
-system.title: System
-tessera.alarm.armed_away: Away
-tessera.alarm.armed_custom_bypass: Custom bypass
-tessera.alarm.armed_home: Home
-tessera.alarm.armed_night: Night
-tessera.alarm.armed_vacation: Vacation
-tessera.alarm.cancel: Cancel
-tessera.alarm.clear: Clear
-tessera.alarm.disarm: Disarm
-tessera.alarm.ok: OK
-tessera.alarm.text: Enter this panel's code in Home Assistant.
-tessera.alert.notification: Notification
-tessera.again: Tap again to unlock
-tessera.binary.battery.off: Normal
-tessera.binary.battery.on: Low
-tessera.binary.battery_charging.off: Not charging
-tessera.binary.battery_charging.on: Charging
-tessera.binary.carbon_monoxide.off: Clear
-tessera.binary.carbon_monoxide.on: Detected
-tessera.binary.cold.off: Normal
-tessera.binary.cold.on: Cold
-tessera.binary.connectivity.off: Disconnected
-tessera.binary.connectivity.on: Connected
-tessera.binary.door.off: Closed
-tessera.binary.door.on: Open
-tessera.binary.garage_door.off: Closed
-tessera.binary.garage_door.on: Open
-tessera.binary.gas.off: Clear
-tessera.binary.gas.on: Detected
-tessera.binary.heat.off: Normal
-tessera.binary.heat.on: Hot
-tessera.binary.light.off: No light
-tessera.binary.light.on: Light detected
-tessera.binary.lock.off: Locked
-tessera.binary.lock.on: Unlocked
-tessera.binary.moisture.off: Dry
-tessera.binary.moisture.on: Wet
-tessera.binary.motion.off: Clear
-tessera.binary.motion.on: Detected
-tessera.binary.moving.off: Not moving
-tessera.binary.moving.on: Moving
-tessera.binary.occupancy.off: Clear
-tessera.binary.occupancy.on: Detected
-tessera.binary.opening.off: Closed
-tessera.binary.opening.on: Open
-tessera.binary.plug.off: Unplugged
-tessera.binary.plug.on: Plugged in
-tessera.binary.power.off: "Off"
-tessera.binary.power.on: "On"
-tessera.binary.presence.off: Away
-tessera.binary.presence.on: Home
-tessera.binary.problem.off: "OK"
-tessera.binary.problem.on: Problem
-tessera.binary.running.off: Not running
-tessera.binary.running.on: Running
-tessera.binary.safety.off: Safe
-tessera.binary.safety.on: Unsafe
-tessera.binary.smoke.off: Clear
-tessera.binary.smoke.on: Detected
-tessera.binary.sound.off: Clear
-tessera.binary.sound.on: Detected
-tessera.binary.tamper.off: Clear
-tessera.binary.tamper.on: Tampering detected
-tessera.binary.update.off: Up-to-date
-tessera.binary.update.on: Update available
-tessera.binary.vibration.off: Clear
-tessera.binary.vibration.on: Detected
-tessera.binary.window.off: Closed
-tessera.binary.window.on: Open
-tessera.card.empty: No history for this range
-tessera.card.high: "High {{.V}} at {{.T}}"
-tessera.card.loading: Loading history…
-tessera.card.low: "Low {{.V}} at {{.T}}"
-tessera.card.now: "Now {{.T}}"
-tessera.card.since: "Since {{.T}}"
-tessera.last.date: "Last {{.D}}"
-tessera.last.time: "Last {{.T}}"
-tessera.last.yest: "Yest. {{.T}}"
-tessera.last.yesterday: "Yesterday {{.T}}"
-tessera.light.brightness: Brightness
-tessera.light.effect: Effect
-tessera.light.effects: Effects
-tessera.light.hue: Color
-tessera.light.lamps: Lamps
-tessera.light.waiting: Waiting
-tessera.light.warmth: Color temperature
-tessera.lock.jammed: Jammed
-tessera.lock.lock: Lock
-tessera.lock.locked: Locked
-tessera.lock.locking: Locking
-tessera.lock.open: Open
-tessera.lock.open.key: Open
-tessera.lock.opening: Opening
-tessera.lock.unlock: Unlock
-tessera.lock.unlocked: Unlocked
-tessera.lock.unlocking: Unlocking
-tessera.never: Never run
-tessera.paused: "Paused {{.T}}"
-tessera.range.day: 24 h
-tessera.range.hour: 1 h
-tessera.range.week: 7 d
-tessera.ago: "{{.T}} ago"
-tessera.connected: Set up this screen in Tessera
-tessera.empty: "Configure and add tiles to this screen ({{.Name}}) in Tessera."
-tessera.enable: Turn on landscape or portrait in Settings → Dashboard
-tessera.in: "in {{.T}}"
-tessera.install: Install Tessera Screen Manager in Home Assistant, then add this screen to it.
-tessera.now: Just now
-tessera.off: Tessera is off
-tessera.refused: Refused
-tessera.running: Running...
-tessera.lapsed: Tessera not active
-tessera.key.activate: Activate
-tessera.key.press: Press
-tessera.key.run: Run
-tessera.silent: No answer
-tessera.sun.name: "Sun"
-tessera.energy.solar: Solar
-tessera.energy.grid: Grid
-tessera.energy.battery: Battery
-tessera.energy.home: Home
-tessera.energy.other: Other
-tessera.energy.untracked: Untracked
-tessera.sun.rise: "Sunrise {{.T}}"
-tessera.sun.set: "Sunset {{.T}}"
-tessera.updating: Updating…
-tessera.bottom.dock: Page panel
-tessera.bottom.home: Home page
-tessera.bottom.off: Nothing
-tessera.turn.none: None
-tessera.turn.slide: Slide
-tessera.turn.cover: Cover
-tessera.turn.reveal: Reveal
-tessera.turn.deck: Deck
-tessera.turn.zoom: Zoom
-tessera.turn.fade: Fade
-tessera.vacuum.battery: "Battery {{.N}}%"
-tessera.vacuum.dock: Dock
-tessera.vacuum.locate: Locate
-tessera.vacuum.pause: Pause
-tessera.vacuum.start: Start
-tessera.waiting: Install Tessera
-tessera.weather.clear-night: Clear night
-tessera.weather.cloudy: Cloudy
-tessera.weather.exceptional: Exceptional
-tessera.weather.fog: Fog
-tessera.weather.hail: Hail
-tessera.weather.lightning: Lightning
-tessera.weather.lightning-rainy: Lightning, rainy
-tessera.weather.partlycloudy: Partly cloudy
-tessera.weather.pouring: Pouring
-tessera.weather.rainy: Rainy
-tessera.weather.snowy: Snowy
-tessera.weather.snowy-rainy: Snowy, rainy
-tessera.weather.sunny: Sunny
-tessera.weather.windy: Windy
-tessera.weather.windy-variant: Windy, cloudy
-tessera.weather.daily: Daily
-tessera.weather.feels: "Feels like {{.T}}"
-tessera.weather.hourly: Hourly
-tessera.weather.none: No forecast
-tessera.weather.pressure: "Pressure {{.P}}"
-tessera.weather.visibility: "Visibility {{.V}}"
-tessera.weather.wind: "Wind {{.W}}"
-theme.custom: Custom
-theme.custom.title: Custom theme
-theme.custom.background: Background
-theme.custom.surface: Cards
-theme.custom.text: Text
-theme.custom.muted: Secondary text
-theme.custom.accent: Accent
-theme.custom.accent2: Second accent
-theme.default: Default
-theme.title: Theme
-timer.stop: Stop
-timerstyle.banner: Banner
-timerstyle.bar: Bar
-timerstyle.corner: Corner
-timerstyle.dial: Dial
-timerstyle.face: Clock face
-timerstyle.full: Full screen
-todo.add: Add an item
-todo.app: Shopping list
-todo.clear: Clear completed
-todo.empty: Nothing on the list
-todo.entity: To-do lists
-todo.group.todo: Shopping list
-todo.lists: "{{.Count}} lists"
-todo.none: No to-do lists in Home Assistant
-todo.off: "Off"
-todo.pick: Pick a list in Settings → Home control → Shopping list
-todo.setting.completed: Show completed items
-todo.example.entities: todo.shopping_list,todo.hardware
-todo.setting.entities: To-do lists
-todo.title: Shopping list
-tone.alert: Alert
-tone.info: Info
-tone.success: Success
-tone.title: Wake sound
-tone.warning: Warning
-tv.app: TV
-tv.empty: Nothing airing
-tv.example.default: media_player.yttv_living_room
-tv.failed: Couldn't load the channel guide
-tv.find: Find a channel or show
-tv.group.tv: TV
-tv.here: Here
-tv.next: "Next at {{.Time}}: {{.Title}}"
-tv.none: No YouTube TV players in Home Assistant
-tv.quiet: Nothing playing
-tv.setting.default: Default TV
-tv.setting.favorites: Favorites
-tv.update: Update the YouTube TV integration
-tv.watch: "Watch on {{.TV}}"
-tv.watch_here: Watch here
-tv.youtube: YouTube TV
-uisize.compact: Compact
-uisize.large: Large
-uisize.medium: Medium
-uisize.mini: Mini
-uisize.xlarge: Extra large
-update.available: "{{.Version}} available"
-update.channel: Update channel
-update.channel.dev: Development
-update.channel.stable: Stable
-update.check: Check for updates
-update.checking: Checking…
-update.current: Up to date
-update.install: "Download and install {{.Version}}"
-update.ready: Update available
-update.running: Current version
-update.title: Software update
-update.unreachable: Couldn't reach the update server
-update.versions: Other versions
-update.versions.confirm: "Install {{.Version}}"
-update.versions.installed: Installed
-update.versions.what: "{{.Running}} is replaced by {{.Version}} and the app restarts."
-update.versions.none: No other versions
-upgrade.engine: the cast engine
-upgrade.installing: Installing…
-upgrade.line: Updating to {{.Version}} · {{.Status}}
-upgrade.percent: "{{.N}}%"
-upgrade.preparing: Getting {{.Name}} ready · {{.Status}}
-visual.group.visual: Visuals
-visual.aurora: Aurora
-visual.classic-vu: Classic VU
-visual.cymatics: Cymatics
-visual.digital-vu: Digital VU
-visual.fire: Fire
-visual.fireflies: Fireflies
-visual.fireworks: Fireworks
-visual.galaxy: Galaxy
-visual.hal-9000: HAL 9000
-visual.halo: Halo
-visual.ink-in-water: Ink in Water
-visual.koi-pond: Koi Pond
-visual.lava-lamp: Lava Lamp
-visual.lcars: LCARS
-visual.lens-flares: Lens Flares
-visual.light-cycles: Light Cycles
-visual.matrix: Matrix
-visual.mercury: Mercury
-visual.mother: Mother
-visual.neon-sign: Neon Sign
-visual.orb: Orb
-visual.paint-splash: Paint Splash
-visual.phosphor: Phosphor
-visual.pipboy-3: PB 3000
-visual.pipboy-4: PB Mark IV
-visual.pipboy-76: PB 2000
-visual.pipboy-nv: PB New Vegas
-visual.pulsar: Pulsar
-visual.rain-on-glass: Rain on Glass
-visual.ribbons: Ribbons
-visual.setting.fps: Visual frame cap
-visual.setting.kind: Visual
-visual.example.label: Kitchen
-visual.setting.label: Visual label
-visual.setting.lift: Visualizer lift
-visual.setting.seed: Visual seed
-visual.synthwave: Synthwave
-visual.tesla: Tesla
-visual.thunderstorm: Thunderstorm
-voice.group.actions: Actions
-voicematch.accept: Accept
-voicematch.add: Add a voice
-voicematch.again: Try again
-voicematch.cancel: Cancel
-voicematch.done: "Voice match is ready for {{.Name}}"
-voicematch.failed: Voice match couldn't be set up
-voicematch.finish: Done
-voicematch.heard: Got it
-voicematch.listening: Listening…
-voicematch.missed: Didn't catch that. Once more.
-voicematch.pick: Pick a person
-voicematch.preparing: Getting ready…
-voicematch.redo: Record again
-voicematch.remove: Remove
-voicematch.say: "Say “{{.Wake}}”, then"
-voicematch.say_plain: Say the wake word, then
-voicematch.similar: "This voice sounds very similar to {{.Name}}"
-voicematch.someone: Someone else
-voicematch.threshold: Match threshold
-voicematch.title: Voice match
-voicematch.unconfirmed: That didn't sound like the same voice
-voicematch.phrase.calendar: "what's on my calendar today"
-voicematch.phrase.door: "lock the front door"
-voicematch.phrase.lights: "turn on the lights"
-voicematch.phrase.music: "play some music in the kitchen"
-voicematch.phrase.shopping: "add milk to the shopping list"
-voicematch.phrase.timer: "set a timer for ten minutes"
-voicematch.phrase.weather: "what's the weather like tomorrow"
-voice.group.commands: Commands
-voice.hacs: EchoLocal integration
-voice.hacs.hint: Actions need the EchoLocal integration in Home Assistant. Scan the code to open it in HACS, then install or update it.
-voice.hacs.missing: Not installed
-voice.hacs.outdated: Update needed
-voice.hacs.unknown: Checking
-voice.setting.action.broadcast: Broadcast a message
-voice.setting.action.alarm: Manage alarms
-voice.setting.action.call_answer: Answer a call
-voice.setting.action.call_hangup: Hang up a call
-voice.setting.action.call: Call a device
-voice.setting.action.youtube_tv: Watch YouTube TV
-voice.setting.actions: All actions
-voice.setting.command.mirror: Mirror
-voice.setting.command.radar: Radar
-voice.setting.commands: All commands
-voice.setting.label: Home Assistant names to listen for
-voice.option.label.none: Areas only
-voice.title: Voice triggers
-volume.chime: Notification sound
-wake.ember: Ember
-wake.sunrise: Sunrise
-wake.white: White
-weather.group.weather: Weather
-weather.alert.until: "Until {{.T}}"
-weather.alert.dismiss: Dismiss
-weather.alerts.hint: Severe US weather warnings for your home, from the National Weather Service
-weather.animate: Animate
-weather.cond.clear-night: Clear
-weather.cond.cloudy: Cloudy
-weather.cond.exceptional: Warning
-weather.cond.fog: Fog
-weather.cond.hail: Hail
-weather.cond.lightning: Thunderstorm
-weather.cond.lightning-rainy: Thunderstorm
-weather.cond.partlycloudy: Partly cloudy
-weather.cond.pouring: Heavy rain
-weather.cond.rainy: Rain
-weather.cond.snowy: Snow
-weather.cond.snowy-rainy: Sleet
-weather.cond.sunny: Sunny
-weather.cond.windy: Windy
-weather.cond.windy-variant: Windy
-weather.dashboard: Show on dashboard
-weather.entity: Weather entity
-weather.feels: "Feels like {{.T}}"
-weather.humidity: "Humidity {{.N}}%"
-weather.idle: Show on screen saver
-weather.look: Look
-weather.look.card: Card
-weather.look.compact: Compact
-weather.look.detail: Detail
-weather.look.icon: Icon
-weather.look.stack: Stack
-weather.look.words: Words
-weather.none: No weather entities in Home Assistant
-weather.off: "Off"
-weather.setting.alerts: Weather alerts
-weather.setting.align: Dashboard weather horizontal position
-weather.setting.animate: Animate dashboard weather
-weather.setting.dashboard: Weather on dashboard
-weather.example.entity: weather.home
-weather.setting.entity: Weather entity
-weather.example.forecast: weather.home
-weather.setting.forecast: Forecast entity
-weather.forecast: Forecast
-weather.forecast.daily: Daily
-weather.forecast.twice_daily: Twice daily
-weather.forecast.hourly: Hourly
-weather.forecast.none: No forecast
-weather.setting.idle: Weather on screen saver
-weather.setting.look: Dashboard weather look
-weather.setting.position: Dashboard weather vertical position
-weather.setting.radar_range: Radar starting range
-weather.setting.radar_source: Radar source
-weather.setting.saver.align: Screen saver weather horizontal position
-weather.setting.saver.animate: Animate screen saver weather
-weather.setting.saver.look: Screen saver weather look
-weather.setting.saver.position: Screen saver weather vertical position
-weather.setting.saver.size: Screen saver weather size
-weather.setting.saver.themed: Themed screen saver weather colors
-weather.setting.size: Dashboard weather size
-weather.setting.themed: Themed dashboard weather colors
-weather.themed: Themed colors
-weather.themed.hint: "Off uses natural colors: a yellow sun, gray clouds, blue rain"
-weather.title: Weather
-weather.uv: "UV {{.N}}"
-weather.wind: "Wind {{.N}} {{.Unit}}"
-webaccess.address: Address
-webaccess.title: Web access
-wifi.busy: Already joining another network
-wifi.connected: Connected
-wifi.failed: "Couldn't join {{.Network}}"
-wifi.join: Join
-wifi.joined: "Connected to {{.Network}}"
-wifi.joining: "Joining {{.Network}}…"
-wifi.left: "{{.N}} s left"
-wifi.none: No networks found
-wifi.ok: OK
-wifi.password: Password
-wifi.refused: Wrong password
-wifi.scan: Scan again
-wifi.scan.failed: Scan failed
-wifi.scanning: Scanning…
-wifi.short: "Use at least {{.N}} characters"
-wifi.timeout: "No connection within {{.Minutes}} minutes"
-wifi.title: Wi-Fi
-wifi.unreachable: Try again
-wifi.unsupported: "{{.Security}}, not supported"
-youtube.account: YouTube account
-youtube.accounts: Accounts
-youtube.add: Add account
-youtube.again: New code
-youtube.anonymous: Anonymous
-youtube.app: YouTube
-youtube.asking: Getting a code…
-youtube.cancel: Cancel
-youtube.category.filler: Filler
-youtube.category.hook: Hook
-youtube.category.interaction: Interaction reminder
-youtube.category.intro: Intro
-youtube.category.music_offtopic: Non-music section
-youtube.category.outro: Outro
-youtube.category.preview: Preview
-youtube.category.selfpromo: Self-promotion
-youtube.category.sponsor: Sponsor
-youtube.empty: Nothing here yet
-youtube.enter: and enter
-youtube.entity.lounge: YouTube lounge
-youtube.expired: The code expired
-youtube.failed: Couldn't reach YouTube
-youtube.go: On your phone or computer, go to
-youtube.group.cast: Cast
-youtube.history: History
-youtube.home: Home
-youtube.later: Watch later
-youtube.option.lounge.always: Always
-youtube.option.lounge.demand: On demand
-youtube.refused: Sign-in was declined
-youtube.search: Search
-youtube.setting.lounge: YouTube lounge
-youtube.shorts: Shorts
-youtube.signin: Sign in to YouTube
-youtube.skip: Skip segments
-youtube.skip.none: None
-youtube.skip.some: "{{.N}} kinds"
-youtube.stay: Stay anonymous
-youtube.subscriptions: Subscriptions
-youtube.unwatched: Watch something to fill Home
-youtube.waiting: Waiting for approval…
-zone.title: Time zone
-
-feedback.group.feedback: Feedback sounds
-feedback.setting.chime: Device chime
-feedback.setting.failure: Failure sound
-feedback.setting.cancel: Cancellation sound
-feedback.setting.mute: Mute sound
-feedback.setting.unmute: Unmute sound
-feedback.setting.hold: Mute hold sound
-frontend.entity.password: Admin password
-access.group.frontend: Web access
-access.setting.password: Admin password
-microphone.setting.mute_sound: Mute sound
+about:
+  built: Built
+  commit: Commit
+  name: Name
+  title: About
+  version: Version
+access:
+  group:
+    access: Access
+    api: Home Assistant
+    frontend: Web access
+  setting:
+    adb:
+      _: ADB over network
+      help: Opens adb on network port 5555 with a root shell; off limits adb to USB
+    adopted:
+      _: Adopted by Home Assistant
+      help: Set once Home Assistant subscribes; while off, the device offers its address for adoption
+    password:
+      _: Admin password
+      help: Login password for the device's web interface; a random one is made when empty
+actions:
+  alarm:
+    _: Manage alarms
+    ambiguous: More than one alarm matches; say its name
+    daily: every day
+    delete: Deleted {{.Alarm}}
+    disable: Disabled {{.Alarm}}
+    empty: You have no saved alarms
+    enable: Enabled {{.Alarm}}
+    exists: '{{.Alarm}} already exists'
+    missing: No saved alarm matches that name or time
+    named: '{{.Name}} at {{.Clock}}'
+    next: Your next alarm is {{.Alarm}}, {{.When}}
+    none: You have no upcoming alarm
+    not_ringing: No alarm is ringing
+    not_snoozed: No ringing alarm can be snoozed
+    'off': '{{.Alarm}}, disabled'
+    once: one time
+    sentence:
+      delete: (delete|remove|cancel) [my|the] {target} alarm
+      disable: (disable|turn off) [my|the] {target} alarm
+      enable: (enable|turn on) [my|the] {target} alarm
+      list: list [my] alarms
+      list_what: what are my alarms
+      next: when is [my|the] next alarm
+      set: (set|create|add) [a|an] alarm (for|at) {time}
+      set_named: (set|create|add) [a|an] alarm (called|named) {name} (for|at) {time}
+      snooze: snooze [my|the] alarm
+      snooze_bare: snooze
+      stop: (stop|dismiss) [my|the] alarm
+    set: Set {{.Alarm}}
+    snoozed: Alarm snoozed
+    stopped: Alarm stopped
+    target: Say the alarm name, time, or next alarm
+    time: Say a time such as seven thirty AM, optionally followed by every weekday, every weekend, every day, or on named weekdays
+    weekdays: weekdays
+    weekends: weekends
+    when: '{{.Day}} at {{.Clock}}'
+  broadcast:
+    _: Broadcast a message
+    ask: Go ahead after the tone
+    sentence:
+      ask: (broadcast|announce)
+      message: (broadcast|announce) {message}
+      send: send a broadcast
+    text: Broadcasting typed text needs the Home Assistant integration
+  call:
+    _: Call a device
+    busy: Already in a call
+    foreign: '{{.Peer}} isn''t in this home'
+    sentence:
+      call: (call|ring|intercom) [the] {peer}
+      video: video call [the] {peer}
+    unknown: There's no device called {{.Peer}}
+    unreachable: '{{.Peer}} can''t be reached'
+  call_answer:
+    _: Answer a call
+    done: Answering the call
+    none: No incoming call to answer
+    sentence:
+      bare: answer
+      call: answer [the] (call|phone)
+      video: answer [the] video call
+  call_hangup:
+    _: Hang up a call
+    done: Call ended
+    none: No call to hang up
+    sentence:
+      bare: hang up
+      call: hang up [the] (call|phone)
+      end: (end|decline|reject) [the] call
+  recipes:
+    _: Cook from recipes
+    amount: You need {{.Amount}}
+    closed: No recipe is open for cooking
+    cooking: Let's cook {{.Recipe}}.
+    first: This is the first step
+    found: Here are recipes for {{.Query}}
+    last: That was the last step
+    missing: '{{.Ingredient}} isn''t in this recipe'
+    none: No recipes match {{.Query}}
+    nosteps: This recipe has no steps
+    notimer: This step has no timer
+    sentence:
+      amount: how much {ingredient} [do i need]
+      amount_many: how many {ingredient} [do i need]
+      cook: (start cooking|let's cook|let's make|i want to cook) {recipe}
+      find: (find|search for|look up) [some] recipe[s] (for|with) {recipe}
+      find_named: find [me] [a] {recipe} recipe[s]
+      next: next step
+      next_what: what's [the] next step
+      previous: (previous|last) step
+      repeat: (repeat|read) [the] [current] step
+      show: show [me] [the] recipe for {recipe}
+      timer: start [the] step timer
+    showing: Here's {{.Recipe}}
+    step: 'Step {{.N}} of {{.Of}}: {{.Text}}'
+    timer: Timer started for {{.Minutes}} minute{{if ne .Minutes 1}}s{{end}}
+    unreachable: I couldn't reach Mealie
+    unset: Set up Mealie in the Recipes app first
+    which: Which recipe?
+  youtube_tv:
+    _: Watch YouTube TV
+    airing: '{{.Channel}} is showing {{.Title}}'
+    channel: Say a channel or a show
+    device: There's no device called {{.Device}}
+    here:
+      _: Playing {{.Show}} on {{.Channel}}
+      channel: Playing {{.Channel}}
+    nothing: Nothing is listed on {{.Channel}} right now
+    nowhere: Choose a default TV in the TV app
+    sentence:
+      watch: (watch|put on) {channel}
+      watch_on: (watch|put on) {channel} on [the] {device}
+      what_is_on: what is on {channel}
+      whats_on: what's on {channel}
+    unknown: I looked for {{.Channel}} on YouTube TV, but it either isn't available or can't be played right now
+    watching:
+      _: Playing {{.Show}} on {{.Channel}} on {{.Device}}
+      channel: Playing {{.Channel}} on {{.Device}}
+airplay:
+  code: Enter this code on {{.Client}}
+alarm:
+  add: Add alarm
+  app: Alarms
+  daily: Every day
+  day:
+    fri: Friday
+    mon: Monday
+    sat: Saturday
+    sun: Sunday
+    thu: Thursday
+    tue: Tuesday
+    wed: Wednesday
+  delete: Delete alarm
+  edit: Alarm
+  hour: Hour
+  light: Wake light
+  minute: Minute
+  minutes: '{{.N}} min'
+  name: Name
+  'off': 'Off'
+  'on': Alarm on
+  once: Once
+  ramp: Gentle start
+  repeat: Repeat
+  save: Save
+  seconds: '{{.N}} s'
+  snooze: Snooze
+  snooze_for: Snooze {{.N}} min
+  snoozed: Snoozed until {{.T}}
+  sound: Sound
+  state:
+    'off': 'Off'
+    'on': 'On'
+  stop: Stop
+  volume:
+    _: Volume
+    gentle: Gentle
+    silent: Silent
+    static: Steady
+  weekdays: Weekdays
+  weekends: Weekends
+alerts:
+  group:
+    alerts: Alerts & Alarms
+  page: Alerts & Alarms
+  setting:
+    alert:
+      _: Alert chime
+      help: Sound for alert messages, repeated every 2 seconds until the ring time runs out
+    info:
+      _: Info chime
+      help: Sound played when an info message appears
+    ring_for:
+      _: Timer rings for
+      help: 'How long timers, alarms and alert messages keep ringing: 1, 5, 15 or 30 minutes'
+    success:
+      _: Success chime
+      help: Sound played when a success message appears
+    timer:
+      _: Timer sound
+      help: Sound played when a timer rings
+    wake:
+      _: Wake light
+      help: 'Screen look of the light that rises before an alarm: sunrise, white or ember'
+    warning:
+      _: Warning chime
+      help: Sound played when a warning message appears
+alertstyle:
+  answer: Auto answer
+  banner: Banner
+  card: Card
+  full: Full screen
+  none: None
+  screen: Same as screen
+  toast: Toast
+align:
+  center: Center
+  left: Left
+  random: Random
+  right: Right
+apps:
+  empty: No apps
+  group:
+    apps: Apps
+  hint: Tap the star to keep an app in the dock. Hold a tile, then drag it to move it.
+  setting:
+    dock:
+      _: Apps in the dock
+      help: Comma-separated app ids shown in the dock, in app order
+    order:
+      _: App order
+      help: Comma-separated app ids listed first, in this order; unlisted apps follow
+  title: Apps
+assistants:
+  arbitration:
+    offset: '{{.N}} dB'
+    value: '{{.N}} ms'
+  group:
+    announcements: Announcements
+    arbitration: Arbitration
+    captions: Captions
+    gemini: Gemini
+    pryon: Pryon
+    stopword: Stop word
+  'off': 'Off'
+  pipeline:
+    _: Pipeline
+    preferred: Preferred
+  reply: Response playback
+  setting:
+    animate_announcements: Animate announcements
+    arbitration_offset:
+      _: Arbitration offset
+      help: Decibels added to this device's wake score when nearby devices compete to answer, ±20
+    arbitration_wait:
+      _: Arbitration wait
+      help: Milliseconds to wait for other devices that heard the same wake word, up to 500; 0 answers at once
+    buffer:
+      _: Reply buffer
+      help: Milliseconds of streamed reply audio held before playback starts, 0 to 3000
+    delivery:
+      _: Response playback
+      help: Plays the reply once it is complete, or streams it as the audio arrives
+    follow_up:
+      _: Follow-up time
+      help: Seconds to listen again without the wake word after a reply; 0 turns it off
+    gemini:
+      _: Gemini wake word
+      help: Offers Google's "Hey Google" wake word, downloading its model when chosen
+    known_voices:
+      _: Recognized voices only
+      help: Starts a request only when the wake word matches an enrolled voice profile
+    look:
+      listening:
+        _: Listening visual
+        help: Visual shown while the assistant listens, driven by the microphone; Default keeps the built-in look
+      place:
+        _: Visual placement
+        help: Shows the chosen assistant visuals in the assistant panel or across the full screen
+      responding:
+        _: Responding visual
+        help: Visual shown while the reply plays, driven by the speaker; Default keeps the built-in look
+      waiting:
+        _: Waiting visual
+        help: Visual shown while waiting for the answer, driven by microphone and speaker; Default keeps the built-in look
+    max_listen:
+      _: Max listening time
+      help: Seconds the assistant listens for a request before giving up, 5 to 60
+    max_think:
+      _: Max thinking time
+      help: Seconds to wait for an answer before giving up, 5 to 300
+    pryon:
+      _: Amazon wake words
+      help: Offers Amazon's Pryon wake words, downloading the library and models when chosen
+    pryon_stop:
+      _: Amazon stop word
+      help: Uses Amazon's Pryon "Stop" keyword to interrupt replies; needs Amazon wake words on
+    recordings:
+      _: Recordings kept
+      help: How many of the latest requests' audio this assistant keeps on the device, up to 10; 0 keeps none
+    show_captions: Show captions
+    stop_sensitivity:
+      _: Stop word sensitivity
+      help: Detection threshold for the stop word that interrupts a reply, 50 to 100%; 100% turns it off
+    threshold:
+      _: Wake word sensitivity
+      help: Score a wake word must reach to trigger, 50 to 99%
+    tone:
+      _: Wake sound
+      help: Sound played when the wake word is accepted
+    wake_screen:
+      _: Wake the screen
+      help: Turns the screen on when this wake word is heard
+  slot: Assistant {{.N}}
+  talk:
+    _: Talk now
+    hint: Without the wake word
+  threshold:
+    _: Wake word sensitivity
+    hint: Higher wakes more easily
+  title: Voice assistants
+  tone: Wake sound
+  unset: Set the wake word in Home Assistant
+  waiting: Waiting for the model
+  word:
+    _: Wake word
+    ha: Enable actions or pick in Home Assistant
+bluetooth:
+  connected_sources: Connected devices
+  group:
+    bluetooth: Bluetooth
+  setting:
+    proxy:
+      _: Bluetooth proxy
+      help: Relays nearby Bluetooth devices to Home Assistant as an ESPHome Bluetooth proxy
+    scan:
+      _: Bluetooth scanning
+      help: 'Share of radio time spent listening for Bluetooth advertisements: 1, 2, 5 or 9%'
+    speaker:
+      _: Bluetooth speaker
+      help: Lets phones play audio through this device over Bluetooth (A2DP)
+  source_auto: Automatic source switching
+  source_empty: No Bluetooth devices connected
+  source_selected: Selected source
+boot:
+  leaving: Restarting
+  skip: Skip
+  stranded: Lost contact with the screen
+broadcast:
+  from: From {{.Peer}}
+  title: Broadcast
+buttons:
+  dynamic: What's playing
+  static: Main volume
+calendar:
+  add: New event
+  allday: All day
+  app: Calendar
+  chosen: '{{.N}} calendar{{if ne .N 1}}s{{end}}'
+  count: '{{.N}} day{{if ne .N 1}}s{{end}}'
+  date: Date
+  days: Days
+  empty: Nothing coming up
+  failed: Couldn't add the event
+  free: Nothing planned
+  group:
+    calendar: Calendar
+  hour: Hour
+  hours:
+    _: '{{.N}} hr'
+    half: '{{.N}}½ hr'
+  length: Length
+  location: Location
+  minute: Minute
+  minutes: '{{.N}} min'
+  more: +{{.N}} more
+  needs:
+    title: Enter a title
+  none: No calendars in Home Assistant
+  notes: Notes
+  'off': 'Off'
+  opening:
+    day: Day
+    last: Last used
+    month: Month
+    week: Week
+  pick: Pick calendars
+  save: Save
+  setting:
+    colors:
+      _: Calendar colors
+      example: calendar.family=#e8a33d, calendar.work=#3a7bd5
+      help: Comma-separated entity=#rrggbb pairs; calendars without one take the next palette color
+    entities:
+      _: Calendars
+      example: calendar.family, calendar.work
+      help: Comma-separated Home Assistant calendar entities whose events are shown; empty shows none
+    opening:
+      _: Opens on
+      help: 'View the calendar opens on: day, week, month, or the last one used'
+    saver: Next event on the screensaver
+    weather:
+      _: Weather on days
+      help: Shows the daily forecast on calendar days
+  title: Title
+  today: Today
+  tomorrow: Tomorrow
+  view:
+    day: Day
+    month: Month
+    week: Week
+  week:
+    start: sunday
+call:
+  address: Address
+  answer:
+    count: '{{.N}} selected'
+    everyone: Everyone
+    from: Answer from
+    peers: Panels
+    selected: Selected
+    users: Users
+  auto:
+    _: Auto-answer
+    hint: Answers at once
+  autovideo: Auto-answer with camera on
+  busy: Busy
+  calling: Calling…
+  camera:
+    'off': Camera off
+    'on': Camera on
+  caps: Can do
+  connected: Connected
+  declined: Declined
+  dropped: Call dropped
+  empty: No other devices found
+  failed: Call failed
+  gone: No longer on the network
+  group:
+    calls: Intercom
+  incoming:
+    _: Incoming call
+    allow: Incoming calls
+    video: Incoming video call
+  model: Model
+  mute: Mute
+  'no': 'No'
+  pausewake: Pause wake word during calls
+  reconnecting: Reconnecting…
+  ring: Ring
+  ringback: Ringback
+  seen: Last seen
+  setting:
+    answer_api:
+      _: Auto-answer API calls
+      help: With auto-answer limited to selected callers, answers calls placed through the device's web API
+    answer_from:
+      _: Auto-answer from
+      help: Auto-answers calls from everyone or only from the selected panels, users and API
+    answer_peers:
+      _: Auto-answer panels
+      help: Space-separated device ids whose calls are auto-answered when limited to selected callers
+    answer_users:
+      _: Auto-answer users
+      help: Space-separated Home Assistant user ids whose calls are auto-answered when limited to selected callers
+    auto_answer:
+      _: Auto-answer calls
+      help: Answers incoming calls without ringing, after a short chime
+    auto_video:
+      _: Auto-answer with camera on
+      help: Keeps the camera on for auto-answered video calls; off starts them with the camera off
+    broadcasts:
+      _: Receive broadcasts
+      help: Accepts audio broadcasts from other devices and advertises that it takes them
+    incoming:
+      _: Incoming calls
+      help: Accepts incoming calls; off refuses every call
+    pause_wake:
+      _: Pause wake word during calls
+      help: Stops wake word detection while a call is in progress
+    ring:
+      _: Ring tone
+      help: Sound played for an incoming audio call
+    ringback:
+      _: Ringback tone
+      help: Sound played while an outgoing call waits to be answered
+    stream:
+      _: Call video stream
+      help: 'Camera stream sent on video calls: main, or the camera''s second (sub) stream when it has one'
+    video_ring:
+      _: Video ring tone
+      help: Sound played for an incoming video call
+  settings:
+    _: Intercom
+    hint: Incoming calls and auto-answer
+  standing: Home
+  stream:
+    _: Video stream
+    hint: Sub uses less bandwidth; falls back to main when the sub stream is off
+    main: Main
+    sub: Sub
+  tab: Intercom
+  unanswered: No answer
+  unavailable: Not taking calls
+  unmute: Unmute
+  unreachable: Can't be reached
+  users:
+    empty: No Home Assistant users found
+  version: Version
+  videoring: Video ring
+  volume: Volume
+camera:
+  group:
+    exposure: Exposure
+    picture: Picture
+    streams: Streams
+    whitebalance: White Balance
+  muted: Microphones are muted
+  option:
+    banding:
+      50hz: 50 Hz
+      60hz: 60 Hz
+      auto: Auto
+      'off': 'Off'
+    brightness:
+      high: High
+      low: Low
+      middle: Medium
+    contrast:
+      high: High
+      low: Low
+      middle: Medium
+    effect:
+      aqua: Aqua
+      blackboard: Blackboard
+      mono: Mono
+      negative: Negative
+      none: None
+      posterize: Posterize
+      sepia: Sepia
+      solarize: Solarize
+      whiteboard: Whiteboard
+    hue:
+      high: High
+      low: Low
+      middle: Medium
+    noise:
+      fast: Fast
+      high_quality: High quality
+      minimal: Minimal
+      'off': 'Off'
+    quality:
+      high: High
+      low: Low
+      standard: Standard
+    saturation:
+      high: High
+      low: Low
+      middle: Medium
+    scene:
+      action: Action
+      auto: Auto
+      beach: Beach
+      candlelight: Candlelight
+      fireworks: Fireworks
+      hdr: HDR
+      landscape: Landscape
+      night: Night
+      night-portrait: Night portrait
+      party: Party
+      portrait: Portrait
+      snow: Snow
+      sports: Sports
+      steadyphoto: Steady photo
+      sunset: Sunset
+      theatre: Theatre
+    sharpness:
+      high: High
+      low: Low
+      middle: Medium
+    whitebalance:
+      auto: Auto
+      cloudy-daylight: Cloudy
+      daylight: Daylight
+      fluorescent: Fluorescent
+      incandescent: Incandescent
+      shade: Shade
+      twilight: Twilight
+      warm-fluorescent: Warm fluorescent
+  reset:
+    _: Reset to defaults
+    confirm: Tap again to reset
+  setting:
+    banding:
+      _: Anti-banding
+      help: 'Flicker filter for mains lighting: auto, off, 50 Hz or 60 Hz'
+    brightness:
+      _: Brightness
+      help: 'Picture brightness sent to the camera HAL: low/middle/high or 0 to 10, by vendor'
+    contrast:
+      _: Contrast
+      help: 'Picture contrast sent to the camera HAL: low/middle/high or 0 to 10, by vendor'
+    effect:
+      _: Effect
+      help: Color effect the camera HAL applies, from the vendor's list
+    ev:
+      _: Exposure compensation
+      help: Exposure compensation steps, within the range the vendor camera reports
+    framerate:
+      _: Frame rate
+      help: Fixed sensor frame rate used when Auto frame rate is off, snapped to a supported rate
+    framerate_auto:
+      _: Auto frame rate
+      help: Lets the camera HAL choose its own frame rate range
+    hue:
+      _: Hue
+      help: 'Picture hue sent to the camera HAL: low, middle or high'
+    iso:
+      _: ISO
+      help: Sensor ISO speed from the vendor's list, or auto
+    keyframe:
+      _: Keyframe interval
+      help: Seconds between H.264 keyframes, 1 to 10; stills can wait this long on API 25
+    main_on:
+      _: Main stream
+      help: Serves the main H.264 stream over RTSP and ONVIF
+    main_size:
+      _: Main resolution
+      help: Resolution of the main H.264 stream, from the board's list
+    noise:
+      _: Noise reduction
+      help: Noise reduction mode from the vendor's list
+    quality:
+      _: Quality
+      help: 'Stream bitrate: low halves it, high doubles it, kept within 0.25 to 10 Mbit/s'
+    saturation:
+      _: Saturation
+      help: 'Color saturation sent to the camera HAL: low/middle/high or 0 to 10, by vendor'
+    scene:
+      _: Scene
+      help: Scene mode the camera HAL uses, from the vendor's list
+    sharpness:
+      _: Sharpness
+      help: 'Edge sharpening sent to the camera HAL: low/middle/high or 0 to 6, by vendor'
+    sub_on:
+      _: Sub stream
+      help: Encodes a second, smaller H.264 stream and serves it over RTSP and ONVIF
+    sub_size:
+      _: Sub resolution
+      help: Width of the sub stream in pixels; height follows the main stream's shape
+    whitebalance:
+      _: White balance
+      help: White balance preset from the vendor's list, or auto
+  shutter: Camera shutter is closed
+  starting: Starting the camera
+cameras:
+  app: Cameras
+  failed: Couldn't list the cameras in Home Assistant
+  group:
+    cameras: Cameras
+  loading: Loading cameras
+  none: No cameras selected
+  nosite: Home Assistant's address isn't known. Set Home Assistant URL in Settings → Home control → Cameras
+  'off': 'Off'
+  pick: Select
+  seconds: '{{.N}} s'
+  setting:
+    refresh:
+      _: Refresh
+      help: Seconds between refreshes of the camera grid pictures; 0 turns refresh off
+    rotate:
+      _: Auto paginate
+      help: Seconds between automatic page turns in the camera grid; 0 turns it off
+    scale:
+      _: Thumbnail size
+      help: Camera tile height, 1 to 5, from a fifth of the width to full width
+    tab:
+      _: Dashboard tab
+      help: Adds a Cameras tab to the dashboard when cameras are picked
+    url:
+      _: Home Assistant URL
+      example: http://homeassistant.local:8123
+      help: Home Assistant address for camera pictures and streams; empty finds it over mDNS
+  why:
+    display: Live video isn't supported on this display
+    failed: Live video unavailable
+    format: Video format not supported
+    lost: Connection lost
+    nopicture: No video from the camera
+    pictures: No live stream in Home Assistant
+    refused: 'Home Assistant: {{.Message}}'
+    slow: Home Assistant timed out
+    webrtc: Install the EchoLocal integration for live video
+card:
+  light:
+    brightness: Brightness
+    hue: Color
+    waiting: Waiting
+    warmth: Color temperature
+  lock:
+    lock: Lock
+    open: Open
+    unlock: Unlock
+cast:
+  entity:
+    bundle: Cast bundle
+    forecast: Cast forecast
+    oracle: Cast oracle
+    receiver: Cast receiver
+    youtube:
+      skip: YouTube SponsorBlock categories
+  group:
+    cast: Cast
+  refused: 'Chromecast: {{.Name}} can''t play on this device'
+  setting:
+    bundle:
+      _: Bundle
+      help: URL of a cast credential bundle, tried first for cast credentials
+    forecast:
+      _: Forecast
+      help: URL of a forecast signing service, used when Bundle gives nothing and Oracle is empty
+    oracle:
+      _: Oracle
+      help: URL of a cast oracle for credentials when Bundle gives nothing; empty with no Forecast self-issues
+    receiver:
+      _: Receiver
+      help: Runs the Google Cast receiver on the device
+    youtube:
+      skip:
+        _: SponsorBlock categories
+        example: sponsor, selfpromo, intro
+        help: SponsorBlock segment categories skipped in YouTube videos, comma-separated
+  starting: Starting {{.Name}}…
+certs:
+  entity:
+    cert: Cert Warden certificate name
+    cert_api_key: Cert Warden certificate API key
+    key_api_key: Cert Warden key API key
+    server: Cert Warden server
+  group:
+    certificate: Certificate
+  setting:
+    cert:
+      _: Certificate name
+      example: kitchen-display
+      help: Name of the Cert Warden private certificate chain the device downloads
+    cert_api_key:
+      _: Certificate API key
+      help: Cert Warden API key for the certificate
+    key_api_key:
+      _: Key API key
+      help: Cert Warden API key for the private key
+    server:
+      _: Cert Warden server
+      example: https://certs.example.com
+      help: Cert Warden server address; https is assumed when no scheme is given
+  status:
+    expired: Expired
+    fetching: Fetching
+    refused: Wrong API key
+    unreachable: Can't reach Cert Warden
+    unset: Self-signed
+    valid: '{{.Name}}, valid until {{.Date}}'
+chime:
+  chirp: Chirp
+  ding: Ding
+  none: None
+  ring: Ring
+  ringback: Ringback
+  rise: Rise
+  timer: Timer
+  trouble: Trouble
+clock:
+  backing:
+    _: Backing
+    card: Card
+    none: None
+    shade: Shade
+  color:
+    _: Color
+    title: Clock color
+  date: Show date
+  face: Clock face
+  group:
+    clock: Clock
+  hours: Use 24-hour format
+  setting:
+    align:
+      _: Clock horizontal position
+      help: Places the dashboard clock on the left, center or right
+    backing:
+      _: Clock backing
+      help: Draws nothing, a soft shade or a card behind the dashboard clock
+    color:
+      _: Clock color
+      help: 'Color of the dashboard clock: the theme''s or a fixed color'
+    date:
+      _: Clock date
+      help: Shows the date with the dashboard clock
+    face:
+      _: Clock face
+      help: Clock design drawn on the dashboard, such as plain, flip, analog or nixie
+    hours:
+      _: Clock format
+      help: Shows times in 24-hour or 12-hour format
+    position:
+      _: Clock vertical position
+      help: Places the dashboard clock at the top, center or bottom
+    size:
+      _: Clock size
+      help: Dashboard clock size, from nano to large, as a share of its area
+  title: Clock
+  zone: Time zone
+controls:
+  dock:
+    _: Dock position
+    hide: Hide dock after
+  volume: Volume panel position
+dashboard:
+  title: Dashboard
+datetime:
+  title: Date & time
+debug:
+  fps:
+    _: Visual frame rate limit
+    value: '{{.N}} fps'
+  page_memory:
+    value: '{{.N}} MB'
+  seed:
+    _: Visual seed
+    random: Random
+    value: '#{{.N}}'
+  title: Developer options
+  touches:
+    _: 'Fingers down: {{.N}}'
+    gesture: 'Last gesture: {{.Name}}'
+  visuals: Visuals
+delay:
+  10m: 10 minutes
+  10s: 10 seconds
+  15m: 15 minutes
+  15s: 15 seconds
+  1m: 1 minute
+  2m: 2 minutes
+  30m: 30 minutes
+  30s: 30 seconds
+  3m: 3 minutes
+  45s: 45 seconds
+  5m: 5 minutes
+  5s: 5 seconds
+  never: Never
+delivery:
+  stream: Stream
+  whole: Download first
+diag:
+  group:
+    diagnostics: Diagnostics
+  option:
+    page_memory:
+      none: No limit
+  setting:
+    interval:
+      _: Metrics interval
+      help: Seconds between diagnostic sensor updates sent to Home Assistant, 10 to 3600
+    low_memory:
+      _: Low memory mode
+      help: Runs the cast engine in Chromium's low-end device mode; changing it restarts the engine
+    min_cores:
+      _: Minimum CPU cores
+      help: Fewest CPU cores the MediaTek hotplug driver keeps online
+    page_memory:
+      _: Page memory limit
+      help: JavaScript heap limit for cast engine pages, in MB; None keeps Chromium's default
+display:
+  alerts: Alert style
+  auto: Adaptive brightness
+  brightness: Brightness
+  clock: Clock
+  font: Font
+  idle: Screen saver
+  marks: Privacy indicators
+  poster: Wallpaper
+  presence: Sensors
+  size: Size
+  style: Style
+  theme: Theme
+  timer: Timer style
+  title: Display
+doorbell:
+  add: Add doorbell
+  added: Added
+  app: Doorbell
+  autosetup: Auto setup
+  camera:
+    pictures:
+      _: Event pictures from
+      hint: A Home Assistant camera that shows this door
+    title: Home Assistant camera
+  cameras: '{{.N}} cameras'
+  cancel: Cancel
+  channel: Channel {{.N}}
+  checking: Checking…
+  connect: Connect
+  connecting: Connecting…
+  entity:
+    chime: Doorbell ring sound
+    door:
+      events: Doorbell {{.N}} event source
+      name: Doorbell {{.N}} name
+      talk: Doorbell {{.N}} talkback source
+      video: Doorbell {{.N}} video source
+    live_for: Doorbell live view open for
+    notify: Doorbell notification sound
+    ring_for: Doorbell ring for
+    style: Doorbell notification style
+    tab: Doorbell dashboard tab
+    visitor: Doorbell ring style
+  event:
+    dog_cat: Animal at the {{.Door}}
+    motion: Motion at the {{.Door}}
+    package: Package at the {{.Door}}
+    people: Person at the {{.Door}}
+    vehicle: Vehicle by the {{.Door}}
+    visitor: Someone's at the {{.Door}}
+  events:
+    via: '{{.State}} via {{.Source}}'
+  fellback: '{{.Line}} (Reolink failed)'
+  field:
+    host: IP address or hostname
+    host_port: Add :port to skip discovery
+    name: Name
+    password: Password
+    rtsp: RTSP URL
+    stream: Stream
+    uid: UID
+    user: User
+  forget: Remove
+  group:
+    doorbell: Doorbell
+  lock:
+    _: Lock
+    confirm: Tap again to unlock
+  looking: Looking in Home Assistant…
+  manual: Manual
+  needs:
+    _: Enter a UID or an IP address or hostname
+    host: Enter an IP address or hostname
+    rtsp: Enter an RTSP URL
+  none: No doorbells set up
+  notsaved: Not saved
+  offline: Offline
+  ok: OK
+  save: Save
+  saved: Saved
+  sensor:
+    animal: Animal sensor
+    motion: Motion sensor
+    none: None
+    package: Package sensor
+    person: Person sensor
+    vehicle: Vehicle sensor
+    visitor: Ring sensor
+  setting:
+    chime:
+      _: Ring sound
+      help: Sound played when a visitor rings the doorbell
+    door:
+      events:
+        _: Events
+        help: 'Where doorbell events come from: Reolink, ONVIF, Home Assistant, or auto'
+      name:
+        _: Name
+        help: Door name shown as the title of its doorbell alerts and live view
+      talk:
+        _: Talkback
+        help: 'How talkback reaches the doorbell: Reolink, ONVIF, or auto'
+      video:
+        _: Video
+        help: 'Where the doorbell''s live video comes from: Reolink, ONVIF, RTSP or Home Assistant'
+    live_for:
+      _: Keep live view open
+      help: How long the doorbell live view stays open, 1 to 10 minutes
+    notify:
+      _: Notification sound
+      help: Sound played for doorbell detections other than a visitor ring
+    ring_for:
+      _: Ring for
+      help: How long a visitor ring repeats its sound and keeps its alert up
+    style:
+      _: Notification style
+      help: 'How detections other than a visitor ring are shown: screen default, none, banner, card, full or toast'
+    tab:
+      _: Dashboard tab
+      help: Adds a Doorbell tab to the dashboard when a door is set up
+    visitor:
+      _: Ring style
+      help: How a visitor ring is shown; Answer opens the live view at once
+  slot: Doorbell {{.N}}
+  source:
+    auto: Automatic
+    ha: Home Assistant
+    ha_reolink: Home Assistant (Reolink integration)
+    nvr: Reolink NVR
+    onvif: ONVIF
+    reolink: Reolink
+    rtsp: RTSP
+  status:
+    connected: Connected
+    connecting: Connecting…
+    events: Events
+    login: Wrong user or password
+    none: No doorbells in Home Assistant
+    ready: '{{.Count}} connected'
+    unreachable: Can't reach the doorbells
+    unset: Not set up
+    unsupported: Not available from this source
+    video: Video
+  stream:
+    main: Main
+    sub: Sub
+  tried: '{{.Source}} failed: {{.Why}}'
+  video:
+    connecting: Connecting via {{.Source}}
+    failed: '{{.Why}} ({{.Source}})'
+    working: Working via {{.Source}}
+  watch: Watch
+  why:
+    camera: No live video for this doorbell
+    decoder: This screen can't play this doorbell's video
+    fallback: Showing Home Assistant video, no talkback
+    lock: 'Can''t change the lock: {{.Why}}'
+    lost: Lost the doorbell, retrying
+    nocamera: Pick a Home Assistant camera
+    nopassword: Enter the doorbell's password
+    other: A different doorbell answers at that address
+    refused: Login refused (code {{.Code}})
+    talk: 'Can''t talk: {{.Why}}'
+    toobig: The main stream is too large for this screen, showing the sub stream
+    unreachable: Can't reach the doorbell
+edge:
+  bottom: Bottom
+  left: Left
+  right: Right
+  top: Top
+face:
+  analog: Analog
+  analog-seconds: Analog seconds
+  atomic: Atomic
+  bars: Bars
+  binary: Binary
+  cards: Cards
+  flip: Flip
+  math: Math
+  neon: Neon
+  nixie: Nixie
+  none: None
+  octagon: Octagon
+  overlap: Overlap
+  plain: Plain
+  railway: Railway
+  reel: Reel
+  roman: Roman
+  segments: Segments
+  smiley: Smiley
+  spoken: Spoken
+  stack: Stack
+  words: Words
+features:
+  airplay:
+    _: AirPlay
+    hint: Mirror from a Mac or iPhone
+  cast:
+    _: Cast receiver
+    hint: Cast from a phone or an app
+  mealie:
+    _: Mealie
+    hint: Recipes and cook mode
+  proxy:
+    _: Bluetooth proxy
+    hint: Bluetooth LE proxy for Home Assistant
+  rtsp:
+    _: Camera stream
+    hint: RTSP and ONVIF, for Home Assistant and recorders
+  sendspin:
+    _: Sendspin
+    hint: Whole-home audio
+  speaker:
+    _: Bluetooth speaker
+    hint: Play from a phone over Bluetooth
+  title: Connected services
+feedback:
+  group:
+    feedback: Feedback sounds
+  setting:
+    cancel:
+      _: Cancellation sound
+      help: Sound played when a voice request is canceled
+    chime:
+      _: Device chime
+      help: Sound played on volume changes; None silences the other feedback sounds
+    failure:
+      _: Failure sound
+      help: Sound played when a voice request fails
+    hold:
+      _: Mute hold sound
+      help: Sound played when the mute button is held, even when Device chime is None
+    mute:
+      _: Mute sound
+      help: Sound played when the microphone is muted
+    unmute:
+      _: Unmute sound
+      help: Sound played when the microphone is unmuted
+font:
+  style: Style default
+  title: Font
+frontend:
+  entity:
+    password: Admin password
+gesture:
+  double-tap: Double tap
+  fingers: '{{.Move}} with {{.N}} fingers'
+  hold: Hold
+  pinch-in: Pinch in
+  pinch-out: Pinch out
+  swipe-down: Swipe down
+  swipe-left: Swipe left
+  swipe-right: Swipe right
+  swipe-up: Swipe up
+  tap: Tap
+home:
+  all: All
+  area:
+    count: '{{.N}} of {{.Of}}'
+  check: Check again
+  checking: Checking Home Assistant…
+  combine: Include switches
+  dashboard: Mode
+  devices: Select devices
+  empty: Nothing to show
+  enable: Enable
+  enabled: Enable home control
+  everything:
+    cameras: All cameras
+    lights: All lights
+    switches: All switches
+  failed: Couldn't load from Home Assistant
+  group:
+    _: Group by area
+    all: Every area on one card
+    from: Areas with {{.N}} or more devices
+    home: Home control
+    none: Every device on its own card
+  label:
+    count: '{{.N}} device{{if ne .N 1}}s{{end}}'
+  loading: Loading…
+  noarea: No area
+  none: None
+  'off':
+    _: Home Assistant is off
+    hint: Turn on home control in Settings → Home control
+  picked:
+    areas: '{{.N}} area{{if ne .N 1}}s{{end}}'
+    entities: '{{.N}} device{{if ne .N 1}}s{{end}}'
+    labels: '{{.N}} label{{if ne .N 1}}s{{end}}'
+  reconnecting: Reconnecting to Home Assistant…
+  refused:
+    _: Actions not allowed
+    hint: Open ESPHome, press the settings cog on {{.Name}}, and enable “Allow the device to perform Home Assistant actions.”
+  retry: Try again
+  saver:
+    _: Screen saver
+    'off': Turn on Auto standby in Tessera's screen settings to use its screen saver
+  search: Search
+  selection:
+    cameras: Cameras
+    lights: Lights
+    switches: Switches
+  setting:
+    combine:
+      _: Include switches
+      help: Shows the picked Home Assistant switches on the Lights tab, when Control lights is on
+    control:
+      lights:
+        _: Control lights
+        help: Adds a Lights tab to the native dashboard for toggling the picked Home Assistant lights
+      switches:
+        _: Control switches
+        help: Adds a Switches tab to the native dashboard for toggling the picked Home Assistant switches
+    dashboard:
+      _: Dashboard
+      help: 'Picks the home dashboard: Native, Rings, Tessera or Home Assistant'
+    enabled:
+      _: Enable home control
+      help: Turns home control on or off; off hides every dashboard and stops Home Assistant actions
+    group:
+      lights:
+        _: Group lights from
+        help: Lights in areas with at least this many share one card; 0 gives each its own card
+      switches:
+        _: Group switches from
+        help: Switches in areas with at least this many share one card; 0 gives each its own card
+    rings:
+      depth:
+        _: Rings depth
+        help: Number of ring levels drawn outside the focused ring, 1 to 4
+      group:
+        _: 'Rings: group by'
+        help: Arranges Rings by room (floor, area, then type) or by system (type, then area)
+      hidden_areas:
+        _: 'Rings: hidden areas'
+        help: Home Assistant areas left out of Rings, as comma-separated area ids
+      hidden_floors:
+        _: 'Rings: hidden floors'
+        help: Home Assistant floors left out of Rings, as comma-separated floor ids
+      hidden_kinds:
+        _: 'Rings: hidden types'
+        help: Device types left out of Rings, such as lights, locks or cameras
+      labels:
+        _: 'Rings: labels'
+        help: Rings shows only entities with one of these Home Assistant labels; empty shows all
+      look:
+        _: Rings look
+        help: Draws Rings as a wheel, icicle or burst
+      side:
+        _: 'Rings: details side'
+        help: Places the Rings details panel at left or top, or at right or bottom
+    tessera:
+      bottom:
+        _: 'Tessera: swipe up from the bottom'
+        help: 'What a swipe up from the bottom edge opens in Tessera: page panel, home page, or nothing'
+      columns:
+        _: Tessera tiles along the long side
+        help: Number of Tessera tiles along the screen's long side, 1 to 12
+      follow:
+        _: 'Tessera: page follows finger'
+        help: Tessera pages track the finger while swiping between them
+      home_after_idle:
+        _: 'Tessera: back to the home page after the screensaver'
+        help: Tessera returns to its home page when the screen saver ends
+      landscape:
+        _: 'Tessera: landscape screen'
+        help: Offers the landscape Tessera screen to Home Assistant on boards that turn
+      portrait:
+        _: 'Tessera: portrait screen'
+        help: Offers the portrait Tessera screen to Home Assistant on boards that turn
+      rows:
+        _: Tessera tiles along the short side
+        help: Number of Tessera tiles along the screen's short side, 1 to 12
+      themed:
+        _: 'Tessera: use this device''s theme'
+        help: Gives Tessera this device's theme colors instead of its own
+      turn:
+        _: 'Tessera: page transition'
+        help: 'Animation Tessera plays between pages: none, slide, cover, reveal, deck, zoom or fade'
+  tab:
+    labels: Labels
+    manual: Manual
+  tessera:
+    bottom: Swipe up from the bottom
+    columns: Long side
+    follow: Page follows finger
+    grid: Grid
+    landscape: Enable landscape
+    portrait: Enable portrait
+    return: Go back to the home page after the screensaver
+    rows: Short side
+    themed: Use this device's theme
+    turn: Page transition
+  tile:
+    all:
+      'off': All off
+      'on': All on
+    area: '{{.N}} of {{.Of}} on'
+    level: '{{.N}}%'
+    'off': 'Off'
+    'on': 'On'
+    unavailable: Unavailable
+  title: Home control
+  unconnected:
+    _: Not connected
+    hint: Add {{.Name}} to Home Assistant
+homealarm:
+  app: Home alarm
+  arm: Arm
+  blueprint:
+    date: Date
+    link: Link
+    location: Location
+    log: State log
+    sheet: Sheet
+    time: Time
+    type: Type
+  cancel: Cancel
+  chip:
+    alarm: Alarm
+    armed: Armed
+    delay: Delay
+    ready: Ready
+  class:
+    carbon_monoxide: CO
+    door: Door
+    garage_door: Garage door
+    gas: Gas
+    moisture: Water
+    motion: Motion
+    occupancy: Occupancy
+    opening: Opening
+    presence: Presence
+    safety: Safety
+    smoke: Smoke
+    sound: Sound
+    tamper: Tamper
+    vibration: Vibration
+    window: Window
+  code:
+    enter: Enter code
+    first: Enter your code first
+    title: Enter code
+  console:
+    by: by
+    log: Event log
+    prompt: Enter code or select function
+  disarm: Disarm
+  emergency: Emergency
+  entity:
+    arming:
+      show: Home alarm show while arming
+      sound: Home alarm arming sound
+    look: Home alarm look
+    pending:
+      show: Home alarm show during entry delay
+      sound: Home alarm entry delay sound
+    settled:
+      for: Home alarm hide after
+      show: Home alarm show when armed or disarmed
+      sound: Home alarm armed and disarmed sound
+    tab: Home alarm dashboard tab
+    triggered:
+      show: Home alarm show when triggered
+      sound: Home alarm triggered sound
+  faults: Faults
+  flip:
+    state: State
+    time: Time
+  group:
+    homealarm: Home alarm
+  hold: Hold to trigger
+  look:
+    blueprint: Blueprint
+    card: Card
+    console: Console
+    dial: Dial
+    flip: Flip board
+    hardware: Hardware
+    keypad: Keypad
+    matrix: Matrix
+    minimal: Minimal
+    neon: Neon
+    ring: Ring
+    shield: Shield
+    terminal: Terminal
+    vault: Vault
+  mode:
+    armed_away: Away
+    armed_custom_bypass: Bypass
+    armed_home: Home
+    armed_night: Night
+    armed_vacation: Vacation
+  neon:
+    state: System state
+  none: No alarm panels in Home Assistant
+  notready:
+    many: 'Not ready: {{.N}} zones open'
+    one: 'Not ready: {{.Zone}} open'
+  'off': 'Off'
+  ok: OK
+  'on': 'On'
+  panic: Panic
+  pick: Pick one
+  plate:
+    entry: Entry
+    exit: Exit
+    idle: Idle
+    link: Link
+    lost: Lost
+    mode: System mode
+    normal: Normal
+    system: System
+    time: Local time
+  recent: Recent
+  refused: Home Assistant refused that
+  rehearsal: Rehearsal, nothing sent
+  sending: Sending…
+  setting:
+    arming:
+      show:
+        _: Show while arming
+        help: Opens the alarm screen while the alarm panel is arming
+      sound:
+        _: Arming sound
+        help: Sound played once when the alarm panel starts arming
+    entity:
+      _: Alarm panel
+      help: The Home Assistant alarm panel entity this device shows; empty picks the only one
+    hidden:
+      _: Hidden zones
+      help: Zone entities left off the alarm screen, comma-separated
+    look:
+      _: Look
+      help: Visual style of the alarm screen, such as keypad, shield or terminal
+    pending:
+      show:
+        _: Show during entry delay
+        help: Opens the alarm screen during the entry delay
+      sound:
+        _: Entry delay sound
+        help: Sound repeated during the entry delay until the alarm state changes or the screen closes
+    settled:
+      for:
+        _: Hide after
+        help: 'How long the alarm screen stays up after arming or disarming: 5 seconds to never'
+      show:
+        _: Show when armed or disarmed
+        help: Opens the alarm screen when the alarm panel finishes arming or disarming
+      sound:
+        _: Armed and disarmed sound
+        help: Sound played once when the alarm panel finishes arming or disarming
+    tab:
+      _: Dashboard tab
+      help: Adds a Home alarm tab to the dashboard when an alarm panel is chosen
+    triggered:
+      show:
+        _: Show when triggered
+        help: Opens the alarm screen when the alarm is triggered
+      sound:
+        _: Triggered sound
+        help: Sound repeated while the alarm is triggered until its state changes or the screen closes
+    zones:
+      _: Zones shown
+      help: Picks which of the alarm panel's zones the alarm screen lists
+  status:
+    armed_away: Armed away
+    armed_custom_bypass: Armed bypass
+    armed_home: Armed home
+    armed_night: Armed night
+    armed_vacation: Armed vacation
+    arming: Arming
+    disarmed: Disarmed
+    disarming: Disarming
+    pending: Entry delay
+    triggered: Triggered
+    unavailable: Unavailable
+    unset: No alarm panel
+    waiting: Waiting for Home Assistant
+  terminal:
+    command: Command
+    status: System status
+  zone:
+    active: Active
+    battery: Low battery
+    bypassed: Bypassed
+    clear: Clear
+    closed: Closed
+    fault: Fault
+    idle: Idle
+    lost: Lost
+    open: Open
+    tamper: Tamper
+    trouble: Trouble
+  zones:
+    _: Zones
+    count: '{{.Secure}} secure / {{.Open}} open'
+    page: Zones {{.From}}–{{.To}} / {{.Of}}
+    shown: '{{.N}} of {{.Of}}'
+hours:
+  '12': 12 hour
+  '24': 24 hour
+idle:
+  after:
+    _: Start after
+    title: Start after
+  entity:
+    photo_every: Screen saver next photo every
+    photo_fit: Screen saver photo fit
+    photo_transition: Screen saver photo transition
+  face: Clock face
+  group:
+    idle: Screen saver
+  label: Visual label
+  media:
+    _: Close paused player after
+    hint: Audio and video players
+  night:
+    _: Night mode
+    after: Starts after
+    hint: When the room is dark
+    lux:
+      _: Darker than
+      value: '{{.N}} lx'
+    mode: Mode
+  none: None
+  'off': Screen off
+  setting:
+    after:
+      _: Idle screen after
+      help: Inactivity time before the screen saver opens; Never keeps it from opening itself
+    align:
+      _: Idle clock horizontal position
+      help: 'Horizontal position of the screen saver clock: left, center, right or random'
+    backing:
+      _: Idle clock backing
+      help: 'What sits behind the screen saver clock: nothing, a shade, or a card'
+    face:
+      _: Idle clock face
+      help: Clock face drawn on the screen saver; None shows no clock
+    media:
+      _: Close paused player after
+      help: Stops a paused audio or video player after this long; Never leaves it
+    night:
+      _: Night mode
+      after:
+        _: Night mode after
+        help: 'Idle time in a dark room before night mode starts: 1 to 30 minutes'
+      help: 'What happens in a dark room: nothing, dim, dim to a clock, or screen off'
+      lux:
+        _: Night mode below
+        help: Ambient light level, 0 to 100 lux, below which the room counts as dark
+    photo_every:
+      _: Next photo every
+      help: 'How often the screen saver shows the next photo: 10 seconds to 5 minutes'
+    photo_fit:
+      _: Photo fit
+      help: How screen saver photos fill the screen, such as fill, fit, framed or slow pan
+    photo_transition:
+      _: Transition
+      help: 'Effect between screen saver photos: none, fade, slide, zoom, wipe or dissolve'
+    position:
+      _: Idle clock vertical position
+      help: 'Vertical position of the screen saver clock: top, center, bottom or random'
+    saver:
+      _: Screen saver mode
+      help: 'Which screen saver shows: this device''s own, Tessera''s, or the Home Assistant dashboard''s'
+    size:
+      _: Idle clock size
+      help: Size of the screen saver clock, from nano to large
+    visual1:
+      _: Idle visual 1
+      help: 'First screen saver slot: a visual, photos, nothing, or screen off'
+      source:
+        _: Idle visual 1 listens to
+        help: 'Audio the first screen saver visual reacts to: microphone, speaker, or both'
+    visual2:
+      _: Idle visual 2
+      help: 'Second screen saver slot, sharing the screen with the first: a visual, photos, or nothing'
+      source:
+        _: Idle visual 2 listens to
+        help: 'Audio the second screen saver visual reacts to: microphone, speaker, or both'
+    wake:
+      _: Wake gesture
+      help: Touch gesture that closes the screen saver; tap by default
+  source1: Visual 1 audio
+  source2: Visual 2 audio
+  title: Screen saver
+  visual1: Visual 1
+  visual2: Visual 2
+ink:
+  amber: Amber
+  blue: Blue
+  cyan: Cyan
+  green: Green
+  pink: Pink
+  red: Red
+  theme: Theme
+  violet: Violet
+keyboard:
+  cancel: Cancel
+  code_expired: Code expired
+  compact: Compact
+  enter: Enter
+  full_width: Full width
+  hide: Hide
+  large: Large
+  refresh: Refresh
+  save: Save
+  search: Search
+  size: Keyboard size
+  standard: Standard
+language:
+  name: English
+lock:
+  again: Enter it again
+  change: Change PIN
+  clear:
+    _: Remove PIN
+    what: Are you sure? This will unlock settings.
+  enter: Enter the PIN
+  entity:
+    pin: Settings Lock
+  mismatch: The PINs didn't match. Enter a new PIN
+  new: Enter a new PIN, 4 to 8 digits
+  next: Next
+  'off': 'Off'
+  'on': 'On'
+  set: Set PIN
+  title: Settings
+  wait: Try again in {{.Seconds}} s
+  wrong: Wrong PIN
+look:
+  default: Default
+  full: Full screen
+  panel: In the panel
+  place: Placement
+  stage:
+    listening: Listening
+    responding: Responding
+    waiting: Waiting
+  title: Visuals
+lovelace:
+  default: Default dashboard
+  entity:
+    dashboard: Dashboard
+    saver_dashboard: Screensaver dashboard
+    saver_scale: Screensaver render scale
+    saver_view: Screensaver view
+    scale: Dashboard render scale
+    theme: Dashboard theme
+    user: Dashboard user
+    view: Dashboard view
+  first: First view
+  group:
+    lovelace: Home Assistant dashboard
+  hint:
+    allow: Allow a user under the EchoLocal integration's options in Home Assistant
+    integration: Install the EchoLocal integration in Home Assistant
+    user: Choose a user under Settings › Dashboard
+  loading: Loading Home Assistant
+  scale:
+    value: '{{.N}}%'
+  setting:
+    dashboard:
+      _: Dashboard
+      help: Home Assistant dashboard shown in dashboard mode; empty uses the default dashboard
+    saver_dashboard:
+      _: Screensaver dashboard
+      help: Home Assistant dashboard shown as the screensaver; empty uses the default dashboard
+    saver_scale:
+      _: Screensaver render scale
+      help: Zoom of the screensaver dashboard page, from 50 to 100 percent
+    saver_view:
+      _: Screensaver view
+      help: View of the screensaver dashboard to open; empty opens its first view
+    scale:
+      _: Render scale
+      help: Zoom of the Home Assistant dashboard page, from 50 to 100 percent
+    theme:
+      _: Theme
+      help: Home Assistant theme applied to the dashboard pages; empty keeps the default theme
+    user:
+      _: Show as
+      help: Home Assistant user the dashboard signs in as
+    view:
+      _: View
+      help: View of the Home Assistant dashboard to open; empty opens its first view
+  theme:
+    default: Home Assistant default
+  unreachable:
+    _: Home Assistant isn't reachable
+    retry: Trying again automatically · tap to try now
+mealie:
+  group:
+    mealie: Mealie
+  setting:
+    server:
+      _: Mealie server
+      help: Address of the Mealie server the Recipes app reads; http is assumed when no scheme is given
+    token:
+      _: Mealie API token
+      help: API token created in Mealie under your profile's API Tokens; recipes and favorites are read as that user
+media:
+  entity:
+    buttons: Volume buttons
+    duck: Music ducking
+  group:
+    airplay: AirPlay
+    media: Media
+    sendspin: Sendspin
+  option:
+    airplay_audio_mode:
+      instant: Instant
+      synced: Synced with video
+  setting:
+    airplay:
+      _: AirPlay
+      help: Runs the AirPlay receiver
+    airplay_audio_mode:
+      _: AirPlay audio mode
+      help: Instant plays AirPlay audio as it arrives; Synced plays it on the sender's timing
+    autoplay:
+      _: Autoplay
+      help: YouTube player moves to the next video when one ends
+    background:
+      _: Background play
+      help: Leaving the video page keeps playback going with the player card instead of stopping
+    buttons:
+      _: Volume buttons
+      help: Static sets main volume; Dynamic sets the volume of what is on screen or playing
+    duck:
+      _: Ducking depth
+      help: Level in dB media drops to during assistant turns, calls and alarms, from -40 to -3
+    mini:
+      _: Mini player
+      help: Shows a small player bar while media plays and no page is open
+    player:
+      _: Player on start
+      help: Whether the full player card opens when playback starts
+    sendspin:
+      _: Sendspin
+      help: Runs the Sendspin player
+message:
+  close: Close
+microphone:
+  group:
+    microphone: Microphone
+  setting:
+    cancel:
+      _: Microphone echo cancellation
+      help: Removes the device's own playback from the microphone while it plays
+    denoise:
+      _: Noise suppression
+      help: Runs noise suppression on the microphone capture
+    gain:
+      _: Microphone gain
+      help: Hardware microphone gain in dB
+    leveling:
+      _: Microphone leveling
+      help: Automatically adjusts microphone level toward a fixed speech target, up to 27 dB
+    mixing:
+      _: Microphone mixing
+      help: 'How the microphones combine: center mic, delay and sum, or the vendor beamformer'
+    mute_led:
+      _: Mute LED brightness
+      help: 'Brightness of the microphone mute LED: Dim or Bright'
+    mute_sound:
+      _: Mute sound
+      help: Sound played when the microphone is muted or unmuted
+    sensitivity:
+      _: Room sensitivity
+      help: dB above room noise before the listening animation responds, from 4 to 20
+mirror:
+  app: Mirror
+mode:
+  auto: Automatic
+  firmware: Tessera
+  lovelace: HA
+  manual: Manual
+  native: Native
+  rings: Rings
+  tessera: Tessera
+  tessera_native: Tessera native
+music:
+  add: Add to queue
+  albums: Albums
+  app: Music
+  artists: Artists
+  back: Back
+  find: Find a speaker
+  group: Group
+  here: Move here
+  home: Home
+  integration: Update the EchoLocal integration in Home Assistant
+  kind:
+    album: Album
+    artist: Artist
+    audiobook: Audiobook
+    playlist: Playlist
+    podcast: Podcast
+    radio: Radio station
+    track: Track
+  library: Library
+  next: Play next
+  none: No Music Assistant speakers
+  nothing: Nothing here
+  now: Playing
+  play: Play
+  playlists: Playlists
+  queue: Up next
+  quiet: Nothing playing
+  radio: Radio
+  recent: Recently played
+  search: Search
+  searching: Search Music Assistant
+  similar: Similar
+  speakers: Speakers
+  starting: Starting…
+  unavailable: Music Assistant is not reachable
+network:
+  address:
+    _: IP address
+    none: None
+  group:
+    network: Network & internet
+  internet:
+    hint: Local only blocks everything outside your network
+    local: Local only
+    open: Open
+    quiet: Quiet
+  lease:
+    _: Lease renews
+    hours: '{{.N}} h'
+    minutes: '{{.N}} min'
+    now: Now
+  mac: MAC address
+  router: Router
+  setting:
+    home_key:
+      _: Home key
+      help: Shared key nearby devices must also hold to be trusted as this home
+    internet: Internet access
+    verify:
+      _: Verify certificates
+      help: Checks TLS certificates on the device's downloads and web requests
+    via_home:
+      _: Download through Home Assistant
+      help: Downloads from GitHub and the release file host go through Home Assistant
+  ssid: Wi-Fi network
+  title: Network & internet
+  via_home:
+    hint: Updates fetched by Home Assistant
+night:
+  clock: Dim to a clock
+  dim: Dim
+  none: Nothing
+  'off': Turn off the screen
+onboard:
+  add: Scan the code, then add
+  hint: Scan the code, then enter this address.
+  or: or enter this address
+  title: Add me to Home Assistant
+peer:
+  cap:
+    audio: Calls
+    broadcast: Broadcasts
+    sync: Settings sync
+    video: Video calls
+  checking: Checking
+  foreign: Not in this home
+  home: In this home
+  open: No home key
+photofit:
+  auto: Auto
+  bars: Fit, plain edges
+  contain: Fit, blurred edges
+  cover: Fill
+  framed: Framed
+  kenburns: Slow pan
+photos:
+  app: Photos
+  entity:
+    app:
+      every: Photos app next photo every
+      fit: Photos app fit
+      transition: Photos app transition
+    google:
+      album1:
+        _: Google Photos album 1 link
+        weight: Google Photos album 1 share
+      album2:
+        _: Google Photos album 2 link
+        weight: Google Photos album 2 share
+      album3:
+        _: Google Photos album 3 link
+        weight: Google Photos album 3 share
+      album4:
+        _: Google Photos album 4 link
+        weight: Google Photos album 4 share
+      enabled: Google Photos
+    immich:
+      albums: Immich albums
+      enabled: Immich photos
+      favorites: Immich favorites only
+      key: Immich API key
+      memories: Immich memories first
+      people: Immich people
+      quality: Immich quality
+      server: Immich server
+      tags: Immich tags
+    status: Photos {{.Source}} status
+  google: Google Photos
+  group:
+    google: Google Photos
+    immich: Immich
+    photos: Photos
+  immich: Immich
+  page: Photos
+  quality:
+    fullsize: Full size
+    preview: Preview
+  setting:
+    app:
+      every:
+        _: Photos app next photo every
+        help: How often the Photos app moves to the next photo; Never stays on one
+      fit:
+        _: Photos app fit
+        help: How the Photos app fits each photo to the screen
+      transition:
+        _: Photos app transition
+        help: Animation the Photos app uses between photos
+    google:
+      album1:
+        _: Album 1 link
+        example: https://photos.app.goo.gl/…
+        help: Shared Google Photos album link used as a photo source
+        weight:
+          _: Album 1 share
+          help: How often this album is picked relative to the others, 0 to 10; 0 skips it
+      album2:
+        _: Album 2 link
+        example: https://photos.app.goo.gl/…
+        help: Shared Google Photos album link used as a photo source
+        weight:
+          _: Album 2 share
+          help: How often this album is picked relative to the others, 0 to 10; 0 skips it
+      album3:
+        _: Album 3 link
+        example: https://photos.app.goo.gl/…
+        help: Shared Google Photos album link used as a photo source
+        weight:
+          _: Album 3 share
+          help: How often this album is picked relative to the others, 0 to 10; 0 skips it
+      album4:
+        _: Album 4 link
+        example: https://photos.app.goo.gl/…
+        help: Shared Google Photos album link used as a photo source
+        weight:
+          _: Album 4 share
+          help: How often this album is picked relative to the others, 0 to 10; 0 skips it
+      enabled:
+        _: Enable
+        help: Uses the shared Google Photos albums as a photo source
+    immich:
+      albums:
+        _: Albums
+        example: Family, Summer 2026
+        help: Comma-separated Immich album names to draw from; empty means any album
+      enabled:
+        _: Enable
+        help: Uses an Immich server as a photo source
+      favorites:
+        _: Favorites only
+        help: Draws only photos marked as favorites in Immich
+      key:
+        _: API key
+        help: Immich API key the device uses to read photos
+      memories:
+        _: Memories first
+        help: Shows Immich's On this day memories ahead of random photos
+      people:
+        _: People
+        example: Alex, Sam
+        help: Comma-separated Immich person names to draw from; empty means anyone
+      quality:
+        _: Quality
+        help: Downloads Immich's preview size or the full-size image
+      server:
+        _: Server
+        example: https://photos.example.com
+        help: Address of the Immich server
+      tags:
+        _: Tags
+        example: kitchen, favorites
+        help: Comma-separated Immich tag names to draw from; empty means any tag
+  sources: Sources
+  status:
+    _: Status
+    connecting: Connecting…
+    empty: No photos match
+    key: Wrong API key
+    'off': 'Off'
+    old: 'Immich {{.Version}}: needs 3.2 or newer'
+    permission: API key needs {{.Name}}
+    ready: Connected
+    unknown: Nothing named {{.Name}}
+    unreachable: Can't reach the server
+    unset: Not set up
+phototransition:
+  cut: None
+  dissolve: Dissolve
+  fade: Fade
+  slide: Slide
+  wipe: Wipe
+  zoom: Zoom
+place:
+  horizontal: Horizontal position
+  size: Size
+  vertical: Vertical position
+player:
+  ad: Ad
+  ad_clip: Ad {{.Clip}} of {{.Clips}}
+  full: Full player
+  live: LIVE
+  lyrics: Lyrics
+  next: Up next
+  none: Nothing
+  now: Now playing
+position:
+  bottom: Bottom
+  center: Center
+  random: Random
+  top: Top
+poster:
+  daily: Daily
+  entity:
+    every: Wallpaper changes
+    fit: Wallpaper fit
+    'on': Wallpaper
+    transition: Wallpaper transition
+  every: Change every
+  group:
+    poster: Wallpaper
+  hourly: Hourly
+  never: Never
+  'off': 'Off'
+  setting:
+    every:
+      _: Change every
+      help: 'When the wallpaper changes: on return after 5 minutes away, a set interval, or never'
+    fit:
+      _: Fit
+      help: How the wallpaper photo fits the screen
+    'on':
+      _: Show wallpaper
+      help: Shows a photo from the photo sources behind the idle screen
+    transition:
+      _: Transition
+      help: Animation used when the wallpaper changes
+  show: Show wallpaper
+  wake: On each wake
+power:
+  reboot:
+    _: Restart device
+    what: Everything comes back in about a minute.
+  restart:
+    _: Restart app
+    what: The screen goes dark for a few seconds.
+  title: Restart
+presence:
+  group:
+    presence: Presence
+  setting:
+    range:
+      _: Detection range
+      help: How far away the proximity sensor counts someone as present, 1 near to 5 far
+    wake:
+      _: Wake on motion
+      help: Someone nearby wakes the screen from idle and keeps it awake
+radar:
+  app: Radar
+  credit:
+    nws: 'Imagery: NASA GIBS · Radar: NWS via Iowa Environmental Mesonet'
+    rainviewer: 'Imagery: NASA GIBS · Radar: RainViewer'
+  failed: Radar is unavailable right now
+  forecast: Forecast {{.Time}}
+  miles: '{{.N}} mi'
+  source:
+    auto: Auto
+    nws: NWS
+    rainviewer: RainViewer
+  updating: Updating…
+radio:
+  app: Radio
+  empty: Star a station to put it on the dial
+  idle: Pick a station
+  local: Local stations
+  more: '{{.N}} more not shown'
+  nothing: No stations here
+  playing: Playing
+  popular: Popular
+  stopped: Stopped
+  unavailable: Radio Browser is not set up in Home Assistant
+rail:
+  media: Media
+  sleep: Sleep
+recipes:
+  all: All
+  app: Recipes
+  back: Back
+  cook: Start cooking
+  done: Done
+  favorites: Favorites
+  hours: '{{.N}} hr'
+  hours_minutes: '{{.H}} hr {{.M}} min'
+  ingredients: Ingredients
+  listening: Say “next step”
+  minutes: '{{.N}} min'
+  more: Show more
+  need: For this step
+  next: Next
+  nofavorites: No favorite recipes yet
+  none: No recipes found
+  page: Recipes
+  prep: Prep {{.Time}}
+  search: Search recipes
+  servings: '{{.N}} servings'
+  setup:
+    _: Connect Mealie
+    hint: Enter your Mealie server and API token
+  status:
+    _: Status
+    connecting: Connecting…
+    ready: Connected
+    token: Mealie refused the API token
+    unreachable: Can't reach Mealie
+    unset: Not set up
+  step: Step {{.N}} of {{.Of}}
+  steps: Steps
+  timer: Start {{.Time}} timer
+reply:
+  download: Starts later, never gaps
+  stream: Starts sooner, can gap
+  title: Response playback
+ring:
+  group:
+    ring: Ring
+  setting:
+    effect:
+      _: Wake light
+      help: Light ring effect while this assistant listens after its wake word
+    incoming:
+      _: Incoming call light
+      help: Light ring effect while a call is ringing in
+    muted:
+      _: Muted light
+      help: Light ring effect while the microphone is muted
+    reaction:
+      _: Room reaction
+      help: Light ring effect that follows the sound level heard in the room
+    replying_effect:
+      _: Replying light
+      help: Light ring effect while this assistant replies; Default plays the wake light reversed
+    talking:
+      _: In-call light
+      help: Light ring effect while placing or in a call
+    thinking_effect:
+      _: Thinking light
+      help: Light ring effect while this assistant thinks; Default plays the wake light reversed
+    trouble:
+      _: Failure light
+      help: Light ring effect flashed red for 1.5 s when a voice request or update fails
+rings:
+  areas: Areas
+  depth: Depth
+  floors: Floors
+  group:
+    _: Group by
+    room: Room
+    system: System
+  home: Home
+  kind:
+    access: Access
+    cameras: Cameras
+    climate: Climate
+    covers: Covers
+    fans: Fans
+    lights: Lights
+    locks: Locks
+    media: Media
+    presence: Presence
+    switches: Switches
+  kinds: Types
+  look:
+    _: Look
+    burst: Burst
+    icicle: Icicle
+    wheel: Wheel
+  nofloor: No floor
+  side:
+    _: Details
+    left: Left / top
+    right: Right / bottom
+  summary: '{{.On}} on · {{.N}} device{{if ne .N 1}}s{{end}}'
+rtsp:
+  entity:
+    audio: RTSP audio
+    password: RTSP password
+    username: RTSP username
+  group:
+    rtsp: RTSP
+  setting:
+    audio:
+      _: Include audio
+      help: Adds the microphone to the RTSP stream
+    enabled:
+      _: RTSP server
+      help: Serves the camera over RTSP on port 8554
+    password:
+      _: Password
+      help: Password RTSP clients must give; empty allows anyone
+    username:
+      _: Username
+      example: viewer
+      help: User name RTSP clients must give with the password
+screen:
+  group:
+    lock: Lock
+    panel: Display
+  setting:
+    alert:
+      _: Alert style
+      help: 'How on-screen messages appear: banner, card, full screen or toast'
+    auto:
+      _: Auto brightness
+      help: Sets screen brightness from the ambient light sensor
+    backlight:
+      _: Brightness
+      help: Screen brightness, 0 to 100%; with auto brightness on, it shifts the automatic level
+    custom:
+      accent:
+        _: Custom theme accent
+        help: 'Accent color of the Custom theme as #rrggbb; empty uses the default theme''s'
+      accent2:
+        _: Custom theme second accent
+        help: 'Second accent color of the Custom theme as #rrggbb; empty uses the default theme''s'
+      background:
+        _: Custom theme background
+        help: 'Background color of the Custom theme as #rrggbb; empty uses the default theme''s'
+      muted:
+        _: Custom theme secondary text
+        help: 'Secondary text color of the Custom theme as #rrggbb; empty uses the default theme''s'
+      surface:
+        _: Custom theme cards
+        help: 'Card and panel color of the Custom theme as #rrggbb; empty uses the default theme''s'
+      text:
+        _: Custom theme text
+        help: 'Main text color of the Custom theme as #rrggbb; empty uses the default theme''s'
+    drawer:
+      _: Dock location
+      help: Screen edge the app dock sits on and is swiped in from
+      hide:
+        _: Hide dock after
+        help: Time before the dock hides, 5 seconds to 1 minute; Never keeps it shown
+    font:
+      _: Font
+      help: Typeface for the panel's text; the default uses the style's own font
+    keyboard:
+      _: Keyboard size
+      help: 'Size of the on-screen keyboard: compact, standard, large or full width'
+    language:
+      _: Language
+      help: Language the panel's text is shown in
+    lock_pin:
+      _: Settings Lock
+      help: 4 to 8 digit PIN asked before settings open on the panel; empty means no lock
+    marks:
+      _: Privacy marks
+      help: Shows marks on screen while the microphone is muted or the camera is blocked
+    size:
+      _: Size
+      help: Scale of the panel's interface, mini to extra large; unset uses the board's size
+    style:
+      _: Style
+      help: Look of the interface's controls, with its own default font and colors
+    theme:
+      _: Theme
+      help: Color palette; Default follows the style, Custom uses the custom colors
+    timer:
+      _: Timer style
+      help: 'How running timers are drawn: bar, banner, dial, full screen, face or corner'
+    touches:
+      _: Show touches
+      help: Draws dots where the screen is touched; details adds touch count and last gesture
+    volume:
+      _: Volume panel position
+      help: Side of the screen the volume panel appears on
+settings:
+  about: About
+  assistants: Voice assistants
+  camera: Camera
+  debug: Developer options
+  display: Display
+  features: Connected services
+  language: Language
+  media: Media
+  network: Network & internet
+  power: Restart
+  search:
+    _: Search settings
+    empty: Type to find a setting
+    none: No matching settings
+  sync: Config sync
+  system: System
+  title: Settings
+  volume: Sound
+size:
+  large: Large
+  medium: Medium
+  micro: Micro
+  mini: Mini
+  nano: Nano
+  small: Small
+sound:
+  alerts: Alarm volume
+  feedback: System sounds
+  main: Main volume
+  media: Media volume
+  mute:
+    alerts: Mute alarms
+    feedback: Mute system sounds
+    main: Mute all sound
+    media: Mute media
+    voice: Mute assistant
+  voice: Assistant volume
+source:
+  both: Microphone and speaker
+  mic: Microphone
+  speaker: Speaker
+speaker:
+  group:
+    speaker: Speaker
+  setting:
+    eq:
+      _: Speaker EQ
+      help: Runs playback through the board's vendor speaker tuning filters
+    headphone_output:
+      _: Headphone jack
+      help: Auto plays through the headphone jack when plugged in; On or Off forces it
+    resampling:
+      _: Voice resampling
+      help: Method used to upsample 16 kHz voice audio to the speaker rate
+    speaker_gain:
+      _: Speaker gain
+      help: Codec driver gain step, 0 to 12, applied while playing through the speaker
+    speaker_output:
+      _: Speaker
+      help: Auto plays through the speaker only while headphones are unplugged; On or Off forces it
+stream:
+  alerts: Alerts
+  feedback: Feedback
+  main: Main
+  media: Media
+  voice: Voice
+style:
+  eink: E-ink
+  glass: Glass
+  hifi: Hi-fi
+  material: Material You
+  metro: Metro
+  neon: Neon
+  skeuo: Skeuo
+  standard: Standard
+  terminal: Terminal
+  title: Style
+sync:
+  busy: '{{.Peer}} is busy'
+  cancelled: Sync cancelled
+  empty: No other devices to sync with
+  enter: Enter the code shown on {{.Peer}}
+  expired: The code expired
+  failed: Sync failed
+  matched: Already matched {{.Peer}}
+  received: '{{.N}} settings applied from {{.Peer}}'
+  receiving: Receiving settings…
+  sending: Sending settings…
+  sent: Settings sent to {{.Peer}}
+  show: Enter this code on {{.Peer}}
+  title: Config sync
+  tries: Too many wrong codes
+  wrong: Wrong code, {{.N}} tries left
+system:
+  adb:
+    _: ADB over network
+    hint: Unauthenticated root shell on 5555
+  certificates:
+    _: Verify certificates
+    hint: TLS certificate validation
+  title: System
+tessera:
+  again: Tap again to unlock
+  ago: '{{.T}} ago'
+  alarm:
+    armed_away: Away
+    armed_custom_bypass: Custom bypass
+    armed_home: Home
+    armed_night: Night
+    armed_vacation: Vacation
+    cancel: Cancel
+    clear: Clear
+    disarm: Disarm
+    ok: OK
+    text: Enter this panel's code in Home Assistant.
+  alert:
+    notification: Notification
+  binary:
+    battery:
+      'off': Normal
+      'on': Low
+    battery_charging:
+      'off': Not charging
+      'on': Charging
+    carbon_monoxide:
+      'off': Clear
+      'on': Detected
+    cold:
+      'off': Normal
+      'on': Cold
+    connectivity:
+      'off': Disconnected
+      'on': Connected
+    door:
+      'off': Closed
+      'on': Open
+    garage_door:
+      'off': Closed
+      'on': Open
+    gas:
+      'off': Clear
+      'on': Detected
+    heat:
+      'off': Normal
+      'on': Hot
+    light:
+      'off': No light
+      'on': Light detected
+    lock:
+      'off': Locked
+      'on': Unlocked
+    moisture:
+      'off': Dry
+      'on': Wet
+    motion:
+      'off': Clear
+      'on': Detected
+    moving:
+      'off': Not moving
+      'on': Moving
+    occupancy:
+      'off': Clear
+      'on': Detected
+    opening:
+      'off': Closed
+      'on': Open
+    plug:
+      'off': Unplugged
+      'on': Plugged in
+    power:
+      'off': 'Off'
+      'on': 'On'
+    presence:
+      'off': Away
+      'on': Home
+    problem:
+      'off': OK
+      'on': Problem
+    running:
+      'off': Not running
+      'on': Running
+    safety:
+      'off': Safe
+      'on': Unsafe
+    smoke:
+      'off': Clear
+      'on': Detected
+    sound:
+      'off': Clear
+      'on': Detected
+    tamper:
+      'off': Clear
+      'on': Tampering detected
+    update:
+      'off': Up-to-date
+      'on': Update available
+    vibration:
+      'off': Clear
+      'on': Detected
+    window:
+      'off': Closed
+      'on': Open
+  bottom:
+    dock: Page panel
+    home: Home page
+    'off': Nothing
+  card:
+    empty: No history for this range
+    high: High {{.V}} at {{.T}}
+    loading: Loading history…
+    low: Low {{.V}} at {{.T}}
+    now: Now {{.T}}
+    since: Since {{.T}}
+  connected: Set up this screen in Tessera
+  empty: Configure and add tiles to this screen ({{.Name}}) in Tessera.
+  enable: Turn on landscape or portrait in Settings → Dashboard
+  energy:
+    battery: Battery
+    grid: Grid
+    home: Home
+    other: Other
+    solar: Solar
+    untracked: Untracked
+  in: in {{.T}}
+  install: Install Tessera Screen Manager in Home Assistant, then add this screen to it.
+  key:
+    activate: Activate
+    press: Press
+    run: Run
+  lapsed: Tessera not active
+  last:
+    date: Last {{.D}}
+    time: Last {{.T}}
+    yest: Yest. {{.T}}
+    yesterday: Yesterday {{.T}}
+  light:
+    brightness: Brightness
+    effect: Effect
+    effects: Effects
+    hue: Color
+    lamps: Lamps
+    waiting: Waiting
+    warmth: Color temperature
+  lock:
+    jammed: Jammed
+    lock: Lock
+    locked: Locked
+    locking: Locking
+    open:
+      _: Open
+      key: Open
+    opening: Opening
+    unlock: Unlock
+    unlocked: Unlocked
+    unlocking: Unlocking
+  never: Never run
+  now: Just now
+  'off': Tessera is off
+  paused: Paused {{.T}}
+  range:
+    day: 24 h
+    hour: 1 h
+    week: 7 d
+  refused: Refused
+  running: Running...
+  silent: No answer
+  sun:
+    name: Sun
+    rise: Sunrise {{.T}}
+    set: Sunset {{.T}}
+  turn:
+    cover: Cover
+    deck: Deck
+    fade: Fade
+    none: None
+    reveal: Reveal
+    slide: Slide
+    zoom: Zoom
+  updating: Updating…
+  vacuum:
+    battery: Battery {{.N}}%
+    dock: Dock
+    locate: Locate
+    pause: Pause
+    start: Start
+  waiting: Install Tessera
+  weather:
+    clear-night: Clear night
+    cloudy: Cloudy
+    daily: Daily
+    exceptional: Exceptional
+    feels: Feels like {{.T}}
+    fog: Fog
+    hail: Hail
+    hourly: Hourly
+    lightning: Lightning
+    lightning-rainy: Lightning, rainy
+    none: No forecast
+    partlycloudy: Partly cloudy
+    pouring: Pouring
+    pressure: Pressure {{.P}}
+    rainy: Rainy
+    snowy: Snowy
+    snowy-rainy: Snowy, rainy
+    sunny: Sunny
+    visibility: Visibility {{.V}}
+    wind: Wind {{.W}}
+    windy: Windy
+    windy-variant: Windy, cloudy
+theme:
+  custom:
+    _: Custom
+    accent: Accent
+    accent2: Second accent
+    background: Background
+    muted: Secondary text
+    surface: Cards
+    text: Text
+    title: Custom theme
+  default: Default
+  title: Theme
+thermostat:
+  action:
+    cooling: Cooling
+    drying: Drying
+    fan: Fan
+    heating: Heating
+    idle: Idle
+    'off': 'Off'
+  app: Thermostat
+  between: Keeping between
+  choose:
+    fan: Fan
+    mode: Mode
+    preset: Preset
+  chosen: '{{.N}} of {{.Of}}'
+  cooling: Cooling to
+  dial: Setting
+  drying: Drying
+  entity:
+    look: Thermostat look
+    tab: Thermostat dashboard tab
+  environment: Environmental control
+  fan: Fan
+  fanmode:
+    auto: Auto
+    diffuse: Diffuse
+    focus: Focus
+    high: High
+    low: Low
+    medium: Medium
+    middle: Middle
+    'off': 'Off'
+    'on': 'On'
+  fanning: Fan running
+  full: Up to {{.N}}; turn one off first
+  group:
+    thermostat: Thermostat
+  heating: Heating to
+  high: High
+  holding: Holding at
+  humidity: Humidity
+  in: In
+  inside: Inside
+  lamp:
+    fan: Fan run
+  look:
+    bars: Bars
+    brass: Brass
+    column: Column
+    dial: Dial
+    mission: Mission
+    split: Split
+    terminal: Terminal
+    wheel: Wheel
+  low: Low
+  mode:
+    auto: Auto
+    cool: Cool
+    dry: Dry
+    fan_only: Fan
+    heat: Heat
+    heat_cool: Auto
+    'off': 'Off'
+  no-preset: No preset
+  none: No thermostats chosen
+  'off': 'Off'
+  out: Out
+  outside: Outside
+  preset:
+    activity: Activity
+    away: Away
+    boost: Boost
+    comfort: Comfort
+    eco: Eco
+    home: Home
+    none: None
+    sleep: Sleep
+  refused: Home Assistant refused that
+  set: Set
+  setpoint: Set point
+  setting:
+    entities:
+      _: Thermostats
+      help: Home Assistant climate entities shown in the thermostat app, at most 4
+    look:
+      _: Look
+      help: Drawing style of the thermostat app, such as dial, column or wheel
+    tab:
+      _: Dashboard tab
+      help: Adds a thermostat tab to the dashboard once a thermostat is chosen
+  status: Status
+  target: Target
+  temp: Temp
+  temperature: Temperature
+  unavailable: Unavailable
+  waiting: Waiting for Home Assistant
+timer:
+  stop: Stop
+timerstyle:
+  banner: Banner
+  bar: Bar
+  corner: Corner
+  dial: Dial
+  face: Clock face
+  full: Full screen
+todo:
+  add: Add an item
+  app: Shopping list
+  clear: Clear completed
+  empty: Nothing on the list
+  entity: To-do lists
+  group:
+    todo: Shopping list
+  lists: '{{.Count}} lists'
+  none: No to-do lists in Home Assistant
+  'off': 'Off'
+  pick: Pick a list in Settings → Home control → Shopping list
+  setting:
+    completed:
+      _: Show completed items
+      help: Lists checked-off items below open ones, with a button to clear them
+    entities:
+      _: To-do lists
+      example: todo.shopping_list,todo.hardware
+      help: Home Assistant to-do list entities shown, as a comma-separated list
+  title: Shopping list
+tone:
+  alert: Alert
+  info: Info
+  success: Success
+  title: Wake sound
+  warning: Warning
+touches:
+  details: Details
+  dots: Dots
+  'off': 'Off'
+tv:
+  app: TV
+  empty: Nothing airing
+  failed: Couldn't load the channel guide
+  find: Find a channel or show
+  group:
+    tv: TV
+  here: Here
+  next: 'Next at {{.Time}}: {{.Title}}'
+  none: No YouTube TV players in Home Assistant
+  quiet: Nothing playing
+  setting:
+    default:
+      _: Default TV
+      example: media_player.yttv_living_room
+      help: TV that YouTube TV voice requests play on when no TV is named
+    favorites:
+      _: Favorites
+      help: YouTube TV channels starred to list first in the TV guide
+  update: Update the YouTube TV integration
+  watch: Watch on {{.TV}}
+  watch_here: Watch here
+  youtube: YouTube TV
+uisize:
+  compact: Compact
+  large: Large
+  medium: Medium
+  mini: Mini
+  xlarge: Extra large
+update:
+  available: '{{.Version}} available'
+  channel:
+    _: Update channel
+    dev: Development
+    stable: Stable
+  check: Check for updates
+  checking: Checking…
+  current: Up to date
+  group:
+    updates: Updates
+  install: Download and install {{.Version}}
+  ready: Update available
+  running: Current version
+  setting:
+    channel:
+      _: Update channel
+      help: Release channel firmware updates come from; changing it checks for an update
+  title: Software update
+  unreachable: Couldn't reach the update server
+  versions:
+    _: Other versions
+    confirm: Install {{.Version}}
+    installed: Installed
+    none: No other versions
+    what: '{{.Running}} is replaced by {{.Version}} and the app restarts.'
+upgrade:
+  engine: the cast engine
+  installing: Installing…
+  line: Updating to {{.Version}} · {{.Status}}
+  percent: '{{.N}}%'
+  preparing: Getting {{.Name}} ready · {{.Status}}
+visual:
+  aurora: Aurora
+  classic-vu: Classic VU
+  cymatics: Cymatics
+  digital-vu: Digital VU
+  fire: Fire
+  fireflies: Fireflies
+  fireworks: Fireworks
+  galaxy: Galaxy
+  group:
+    visual: Visuals
+  hal-9000: HAL 9000
+  halo: Halo
+  ink-in-water: Ink in Water
+  koi-pond: Koi Pond
+  lava-lamp: Lava Lamp
+  lcars: LCARS
+  lens-flares: Lens Flares
+  light-cycles: Light Cycles
+  matrix: Matrix
+  mercury: Mercury
+  mother: Mother
+  neon-sign: Neon Sign
+  orb: Orb
+  paint-splash: Paint Splash
+  phosphor: Phosphor
+  pipboy-3: PB 3000
+  pipboy-4: PB Mark IV
+  pipboy-76: PB 2000
+  pipboy-nv: PB New Vegas
+  pulsar: Pulsar
+  rain-on-glass: Rain on Glass
+  ribbons: Ribbons
+  setting:
+    fps:
+      _: Visual frame cap
+      help: 'Highest frame rate visuals draw at: 10, 15, 20, 30, 45 or 60'
+    kind:
+      _: Visual
+      help: Animation the visualizer draws in response to sound
+    label:
+      _: Visual label
+      example: Kitchen
+      help: Text, up to 32 characters, shown by visuals that draw a label
+    lift:
+      _: Visualizer lift
+      help: Gain, 0 to 40 dB, added to the microphone sound visuals react to
+    seed:
+      _: Visual seed
+      help: Fixes the random pattern of visuals, up to 1024; 0 is random each time
+  synthwave: Synthwave
+  tesla: Tesla
+  thunderstorm: Thunderstorm
+voice:
+  group:
+    actions: Actions
+    commands: Commands
+  hacs:
+    _: EchoLocal integration
+    hint: Actions need the EchoLocal integration in Home Assistant. Scan the code to open it in HACS, then install or update it.
+    missing: Not installed
+    outdated: Update needed
+    unknown: Checking
+  option:
+    label:
+      none: Areas only
+  setting:
+    action:
+      alarm:
+        _: Manage alarms
+        help: Lets Home Assistant Assist sentences set, list, stop or snooze alarms on this device
+      broadcast:
+        _: Broadcast a message
+        help: Lets Home Assistant Assist sentences like "broadcast" announce a message
+      call:
+        _: Call a device
+        help: Lets Home Assistant Assist sentences call another device found on the network
+      call_answer:
+        _: Answer a call
+        help: Lets Home Assistant Assist sentences like "answer" pick up a ringing call
+      call_hangup:
+        _: Hang up a call
+        help: Lets Home Assistant Assist sentences like "hang up" end or decline a call
+      recipes:
+        _: Cook from recipes
+        help: Lets Home Assistant Assist sentences find recipes, start cooking, and step through the recipe on this device
+      youtube_tv:
+        _: Watch YouTube TV
+        help: Lets Home Assistant Assist sentences put on a YouTube TV channel or say what's on
+    actions:
+      _: All actions
+      help: Offers this device's spoken sentences to Home Assistant Assist; off withdraws all of them
+    command:
+      cook:
+        _: Cook mode
+        help: While cook mode is open, saying "next step", "previous step" or "start timer" moves through the recipe
+      mirror:
+        _: Mirror
+        help: Saying "mirror" opens the camera mirror view
+      radar:
+        _: Radar
+        help: Saying "radar" or "show the weather radar" opens the radar map
+    commands:
+      _: All commands
+      help: Runs the on-device speech recognizer for spoken commands such as mirror and radar
+    label:
+      _: Home Assistant names to listen for
+      help: Home Assistant label whose entity names the recognizer listens for, besides area names
+    language:
+      _: Voice actions language
+      help: Language of the voice action sentences this device answers and of its spoken replies
+  title: Voice triggers
+voicematch:
+  accept: Accept
+  add: Add a voice
+  again: Try again
+  cancel: Cancel
+  done: Voice match is ready for {{.Name}}
+  failed: Voice match couldn't be set up
+  finish: Done
+  heard: Got it
+  listening: Listening…
+  missed: Didn't catch that. Once more.
+  phrase:
+    calendar: what's on my calendar today
+    door: lock the front door
+    lights: turn on the lights
+    music: play some music in the kitchen
+    shopping: add milk to the shopping list
+    timer: set a timer for ten minutes
+    weather: what's the weather like tomorrow
+  pick: Pick a person
+  preparing: Getting ready…
+  redo: Record again
+  remove: Remove
+  say: Say “{{.Wake}}”, then
+  say_plain: Say the wake word, then
+  similar: This voice sounds very similar to {{.Name}}
+  someone: Someone else
+  threshold: Match threshold
+  title: Voice match
+  unconfirmed: That didn't sound like the same voice
+volume:
+  chime: Notification sound
+wake:
+  ember: Ember
+  sunrise: Sunrise
+  white: White
+weather:
+  alert:
+    dismiss: Dismiss
+    until: Until {{.T}}
+  alerts:
+    hint: Severe US weather warnings for your home, from the National Weather Service
+  animate: Animate
+  cond:
+    clear-night: Clear
+    cloudy: Cloudy
+    exceptional: Warning
+    fog: Fog
+    hail: Hail
+    lightning: Thunderstorm
+    lightning-rainy: Thunderstorm
+    partlycloudy: Partly cloudy
+    pouring: Heavy rain
+    rainy: Rain
+    snowy: Snow
+    snowy-rainy: Sleet
+    sunny: Sunny
+    windy: Windy
+    windy-variant: Windy
+  dashboard: Show on dashboard
+  entity: Weather entity
+  feels: Feels like {{.T}}
+  forecast:
+    _: Forecast
+    daily: Daily
+    hourly: Hourly
+    none: No forecast
+    twice_daily: Twice daily
+  group:
+    weather: Weather
+  humidity: Humidity {{.N}}%
+  idle: Show on screen saver
+  look:
+    _: Look
+    card: Card
+    compact: Compact
+    detail: Detail
+    icon: Icon
+    stack: Stack
+    words: Words
+  none: No weather entities in Home Assistant
+  'off': 'Off'
+  setting:
+    alerts:
+      _: Weather alerts
+      help: Polls National Weather Service alerts and shows severe ones in place of the weather
+    align:
+      _: Dashboard weather horizontal position
+      help: 'Horizontal placement of the dashboard weather: left, center or right'
+    animate:
+      _: Animate dashboard weather
+      help: Animates the dashboard weather icon
+    dashboard:
+      _: Weather on dashboard
+      help: Shows the current weather on the dashboard
+    entity:
+      _: Weather entity
+      example: weather.home
+      help: Home Assistant weather entity for current conditions; empty picks the first one found
+    forecast:
+      _: Forecast entity
+      example: weather.home
+      help: Weather entity the daily forecast comes from; empty uses the weather entity
+    idle:
+      _: Weather on screen saver
+      help: Shows the current weather on the screen saver
+    look:
+      _: Dashboard weather look
+      help: 'Layout of the dashboard weather: compact, stack, icon, words, card or detail'
+    position:
+      _: Dashboard weather vertical position
+      help: 'Vertical placement of the dashboard weather: top, center or bottom'
+    radar_range:
+      _: Radar starting range
+      help: Distance in miles the radar map covers when it opens, 50 to 800
+    radar_source:
+      _: Radar source
+      help: Radar imagery source; Auto uses NWS in the lower 48 states, RainViewer elsewhere
+    saver:
+      align:
+        _: Screen saver weather horizontal position
+        help: 'Horizontal placement of the screen saver weather: left, center or right'
+      animate:
+        _: Animate screen saver weather
+        help: Animates the screen saver weather icon
+      look:
+        _: Screen saver weather look
+        help: 'Layout of the screen saver weather: compact, stack, icon, words, card or detail'
+      position:
+        _: Screen saver weather vertical position
+        help: 'Vertical placement of the screen saver weather: top, center or bottom'
+      size:
+        _: Screen saver weather size
+        help: Size of the screen saver weather, nano to large
+      themed:
+        _: Themed screen saver weather colors
+        help: Draws screen saver weather icons in theme colors instead of natural colors
+    size:
+      _: Dashboard weather size
+      help: Size of the dashboard weather, nano to large
+    themed:
+      _: Themed dashboard weather colors
+      help: Draws dashboard weather icons in theme colors instead of natural colors
+  themed:
+    _: Themed colors
+    hint: 'Off uses natural colors: a yellow sun, gray clouds, blue rain'
+  title: Weather
+  uv: UV {{.N}}
+  wind: Wind {{.N}} {{.Unit}}
+webaccess:
+  address: Address
+  title: Web access
+wifi:
+  busy: Already joining another network
+  connected: Connected
+  failed: Couldn't join {{.Network}}
+  join: Join
+  joined: Connected to {{.Network}}
+  joining: Joining {{.Network}}…
+  left: '{{.N}} s left'
+  none: No networks found
+  ok: OK
+  password: Password
+  refused: Wrong password
+  scan:
+    _: Scan again
+    failed: Scan failed
+  scanning: Scanning…
+  short: Use at least {{.N}} characters
+  timeout: No connection within {{.Minutes}} minutes
+  title: Wi-Fi
+  unreachable: Try again
+  unsupported: '{{.Security}}, not supported'
+youtube:
+  account: YouTube account
+  accounts: Accounts
+  add: Add account
+  again: New code
+  anonymous: Anonymous
+  app: YouTube
+  asking: Getting a code…
+  cancel: Cancel
+  category:
+    filler: Filler
+    hook: Hook
+    interaction: Interaction reminder
+    intro: Intro
+    music_offtopic: Non-music section
+    outro: Outro
+    preview: Preview
+    selfpromo: Self-promotion
+    sponsor: Sponsor
+  empty: Nothing here yet
+  enter: and enter
+  entity:
+    lounge: YouTube lounge
+  expired: The code expired
+  failed: Couldn't reach YouTube
+  go: On your phone or computer, go to
+  group:
+    cast: Cast
+  history: History
+  home: Home
+  later: Watch later
+  option:
+    lounge:
+      always: Always
+      demand: On demand
+  refused: Sign-in was declined
+  search: Search
+  setting:
+    lounge:
+      _: YouTube lounge
+      help: Keeps YouTube and YouTube Music lounge connections open always, or opens them on demand
+  shorts: Shorts
+  signin: Sign in to YouTube
+  skip:
+    _: Skip segments
+    none: None
+    some: '{{.N}} kinds'
+  stay: Stay anonymous
+  subscriptions: Subscriptions
+  unwatched: Watch something to fill Home
+  waiting: Waiting for approval…
+zone:
+  title: Time zone

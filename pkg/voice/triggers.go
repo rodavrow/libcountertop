@@ -3,6 +3,7 @@ package voice
 import (
 	"fmt"
 	"maps"
+	"slices"
 
 	"github.com/ygelfand/libcountertop/pkg/say"
 	setting "github.com/ygelfand/libcountertop/pkg/settings"
@@ -20,7 +21,7 @@ func NewTable(
 	actions, commands []string,
 	labels func() []setting.Option,
 ) *setting.Table[schema.Voice] {
-	rows := []Setting{setting.Flag(
+	rows := []Setting{languageRow(), setting.Flag(
 		Setting{Name: "actions", Group: ActionsGroup, Icon: "mdi:account-voice"},
 		func(v *schema.Voice) *bool { return &v.Actions },
 	)}
@@ -59,6 +60,34 @@ func NewTable(
 		rows,
 		setting.Messages{Text: say.T, Missing: say.Missing},
 	)
+}
+
+func languageRow() Setting {
+	var options []setting.Option
+	for _, tag := range say.Languages() {
+		options = append(options, setting.Option{Value: tag, Label: say.Name(tag)})
+	}
+	s := Setting{
+		Name:    "language",
+		Group:   ActionsGroup,
+		Icon:    "mdi:translate",
+		Kind:    setting.Choice,
+		Options: options,
+		Read: func(v *schema.Voice) string {
+			if v.Language == "" {
+				return say.English.String()
+			}
+			return v.Language
+		},
+	}
+	s.Write = func(v *schema.Voice, value string) error {
+		if !slices.Contains(say.Languages(), value) {
+			return s.Bad(value, "")
+		}
+		v.Language = value
+		return nil
+	}
+	return s
 }
 
 func ActionSwitch(name string) string { return say.T("voice.setting." + schema.ActionKey(name)) }

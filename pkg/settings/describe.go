@@ -13,6 +13,7 @@ type Field struct {
 	Kind    string        `json:"kind"`
 	Value   string        `json:"value"`
 	Example string        `json:"example,omitempty"`
+	Help    string        `json:"help,omitempty"`
 	Unit    string        `json:"unit,omitempty"`
 	Min     int           `json:"min,omitempty"`
 	Max     int           `json:"max,omitempty"`
@@ -35,6 +36,7 @@ func (c *Controls[T]) Fields() []Field {
 			Group:   c.Table.Title(s.Group),
 			Kind:    s.Kind.String(),
 			Example: s.Example(),
+			Help:    s.Help(),
 			Unit:    s.Unit,
 			Min:     s.Min,
 			Max:     s.Max,

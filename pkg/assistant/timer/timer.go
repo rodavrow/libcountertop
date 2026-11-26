@@ -44,10 +44,11 @@ type Timers struct {
 
 	woke chan struct{}
 
-	mu   sync.Mutex
-	held map[string]*timer
-	stop context.CancelFunc
-	said string
+	mu    sync.Mutex
+	held  map[string]*timer
+	local map[string]*time.Timer
+	stop  context.CancelFunc
+	said  string
 }
 
 type timer struct {
@@ -137,6 +138,35 @@ func (t *Timers) Event(e esphome.TimerEvent) {
 	}
 	t.show()
 	t.publish()
+}
+
+func (t *Timers) Count(id, name string, d time.Duration) {
+	seconds := uint32(max(d, time.Second) / time.Second)
+	t.mu.Lock()
+	if t.local == nil {
+		t.local = map[string]*time.Timer{}
+	}
+	if old := t.local[id]; old != nil {
+		old.Stop()
+	}
+	t.local[id] = time.AfterFunc(time.Duration(seconds)*time.Second, func() {
+		t.mu.Lock()
+		delete(t.local, id)
+		t.mu.Unlock()
+		t.Event(esphome.TimerEvent{
+			Type:    api.VoiceAssistantTimerEvent_VOICE_ASSISTANT_TIMER_FINISHED,
+			TimerID: id,
+		})
+	})
+	t.mu.Unlock()
+	t.Event(esphome.TimerEvent{
+		Type:         api.VoiceAssistantTimerEvent_VOICE_ASSISTANT_TIMER_STARTED,
+		TimerID:      id,
+		Name:         name,
+		TotalSeconds: seconds,
+		SecondsLeft:  seconds,
+		IsActive:     true,
+	})
 }
 
 func (t *Timers) publish() {

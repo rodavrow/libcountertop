@@ -43,6 +43,7 @@ type Shell struct {
 	reported   View
 	pending    []notice
 	notifying  bool
+	idling     bool
 
 	dock      bool
 	dockHide  time.Duration
@@ -58,7 +59,10 @@ type Shell struct {
 	Redrawn hook.Hook[struct{}]
 }
 
-type Change struct{ From, To View }
+type Change struct {
+	From, To   View
+	Back, Idle bool
+}
 
 type notice struct {
 	closing []View
@@ -157,9 +161,15 @@ func (s *Shell) changed() {
 		}
 	}
 	if to := s.top(); to != s.reported {
-		n.change = &Change{From: s.reported, To: to}
+		n.change = &Change{
+			From: s.reported,
+			To:   to,
+			Back: s.reported != nil && !slices.Contains(s.stack, s.reported),
+			Idle: s.idling,
+		}
 		s.reported = to
 	}
+	s.idling = false
 	s.pending = append(s.pending, n)
 	if s.notifying {
 		s.mu.Unlock()
@@ -472,6 +482,7 @@ func (s *Shell) idled(generation uint64) {
 			s.timer = nil
 		}
 	}
+	s.idling = true
 	s.mu.Unlock()
 	s.changed()
 }

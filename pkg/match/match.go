@@ -50,7 +50,7 @@ func Closest(said string, candidates []Candidate) (string, bool) {
 
 func ranked(said string, candidates []Candidate) []scored {
 	words := voice.Normalize(said)
-	words = strings.TrimPrefix(words, "the ")
+	words = voice.TrimArticles(voice.Current(), words)
 	want := compact(words)
 	if want == "" {
 		return nil

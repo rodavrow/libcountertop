@@ -19,6 +19,7 @@ func TestTheEntityIdentifiersDoNotMove(t *testing.T) {
 		"size":        "screen_size",
 		"drawer":      "drawer_edge",
 		"drawer.hide": "dock_hide",
+		"volume":      "volume_side",
 		"alert":       "screen_alert",
 		"timer":       "screen_timer",
 		"keyboard":    "screen_keyboard",

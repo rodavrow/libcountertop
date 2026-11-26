@@ -7,6 +7,7 @@ type Voice struct {
 	Actions  bool            `json:"actions"`
 	Off      map[string]bool `json:"off,omitempty"`
 	Label    string          `json:"label,omitempty"`
+	Language string          `json:"language,omitempty"`
 }
 
 func DefaultVoice() Voice { return Voice{Commands: true, Actions: true} }

@@ -143,6 +143,11 @@ func rows(table func() *Table, uiSize func() string) []Setting {
 			},
 		},
 		setting.Pick(
+			Setting{Name: "volume", Group: Panel, ID: "volume_side", Icon: "mdi:volume-source"},
+			schema.Sides(),
+			func(s *schema.Screen) *schema.Edge { return &s.Volume },
+		),
+		setting.Pick(
 			Setting{Name: "drawer.hide", Group: Panel, ID: "dock_hide", Icon: "mdi:dock-right"},
 			schema.DockDelays(),
 			func(s *schema.Screen) *schema.Delay { return &s.DockHide },

@@ -23,6 +23,7 @@ const (
 	AppDoorbell   = "doorbell"
 	AppHomeAlarm  = "homealarm"
 	AppPhotos     = "photos"
+	AppRecipes    = "recipes"
 	AppThermostat = "thermostat"
 	AppTV         = "tv"
 	AppYouTube    = "youtube"

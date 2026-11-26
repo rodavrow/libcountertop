@@ -1,0 +1,3114 @@
+about:
+  built: Gebouwd
+  commit: Commit
+  name: Naam
+  title: Over
+  version: Versie
+access:
+  group:
+    access: Toegang
+    api: Home Assistant
+    frontend: Webtoegang
+  setting:
+    adb:
+      _: ADB via netwerk
+      help: Opent adb via het netwerk op poort 5555 met een root-shell; uit beperkt adb tot USB
+    adopted:
+      _: Overgenomen door Home Assistant
+      help: Wordt gezet zodra Home Assistant abonneert; zolang uit biedt het apparaat zijn adres aan voor overname
+    password:
+      _: Beheerderswachtwoord
+      help: Inlogwachtwoord voor de webinterface van het apparaat; leeg maakt een willekeurig wachtwoord
+actions:
+  alarm:
+    _: Wekkers beheren
+    ambiguous: Meer dan één wekker past; noem de naam
+    daily: elke dag
+    delete: '{{.Alarm}} verwijderd'
+    disable: '{{.Alarm}} uitgeschakeld'
+    empty: Je hebt geen opgeslagen wekkers
+    enable: '{{.Alarm}} ingeschakeld'
+    exists: '{{.Alarm}} bestaat al'
+    missing: Geen opgeslagen wekker past bij die naam of tijd
+    named: '{{.Name}} om {{.Clock}}'
+    next: Je volgende wekker is {{.Alarm}}, {{.When}}
+    none: Je hebt geen komende wekker
+    not_ringing: Er gaat geen wekker af
+    not_snoozed: Er is geen afgaande wekker om te snoozen
+    'off': '{{.Alarm}}, uitgeschakeld'
+    once: eenmalig
+    sentence:
+      delete: (verwijder|wis) [de|mijn] wekker {target}
+      disable: (schakel|zet) [de|mijn] wekker {target} uit
+      enable: (schakel|zet) [de|mijn] wekker {target} aan
+      list: toon [mijn] wekkers
+      list_what: welke wekkers heb ik
+      next: wanneer gaat [mijn] volgende wekker
+      set: (zet|stel|maak) [een] wekker (om|voor|op) {time}
+      set_named: (zet|stel|maak) [een] wekker (genaamd|met de naam) {name} (om|voor|op) {time}
+      snooze: (snooze|sluimer) [de] wekker
+      snooze_bare: sluimer
+      stop: stop [de] wekker
+    set: '{{.Alarm}} ingesteld'
+    snoozed: Wekker gesnoozed
+    stopped: Wekker gestopt
+    target: Noem de naam van de wekker, de tijd of volgende wekker
+    time: Noem een tijd zoals half acht, eventueel gevolgd door op werkdagen, in het weekend, elke dag of dagen van de week
+    weekdays: op werkdagen
+    weekends: in het weekend
+    when: '{{.Day}} om {{.Clock}}'
+  broadcast:
+    _: Een omroepbericht sturen
+    ask: Spreek na de toon
+    sentence:
+      ask: (omroepen|aankondigen)
+      message: (omroepen|aankondigen) {message}
+      send: stuur een omroepbericht
+    text: Getypte tekst omroepen vereist de Home Assistant-integratie
+  call:
+    _: Een apparaat bellen
+    busy: Al in gesprek
+    foreign: '{{.Peer}} hoort niet bij dit huis'
+    sentence:
+      call: (bel|intercom) {peer}
+      video: (videobel|start een videogesprek met) {peer}
+    unknown: Er is geen apparaat met de naam {{.Peer}}
+    unreachable: '{{.Peer}} is niet bereikbaar'
+  call_answer:
+    _: Een oproep aannemen
+    done: Oproep wordt aangenomen
+    none: Geen inkomende oproep om aan te nemen
+    sentence:
+      bare: opnemen
+      call: (neem [de] (oproep|telefoon) op|beantwoord [de] oproep)
+      video: (neem [het] videogesprek op|beantwoord [het] videogesprek)
+  call_hangup:
+    _: Een oproep beëindigen
+    done: Oproep beëindigd
+    none: Geen oproep om op te hangen
+    sentence:
+      bare: ophangen
+      call: (hang [de] (oproep|telefoon) op|beëindig [de] oproep)
+      end: (weiger|negeer) [de] oproep
+  recipes:
+    _: Koken met recepten
+    amount: Je hebt {{.Amount}} nodig
+    closed: Er is geen recept open om te koken
+    cooking: Laten we {{.Recipe}} koken.
+    first: Dit is de eerste stap
+    found: Hier zijn recepten voor {{.Query}}
+    last: Dat was de laatste stap
+    missing: '{{.Ingredient}} zit niet in dit recept'
+    none: Geen recepten gevonden voor {{.Query}}
+    nosteps: Dit recept heeft geen stappen
+    notimer: Deze stap heeft geen timer
+    sentence:
+      amount: hoeveel {ingredient} [heb ik nodig]
+      amount_many: hoe veel {ingredient} [heb ik nodig]
+      cook: (laten we {recipe} koken|ik wil {recipe} koken|kook {recipe})
+      find: (zoek|vind) [een] recept[en] (voor|met) {recipe}
+      find_named: (zoek|vind) [een] {recipe} recept
+      next: volgende stap
+      next_what: wat is de volgende stap
+      previous: vorige stap
+      repeat: (herhaal|lees) [de] stap [nog eens]
+      show: laat [me] [het] recept (voor|van) {recipe} zien
+      timer: start [de] timer [voor] [deze] stap
+    showing: Hier is {{.Recipe}}
+    step: 'Stap {{.N}} van {{.Of}}: {{.Text}}'
+    timer: Timer gestart voor {{.Minutes}} minu{{if eq .Minutes 1}}ut{{else}}ten{{end}}
+    unreachable: Ik kon Mealie niet bereiken
+    unset: Stel eerst Mealie in via de Recepten-app
+    which: Welk recept?
+  youtube_tv:
+    _: YouTube TV kijken
+    airing: Op {{.Channel}} is {{.Title}}
+    channel: Noem een zender of programma
+    device: Er is geen apparaat met de naam {{.Device}}
+    here:
+      _: '{{.Show}} op {{.Channel}} wordt afgespeeld'
+      channel: '{{.Channel}} wordt afgespeeld'
+    nothing: Er staat nu niets op {{.Channel}}
+    nowhere: Kies een standaard-tv in de tv-app
+    sentence:
+      watch: (kijk naar|kijk) {channel}
+      watch_on: (kijk naar|kijk) {channel} op [de] {device}
+      what_is_on: wat komt er op {channel}
+      whats_on: wat is er op {channel}
+    unknown: Ik heb {{.Channel}} gezocht op YouTube TV, maar het is niet beschikbaar of kan nu niet worden afgespeeld
+    watching:
+      _: '{{.Show}} op {{.Channel}} wordt afgespeeld op {{.Device}}'
+      channel: '{{.Channel}} wordt afgespeeld op {{.Device}}'
+airplay:
+  code: Voer deze code in op {{.Client}}
+alarm:
+  add: Wekker toevoegen
+  app: Wekkers
+  daily: Elke dag
+  day:
+    fri: Vrijdag
+    mon: Maandag
+    sat: Zaterdag
+    sun: Zondag
+    thu: Donderdag
+    tue: Dinsdag
+    wed: Woensdag
+  delete: Wekker verwijderen
+  edit: Wekker
+  hour: Uur
+  light: Wekkerlicht
+  minute: Minuut
+  minutes: '{{.N}} min'
+  name: Naam
+  'off': Uit
+  'on': Wekker aan
+  once: Eenmalig
+  ramp: Zacht beginnen
+  repeat: Herhalen
+  save: Opslaan
+  seconds: '{{.N}} s'
+  snooze: Snooze
+  snooze_for: '{{.N}} min snoozen'
+  snoozed: Gesnoozed tot {{.T}}
+  sound: Geluid
+  state:
+    'off': Uit
+    'on': Aan
+  stop: Stop
+  volume:
+    _: Volume
+    gentle: Zacht
+    silent: Stil
+    static: Constant
+  weekdays: Werkdagen
+  weekends: Weekenden
+alerts:
+  group:
+    alerts: Meldingen & wekkers
+  page: Meldingen & wekkers
+  setting:
+    alert:
+      _: Alarmsignaal
+      help: Geluid voor alarmmeldingen, elke 2 seconden herhaald tot de beltijd voorbij is
+    info:
+      _: Infosignaal
+      help: Geluid bij een infomelding
+    ring_for:
+      _: Beltijd
+      help: 'Hoe lang timers, wekkers en alarmmeldingen blijven afgaan: 1, 5, 15 of 30 minuten'
+    success:
+      _: Successignaal
+      help: Geluid bij een succesmelding
+    timer:
+      _: Timergeluid
+      help: Geluid als een timer afgaat
+    wake:
+      _: Wekkerlicht
+      help: 'Schermweergave van het licht dat opkomt voor een wekker: zonsopkomst, wit of gloed'
+    warning:
+      _: Waarschuwingssignaal
+      help: Geluid bij een waarschuwing
+alertstyle:
+  answer: Automatisch opnemen
+  banner: Banner
+  card: Kaart
+  full: Volledig scherm
+  none: Geen
+  screen: Zoals scherm
+  toast: Toast
+align:
+  center: Midden
+  left: Links
+  random: Willekeurig
+  right: Rechts
+apps:
+  empty: Geen apps
+  group:
+    apps: Apps
+  hint: Tik op de ster om een app in het dock te houden. Houd een tegel vast en sleep om hem te verplaatsen.
+  setting:
+    dock:
+      _: Apps in het dock
+      help: Door komma's gescheiden app-id's in het dock, in app-volgorde
+    order:
+      _: Volgorde van apps
+      help: Door komma's gescheiden app-id's die eerst staan, in deze volgorde; overige apps volgen
+  title: Apps
+assistants:
+  arbitration:
+    offset: '{{.N}} dB'
+    value: '{{.N}} ms'
+  group:
+    announcements: Aankondigingen
+    arbitration: Arbitrage
+    captions: Ondertitels
+    gemini: Gemini
+    pryon: Pryon
+    stopword: Stopwoord
+  'off': Uit
+  pipeline:
+    _: Pipeline
+    preferred: Voorkeur
+  reply: Antwoord afspelen
+  setting:
+    animate_announcements: Aankondigingen animeren
+    arbitration_offset:
+      _: Arbitrage-offset
+      help: Decibel opgeteld bij de wekscore van dit apparaat als apparaten in de buurt strijden om te antwoorden, ±20
+    arbitration_wait:
+      _: Arbitrage-wachttijd
+      help: Milliseconden wachten op andere apparaten die hetzelfde activeringswoord hoorden, tot 500; 0 antwoordt meteen
+    buffer:
+      _: Antwoordbuffer
+      help: Milliseconden gestreamd antwoord vastgehouden voor het afspelen begint, 0 tot 3000
+    delivery:
+      _: Antwoord afspelen
+      help: Speelt het antwoord af als het compleet is, of streamt het terwijl het geluid binnenkomt
+    follow_up:
+      _: Vervolgtijd
+      help: Seconden opnieuw luisteren zonder activeringswoord na een antwoord; 0 zet het uit
+    gemini:
+      _: Gemini-activeringswoord
+      help: Biedt Googles activeringswoord "Hey Google" aan en downloadt het model bij keuze
+    known_voices:
+      _: Alleen herkende stemmen
+      help: Start een verzoek alleen als het activeringswoord bij een ingeleerd stemprofiel past
+    look:
+      listening:
+        _: Visual bij luisteren
+        help: Visual terwijl de assistent luistert, gestuurd door de microfoon; Standaard houdt de ingebouwde weergave
+      place:
+        _: Plaats van de visual
+        help: Toont de gekozen visuals in het assistentpaneel of op het volledige scherm
+      responding:
+        _: Visual bij antwoorden
+        help: Visual terwijl het antwoord speelt, gestuurd door de luidspreker; Standaard houdt de ingebouwde weergave
+      waiting:
+        _: Visual bij wachten
+        help: Visual tijdens het wachten op het antwoord, gestuurd door microfoon en luidspreker; Standaard houdt de ingebouwde weergave
+    max_listen:
+      _: Maximale luistertijd
+      help: Seconden dat de assistent naar een verzoek luistert voor hij opgeeft, 5 tot 60
+    max_think:
+      _: Maximale denktijd
+      help: Seconden wachten op een antwoord voor er wordt opgegeven, 5 tot 300
+    pryon:
+      _: Amazon-activeringswoorden
+      help: Biedt Amazons Pryon-activeringswoorden aan en downloadt bibliotheek en modellen bij keuze
+    pryon_stop:
+      _: Amazon-stopwoord
+      help: Gebruikt Amazons Pryon-trefwoord "Stop" om antwoorden te onderbreken; vereist Amazon-activeringswoorden
+    recordings:
+      _: Bewaarde opnames
+      help: Hoeveel van de laatste verzoeken deze assistent als geluid op het apparaat bewaart, tot 10; 0 bewaart niets
+    show_captions: Ondertitels tonen
+    stop_sensitivity:
+      _: Gevoeligheid stopwoord
+      help: Detectiedrempel voor het stopwoord dat een antwoord onderbreekt, 50 tot 100%; 100% zet het uit
+    threshold:
+      _: Gevoeligheid activeringswoord
+      help: Score die een activeringswoord moet halen om te activeren, 50 tot 99%
+    tone:
+      _: Activeringsgeluid
+      help: Geluid als het activeringswoord wordt geaccepteerd
+    wake_screen:
+      _: Scherm wekken
+      help: Zet het scherm aan als dit activeringswoord wordt gehoord
+  slot: Assistent {{.N}}
+  talk:
+    _: Nu spreken
+    hint: Zonder activeringswoord
+  threshold:
+    _: Gevoeligheid activeringswoord
+    hint: Hoger reageert makkelijker
+  title: Spraakassistenten
+  tone: Activeringsgeluid
+  unset: Stel het activeringswoord in via Home Assistant
+  waiting: Wachten op het model
+  word:
+    _: Activeringswoord
+    ha: Schakel acties in of kies in Home Assistant
+bluetooth:
+  connected_sources: Verbonden apparaten
+  group:
+    bluetooth: Bluetooth
+  setting:
+    proxy:
+      _: Bluetooth-proxy
+      help: Stuurt Bluetooth-apparaten in de buurt door naar Home Assistant als ESPHome-Bluetooth-proxy
+    scan:
+      _: Bluetooth-scannen
+      help: 'Deel van de radiotijd om naar Bluetooth-advertenties te luisteren: 1, 2, 5 of 9%'
+    speaker:
+      _: Bluetooth-luidspreker
+      help: Laat telefoons via Bluetooth (A2DP) geluid op dit apparaat afspelen
+  source_auto: Automatisch van bron wisselen
+  source_empty: Geen Bluetooth-apparaten verbonden
+  source_selected: Gekozen bron
+boot:
+  leaving: Herstarten
+  skip: Overslaan
+  stranded: Contact met het scherm verloren
+broadcast:
+  from: Van {{.Peer}}
+  title: Omroepbericht
+buttons:
+  dynamic: Wat er speelt
+  static: Hoofdvolume
+calendar:
+  add: Nieuwe afspraak
+  allday: Hele dag
+  app: Agenda
+  chosen: '{{.N}} agenda{{if ne .N 1}}''s{{end}}'
+  count: '{{.N}} dag{{if ne .N 1}}en{{end}}'
+  date: Datum
+  days: Dagen
+  empty: Niets gepland
+  failed: Kon de afspraak niet toevoegen
+  free: Niets gepland
+  group:
+    calendar: Agenda
+  hour: Uur
+  hours:
+    _: '{{.N}} u'
+    half: '{{.N}}½ u'
+  length: Duur
+  location: Locatie
+  minute: Minuut
+  minutes: '{{.N}} min'
+  more: +{{.N}} meer
+  needs:
+    title: Voer een titel in
+  none: Geen agenda's in Home Assistant
+  notes: Notities
+  'off': Uit
+  opening:
+    day: Dag
+    last: Laatst gebruikt
+    month: Maand
+    week: Week
+  pick: Agenda's kiezen
+  save: Opslaan
+  setting:
+    colors:
+      _: Agendakleuren
+      help: Door komma's gescheiden paren entity=#rrggbb; agenda's zonder paar krijgen de volgende paletkleur
+    entities:
+      _: Agenda's
+      help: Door komma's gescheiden Home Assistant-agenda-entiteiten waarvan de afspraken worden getoond; leeg toont niets
+    opening:
+      _: Opent op
+      help: 'Weergave waarmee de agenda opent: dag, week, maand of de laatst gebruikte'
+    saver: Volgende afspraak op de schermbeveiliging
+    weather:
+      _: Weer bij dagen
+      help: Toont de dagverwachting bij agendadagen
+  title: Titel
+  today: Vandaag
+  tomorrow: Morgen
+  view:
+    day: Dag
+    month: Maand
+    week: Week
+  week:
+    start: monday
+call:
+  address: Adres
+  answer:
+    count: '{{.N}} geselecteerd'
+    everyone: Iedereen
+    from: Opnemen van
+    peers: Schermen
+    selected: Geselecteerd
+    users: Gebruikers
+  auto:
+    _: Automatisch opnemen
+    hint: Neemt meteen op
+  autovideo: Automatisch opnemen met camera aan
+  busy: Bezet
+  calling: Bellen…
+  camera:
+    'off': Camera uit
+    'on': Camera aan
+  caps: Kan
+  connected: Verbonden
+  declined: Geweigerd
+  dropped: Gesprek verbroken
+  empty: Geen andere apparaten gevonden
+  failed: Bellen mislukt
+  gone: Niet meer op het netwerk
+  group:
+    calls: Intercom
+  incoming:
+    _: Inkomende oproep
+    allow: Inkomende oproepen
+    video: Inkomend videogesprek
+  model: Model
+  mute: Dempen
+  'no': Nee
+  pausewake: Activeringswoord pauzeren tijdens gesprekken
+  reconnecting: Opnieuw verbinden…
+  ring: Beltoon
+  ringback: Kiestoon
+  seen: Laatst gezien
+  setting:
+    answer_api:
+      _: API-oproepen automatisch opnemen
+      help: Als automatisch opnemen beperkt is tot geselecteerde bellers, worden oproepen via de web-API van het apparaat opgenomen
+    answer_from:
+      _: Automatisch opnemen van
+      help: Neemt oproepen van iedereen of alleen van de geselecteerde schermen, gebruikers en API automatisch op
+    answer_peers:
+      _: Schermen automatisch opnemen
+      help: Door spaties gescheiden apparaat-id's waarvan oproepen automatisch worden opgenomen bij beperking tot geselecteerde bellers
+    answer_users:
+      _: Gebruikers automatisch opnemen
+      help: Door spaties gescheiden Home Assistant-gebruikers-id's waarvan oproepen automatisch worden opgenomen bij beperking tot geselecteerde bellers
+    auto_answer:
+      _: Oproepen automatisch opnemen
+      help: Neemt inkomende oproepen zonder overgaan op, na een korte toon
+    auto_video:
+      _: Automatisch opnemen met camera aan
+      help: Houdt de camera aan bij automatisch opgenomen videogesprekken; uit start ze met de camera uit
+    broadcasts:
+      _: Omroepberichten ontvangen
+      help: Accepteert omroepberichten van andere apparaten en meldt dat het ze ontvangt
+    incoming:
+      _: Inkomende oproepen
+      help: Accepteert inkomende oproepen; uit weigert elke oproep
+    pause_wake:
+      _: Activeringswoord pauzeren tijdens gesprekken
+      help: Stopt de detectie van het activeringswoord tijdens een gesprek
+    ring:
+      _: Beltoon
+      help: Geluid bij een inkomende audio-oproep
+    ringback:
+      _: Kiestoon
+      help: Geluid terwijl een uitgaande oproep wacht om te worden opgenomen
+    stream:
+      _: Videostream voor gesprekken
+      help: 'Camerastream bij videogesprekken: hoofdstream, of de tweede (sub)stream van de camera als die er is'
+    video_ring:
+      _: Beltoon voor video
+      help: Geluid bij een inkomend videogesprek
+  settings:
+    _: Intercom
+    hint: Inkomende oproepen en automatisch opnemen
+  standing: Thuis
+  stream:
+    _: Videostream
+    hint: Sub gebruikt minder bandbreedte; valt terug op hoofd als de substream uit staat
+    main: Hoofd
+    sub: Sub
+  tab: Intercom
+  unanswered: Geen antwoord
+  unavailable: Neemt geen oproepen aan
+  unmute: Dempen uit
+  unreachable: Niet bereikbaar
+  users:
+    empty: Geen Home Assistant-gebruikers gevonden
+  version: Versie
+  videoring: Beltoon voor video
+  volume: Volume
+camera:
+  group:
+    exposure: Belichting
+    picture: Beeld
+    streams: Streams
+    whitebalance: Witbalans
+  muted: Microfoons zijn gedempt
+  option:
+    banding:
+      50hz: 50 Hz
+      60hz: 60 Hz
+      auto: Auto
+      'off': Uit
+    brightness:
+      high: Hoog
+      low: Laag
+      middle: Gemiddeld
+    contrast:
+      high: Hoog
+      low: Laag
+      middle: Gemiddeld
+    effect:
+      aqua: Aqua
+      blackboard: Schoolbord
+      mono: Mono
+      negative: Negatief
+      none: Geen
+      posterize: Posteriseren
+      sepia: Sepia
+      solarize: Solariseren
+      whiteboard: Whiteboard
+    hue:
+      high: Hoog
+      low: Laag
+      middle: Gemiddeld
+    noise:
+      fast: Snel
+      high_quality: Hoge kwaliteit
+      minimal: Minimaal
+      'off': Uit
+    quality:
+      high: Hoog
+      low: Laag
+      standard: Standaard
+    saturation:
+      high: Hoog
+      low: Laag
+      middle: Gemiddeld
+    scene:
+      action: Actie
+      auto: Auto
+      beach: Strand
+      candlelight: Kaarslicht
+      fireworks: Vuurwerk
+      hdr: HDR
+      landscape: Landschap
+      night: Nacht
+      night-portrait: Nachtportret
+      party: Feest
+      portrait: Portret
+      snow: Sneeuw
+      sports: Sport
+      steadyphoto: Stabiele foto
+      sunset: Zonsondergang
+      theatre: Theater
+    sharpness:
+      high: Hoog
+      low: Laag
+      middle: Gemiddeld
+    whitebalance:
+      auto: Auto
+      cloudy-daylight: Bewolkt
+      daylight: Daglicht
+      fluorescent: Tl-licht
+      incandescent: Gloeilamp
+      shade: Schaduw
+      twilight: Schemering
+      warm-fluorescent: Warm tl-licht
+  reset:
+    _: Standaardwaarden herstellen
+    confirm: Tik nogmaals om te herstellen
+  setting:
+    banding:
+      _: Anti-flikker
+      help: 'Flikkerfilter voor netverlichting: auto, uit, 50 Hz of 60 Hz'
+    brightness:
+      _: Helderheid
+      help: 'Beeldhelderheid voor de camera-HAL: laag/gemiddeld/hoog of 0 tot 10, per fabrikant'
+    contrast:
+      _: Contrast
+      help: 'Beeldcontrast voor de camera-HAL: laag/gemiddeld/hoog of 0 tot 10, per fabrikant'
+    effect:
+      _: Effect
+      help: Kleureffect dat de camera-HAL toepast, uit de lijst van de fabrikant
+    ev:
+      _: Belichtingscompensatie
+      help: Stappen belichtingscompensatie, binnen het bereik dat de camera van de fabrikant meldt
+    framerate:
+      _: Framerate
+      help: Vaste sensorframerate als automatische framerate uit staat, afgerond op een ondersteunde waarde
+    framerate_auto:
+      _: Automatische framerate
+      help: Laat de camera-HAL zelf zijn framerate-bereik kiezen
+    hue:
+      _: Tint
+      help: 'Beeldtint voor de camera-HAL: laag, gemiddeld of hoog'
+    iso:
+      _: ISO
+      help: ISO-gevoeligheid van de sensor uit de lijst van de fabrikant, of auto
+    keyframe:
+      _: Keyframe-interval
+      help: Seconden tussen H.264-keyframes, 1 tot 10; foto's kunnen op API 25 zo lang wachten
+    main_on:
+      _: Hoofdstream
+      help: Biedt de H.264-hoofdstream aan via RTSP en ONVIF
+    main_size:
+      _: Hoofdresolutie
+      help: Resolutie van de H.264-hoofdstream, uit de lijst van het board
+    noise:
+      _: Ruisonderdrukking
+      help: Ruisonderdrukkingsmodus uit de lijst van de fabrikant
+    quality:
+      _: Kwaliteit
+      help: 'Bitrate van de stream: laag halveert, hoog verdubbelt, binnen 0,25 tot 10 Mbit/s'
+    saturation:
+      _: Verzadiging
+      help: 'Kleurverzadiging voor de camera-HAL: laag/gemiddeld/hoog of 0 tot 10, per fabrikant'
+    scene:
+      _: Scène
+      help: Scènemodus van de camera-HAL, uit de lijst van de fabrikant
+    sharpness:
+      _: Scherpte
+      help: 'Randverscherping voor de camera-HAL: laag/gemiddeld/hoog of 0 tot 6, per fabrikant'
+    sub_on:
+      _: Substream
+      help: Codeert een tweede, kleinere H.264-stream en biedt die aan via RTSP en ONVIF
+    sub_size:
+      _: Subresolutie
+      help: Breedte van de substream in pixels; de hoogte volgt de verhouding van de hoofdstream
+    whitebalance:
+      _: Witbalans
+      help: Witbalansvoorinstelling uit de lijst van de fabrikant, of auto
+  shutter: Camerasluiter is dicht
+  starting: Camera wordt gestart
+cameras:
+  app: Camera's
+  failed: Kon de camera's in Home Assistant niet ophalen
+  group:
+    cameras: Camera's
+  loading: Camera's laden
+  none: Geen camera's geselecteerd
+  nosite: Het adres van Home Assistant is onbekend. Stel de Home Assistant-URL in via Instellingen → Huisbediening → Camera's
+  'off': Uit
+  pick: Selecteren
+  seconds: '{{.N}} s'
+  setting:
+    refresh:
+      _: Vernieuwen
+      help: Seconden tussen het vernieuwen van de camerabeelden in het raster; 0 zet vernieuwen uit
+    rotate:
+      _: Automatisch bladeren
+      help: Seconden tussen automatisch bladeren in het cameraraster; 0 zet het uit
+    scale:
+      _: Miniatuurgrootte
+      help: Hoogte van de camerategels, 1 tot 5, van een vijfde van de breedte tot de volle breedte
+    tab:
+      _: Dashboardtabblad
+      help: Voegt een tabblad Camera's toe aan het dashboard als er camera's gekozen zijn
+    url:
+      _: Home Assistant-URL
+      help: Adres van Home Assistant voor camerabeelden en streams; leeg zoekt het via mDNS
+  why:
+    display: Live video wordt op dit scherm niet ondersteund
+    failed: Live video niet beschikbaar
+    format: Videoformaat niet ondersteund
+    lost: Verbinding verbroken
+    nopicture: Geen video van de camera
+    pictures: Geen livestream in Home Assistant
+    refused: 'Home Assistant: {{.Message}}'
+    slow: Home Assistant reageerde niet op tijd
+    webrtc: Installeer de EchoLocal-integratie voor live video
+card:
+  light:
+    brightness: Helderheid
+    hue: Kleur
+    waiting: Wachten
+    warmth: Kleurtemperatuur
+  lock:
+    lock: Vergrendelen
+    open: Openen
+    unlock: Ontgrendelen
+cast:
+  entity:
+    bundle: Cast-bundel
+    forecast: Cast-forecast
+    oracle: Cast-oracle
+    receiver: Cast-receiver
+    youtube:
+      skip: YouTube SponsorBlock-categorieën
+  group:
+    cast: Cast
+  refused: 'Chromecast: {{.Name}} kan niet op dit apparaat afspelen'
+  setting:
+    bundle:
+      _: Bundel
+      help: URL van een cast-inloggegevensbundel, als eerste geprobeerd voor cast-inloggegevens
+    forecast:
+      _: Forecast
+      help: URL van een forecast-ondertekendienst, gebruikt als de bundel niets geeft en Oracle leeg is
+    oracle:
+      _: Oracle
+      help: URL van een cast-oracle voor inloggegevens als de bundel niets geeft; leeg en zonder Forecast geeft het apparaat ze zelf uit
+    receiver:
+      _: Receiver
+      help: Draait de Google Cast-receiver op het apparaat
+    youtube:
+      skip:
+        _: SponsorBlock-categorieën
+        help: SponsorBlock-segmentcategorieën die in YouTube-video's worden overgeslagen, door komma's gescheiden
+  starting: '{{.Name}} wordt gestart…'
+certs:
+  entity:
+    cert: Cert Warden-certificaatnaam
+    cert_api_key: Cert Warden-API-sleutel van het certificaat
+    key_api_key: Cert Warden-API-sleutel van de sleutel
+    server: Cert Warden-server
+  group:
+    certificate: Certificaat
+  setting:
+    cert:
+      _: Certificaatnaam
+      help: Naam van de privé-certificaatketen in Cert Warden die het apparaat downloadt
+    cert_api_key:
+      _: API-sleutel van het certificaat
+      help: Cert Warden-API-sleutel voor het certificaat
+    key_api_key:
+      _: API-sleutel van de sleutel
+      help: Cert Warden-API-sleutel voor de privésleutel
+    server:
+      _: Cert Warden-server
+      help: Adres van de Cert Warden-server; zonder schema wordt https aangenomen
+  status:
+    expired: Verlopen
+    fetching: Ophalen
+    refused: Verkeerde API-sleutel
+    unreachable: Cert Warden niet bereikbaar
+    unset: Zelfondertekend
+    valid: '{{.Name}}, geldig tot {{.Date}}'
+chime:
+  chirp: Tjilp
+  ding: Ding
+  none: Geen
+  ring: Bel
+  ringback: Kiestoon
+  rise: Stijgend
+  timer: Timer
+  trouble: Storing
+clock:
+  backing:
+    _: Achtergrond
+    card: Kaart
+    none: Geen
+    shade: Schaduw
+  color:
+    _: Kleur
+    title: Klokkleur
+  date: Datum tonen
+  face: Wijzerplaat
+  group:
+    clock: Klok
+  hours: 24-uursnotatie
+  setting:
+    align:
+      _: Horizontale positie van de klok
+      help: Plaatst de dashboardklok links, in het midden of rechts
+    backing:
+      _: Klokachtergrond
+      help: Tekent niets, een zachte schaduw of een kaart achter de dashboardklok
+    color:
+      _: Klokkleur
+      help: 'Kleur van de dashboardklok: die van het thema of een vaste kleur'
+    date:
+      _: Datum bij de klok
+      help: Toont de datum bij de dashboardklok
+    face:
+      _: Wijzerplaat
+      help: Klokontwerp op het dashboard, zoals eenvoudig, flip, analoog of nixie
+    hours:
+      _: Tijdnotatie
+      help: Toont tijden in 24-uurs- of 12-uursnotatie
+    position:
+      _: Verticale positie van de klok
+      help: Plaatst de dashboardklok boven, in het midden of onder
+    size:
+      _: Klokgrootte
+      help: Grootte van de dashboardklok, van nano tot groot, als deel van zijn vlak
+  title: Klok
+  zone: Tijdzone
+controls:
+  dock:
+    _: Positie van het dock
+    hide: Dock verbergen na
+  volume: Positie van het volumepaneel
+dashboard:
+  title: Dashboard
+datetime:
+  title: Datum & tijd
+debug:
+  fps:
+    _: Framerate-limiet voor visuals
+    value: '{{.N}} fps'
+  page_memory:
+    value: '{{.N}} MB'
+  seed:
+    _: Visual-seed
+    random: Willekeurig
+    value: '#{{.N}}'
+  title: Ontwikkelaarsopties
+  touches:
+    _: 'Vingers op het scherm: {{.N}}'
+    gesture: 'Laatste gebaar: {{.Name}}'
+  visuals: Visuals
+delay:
+  10m: 10 minuten
+  10s: 10 seconden
+  15m: 15 minuten
+  15s: 15 seconden
+  1m: 1 minuut
+  2m: 2 minuten
+  30m: 30 minuten
+  30s: 30 seconden
+  3m: 3 minuten
+  45s: 45 seconden
+  5m: 5 minuten
+  5s: 5 seconden
+  never: Nooit
+delivery:
+  stream: Streamen
+  whole: Eerst downloaden
+diag:
+  group:
+    diagnostics: Diagnose
+  option:
+    page_memory:
+      none: Geen limiet
+  setting:
+    interval:
+      _: Meetinterval
+      help: Seconden tussen updates van de diagnosesensoren naar Home Assistant, 10 tot 3600
+    low_memory:
+      _: Weinig-geheugenmodus
+      help: Draait de cast-engine in de low-end-apparaatmodus van Chromium; wijzigen herstart de engine
+    min_cores:
+      _: Minimum aantal CPU-kernen
+      help: Minste aantal CPU-kernen dat de MediaTek-hotplugdriver online houdt
+    page_memory:
+      _: Geheugenlimiet per pagina
+      help: JavaScript-heaplimiet voor pagina's van de cast-engine, in MB; Geen limiet houdt de Chromium-standaard
+display:
+  alerts: Meldingsstijl
+  auto: Adaptieve helderheid
+  brightness: Helderheid
+  clock: Klok
+  font: Lettertype
+  idle: Schermbeveiliging
+  marks: Privacy-indicatoren
+  poster: Achtergrond
+  presence: Sensoren
+  size: Grootte
+  style: Stijl
+  theme: Thema
+  timer: Timerstijl
+  title: Scherm
+doorbell:
+  add: Deurbel toevoegen
+  added: Toegevoegd
+  app: Deurbel
+  autosetup: Automatisch instellen
+  camera:
+    pictures:
+      _: Gebeurtenisbeelden van
+      hint: Een Home Assistant-camera die deze deur toont
+    title: Home Assistant-camera
+  cameras: '{{.N}} camera''s'
+  cancel: Annuleren
+  channel: Kanaal {{.N}}
+  checking: Controleren…
+  connect: Verbinden
+  connecting: Verbinden…
+  entity:
+    chime: Belgeluid van de deurbel
+    door:
+      events: Gebeurtenisbron deurbel {{.N}}
+      name: Naam deurbel {{.N}}
+      talk: Terugspreekbron deurbel {{.N}}
+      video: Videobron deurbel {{.N}}
+    live_for: Liveweergave deurbel open gedurende
+    notify: Meldingsgeluid van de deurbel
+    ring_for: Beltijd van de deurbel
+    style: Meldingsstijl van de deurbel
+    tab: Deurbeltabblad op het dashboard
+    visitor: Belstijl van de deurbel
+  event:
+    dog_cat: '{{.Door}}: dier gezien'
+    motion: '{{.Door}}: beweging gezien'
+    package: '{{.Door}}: pakket gezien'
+    people: '{{.Door}}: persoon gezien'
+    vehicle: '{{.Door}}: voertuig gezien'
+    visitor: 'Er wordt aangebeld: {{.Door}}'
+  events:
+    via: '{{.State}} via {{.Source}}'
+  fellback: '{{.Line}} (Reolink mislukt)'
+  field:
+    host: IP-adres of hostnaam
+    host_port: Voeg :poort toe om zoeken over te slaan
+    name: Naam
+    password: Wachtwoord
+    rtsp: RTSP-URL
+    stream: Stream
+    uid: UID
+    user: Gebruiker
+  forget: Verwijderen
+  group:
+    doorbell: Deurbel
+  lock:
+    _: Slot
+    confirm: Tik nogmaals om te ontgrendelen
+  looking: Zoeken in Home Assistant…
+  manual: Handmatig
+  needs:
+    _: Voer een UID, IP-adres of hostnaam in
+    host: Voer een IP-adres of hostnaam in
+    rtsp: Voer een RTSP-URL in
+  none: Geen deurbellen ingesteld
+  notsaved: Niet opgeslagen
+  offline: Offline
+  ok: OK
+  save: Opslaan
+  saved: Opgeslagen
+  sensor:
+    animal: Diersensor
+    motion: Bewegingssensor
+    none: Geen
+    package: Pakketsensor
+    person: Persoonsensor
+    vehicle: Voertuigsensor
+    visitor: Belsensor
+  setting:
+    chime:
+      _: Belgeluid
+      help: Geluid als een bezoeker aanbelt
+    door:
+      events:
+        _: Gebeurtenissen
+        help: 'Waar deurbelgebeurtenissen vandaan komen: Reolink, ONVIF, Home Assistant of automatisch'
+      name:
+        _: Naam
+        help: Deurnaam als titel van de deurbelmeldingen en de liveweergave
+      talk:
+        _: Terugspreken
+        help: 'Hoe terugspreken de deurbel bereikt: Reolink, ONVIF of automatisch'
+      video:
+        _: Video
+        help: 'Waar de livevideo van de deurbel vandaan komt: Reolink, ONVIF, RTSP of Home Assistant'
+    live_for:
+      _: Liveweergave open houden
+      help: Hoe lang de liveweergave van de deurbel open blijft, 1 tot 10 minuten
+    notify:
+      _: Meldingsgeluid
+      help: Geluid bij deurbeldetecties anders dan een bezoeker die aanbelt
+    ring_for:
+      _: Beltijd
+      help: Hoe lang het aanbellen van een bezoeker het geluid herhaalt en de melding toont
+    style:
+      _: Meldingsstijl
+      help: 'Hoe detecties anders dan aanbellen worden getoond: zoals scherm, geen, banner, kaart, volledig scherm of toast'
+    tab:
+      _: Dashboardtabblad
+      help: Voegt een tabblad Deurbel toe aan het dashboard als een deur is ingesteld
+    visitor:
+      _: Belstijl
+      help: Hoe aanbellen wordt getoond; Opnemen opent meteen de liveweergave
+  slot: Deurbel {{.N}}
+  source:
+    auto: Automatisch
+    ha: Home Assistant
+    ha_reolink: Home Assistant (Reolink-integratie)
+    nvr: Reolink-NVR
+    onvif: ONVIF
+    reolink: Reolink
+    rtsp: RTSP
+  status:
+    connected: Verbonden
+    connecting: Verbinden…
+    events: Gebeurtenissen
+    login: Verkeerde gebruiker of wachtwoord
+    none: Geen deurbellen in Home Assistant
+    ready: '{{.Count}} verbonden'
+    unreachable: Deurbellen niet bereikbaar
+    unset: Niet ingesteld
+    unsupported: Niet beschikbaar via deze bron
+    video: Video
+  stream:
+    main: Hoofd
+    sub: Sub
+  tried: '{{.Source}} mislukt: {{.Why}}'
+  video:
+    connecting: Verbinden via {{.Source}}
+    failed: '{{.Why}} ({{.Source}})'
+    working: Werkt via {{.Source}}
+  watch: Bekijken
+  why:
+    camera: Geen livevideo voor deze deurbel
+    decoder: Dit scherm kan de video van deze deurbel niet afspelen
+    fallback: Video uit Home Assistant, geen terugspreken
+    lock: 'Kan het slot niet wijzigen: {{.Why}}'
+    lost: Verbinding met de deurbel verloren, opnieuw proberen
+    nocamera: Kies een Home Assistant-camera
+    nopassword: Voer het wachtwoord van de deurbel in
+    other: Op dat adres antwoordt een andere deurbel
+    refused: Inloggen geweigerd (code {{.Code}})
+    talk: 'Kan niet spreken: {{.Why}}'
+    toobig: De hoofdstream is te groot voor dit scherm, de substream wordt getoond
+    unreachable: Deurbel niet bereikbaar
+edge:
+  bottom: Onder
+  left: Links
+  right: Rechts
+  top: Boven
+face:
+  analog: Analoog
+  analog-seconds: Analoog met seconden
+  atomic: Atoom
+  bars: Balken
+  binary: Binair
+  cards: Kaarten
+  flip: Flip
+  math: Rekenen
+  neon: Neon
+  nixie: Nixie
+  none: Geen
+  octagon: Achthoek
+  overlap: Overlappend
+  plain: Eenvoudig
+  railway: Station
+  reel: Rol
+  roman: Romeins
+  segments: Segmenten
+  smiley: Smiley
+  spoken: Gesproken
+  stack: Stapel
+  words: Woorden
+features:
+  airplay:
+    _: AirPlay
+    hint: Spiegelen vanaf een Mac of iPhone
+  cast:
+    _: Cast-receiver
+    hint: Casten vanaf een telefoon of app
+  mealie:
+    _: Mealie
+    hint: Recepten en kookmodus
+  proxy:
+    _: Bluetooth-proxy
+    hint: Bluetooth LE-proxy voor Home Assistant
+  rtsp:
+    _: Camerastream
+    hint: RTSP en ONVIF, voor Home Assistant en recorders
+  sendspin:
+    _: Sendspin
+    hint: Audio in het hele huis
+  speaker:
+    _: Bluetooth-luidspreker
+    hint: Afspelen vanaf een telefoon via Bluetooth
+  title: Verbonden diensten
+feedback:
+  group:
+    feedback: Feedbackgeluiden
+  setting:
+    cancel:
+      _: Annuleringsgeluid
+      help: Geluid als een spraakverzoek wordt geannuleerd
+    chime:
+      _: Apparaatgeluid
+      help: Geluid bij volumewijzigingen; Geen dempt de andere feedbackgeluiden
+    failure:
+      _: Foutgeluid
+      help: Geluid als een spraakverzoek mislukt
+    hold:
+      _: Geluid bij vasthouden van dempknop
+      help: Geluid als de dempknop wordt vastgehouden, ook als Apparaatgeluid Geen is
+    mute:
+      _: Dempgeluid
+      help: Geluid als de microfoon wordt gedempt
+    unmute:
+      _: Geluid bij dempen uit
+      help: Geluid als de microfoon weer aan gaat
+font:
+  style: Standaard van de stijl
+  title: Lettertype
+frontend:
+  entity:
+    password: Beheerderswachtwoord
+gesture:
+  double-tap: Dubbeltikken
+  fingers: '{{.Move}} met {{.N}} vingers'
+  hold: Vasthouden
+  pinch-in: Knijpen
+  pinch-out: Spreiden
+  swipe-down: Omlaag vegen
+  swipe-left: Naar links vegen
+  swipe-right: Naar rechts vegen
+  swipe-up: Omhoog vegen
+  tap: Tikken
+home:
+  all: Alle
+  area:
+    count: '{{.N}} van {{.Of}}'
+  check: Opnieuw controleren
+  checking: Home Assistant controleren…
+  combine: Schakelaars meenemen
+  dashboard: Modus
+  devices: Apparaten kiezen
+  empty: Niets te tonen
+  enable: Inschakelen
+  enabled: Huisbediening inschakelen
+  everything:
+    cameras: Alle camera's
+    lights: Alle lampen
+    switches: Alle schakelaars
+  failed: Kon niet laden uit Home Assistant
+  group:
+    _: Groeperen per ruimte
+    all: Elke ruimte op één kaart
+    from: Ruimtes met {{.N}} of meer apparaten
+    home: Huisbediening
+    none: Elk apparaat op een eigen kaart
+  label:
+    count: '{{.N}} apparat{{if ne .N 1}}en{{else}}uur{{end}}'
+  loading: Laden…
+  noarea: Geen ruimte
+  none: Geen
+  'off':
+    _: Home Assistant staat uit
+    hint: Zet huisbediening aan via Instellingen → Huisbediening
+  picked:
+    areas: '{{.N}} ruimte{{if ne .N 1}}s{{end}}'
+    entities: '{{.N}} apparat{{if ne .N 1}}en{{else}}uur{{end}}'
+    labels: '{{.N}} label{{if ne .N 1}}s{{end}}'
+  reconnecting: Opnieuw verbinden met Home Assistant…
+  refused:
+    _: Acties niet toegestaan
+    hint: Open ESPHome, tik op het instellingentandwiel bij {{.Name}} en schakel „Allow the device to perform Home Assistant actions” in.
+  retry: Opnieuw proberen
+  saver:
+    _: Schermbeveiliging
+    'off': Zet Automatische stand-by aan in de scherminstellingen van Tessera om de schermbeveiliging ervan te gebruiken
+  search: Zoeken
+  selection:
+    cameras: Camera's
+    lights: Lampen
+    switches: Schakelaars
+  setting:
+    combine:
+      _: Schakelaars meenemen
+      help: Toont de gekozen Home Assistant-schakelaars op het tabblad Lampen, als Lampen bedienen aan staat
+    control:
+      lights:
+        _: Lampen bedienen
+        help: Voegt een tabblad Lampen toe aan het eigen dashboard om de gekozen Home Assistant-lampen te schakelen
+      switches:
+        _: Schakelaars bedienen
+        help: Voegt een tabblad Schakelaars toe aan het eigen dashboard om de gekozen Home Assistant-schakelaars te schakelen
+    dashboard:
+      _: Dashboard
+      help: 'Kiest het huisdashboard: Eigen, Rings, Tessera of Home Assistant'
+    enabled:
+      _: Huisbediening inschakelen
+      help: Zet huisbediening aan of uit; uit verbergt elk dashboard en stopt Home Assistant-acties
+    group:
+      lights:
+        _: Lampen groeperen vanaf
+        help: Lampen in ruimtes met minstens zoveel delen één kaart; 0 geeft elke lamp een eigen kaart
+      switches:
+        _: Schakelaars groeperen vanaf
+        help: Schakelaars in ruimtes met minstens zoveel delen één kaart; 0 geeft elke schakelaar een eigen kaart
+    rings:
+      depth:
+        _: Rings-diepte
+        help: Aantal ringniveaus buiten de gefocuste ring, 1 tot 4
+      group:
+        _: 'Rings: groeperen op'
+        help: Ordent Rings per kamer (verdieping, ruimte, dan type) of per systeem (type, dan ruimte)
+      hidden_areas:
+        _: 'Rings: verborgen ruimtes'
+        help: Home Assistant-ruimtes die buiten Rings blijven, als door komma's gescheiden ruimte-id's
+      hidden_floors:
+        _: 'Rings: verborgen verdiepingen'
+        help: Home Assistant-verdiepingen die buiten Rings blijven, als door komma's gescheiden verdieping-id's
+      hidden_kinds:
+        _: 'Rings: verborgen types'
+        help: Apparaattypes die buiten Rings blijven, zoals lampen, sloten of camera's
+      labels:
+        _: 'Rings: labels'
+        help: Rings toont alleen entiteiten met een van deze Home Assistant-labels; leeg toont alles
+      look:
+        _: Rings-weergave
+        help: Tekent Rings als wiel, ijspegel of uitbarsting
+      side:
+        _: 'Rings: kant van de details'
+        help: Plaatst het detailpaneel van Rings links of boven, of rechts of onder
+    tessera:
+      bottom:
+        _: 'Tessera: omhoog vegen vanaf de onderkant'
+        help: 'Wat omhoog vegen vanaf de onderrand opent in Tessera: paginapaneel, startpagina of niets'
+      columns:
+        _: Tessera-tegels langs de lange kant
+        help: Aantal Tessera-tegels langs de lange kant van het scherm, 1 tot 12
+      follow:
+        _: 'Tessera: pagina volgt vinger'
+        help: Tessera-pagina's volgen de vinger tijdens het vegen ertussen
+      home_after_idle:
+        _: 'Tessera: terug naar de startpagina na de schermbeveiliging'
+        help: Tessera keert terug naar de startpagina als de schermbeveiliging eindigt
+      landscape:
+        _: 'Tessera: liggend scherm'
+        help: Biedt het liggende Tessera-scherm aan Home Assistant aan op boards die draaien
+      portrait:
+        _: 'Tessera: staand scherm'
+        help: Biedt het staande Tessera-scherm aan Home Assistant aan op boards die draaien
+      rows:
+        _: Tessera-tegels langs de korte kant
+        help: Aantal Tessera-tegels langs de korte kant van het scherm, 1 tot 12
+      themed:
+        _: 'Tessera: thema van dit apparaat gebruiken'
+        help: Geeft Tessera de themakleuren van dit apparaat in plaats van die van zichzelf
+      turn:
+        _: 'Tessera: paginaovergang'
+        help: 'Animatie tussen Tessera-pagina''s: geen, schuiven, bedekken, onthullen, stapel, zoom of vervagen'
+  tab:
+    labels: Labels
+    manual: Handmatig
+  tessera:
+    bottom: Omhoog vegen vanaf de onderkant
+    columns: Lange kant
+    follow: Pagina volgt vinger
+    grid: Raster
+    landscape: Liggend inschakelen
+    portrait: Staand inschakelen
+    return: Terug naar de startpagina na de schermbeveiliging
+    rows: Korte kant
+    themed: Thema van dit apparaat gebruiken
+    turn: Paginaovergang
+  tile:
+    all:
+      'off': Alles uit
+      'on': Alles aan
+    area: '{{.N}} van {{.Of}} aan'
+    level: '{{.N}}%'
+    'off': Uit
+    'on': Aan
+    unavailable: Niet beschikbaar
+  title: Huisbediening
+  unconnected:
+    _: Niet verbonden
+    hint: Voeg {{.Name}} toe aan Home Assistant
+homealarm:
+  app: Alarmsysteem
+  arm: Inschakelen
+  blueprint:
+    date: Datum
+    link: Verbinding
+    location: Locatie
+    log: Statuslog
+    sheet: Blad
+    time: Tijd
+    type: Type
+  cancel: Annuleren
+  chip:
+    alarm: Alarm
+    armed: Ingeschakeld
+    delay: Vertraging
+    ready: Gereed
+  class:
+    carbon_monoxide: CO
+    door: Deur
+    garage_door: Garagedeur
+    gas: Gas
+    moisture: Water
+    motion: Beweging
+    occupancy: Bezetting
+    opening: Opening
+    presence: Aanwezigheid
+    safety: Veiligheid
+    smoke: Rook
+    sound: Geluid
+    tamper: Sabotage
+    vibration: Trilling
+    window: Raam
+  code:
+    enter: Code invoeren
+    first: Voer eerst je code in
+    title: Code invoeren
+  console:
+    by: door
+    log: Gebeurtenislog
+    prompt: Voer code in of kies functie
+  disarm: Uitschakelen
+  emergency: Noodgeval
+  entity:
+    arming:
+      show: Alarmsysteem tonen bij inschakelen
+      sound: Geluid van het alarmsysteem bij inschakelen
+    look: Weergave van het alarmsysteem
+    pending:
+      show: Alarmsysteem tonen tijdens inloopvertraging
+      sound: Geluid van het alarmsysteem bij inloopvertraging
+    settled:
+      for: Alarmsysteem verbergen na
+      show: Alarmsysteem tonen bij in- of uitgeschakeld
+      sound: Geluid van het alarmsysteem bij in- en uitschakelen
+    tab: Alarmsysteemtabblad op het dashboard
+    triggered:
+      show: Alarmsysteem tonen bij alarm
+      sound: Geluid van het alarmsysteem bij alarm
+  faults: Storingen
+  flip:
+    state: Status
+    time: Tijd
+  group:
+    homealarm: Alarmsysteem
+  hold: Vasthouden om alarm te geven
+  look:
+    blueprint: Bouwtekening
+    card: Kaart
+    console: Console
+    dial: Draaiknop
+    flip: Klapbord
+    hardware: Hardware
+    keypad: Toetsenpaneel
+    matrix: Matrix
+    minimal: Minimaal
+    neon: Neon
+    ring: Ring
+    shield: Schild
+    terminal: Terminal
+    vault: Kluis
+  mode:
+    armed_away: Afwezig
+    armed_custom_bypass: Overbrugging
+    armed_home: Thuis
+    armed_night: Nacht
+    armed_vacation: Vakantie
+  neon:
+    state: Systeemstatus
+  none: Geen alarmpanelen in Home Assistant
+  notready:
+    many: 'Niet gereed: {{.N}} zones open'
+    one: 'Niet gereed: {{.Zone}} open'
+  'off': Uit
+  ok: OK
+  'on': Aan
+  panic: Paniek
+  pick: Kies er een
+  plate:
+    entry: Inloop
+    exit: Uitloop
+    idle: Rust
+    link: Verbinding
+    lost: Verloren
+    mode: Systeemmodus
+    normal: Normaal
+    system: Systeem
+    time: Lokale tijd
+  recent: Recent
+  refused: Home Assistant weigerde dat
+  rehearsal: Oefening, niets verzonden
+  sending: Verzenden…
+  setting:
+    arming:
+      show:
+        _: Tonen bij inschakelen
+        help: Opent het alarmscherm terwijl het alarmpaneel wordt ingeschakeld
+      sound:
+        _: Geluid bij inschakelen
+        help: Geluid dat één keer speelt als het alarmpaneel begint met inschakelen
+    entity:
+      _: Alarmpaneel
+      help: De Home Assistant-alarmpaneelentiteit die dit apparaat toont; leeg kiest de enige die er is
+    hidden:
+      _: Verborgen zones
+      help: Zone-entiteiten die niet op het alarmscherm staan, door komma's gescheiden
+    look:
+      _: Weergave
+      help: Visuele stijl van het alarmscherm, zoals toetsenpaneel, schild of terminal
+    pending:
+      show:
+        _: Tonen tijdens inloopvertraging
+        help: Opent het alarmscherm tijdens de inloopvertraging
+      sound:
+        _: Geluid bij inloopvertraging
+        help: Geluid dat tijdens de inloopvertraging herhaalt tot de alarmstatus verandert of het scherm sluit
+    settled:
+      for:
+        _: Verbergen na
+        help: 'Hoe lang het alarmscherm open blijft na in- of uitschakelen: 5 seconden tot nooit'
+      show:
+        _: Tonen bij in- of uitgeschakeld
+        help: Opent het alarmscherm als het alarmpaneel klaar is met in- of uitschakelen
+      sound:
+        _: Geluid bij in- en uitgeschakeld
+        help: Geluid dat één keer speelt als het alarmpaneel klaar is met in- of uitschakelen
+    tab:
+      _: Dashboardtabblad
+      help: Voegt een tabblad Alarmsysteem toe aan het dashboard als een alarmpaneel is gekozen
+    triggered:
+      show:
+        _: Tonen bij alarm
+        help: Opent het alarmscherm als het alarm afgaat
+      sound:
+        _: Geluid bij alarm
+        help: Geluid dat herhaalt zolang het alarm afgaat, tot de status verandert of het scherm sluit
+    zones:
+      _: Getoonde zones
+      help: Kiest welke zones van het alarmpaneel het alarmscherm toont
+  status:
+    armed_away: Ingeschakeld afwezig
+    armed_custom_bypass: Ingeschakeld met overbrugging
+    armed_home: Ingeschakeld thuis
+    armed_night: Ingeschakeld nacht
+    armed_vacation: Ingeschakeld vakantie
+    arming: Inschakelen
+    disarmed: Uitgeschakeld
+    disarming: Uitschakelen
+    pending: Inloopvertraging
+    triggered: Alarm
+    unavailable: Niet beschikbaar
+    unset: Geen alarmpaneel
+    waiting: Wachten op Home Assistant
+  terminal:
+    command: Opdracht
+    status: Systeemstatus
+  zone:
+    active: Actief
+    battery: Batterij bijna leeg
+    bypassed: Overbrugd
+    clear: Vrij
+    closed: Gesloten
+    fault: Storing
+    idle: Rust
+    lost: Verloren
+    open: Open
+    tamper: Sabotage
+    trouble: Probleem
+  zones:
+    _: Zones
+    count: '{{.Secure}} veilig / {{.Open}} open'
+    page: Zones {{.From}}–{{.To}} / {{.Of}}
+    shown: '{{.N}} van {{.Of}}'
+hours:
+  '12': 12 uur
+  '24': 24 uur
+idle:
+  after:
+    _: Starten na
+    title: Starten na
+  entity:
+    photo_every: Schermbeveiliging volgende foto elke
+    photo_fit: Schermbeveiliging fotopassing
+    photo_transition: Schermbeveiliging fotoovergang
+  face: Wijzerplaat
+  group:
+    idle: Schermbeveiliging
+  label: Label van de visual
+  media:
+    _: Gepauzeerde speler sluiten na
+    hint: Audio- en videospelers
+  night:
+    _: Nachtmodus
+    after: Start na
+    hint: Als de kamer donker is
+    lux:
+      _: Donkerder dan
+      value: '{{.N}} lx'
+    mode: Modus
+  none: Geen
+  'off': Scherm uit
+  setting:
+    after:
+      _: Schermbeveiliging na
+      help: Inactiviteitstijd voor de schermbeveiliging opent; Nooit voorkomt dat hij zelf opent
+    align:
+      _: Horizontale positie van de rustklok
+      help: 'Horizontale positie van de klok op de schermbeveiliging: links, midden, rechts of willekeurig'
+    backing:
+      _: Achtergrond van de rustklok
+      help: 'Wat achter de klok op de schermbeveiliging zit: niets, een schaduw of een kaart'
+    face:
+      _: Wijzerplaat van de rustklok
+      help: Wijzerplaat op de schermbeveiliging; Geen toont geen klok
+    media:
+      _: Gepauzeerde speler sluiten na
+      help: Stopt een gepauzeerde audio- of videospeler na deze tijd; Nooit laat hem staan
+    night:
+      _: Nachtmodus
+      after:
+        _: Nachtmodus na
+        help: 'Rusttijd in een donkere kamer voor de nachtmodus begint: 1 tot 30 minuten'
+      help: 'Wat er in een donkere kamer gebeurt: niets, dimmen, dimmen tot een klok of scherm uit'
+      lux:
+        _: Nachtmodus onder
+        help: Omgevingslicht, 0 tot 100 lux, waaronder de kamer als donker geldt
+    photo_every:
+      _: Volgende foto elke
+      help: 'Hoe vaak de schermbeveiliging de volgende foto toont: 10 seconden tot 5 minuten'
+    photo_fit:
+      _: Fotopassing
+      help: Hoe foto's op de schermbeveiliging het scherm vullen, zoals vullen, passen, ingelijst of langzaam pannen
+    photo_transition:
+      _: Overgang
+      help: 'Effect tussen foto''s op de schermbeveiliging: geen, vervagen, schuiven, zoom, vegen of oplossen'
+    position:
+      _: Verticale positie van de rustklok
+      help: 'Verticale positie van de klok op de schermbeveiliging: boven, midden, onder of willekeurig'
+    saver:
+      _: Schermbeveiligingsmodus
+      help: 'Welke schermbeveiliging verschijnt: die van dit apparaat, die van Tessera of die van het Home Assistant-dashboard'
+    size:
+      _: Grootte van de rustklok
+      help: Grootte van de klok op de schermbeveiliging, van nano tot groot
+    visual1:
+      _: Rustvisual 1
+      help: 'Eerste plek op de schermbeveiliging: een visual, foto''s, niets of scherm uit'
+      source:
+        _: Rustvisual 1 luistert naar
+        help: 'Geluid waarop de eerste visual van de schermbeveiliging reageert: microfoon, luidspreker of beide'
+    visual2:
+      _: Rustvisual 2
+      help: 'Tweede plek op de schermbeveiliging, deelt het scherm met de eerste: een visual, foto''s of niets'
+      source:
+        _: Rustvisual 2 luistert naar
+        help: 'Geluid waarop de tweede visual van de schermbeveiliging reageert: microfoon, luidspreker of beide'
+    wake:
+      _: Wekgebaar
+      help: Aanraakgebaar dat de schermbeveiliging sluit; standaard tikken
+  source1: Geluid voor visual 1
+  source2: Geluid voor visual 2
+  title: Schermbeveiliging
+  visual1: Visual 1
+  visual2: Visual 2
+ink:
+  amber: Amber
+  blue: Blauw
+  cyan: Cyaan
+  green: Groen
+  pink: Roze
+  red: Rood
+  theme: Thema
+  violet: Violet
+keyboard:
+  cancel: Annuleren
+  code_expired: Code verlopen
+  compact: Compact
+  enter: Enter
+  full_width: Volle breedte
+  hide: Verbergen
+  large: Groot
+  refresh: Vernieuwen
+  save: Opslaan
+  search: Zoeken
+  size: Toetsenbordgrootte
+  standard: Standaard
+language:
+  name: Nederlands
+lock:
+  again: Voer hem nogmaals in
+  change: Pincode wijzigen
+  clear:
+    _: Pincode verwijderen
+    what: Weet je het zeker? Hiermee worden de instellingen ontgrendeld.
+  enter: Voer de pincode in
+  entity:
+    pin: Instellingenvergrendeling
+  mismatch: De pincodes komen niet overeen. Voer een nieuwe pincode in
+  new: Voer een nieuwe pincode in, 4 tot 8 cijfers
+  next: Volgende
+  'off': Uit
+  'on': Aan
+  set: Pincode instellen
+  title: Instellingen
+  wait: Probeer opnieuw over {{.Seconds}} s
+  wrong: Verkeerde pincode
+look:
+  default: Standaard
+  full: Volledig scherm
+  panel: In het paneel
+  place: Plaats
+  stage:
+    listening: Luisteren
+    responding: Antwoorden
+    waiting: Wachten
+  title: Visuals
+lovelace:
+  default: Standaarddashboard
+  entity:
+    dashboard: Dashboard
+    saver_dashboard: Schermbeveiligingsdashboard
+    saver_scale: Weergaveschaal van de schermbeveiliging
+    saver_view: Schermbeveiligingsweergave
+    scale: Weergaveschaal van het dashboard
+    theme: Dashboardthema
+    user: Dashboardgebruiker
+    view: Dashboardweergave
+  first: Eerste weergave
+  group:
+    lovelace: Home Assistant-dashboard
+  hint:
+    allow: Sta een gebruiker toe in de opties van de EchoLocal-integratie in Home Assistant
+    integration: Installeer de EchoLocal-integratie in Home Assistant
+    user: Kies een gebruiker via Instellingen › Dashboard
+  loading: Home Assistant laden
+  scale:
+    value: '{{.N}}%'
+  setting:
+    dashboard:
+      _: Dashboard
+      help: Home Assistant-dashboard in dashboardmodus; leeg gebruikt het standaarddashboard
+    saver_dashboard:
+      _: Schermbeveiligingsdashboard
+      help: Home Assistant-dashboard als schermbeveiliging; leeg gebruikt het standaarddashboard
+    saver_scale:
+      _: Weergaveschaal van de schermbeveiliging
+      help: Zoom van de dashboardpagina van de schermbeveiliging, van 50 tot 100 procent
+    saver_view:
+      _: Schermbeveiligingsweergave
+      help: Weergave van het schermbeveiligingsdashboard om te openen; leeg opent de eerste weergave
+    scale:
+      _: Weergaveschaal
+      help: Zoom van de Home Assistant-dashboardpagina, van 50 tot 100 procent
+    theme:
+      _: Thema
+      help: Home Assistant-thema voor de dashboardpagina's; leeg houdt het standaardthema
+    user:
+      _: Tonen als
+      help: Home Assistant-gebruiker waarmee het dashboard inlogt
+    view:
+      _: Weergave
+      help: Weergave van het Home Assistant-dashboard om te openen; leeg opent de eerste weergave
+  theme:
+    default: Home Assistant-standaard
+  unreachable:
+    _: Home Assistant is niet bereikbaar
+    retry: Automatisch opnieuw proberen · tik om het nu te proberen
+mealie:
+  group:
+    mealie: Mealie
+  setting:
+    server:
+      _: Mealie-server
+      help: Adres van de Mealie-server die de Recepten-app leest; zonder schema wordt http aangenomen
+    token:
+      _: Mealie-API-token
+      help: API-token aangemaakt in Mealie bij je profiel onder API Tokens; recepten en favorieten worden als die gebruiker gelezen
+media:
+  entity:
+    buttons: Volumeknoppen
+    duck: Muziek zachter zetten
+  group:
+    airplay: AirPlay
+    media: Media
+    sendspin: Sendspin
+  option:
+    airplay_audio_mode:
+      instant: Direct
+      synced: Synchroon met video
+  setting:
+    airplay:
+      _: AirPlay
+      help: Draait de AirPlay-receiver
+    airplay_audio_mode:
+      _: AirPlay-audiomodus
+      help: Direct speelt AirPlay-geluid zodra het binnenkomt; Synchroon speelt het op de timing van de zender
+    autoplay:
+      _: Automatisch afspelen
+      help: De YouTube-speler gaat naar de volgende video als er een eindigt
+    background:
+      _: Afspelen op de achtergrond
+      help: Bij het verlaten van de videopagina gaat afspelen door met de spelerkaart in plaats van te stoppen
+    buttons:
+      _: Volumeknoppen
+      help: Statisch regelt het hoofdvolume; Dynamisch het volume van wat op het scherm staat of speelt
+    duck:
+      _: Mate van zachter zetten
+      help: Niveau in dB waarnaar media zakt tijdens assistentbeurten, gesprekken en wekkers, van -40 tot -3
+    mini:
+      _: Minispeler
+      help: Toont een kleine spelerbalk terwijl media speelt en er geen pagina open is
+    player:
+      _: Speler bij start
+      help: Of de volledige spelerkaart opent als het afspelen begint
+    sendspin:
+      _: Sendspin
+      help: Draait de Sendspin-speler
+message:
+  close: Sluiten
+microphone:
+  group:
+    microphone: Microfoon
+  setting:
+    cancel:
+      _: Echo-onderdrukking van de microfoon
+      help: Haalt het eigen afspelen van het apparaat uit de microfoon terwijl het speelt
+    denoise:
+      _: Ruisonderdrukking
+      help: Past ruisonderdrukking toe op de microfoonopname
+    gain:
+      _: Microfoonversterking
+      help: Hardwareversterking van de microfoon in dB
+    leveling:
+      _: Microfoonniveauregeling
+      help: Past het microfoonniveau automatisch aan naar een vast spraakdoel, tot 27 dB
+    mixing:
+      _: Microfoonmenging
+      help: 'Hoe de microfoons worden gecombineerd: middelste microfoon, delay-and-sum of de beamformer van de fabrikant'
+    mute_led:
+      _: Helderheid van de dempled
+      help: 'Helderheid van de led voor microfoon gedempt: Gedimd of Helder'
+    mute_sound:
+      _: Dempgeluid
+      help: Geluid als de microfoon wordt gedempt of weer aan gaat
+    sensitivity:
+      _: Ruimtegevoeligheid
+      help: dB boven het ruimtegeluid voor de luisteranimatie reageert, van 4 tot 20
+mirror:
+  app: Spiegel
+mode:
+  auto: Automatisch
+  firmware: Tessera
+  lovelace: HA
+  manual: Handmatig
+  native: Eigen
+  rings: Rings
+  tessera: Tessera
+  tessera_native: Tessera eigen
+music:
+  add: Aan wachtrij toevoegen
+  albums: Albums
+  app: Muziek
+  artists: Artiesten
+  back: Terug
+  find: Luidspreker zoeken
+  group: Groeperen
+  here: Hierheen verplaatsen
+  home: Start
+  integration: Werk de EchoLocal-integratie in Home Assistant bij
+  kind:
+    album: Album
+    artist: Artiest
+    audiobook: Luisterboek
+    playlist: Afspeellijst
+    podcast: Podcast
+    radio: Radiozender
+    track: Nummer
+  library: Bibliotheek
+  next: Hierna afspelen
+  none: Geen Music Assistant-luidsprekers
+  nothing: Hier staat niets
+  now: Speelt
+  play: Afspelen
+  playlists: Afspeellijsten
+  queue: Hierna
+  quiet: Er speelt niets
+  radio: Radio
+  recent: Recent afgespeeld
+  search: Zoeken
+  searching: Music Assistant doorzoeken
+  similar: Vergelijkbaar
+  speakers: Luidsprekers
+  starting: Starten…
+  unavailable: Music Assistant is niet bereikbaar
+network:
+  address:
+    _: IP-adres
+    none: Geen
+  group:
+    network: Netwerk & internet
+  internet:
+    hint: Alleen lokaal blokkeert alles buiten je netwerk
+    local: Alleen lokaal
+    open: Open
+    quiet: Stil
+  lease:
+    _: Lease vernieuwt
+    hours: '{{.N}} u'
+    minutes: '{{.N}} min'
+    now: Nu
+  mac: MAC-adres
+  router: Router
+  setting:
+    home_key:
+      _: Huissleutel
+      help: Gedeelde sleutel die apparaten in de buurt ook moeten hebben om als dit huis te worden vertrouwd
+    internet: Internettoegang
+    verify:
+      _: Certificaten controleren
+      help: Controleert TLS-certificaten bij downloads en webverzoeken van het apparaat
+    via_home:
+      _: Downloaden via Home Assistant
+      help: Downloads van GitHub en de releasebestandshost gaan via Home Assistant
+  ssid: Wifi-netwerk
+  title: Netwerk & internet
+  via_home:
+    hint: Updates opgehaald door Home Assistant
+night:
+  clock: Dimmen tot een klok
+  dim: Dimmen
+  none: Niets
+  'off': Scherm uitzetten
+onboard:
+  add: Scan de code en voeg toe
+  hint: Scan de code en voer dan dit adres in.
+  or: of voer dit adres in
+  title: Voeg mij toe aan Home Assistant
+peer:
+  cap:
+    audio: Gesprekken
+    broadcast: Omroepberichten
+    sync: Instellingen synchroniseren
+    video: Videogesprekken
+  checking: Controleren
+  foreign: Niet in dit huis
+  home: In dit huis
+  open: Geen huissleutel
+photofit:
+  auto: Auto
+  bars: Passen, effen randen
+  contain: Passen, vervaagde randen
+  cover: Vullen
+  framed: Ingelijst
+  kenburns: Langzaam pannen
+photos:
+  app: Foto's
+  entity:
+    app:
+      every: Foto's-app volgende foto elke
+      fit: Foto's-app passing
+      transition: Foto's-app overgang
+    google:
+      album1:
+        _: Google Foto's-album 1 link
+        weight: Google Foto's-album 1 aandeel
+      album2:
+        _: Google Foto's-album 2 link
+        weight: Google Foto's-album 2 aandeel
+      album3:
+        _: Google Foto's-album 3 link
+        weight: Google Foto's-album 3 aandeel
+      album4:
+        _: Google Foto's-album 4 link
+        weight: Google Foto's-album 4 aandeel
+      enabled: Google Foto's
+    immich:
+      albums: Immich-albums
+      enabled: Immich-foto's
+      favorites: Alleen Immich-favorieten
+      key: Immich-API-sleutel
+      memories: Immich-herinneringen eerst
+      people: Immich-personen
+      quality: Immich-kwaliteit
+      server: Immich-server
+      tags: Immich-tags
+    status: Foto's {{.Source}} status
+  google: Google Foto's
+  group:
+    google: Google Foto's
+    immich: Immich
+    photos: Foto's
+  immich: Immich
+  page: Foto's
+  quality:
+    fullsize: Volledig formaat
+    preview: Voorbeeld
+  setting:
+    app:
+      every:
+        _: Foto's-app volgende foto elke
+        help: Hoe vaak de Foto's-app naar de volgende foto gaat; Nooit blijft bij één foto
+      fit:
+        _: Foto's-app passing
+        help: Hoe de Foto's-app elke foto op het scherm past
+      transition:
+        _: Foto's-app overgang
+        help: Animatie van de Foto's-app tussen foto's
+    google:
+      album1:
+        _: Album 1 link
+        help: Link naar een gedeeld Google Foto's-album als fotobron
+        weight:
+          _: Album 1 aandeel
+          help: Hoe vaak dit album wordt gekozen ten opzichte van de andere, 0 tot 10; 0 slaat het over
+      album2:
+        _: Album 2 link
+        help: Link naar een gedeeld Google Foto's-album als fotobron
+        weight:
+          _: Album 2 aandeel
+          help: Hoe vaak dit album wordt gekozen ten opzichte van de andere, 0 tot 10; 0 slaat het over
+      album3:
+        _: Album 3 link
+        help: Link naar een gedeeld Google Foto's-album als fotobron
+        weight:
+          _: Album 3 aandeel
+          help: Hoe vaak dit album wordt gekozen ten opzichte van de andere, 0 tot 10; 0 slaat het over
+      album4:
+        _: Album 4 link
+        help: Link naar een gedeeld Google Foto's-album als fotobron
+        weight:
+          _: Album 4 aandeel
+          help: Hoe vaak dit album wordt gekozen ten opzichte van de andere, 0 tot 10; 0 slaat het over
+      enabled:
+        _: Inschakelen
+        help: Gebruikt de gedeelde Google Foto's-albums als fotobron
+    immich:
+      albums:
+        _: Albums
+        help: Door komma's gescheiden Immich-albumnamen als bron; leeg betekent elk album
+      enabled:
+        _: Inschakelen
+        help: Gebruikt een Immich-server als fotobron
+      favorites:
+        _: Alleen favorieten
+        help: Neemt alleen foto's die in Immich als favoriet zijn gemarkeerd
+      key:
+        _: API-sleutel
+        help: Immich-API-sleutel waarmee het apparaat foto's leest
+      memories:
+        _: Herinneringen eerst
+        help: Toont Immich-herinneringen "Op deze dag" vóór willekeurige foto's
+      people:
+        _: Personen
+        help: Door komma's gescheiden Immich-personen als bron; leeg betekent iedereen
+      quality:
+        _: Kwaliteit
+        help: Downloadt het voorbeeldformaat van Immich of de afbeelding op volledig formaat
+      server:
+        _: Server
+        help: Adres van de Immich-server
+      tags:
+        _: Tags
+        help: Door komma's gescheiden Immich-tags als bron; leeg betekent elke tag
+  sources: Bronnen
+  status:
+    _: Status
+    connecting: Verbinden…
+    empty: Geen passende foto's
+    key: Verkeerde API-sleutel
+    'off': Uit
+    old: 'Immich {{.Version}}: vereist 3.2 of nieuwer'
+    permission: API-sleutel heeft {{.Name}} nodig
+    ready: Verbonden
+    unknown: Niets met de naam {{.Name}}
+    unreachable: Server niet bereikbaar
+    unset: Niet ingesteld
+phototransition:
+  cut: Geen
+  dissolve: Oplossen
+  fade: Vervagen
+  slide: Schuiven
+  wipe: Vegen
+  zoom: Zoom
+place:
+  horizontal: Horizontale positie
+  size: Grootte
+  vertical: Verticale positie
+player:
+  ad: Advertentie
+  ad_clip: Advertentie {{.Clip}} van {{.Clips}}
+  full: Volledige speler
+  live: LIVE
+  lyrics: Songtekst
+  next: Hierna
+  none: Niets
+  now: Speelt nu
+position:
+  bottom: Onder
+  center: Midden
+  random: Willekeurig
+  top: Boven
+poster:
+  daily: Dagelijks
+  entity:
+    every: Achtergrond wisselt
+    fit: Achtergrond passing
+    'on': Achtergrond
+    transition: Achtergrond overgang
+  every: Wisselen elke
+  group:
+    poster: Achtergrond
+  hourly: Elk uur
+  never: Nooit
+  'off': Uit
+  setting:
+    every:
+      _: Wisselen elke
+      help: 'Wanneer de achtergrond wisselt: bij terugkomst na 5 minuten weg, met een vaste tussenpoos of nooit'
+    fit:
+      _: Passing
+      help: Hoe de achtergrondfoto op het scherm past
+    'on':
+      _: Achtergrond tonen
+      help: Toont een foto uit de fotobronnen achter het rustscherm
+    transition:
+      _: Overgang
+      help: Animatie als de achtergrond wisselt
+  show: Achtergrond tonen
+  wake: Bij elk ontwaken
+power:
+  reboot:
+    _: Apparaat herstarten
+    what: Alles is na ongeveer een minuut terug.
+  restart:
+    _: App herstarten
+    what: Het scherm wordt een paar seconden donker.
+  title: Herstarten
+presence:
+  group:
+    presence: Aanwezigheid
+  setting:
+    range:
+      _: Detectiebereik
+      help: Hoe ver weg de nabijheidssensor iemand als aanwezig telt, 1 dichtbij tot 5 ver
+    wake:
+      _: Wekken bij beweging
+      help: Iemand in de buurt wekt het scherm uit rust en houdt het wakker
+radar:
+  app: Radar
+  credit:
+    nws: 'Beelden: NASA GIBS · Radar: NWS via Iowa Environmental Mesonet'
+    rainviewer: 'Beelden: NASA GIBS · Radar: RainViewer'
+  failed: Radar is nu niet beschikbaar
+  forecast: Verwachting {{.Time}}
+  miles: '{{.N}} mi'
+  source:
+    auto: Auto
+    nws: NWS
+    rainviewer: RainViewer
+  updating: Bijwerken…
+radio:
+  app: Radio
+  empty: Geef een zender een ster om hem op de schaal te zetten
+  idle: Kies een zender
+  local: Lokale zenders
+  more: Nog {{.N}} niet getoond
+  nothing: Hier geen zenders
+  playing: Speelt
+  popular: Populair
+  stopped: Gestopt
+  unavailable: Radio Browser is niet ingesteld in Home Assistant
+rail:
+  media: Media
+  sleep: Slapen
+recipes:
+  all: Alle
+  app: Recepten
+  back: Terug
+  cook: Begin met koken
+  done: Klaar
+  favorites: Favorieten
+  hours: '{{.N}} u'
+  hours_minutes: '{{.H}} u {{.M}} min'
+  ingredients: Ingrediënten
+  listening: Zeg “next step”
+  minutes: '{{.N}} min'
+  more: Meer tonen
+  need: Voor deze stap
+  next: Volgende
+  nofavorites: Nog geen favoriete recepten
+  none: Geen recepten gevonden
+  page: Recepten
+  prep: Voorbereiding {{.Time}}
+  search: Recepten zoeken
+  servings: '{{.N}} porties'
+  setup:
+    _: Mealie koppelen
+    hint: Voer je Mealie-server en API-token in
+  status:
+    _: Status
+    connecting: Verbinden…
+    ready: Verbonden
+    token: Mealie weigerde het API-token
+    unreachable: Mealie niet bereikbaar
+    unset: Niet ingesteld
+  step: Stap {{.N}} van {{.Of}}
+  steps: Stappen
+  timer: Timer van {{.Time}} starten
+reply:
+  download: Start later, zonder haperingen
+  stream: Start eerder, kan haperen
+  title: Antwoord afspelen
+ring:
+  group:
+    ring: Lichtring
+  setting:
+    effect:
+      _: Activeringslicht
+      help: Lichtringeffect terwijl deze assistent na zijn activeringswoord luistert
+    incoming:
+      _: Licht bij inkomende oproep
+      help: Lichtringeffect terwijl een oproep binnenkomt
+    muted:
+      _: Licht bij dempen
+      help: Lichtringeffect terwijl de microfoon gedempt is
+    reaction:
+      _: Ruimtereactie
+      help: Lichtringeffect dat het geluidsniveau in de ruimte volgt
+    replying_effect:
+      _: Licht bij antwoorden
+      help: Lichtringeffect terwijl deze assistent antwoordt; Standaard speelt het activeringslicht omgekeerd
+    talking:
+      _: Licht tijdens gesprek
+      help: Lichtringeffect tijdens het bellen of in een gesprek
+    thinking_effect:
+      _: Licht bij nadenken
+      help: Lichtringeffect terwijl deze assistent nadenkt; Standaard speelt het activeringslicht omgekeerd
+    trouble:
+      _: Foutlicht
+      help: Lichtringeffect dat 1,5 s rood knippert als een spraakverzoek of update mislukt
+rings:
+  areas: Ruimtes
+  depth: Diepte
+  floors: Verdiepingen
+  group:
+    _: Groeperen op
+    room: Kamer
+    system: Systeem
+  home: Thuis
+  kind:
+    access: Toegang
+    cameras: Camera's
+    climate: Klimaat
+    covers: Zonwering
+    fans: Ventilatoren
+    lights: Lampen
+    locks: Sloten
+    media: Media
+    presence: Aanwezigheid
+    switches: Schakelaars
+  kinds: Types
+  look:
+    _: Weergave
+    burst: Uitbarsting
+    icicle: IJspegel
+    wheel: Wiel
+  nofloor: Geen verdieping
+  side:
+    _: Details
+    left: Links / boven
+    right: Rechts / onder
+  summary: '{{.On}} aan · {{.N}} apparat{{if ne .N 1}}en{{else}}uur{{end}}'
+rtsp:
+  entity:
+    audio: RTSP-audio
+    password: RTSP-wachtwoord
+    username: RTSP-gebruikersnaam
+  group:
+    rtsp: RTSP
+  setting:
+    audio:
+      _: Audio meenemen
+      help: Voegt de microfoon toe aan de RTSP-stream
+    enabled:
+      _: RTSP-server
+      help: Biedt de camera aan via RTSP op poort 8554
+    password:
+      _: Wachtwoord
+      help: Wachtwoord dat RTSP-clients moeten opgeven; leeg laat iedereen toe
+    username:
+      _: Gebruikersnaam
+      help: Gebruikersnaam die RTSP-clients samen met het wachtwoord moeten opgeven
+screen:
+  group:
+    lock: Vergrendeling
+    panel: Scherm
+  setting:
+    alert:
+      _: Meldingsstijl
+      help: 'Hoe schermmeldingen verschijnen: banner, kaart, volledig scherm of toast'
+    auto:
+      _: Automatische helderheid
+      help: Stelt de schermhelderheid in met de omgevingslichtsensor
+    backlight:
+      _: Helderheid
+      help: Schermhelderheid, 0 tot 100%; met automatische helderheid verschuift het het automatische niveau
+    custom:
+      accent:
+        _: Accent van eigen thema
+        help: 'Accentkleur van het eigen thema als #rrggbb; leeg gebruikt die van het standaardthema'
+      accent2:
+        _: Tweede accent van eigen thema
+        help: 'Tweede accentkleur van het eigen thema als #rrggbb; leeg gebruikt die van het standaardthema'
+      background:
+        _: Achtergrond van eigen thema
+        help: 'Achtergrondkleur van het eigen thema als #rrggbb; leeg gebruikt die van het standaardthema'
+      muted:
+        _: Secundaire tekst van eigen thema
+        help: 'Kleur van secundaire tekst van het eigen thema als #rrggbb; leeg gebruikt die van het standaardthema'
+      surface:
+        _: Kaarten van eigen thema
+        help: 'Kleur van kaarten en panelen van het eigen thema als #rrggbb; leeg gebruikt die van het standaardthema'
+      text:
+        _: Tekst van eigen thema
+        help: 'Hoofdtekstkleur van het eigen thema als #rrggbb; leeg gebruikt die van het standaardthema'
+    drawer:
+      _: Positie van het dock
+      help: Schermrand waar het app-dock zit en vanwaar het wordt ingeveegd
+      hide:
+        _: Dock verbergen na
+        help: Tijd voor het dock verdwijnt, 5 seconden tot 1 minuut; Nooit houdt het zichtbaar
+    font:
+      _: Lettertype
+      help: Lettertype voor de tekst op het scherm; standaard gebruikt het lettertype van de stijl
+    keyboard:
+      _: Toetsenbordgrootte
+      help: 'Grootte van het schermtoetsenbord: compact, standaard, groot of volle breedte'
+    language:
+      _: Taal
+      help: Taal waarin de tekst op het scherm wordt getoond
+    lock_pin:
+      _: Instellingenvergrendeling
+      help: Pincode van 4 tot 8 cijfers die wordt gevraagd voor de instellingen op het scherm openen; leeg betekent geen vergrendeling
+    marks:
+      _: Privacymarkeringen
+      help: Toont markeringen op het scherm terwijl de microfoon gedempt of de camera afgedekt is
+    size:
+      _: Grootte
+      help: Schaal van de interface, mini tot extra groot; niet ingesteld gebruikt de grootte van het board
+    style:
+      _: Stijl
+      help: Uiterlijk van de bedieningselementen, met een eigen standaardlettertype en kleuren
+    theme:
+      _: Thema
+      help: Kleurenpalet; Standaard volgt de stijl, Eigen gebruikt de eigen kleuren
+    timer:
+      _: Timerstijl
+      help: 'Hoe lopende timers worden getekend: balk, banner, schaal, volledig scherm, wijzerplaat of hoek'
+    touches:
+      _: Aanrakingen tonen
+      help: Tekent stippen waar het scherm wordt aangeraakt; details voegt aantal vingers en laatste gebaar toe
+    volume:
+      _: Positie van het volumepaneel
+      help: Kant van het scherm waar het volumepaneel verschijnt
+settings:
+  about: Over
+  assistants: Spraakassistenten
+  camera: Camera
+  debug: Ontwikkelaarsopties
+  display: Scherm
+  features: Verbonden diensten
+  language: Taal
+  media: Media
+  network: Netwerk & internet
+  power: Herstarten
+  search:
+    _: Instellingen zoeken
+    empty: Typ om een instelling te vinden
+    none: Geen passende instellingen
+  sync: Configuratiesync
+  system: Systeem
+  title: Instellingen
+  volume: Geluid
+size:
+  large: Groot
+  medium: Gemiddeld
+  micro: Micro
+  mini: Mini
+  nano: Nano
+  small: Klein
+sound:
+  alerts: Wekkervolume
+  feedback: Systeemgeluiden
+  main: Hoofdvolume
+  media: Mediavolume
+  mute:
+    alerts: Wekkers dempen
+    feedback: Systeemgeluiden dempen
+    main: Alle geluid dempen
+    media: Media dempen
+    voice: Assistent dempen
+  voice: Assistentvolume
+source:
+  both: Microfoon en luidspreker
+  mic: Microfoon
+  speaker: Luidspreker
+speaker:
+  group:
+    speaker: Luidspreker
+  setting:
+    eq:
+      _: Luidspreker-EQ
+      help: Stuurt het afspelen door de luidsprekerfilters van de fabrikant voor dit board
+    headphone_output:
+      _: Koptelefoonaansluiting
+      help: Auto speelt via de koptelefoonaansluiting als er iets is aangesloten; Aan of Uit forceert het
+    resampling:
+      _: Spraakresampling
+      help: Methode om 16 kHz-spraakgeluid op te schalen naar de luidsprekerfrequentie
+    speaker_gain:
+      _: Luidsprekerversterking
+      help: Versterkingsstap van de codecdriver, 0 tot 12, bij afspelen via de luidspreker
+    speaker_output:
+      _: Luidspreker
+      help: Auto speelt alleen via de luidspreker zolang er geen koptelefoon is aangesloten; Aan of Uit forceert het
+stream:
+  alerts: Meldingen
+  feedback: Feedback
+  main: Hoofd
+  media: Media
+  voice: Spraak
+style:
+  eink: E-ink
+  glass: Glas
+  hifi: Hifi
+  material: Material You
+  metro: Metro
+  neon: Neon
+  skeuo: Skeuo
+  standard: Standaard
+  terminal: Terminal
+  title: Stijl
+sync:
+  busy: '{{.Peer}} is bezet'
+  cancelled: Synchronisatie geannuleerd
+  empty: Geen andere apparaten om mee te synchroniseren
+  enter: Voer de code in die op {{.Peer}} staat
+  expired: De code is verlopen
+  failed: Synchronisatie mislukt
+  matched: Al gekoppeld met {{.Peer}}
+  received: '{{.N}} instellingen van {{.Peer}} toegepast'
+  receiving: Instellingen ontvangen…
+  sending: Instellingen verzenden…
+  sent: Instellingen verzonden naar {{.Peer}}
+  show: Voer deze code in op {{.Peer}}
+  title: Configuratiesync
+  tries: Te veel verkeerde codes
+  wrong: Verkeerde code, nog {{.N}} pogingen
+system:
+  adb:
+    _: ADB via netwerk
+    hint: Root-shell zonder authenticatie op 5555
+  certificates:
+    _: Certificaten controleren
+    hint: TLS-certificaatcontrole
+  title: Systeem
+tessera:
+  again: Tik nogmaals om te ontgrendelen
+  ago: '{{.T}} geleden'
+  alarm:
+    armed_away: Afwezig
+    armed_custom_bypass: Eigen overbrugging
+    armed_home: Thuis
+    armed_night: Nacht
+    armed_vacation: Vakantie
+    cancel: Annuleren
+    clear: Wissen
+    disarm: Uitschakelen
+    ok: OK
+    text: Voer de code van dit paneel in Home Assistant in.
+  alert:
+    notification: Melding
+  binary:
+    battery:
+      'off': Normaal
+      'on': Laag
+    battery_charging:
+      'off': Laadt niet
+      'on': Laadt
+    carbon_monoxide:
+      'off': Vrij
+      'on': Gedetecteerd
+    cold:
+      'off': Normaal
+      'on': Koud
+    connectivity:
+      'off': Verbroken
+      'on': Verbonden
+    door:
+      'off': Dicht
+      'on': Open
+    garage_door:
+      'off': Dicht
+      'on': Open
+    gas:
+      'off': Vrij
+      'on': Gedetecteerd
+    heat:
+      'off': Normaal
+      'on': Heet
+    light:
+      'off': Geen licht
+      'on': Licht gedetecteerd
+    lock:
+      'off': Vergrendeld
+      'on': Ontgrendeld
+    moisture:
+      'off': Droog
+      'on': Nat
+    motion:
+      'off': Vrij
+      'on': Gedetecteerd
+    moving:
+      'off': Beweegt niet
+      'on': Beweegt
+    occupancy:
+      'off': Vrij
+      'on': Gedetecteerd
+    opening:
+      'off': Dicht
+      'on': Open
+    plug:
+      'off': Niet aangesloten
+      'on': Aangesloten
+    power:
+      'off': Uit
+      'on': Aan
+    presence:
+      'off': Afwezig
+      'on': Thuis
+    problem:
+      'off': OK
+      'on': Probleem
+    running:
+      'off': Draait niet
+      'on': Draait
+    safety:
+      'off': Veilig
+      'on': Onveilig
+    smoke:
+      'off': Vrij
+      'on': Gedetecteerd
+    sound:
+      'off': Stil
+      'on': Gedetecteerd
+    tamper:
+      'off': Vrij
+      'on': Sabotage gedetecteerd
+    update:
+      'off': Actueel
+      'on': Update beschikbaar
+    vibration:
+      'off': Vrij
+      'on': Gedetecteerd
+    window:
+      'off': Dicht
+      'on': Open
+  bottom:
+    dock: Paginapaneel
+    home: Startpagina
+    'off': Niets
+  card:
+    empty: Geen geschiedenis voor deze periode
+    high: Hoog {{.V}} om {{.T}}
+    loading: Geschiedenis laden…
+    low: Laag {{.V}} om {{.T}}
+    now: Nu {{.T}}
+    since: Sinds {{.T}}
+  connected: Stel dit scherm in via Tessera
+  empty: Configureer dit scherm ({{.Name}}) in Tessera en voeg tegels toe.
+  enable: Zet liggend of staand aan via Instellingen → Dashboard
+  energy:
+    battery: Batterij
+    grid: Net
+    home: Huis
+    other: Overig
+    solar: Zon
+    untracked: Niet gemeten
+  in: over {{.T}}
+  install: Installeer Tessera Screen Manager in Home Assistant en voeg dit scherm eraan toe.
+  key:
+    activate: Activeren
+    press: Drukken
+    run: Uitvoeren
+  lapsed: Tessera niet actief
+  last:
+    date: Laatst {{.D}}
+    time: Laatst {{.T}}
+    yest: Gist. {{.T}}
+    yesterday: Gisteren {{.T}}
+  light:
+    brightness: Helderheid
+    effect: Effect
+    effects: Effecten
+    hue: Kleur
+    lamps: Lampen
+    waiting: Wachten
+    warmth: Kleurtemperatuur
+  lock:
+    jammed: Geblokkeerd
+    lock: Vergrendelen
+    locked: Vergrendeld
+    locking: Vergrendelen…
+    open:
+      _: Openen
+      key: Openen
+    opening: Openen…
+    unlock: Ontgrendelen
+    unlocked: Ontgrendeld
+    unlocking: Ontgrendelen…
+  never: Nooit uitgevoerd
+  now: Zojuist
+  'off': Tessera staat uit
+  paused: Gepauzeerd {{.T}}
+  range:
+    day: 24 u
+    hour: 1 u
+    week: 7 d
+  refused: Geweigerd
+  running: Bezig...
+  silent: Geen antwoord
+  sun:
+    name: Zon
+    rise: Zonsopkomst {{.T}}
+    set: Zonsondergang {{.T}}
+  turn:
+    cover: Bedekken
+    deck: Stapel
+    fade: Vervagen
+    none: Geen
+    reveal: Onthullen
+    slide: Schuiven
+    zoom: Zoom
+  updating: Bijwerken…
+  vacuum:
+    battery: Batterij {{.N}}%
+    dock: Station
+    locate: Zoeken
+    pause: Pauze
+    start: Start
+  waiting: Tessera installeren
+  weather:
+    clear-night: Heldere nacht
+    cloudy: Bewolkt
+    daily: Dagelijks
+    exceptional: Uitzonderlijk
+    feels: Voelt als {{.T}}
+    fog: Mist
+    hail: Hagel
+    hourly: Per uur
+    lightning: Onweer
+    lightning-rainy: Onweer, regen
+    none: Geen verwachting
+    partlycloudy: Half bewolkt
+    pouring: Stortregen
+    pressure: Luchtdruk {{.P}}
+    rainy: Regenachtig
+    snowy: Sneeuw
+    snowy-rainy: Natte sneeuw
+    sunny: Zonnig
+    visibility: Zicht {{.V}}
+    wind: Wind {{.W}}
+    windy: Winderig
+    windy-variant: Winderig, bewolkt
+theme:
+  custom:
+    _: Eigen
+    accent: Accent
+    accent2: Tweede accent
+    background: Achtergrond
+    muted: Secundaire tekst
+    surface: Kaarten
+    text: Tekst
+    title: Eigen thema
+  default: Standaard
+  title: Thema
+thermostat:
+  action:
+    cooling: Koelt
+    drying: Ontvochtigt
+    fan: Ventilator
+    heating: Verwarmt
+    idle: Rust
+    'off': Uit
+  app: Thermostaat
+  between: Houdt tussen
+  choose:
+    fan: Ventilator
+    mode: Modus
+    preset: Voorinstelling
+  chosen: '{{.N}} van {{.Of}}'
+  cooling: Koelt tot
+  dial: Instelling
+  drying: Ontvochtigt
+  entity:
+    look: Weergave van de thermostaat
+    tab: Thermostaattabblad op het dashboard
+  environment: Klimaatregeling
+  fan: Ventilator
+  fanmode:
+    auto: Auto
+    diffuse: Diffuus
+    focus: Focus
+    high: Hoog
+    low: Laag
+    medium: Gemiddeld
+    middle: Midden
+    'off': Uit
+    'on': Aan
+  fanning: Ventilator draait
+  full: Maximaal {{.N}}; zet er eerst een uit
+  group:
+    thermostat: Thermostaat
+  heating: Verwarmt tot
+  high: Hoog
+  holding: Houdt op
+  humidity: Luchtvochtigheid
+  in: Binnen
+  inside: Binnen
+  lamp:
+    fan: Ventilator draait
+  look:
+    bars: Balken
+    brass: Messing
+    column: Kolom
+    dial: Draaiknop
+    mission: Missie
+    split: Gesplitst
+    terminal: Terminal
+    wheel: Wiel
+  low: Laag
+  mode:
+    auto: Auto
+    cool: Koelen
+    dry: Ontvochtigen
+    fan_only: Ventilator
+    heat: Verwarmen
+    heat_cool: Auto
+    'off': Uit
+  no-preset: Geen voorinstelling
+  none: Geen thermostaten gekozen
+  'off': Uit
+  out: Buiten
+  outside: Buiten
+  preset:
+    activity: Activiteit
+    away: Afwezig
+    boost: Boost
+    comfort: Comfort
+    eco: Eco
+    home: Thuis
+    none: Geen
+    sleep: Slapen
+  refused: Home Assistant weigerde dat
+  set: Instellen
+  setpoint: Instelpunt
+  setting:
+    entities:
+      _: Thermostaten
+      help: Home Assistant-klimaatentiteiten in de thermostaat-app, maximaal 4
+    look:
+      _: Weergave
+      help: Tekenstijl van de thermostaat-app, zoals draaiknop, kolom of wiel
+    tab:
+      _: Dashboardtabblad
+      help: Voegt een thermostaattabblad toe aan het dashboard zodra een thermostaat is gekozen
+  status: Status
+  target: Doel
+  temp: Temp
+  temperature: Temperatuur
+  unavailable: Niet beschikbaar
+  waiting: Wachten op Home Assistant
+timer:
+  stop: Stop
+timerstyle:
+  banner: Banner
+  bar: Balk
+  corner: Hoek
+  dial: Schaal
+  face: Wijzerplaat
+  full: Volledig scherm
+todo:
+  add: Item toevoegen
+  app: Boodschappenlijst
+  clear: Voltooide wissen
+  empty: Niets op de lijst
+  entity: Takenlijsten
+  group:
+    todo: Boodschappenlijst
+  lists: '{{.Count}} lijsten'
+  none: Geen takenlijsten in Home Assistant
+  'off': Uit
+  pick: Kies een lijst via Instellingen → Huisbediening → Boodschappenlijst
+  setting:
+    completed:
+      _: Voltooide items tonen
+      help: Toont afgevinkte items onder de open items, met een knop om ze te wissen
+    entities:
+      _: Takenlijsten
+      help: Getoonde Home Assistant-takenlijsten, als door komma's gescheiden lijst
+  title: Boodschappenlijst
+tone:
+  alert: Alarm
+  info: Info
+  success: Succes
+  title: Activeringsgeluid
+  warning: Waarschuwing
+touches:
+  details: Details
+  dots: Stippen
+  'off': Uit
+tv:
+  app: Tv
+  empty: Niets op tv
+  failed: Kon de tv-gids niet laden
+  find: Zoek een zender of programma
+  group:
+    tv: Tv
+  here: Hier
+  next: 'Hierna om {{.Time}}: {{.Title}}'
+  none: Geen YouTube TV-spelers in Home Assistant
+  quiet: Er speelt niets
+  setting:
+    default:
+      _: Standaard-tv
+      help: Tv waarop YouTube TV-spraakverzoeken spelen als er geen tv wordt genoemd
+    favorites:
+      _: Favorieten
+      help: YouTube TV-zenders met een ster die bovenaan de tv-gids staan
+  update: Werk de YouTube TV-integratie bij
+  watch: Kijken op {{.TV}}
+  watch_here: Hier kijken
+  youtube: YouTube TV
+uisize:
+  compact: Compact
+  large: Groot
+  medium: Gemiddeld
+  mini: Mini
+  xlarge: Extra groot
+update:
+  available: '{{.Version}} beschikbaar'
+  channel:
+    _: Updatekanaal
+    dev: Ontwikkeling
+    stable: Stabiel
+  check: Zoeken naar updates
+  checking: Controleren…
+  current: Actueel
+  group:
+    updates: Updates
+  install: '{{.Version}} downloaden en installeren'
+  ready: Update beschikbaar
+  running: Huidige versie
+  setting:
+    channel:
+      _: Updatekanaal
+      help: Releasekanaal waar firmware-updates vandaan komen; wijzigen zoekt naar een update
+  title: Software-update
+  unreachable: Kon de updateserver niet bereiken
+  versions:
+    _: Andere versies
+    confirm: '{{.Version}} installeren'
+    installed: Geïnstalleerd
+    none: Geen andere versies
+    what: '{{.Running}} wordt vervangen door {{.Version}} en de app herstart.'
+upgrade:
+  engine: de cast-engine
+  installing: Installeren…
+  line: Bijwerken naar {{.Version}} · {{.Status}}
+  percent: '{{.N}}%'
+  preparing: '{{.Name}} wordt klaargemaakt · {{.Status}}'
+visual:
+  aurora: Noorderlicht
+  classic-vu: Klassieke VU
+  cymatics: Cymatica
+  digital-vu: Digitale VU
+  fire: Vuur
+  fireflies: Vuurvliegjes
+  fireworks: Vuurwerk
+  galaxy: Melkweg
+  group:
+    visual: Visuals
+  hal-9000: HAL 9000
+  halo: Halo
+  ink-in-water: Inkt in water
+  koi-pond: Koivijver
+  lava-lamp: Lavalamp
+  lcars: LCARS
+  lens-flares: Lensflares
+  light-cycles: Lichtcycli
+  matrix: Matrix
+  mercury: Kwik
+  mother: Mother
+  neon-sign: Neonbord
+  orb: Bol
+  paint-splash: Verfspatten
+  phosphor: Fosfor
+  pipboy-3: PB 3000
+  pipboy-4: PB Mark IV
+  pipboy-76: PB 2000
+  pipboy-nv: PB New Vegas
+  pulsar: Pulsar
+  rain-on-glass: Regen op glas
+  ribbons: Linten
+  setting:
+    fps:
+      _: Framelimiet voor visuals
+      help: 'Hoogste framerate waarop visuals tekenen: 10, 15, 20, 30, 45 of 60'
+    kind:
+      _: Visual
+      help: Animatie die de visualizer tekent als reactie op geluid
+    label:
+      _: Label van de visual
+      help: Tekst tot 32 tekens, getoond door visuals die een label tekenen
+    lift:
+      _: Visualizer-versterking
+      help: Versterking van 0 tot 40 dB voor het microfoongeluid waarop visuals reageren
+    seed:
+      _: Visual-seed
+      help: Legt het willekeurige patroon van visuals vast, tot 1024; 0 is elke keer willekeurig
+  synthwave: Synthwave
+  tesla: Tesla
+  thunderstorm: Onweer
+voice:
+  group:
+    actions: Acties
+    commands: Opdrachten
+  hacs:
+    _: EchoLocal-integratie
+    hint: Acties hebben de EchoLocal-integratie in Home Assistant nodig. Scan de code om haar in HACS te openen en installeer of werk haar bij.
+    missing: Niet geïnstalleerd
+    outdated: Update nodig
+    unknown: Controleren
+  option:
+    label:
+      none: Alleen ruimtes
+  setting:
+    action:
+      alarm:
+        _: Wekkers beheren
+        help: Laat zinnen in Home Assistant Assist wekkers op dit apparaat zetten, tonen, stoppen of snoozen
+      broadcast:
+        _: Een omroepbericht sturen
+        help: Laat zinnen in Home Assistant Assist zoals "omroepen" een bericht omroepen
+      call:
+        _: Een apparaat bellen
+        help: Laat zinnen in Home Assistant Assist een ander apparaat op het netwerk bellen
+      call_answer:
+        _: Een oproep aannemen
+        help: Laat zinnen in Home Assistant Assist zoals "opnemen" een binnenkomende oproep aannemen
+      call_hangup:
+        _: Een oproep beëindigen
+        help: Laat zinnen in Home Assistant Assist zoals "ophangen" een oproep beëindigen of weigeren
+      recipes:
+        _: Koken met recepten
+        help: Laat zinnen in Home Assistant Assist recepten zoeken, beginnen met koken en door de stappen gaan op dit apparaat
+      youtube_tv:
+        _: YouTube TV kijken
+        help: Laat zinnen in Home Assistant Assist een YouTube TV-zender aanzetten of zeggen wat er op is
+    actions:
+      _: Alle acties
+      help: Biedt de gesproken zinnen van dit apparaat aan Home Assistant Assist aan; uit trekt ze allemaal in
+    command:
+      cook:
+        _: Kookmodus
+        help: Met de kookmodus open gaat "next step", "previous step" of "start timer" (in het Engels) door het recept
+      mirror:
+        _: Spiegel
+        help: '"Spiegel" zeggen opent de spiegelweergave van de camera'
+      radar:
+        _: Radar
+        help: '"Radar" of "toon de weerradar" zeggen opent de radarkaart'
+    commands:
+      _: Alle opdrachten
+      help: Draait de spraakherkenning op het apparaat voor gesproken opdrachten zoals spiegel en radar
+    label:
+      _: Home Assistant-namen om naar te luisteren
+      help: Home Assistant-label waarvan de herkenning naast ruimtenamen naar de entiteitnamen luistert
+    language:
+      _: Taal van spraakacties
+      help: Taal van de zinnen voor spraakacties waarop dit apparaat antwoordt en van zijn gesproken antwoorden
+  title: Spraaktriggers
+voicematch:
+  accept: Accepteren
+  add: Stem toevoegen
+  again: Opnieuw proberen
+  cancel: Annuleren
+  done: Voice Match is klaar voor {{.Name}}
+  failed: Voice Match kon niet worden ingesteld
+  finish: Klaar
+  heard: Begrepen
+  listening: Luisteren…
+  missed: Niet verstaan. Nog een keer.
+  phrase:
+    calendar: wat staat er vandaag in mijn agenda
+    door: doe de voordeur op slot
+    lights: doe de lampen aan
+    music: speel wat muziek in de keuken
+    shopping: zet melk op de boodschappenlijst
+    timer: zet een timer voor tien minuten
+    weather: wat voor weer wordt het morgen
+  pick: Kies een persoon
+  preparing: Voorbereiden…
+  redo: Opnieuw opnemen
+  remove: Verwijderen
+  say: Zeg "{{.Wake}}" en dan
+  say_plain: Zeg het activeringswoord en dan
+  similar: Deze stem lijkt erg op die van {{.Name}}
+  someone: Iemand anders
+  threshold: Drempel voor overeenkomst
+  title: Voice Match
+  unconfirmed: Dat klonk niet als dezelfde stem
+volume:
+  chime: Meldingsgeluid
+wake:
+  ember: Gloed
+  sunrise: Zonsopkomst
+  white: Wit
+weather:
+  alert:
+    dismiss: Sluiten
+    until: Tot {{.T}}
+  alerts:
+    hint: Waarschuwingen voor zwaar weer in de VS van de National Weather Service voor je huis
+  animate: Animeren
+  cond:
+    clear-night: Helder
+    cloudy: Bewolkt
+    exceptional: Waarschuwing
+    fog: Mist
+    hail: Hagel
+    lightning: Onweer
+    lightning-rainy: Onweer
+    partlycloudy: Half bewolkt
+    pouring: Zware regen
+    rainy: Regen
+    snowy: Sneeuw
+    snowy-rainy: Natte sneeuw
+    sunny: Zonnig
+    windy: Winderig
+    windy-variant: Winderig
+  dashboard: Tonen op het dashboard
+  entity: Weerentiteit
+  feels: Voelt als {{.T}}
+  forecast:
+    _: Verwachting
+    daily: Dagelijks
+    hourly: Per uur
+    none: Geen verwachting
+    twice_daily: Twee keer per dag
+  group:
+    weather: Weer
+  humidity: Luchtvochtigheid {{.N}}%
+  idle: Tonen op de schermbeveiliging
+  look:
+    _: Weergave
+    card: Kaart
+    compact: Compact
+    detail: Detail
+    icon: Pictogram
+    stack: Stapel
+    words: Woorden
+  none: Geen weerentiteiten in Home Assistant
+  'off': Uit
+  setting:
+    alerts:
+      _: Weerwaarschuwingen
+      help: Haalt waarschuwingen van de National Weather Service op en toont zware in plaats van het weer
+    align:
+      _: Horizontale positie van het dashboardweer
+      help: 'Horizontale plaats van het dashboardweer: links, midden of rechts'
+    animate:
+      _: Dashboardweer animeren
+      help: Animeert het weerpictogram op het dashboard
+    dashboard:
+      _: Weer op het dashboard
+      help: Toont het huidige weer op het dashboard
+    entity:
+      _: Weerentiteit
+      help: Home Assistant-weerentiteit voor het huidige weer; leeg kiest de eerste die wordt gevonden
+    forecast:
+      _: Verwachtingsentiteit
+      help: Weerentiteit waar de dagverwachting vandaan komt; leeg gebruikt de weerentiteit
+    idle:
+      _: Weer op de schermbeveiliging
+      help: Toont het huidige weer op de schermbeveiliging
+    look:
+      _: Weergave van het dashboardweer
+      help: 'Indeling van het dashboardweer: compact, stapel, pictogram, woorden, kaart of detail'
+    position:
+      _: Verticale positie van het dashboardweer
+      help: 'Verticale plaats van het dashboardweer: boven, midden of onder'
+    radar_range:
+      _: Beginbereik van de radar
+      help: Afstand in mijlen die de radarkaart bij openen beslaat, 50 tot 800
+    radar_source:
+      _: Radarbron
+      help: Bron van de radarbeelden; Auto gebruikt NWS in de 48 aaneengesloten VS-staten, elders RainViewer
+    saver:
+      align:
+        _: Horizontale positie van het weer op de schermbeveiliging
+        help: 'Horizontale plaats van het weer op de schermbeveiliging: links, midden of rechts'
+      animate:
+        _: Weer op de schermbeveiliging animeren
+        help: Animeert het weerpictogram op de schermbeveiliging
+      look:
+        _: Weergave van het weer op de schermbeveiliging
+        help: 'Indeling van het weer op de schermbeveiliging: compact, stapel, pictogram, woorden, kaart of detail'
+      position:
+        _: Verticale positie van het weer op de schermbeveiliging
+        help: 'Verticale plaats van het weer op de schermbeveiliging: boven, midden of onder'
+      size:
+        _: Grootte van het weer op de schermbeveiliging
+        help: Grootte van het weer op de schermbeveiliging, nano tot groot
+      themed:
+        _: Themakleuren voor het weer op de schermbeveiliging
+        help: Tekent de weerpictogrammen op de schermbeveiliging in themakleuren in plaats van natuurlijke kleuren
+    size:
+      _: Grootte van het dashboardweer
+      help: Grootte van het dashboardweer, nano tot groot
+    themed:
+      _: Themakleuren voor het dashboardweer
+      help: Tekent de weerpictogrammen op het dashboard in themakleuren in plaats van natuurlijke kleuren
+  themed:
+    _: Themakleuren
+    hint: 'Uit gebruikt natuurlijke kleuren: een gele zon, grijze wolken, blauwe regen'
+  title: Weer
+  uv: UV {{.N}}
+  wind: Wind {{.N}} {{.Unit}}
+webaccess:
+  address: Adres
+  title: Webtoegang
+wifi:
+  busy: Al bezig met verbinden met een ander netwerk
+  connected: Verbonden
+  failed: Kon niet verbinden met {{.Network}}
+  join: Verbinden
+  joined: Verbonden met {{.Network}}
+  joining: Verbinden met {{.Network}}…
+  left: Nog {{.N}} s
+  none: Geen netwerken gevonden
+  ok: OK
+  password: Wachtwoord
+  refused: Verkeerd wachtwoord
+  scan:
+    _: Opnieuw zoeken
+    failed: Zoeken mislukt
+  scanning: Zoeken…
+  short: Gebruik minstens {{.N}} tekens
+  timeout: Geen verbinding binnen {{.Minutes}} minuten
+  title: Wifi
+  unreachable: Opnieuw proberen
+  unsupported: '{{.Security}}, niet ondersteund'
+youtube:
+  account: YouTube-account
+  accounts: Accounts
+  add: Account toevoegen
+  again: Nieuwe code
+  anonymous: Anoniem
+  app: YouTube
+  asking: Code ophalen…
+  cancel: Annuleren
+  category:
+    filler: Opvulling
+    hook: Haakje
+    interaction: Interactieherinnering
+    intro: Intro
+    music_offtopic: Deel zonder muziek
+    outro: Outro
+    preview: Voorvertoning
+    selfpromo: Zelfpromotie
+    sponsor: Sponsor
+  empty: Hier staat nog niets
+  enter: en voer in
+  entity:
+    lounge: YouTube-lounge
+  expired: De code is verlopen
+  failed: Kon YouTube niet bereiken
+  go: Ga op je telefoon of computer naar
+  group:
+    cast: Cast
+  history: Geschiedenis
+  home: Start
+  later: Later bekijken
+  option:
+    lounge:
+      always: Altijd
+      demand: Op aanvraag
+  refused: Inloggen is geweigerd
+  search: Zoeken
+  setting:
+    lounge:
+      _: YouTube-lounge
+      help: Houdt loungeverbindingen van YouTube en YouTube Music altijd open of opent ze op aanvraag
+  shorts: Shorts
+  signin: Inloggen bij YouTube
+  skip:
+    _: Segmenten overslaan
+    none: Geen
+    some: '{{.N}} soorten'
+  stay: Anoniem blijven
+  subscriptions: Abonnementen
+  unwatched: Bekijk iets om Start te vullen
+  waiting: Wachten op goedkeuring…
+zone:
+  title: Tijdzone

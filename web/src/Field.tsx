@@ -10,9 +10,14 @@ export function FieldRow({ field, onChange }: Props) {
     field.kind === "list" || field.kind === "pair" || field.kind === "triple";
   return (
     <Group justify="space-between" wrap="nowrap" gap="lg" py={10}>
-      <Text size="sm" style={{ flex: "1 1 auto", minWidth: 0 }}>
-        {field.title}
-      </Text>
+      <div style={{ flex: "1 1 auto", minWidth: 0 }}>
+        <Text size="sm">{field.title}</Text>
+        {field.help && (
+          <Text size="xs" c="dimmed">
+            {field.help}
+          </Text>
+        )}
+      </div>
       <div style={{ flex: wide ? "0 1 320px" : "0 0 auto", minWidth: wide ? 160 : undefined }}>
         <Control field={field} onChange={onChange} />
       </div>

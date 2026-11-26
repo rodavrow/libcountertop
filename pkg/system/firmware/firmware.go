@@ -15,6 +15,7 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/network/releases"
 	"github.com/ygelfand/libcountertop/pkg/runtime/component"
 	"github.com/ygelfand/libcountertop/pkg/runtime/safe"
+	setting "github.com/ygelfand/libcountertop/pkg/settings"
 	"github.com/ygelfand/libcountertop/pkg/settings/schema"
 )
 
@@ -109,7 +110,7 @@ type Firmware[M any] struct {
 	deps Dependencies[M]
 
 	entity   *esphome.Update
-	channel  *esphome.Select
+	controls *setting.Controls[schema.Update]
 	look     *esphome.Button
 	status   *esphome.TextSensor
 	events   *esphome.Event
@@ -141,17 +142,15 @@ func New[M any](deps Dependencies[M]) *Firmware[M] {
 	}
 	u.publish(Release{Version: deps.Version})
 
-	u.channel = &esphome.Select{
-		Base: esphome.Base{
-			ObjectID: "update_channel",
-			Name:     "Update channel",
-			Icon:     "mdi:source-branch",
-			Category: esphome.CategoryDiagnostic,
+	u.controls = &setting.Controls[schema.Update]{
+		Table: table(deps.Channels),
+		Read: func() schema.Update {
+			c := deps.Settings.Read()
+			c.Channel = u.Channel()
+			return c
 		},
-		Options:   slices.Clone(deps.Channels),
-		OnCommand: u.Choose,
+		Save: u.save,
 	}
-	u.channel.Set(u.Channel())
 
 	// Home Assistant asks for an update check only through homeassistant.update_entity.
 	u.look = &esphome.Button{
@@ -236,14 +235,18 @@ func (u *Firmware[M]) installPicked() {
 func (u *Firmware[M]) Name() string { return "firmware" }
 
 func (u *Firmware[M]) Entities() []esphome.Entity {
-	entities := []esphome.Entity{u.entity, u.channel, u.look, u.status, u.events}
+	entities := []esphome.Entity{u.entity}
+	entities = append(entities, u.controls.Entities()...)
+	entities = append(entities, u.look, u.status, u.events)
 	if u.versions != nil {
 		entities = append(entities, u.versions, u.apply)
 	}
 	return entities
 }
 
-func (u *Firmware[M]) Restore() { u.channel.Set(u.Channel()) }
+func (u *Firmware[M]) Controls() *setting.Controls[schema.Update] { return u.controls }
+
+func (u *Firmware[M]) Restore() { u.controls.Publish() }
 
 func (u *Firmware[M]) RebootPending(pending bool) {
 	u.mu.Lock()
@@ -298,16 +301,22 @@ func (u *Firmware[M]) Channels() []string { return slices.Clone(u.deps.Channels)
 func (u *Firmware[M]) Version() string { return u.deps.Version }
 
 func (u *Firmware[M]) Choose(label string) {
-	if !slices.Contains(u.deps.Channels, label) {
-		slog.Warn("unknown option", "setting", u.channel.ObjectID, "value", label)
-		return
+	if err := u.controls.Change("channel", label); err != nil {
+		slog.Warn("the update channel was not changed", "value", label, "err", err)
 	}
-	u.channel.Set(label)
-	if err := u.deps.Settings.Channel(label); err != nil {
-		slog.Error("saving a setting failed", "setting", u.channel.ObjectID, "err", err)
+}
+
+func (u *Firmware[M]) save(row setting.Setting[schema.Update], v string) error {
+	c := u.deps.Settings.Read()
+	if err := row.Write(&c, v); err != nil {
+		return err
 	}
-	slog.Info("setting changed", "setting", u.channel.ObjectID, "using", label)
+	if err := u.deps.Settings.Channel(c.Channel); err != nil {
+		return err
+	}
+	slog.Info("setting changed", "setting", "update.channel", "using", c.Channel)
 	u.CheckLater()
+	return nil
 }
 
 func (u *Firmware[M]) Check(ctx context.Context) {

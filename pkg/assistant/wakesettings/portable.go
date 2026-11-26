@@ -102,9 +102,58 @@ func (s *Settings) rows(n int) []setting.Setting[schema.Wake] {
 			row("wake_screen"),
 			func(c *schema.Wake) *bool { return &word(c).WakeScreen },
 		))
+		place := setting.Pick(
+			row("look.place"),
+			schema.LookPlaces(),
+			func(c *schema.Wake) *schema.LookPlace { return &word(c).Look.Place },
+		)
+		place.Read = func(c *schema.Wake) string {
+			if p := word(c).Look.Place; p != "" {
+				return string(p)
+			}
+			return string(schema.LookPanel)
+		}
+		rows = append(rows, place)
+		for _, st := range schema.Stages() {
+			rows = append(rows, s.look(row("look."+string(st)), word, st))
+		}
 	}
 	return rows
 }
+
+func (s *Settings) look(
+	r setting.Setting[schema.Wake],
+	word func(*schema.Wake) *schema.WakeWord,
+	st schema.Stage,
+) setting.Setting[schema.Wake] {
+	r.Kind = setting.Choice
+	r.Options = append(
+		[]setting.Option{{Value: lookDefault, Label: say.T("look.default")}},
+		s.options.Looks...,
+	)
+	r.Read = func(c *schema.Wake) string {
+		if k := word(c).Look.Kind(st); k != "" {
+			return k
+		}
+		return lookDefault
+	}
+	r.Write = func(c *schema.Wake, v string) error {
+		for _, o := range r.Options {
+			if strings.EqualFold(o.Value, v) || strings.EqualFold(o.Label, v) {
+				kind := o.Value
+				if kind == lookDefault {
+					kind = ""
+				}
+				word(c).Look.Set(st, kind)
+				return nil
+			}
+		}
+		return r.Bad(v, "")
+	}
+	return r
+}
+
+const lookDefault = "default"
 
 func (s *Settings) save(row setting.Setting[schema.Wake], value string) error {
 	n, err := SlotOf(row.Name)

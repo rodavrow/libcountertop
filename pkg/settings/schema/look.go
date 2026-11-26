@@ -48,6 +48,17 @@ func (s Stage) Source() Source {
 	return SourceBoth
 }
 
+func (l *Look) Set(s Stage, kind string) {
+	switch s {
+	case StageListening:
+		l.Listening = kind
+	case StageWaiting:
+		l.Waiting = kind
+	case StageResponding:
+		l.Responding = kind
+	}
+}
+
 func (l Look) Kind(s Stage) string {
 	switch s {
 	case StageListening:

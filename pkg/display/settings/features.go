@@ -27,6 +27,7 @@ func FeaturesPage(read func() []Feature, push func(shell.View)) *shell.Page {
 			"features.proxy":    5,
 			"features.speaker":  6,
 			"features.rtsp":     7,
+			"features.mealie":   8,
 		}
 		slices.SortStableFunc(all, func(a, b Feature) int {
 			return cmp.Or(cmp.Compare(order[a.Key], order[b.Key]), cmp.Compare(a.Key, b.Key))

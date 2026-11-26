@@ -2,6 +2,7 @@ package setting
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -66,6 +67,26 @@ func Words[T any](s Setting[T], most int, field func(*T) *string) Setting[T] {
 			r = r[:most]
 		}
 		*field(c) = string(r)
+		return nil
+	}
+	return s
+}
+
+func Items[T any](s Setting[T], most int, field func(*T) *[]string) Setting[T] {
+	s.Kind = List
+	s.Read = func(c *T) string { return strings.Join(*field(c), ",") }
+	s.Write = func(c *T, v string) error {
+		out := []string{}
+		for part := range strings.SplitSeq(v, ",") {
+			part = strings.TrimSpace(part)
+			if part != "" && !slices.Contains(out, part) {
+				out = append(out, part)
+			}
+		}
+		if most > 0 && len(out) > most {
+			return fmt.Errorf("%s takes at most %d, not %d", s.Name, most, len(out))
+		}
+		*field(c) = out
 		return nil
 	}
 	return s

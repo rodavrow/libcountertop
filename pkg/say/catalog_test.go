@@ -51,6 +51,9 @@ func TestEveryLanguageCarriesEveryString(t *testing.T) {
 			theirs := shipped(t, tag)
 			for _, id := range slices.Sorted(maps.Keys(english)) {
 				text, ok := theirs[id]
+				if !ok && strings.HasSuffix(id, ".example") {
+					continue
+				}
 				if !ok {
 					t.Errorf("%s is missing", id)
 					continue

@@ -52,6 +52,11 @@ func NewTable(chimes func() []setting.Option) *Table {
 			entityMost,
 			func(c *schema.HomeAlarm) *string { return &c.Entity },
 		),
+		setting.Items(
+			Setting{Name: "hidden", Group: Group, Icon: "mdi:eye-off", NoEntity: true},
+			0,
+			func(c *schema.HomeAlarm) *[]string { return &c.Hide },
+		),
 		setting.Pick(
 			Setting{Name: "look", Group: Group, Icon: "mdi:palette"},
 			schema.HomeAlarmLooks(),

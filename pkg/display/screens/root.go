@@ -42,7 +42,7 @@ func (a *App) compose(w *gogui.Window) gogui.View {
 		a.seeThrough(true)
 		return stack(overlaid(w, []gogui.View{blank()}, overlays))
 	}
-	layers := []gogui.View{a.base(w, covering)}
+	layers := []gogui.View{a.transition(w, covering)}
 	a.seeThrough(covering != nil && covering.Clear || a.papering)
 	if shown, _ := a.o.Shell.Dock(); shown && a.o.Shell.Docked() && a.o.Offering() == "" {
 		layers = append(layers, widgets.Floating(0, a.rail(w, covering)))

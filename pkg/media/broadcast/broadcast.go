@@ -111,9 +111,9 @@ func (b *Broadcaster) Action() actions.Action {
 		},
 		Speech: "message",
 		Triggers: []actions.Trigger{
-			{Sentence: "(broadcast|announce)"},
-			{Sentence: "send a broadcast"},
-			{Sentence: "(broadcast|announce) {message}"},
+			{Key: "actions.broadcast.sentence.ask"},
+			{Key: "actions.broadcast.sentence.send"},
+			{Key: "actions.broadcast.sentence.message"},
 		},
 		Run: b.run,
 	}
@@ -129,12 +129,12 @@ func (b *Broadcaster) say(msg string) string {
 	switch {
 	case msg == "":
 		b.o.Turns.AfterTurn(b.speak)
-		return say.T("actions.broadcast.ask")
+		return say.Speak("actions.broadcast.ask")
 	case strings.HasPrefix(msg, "http://"), strings.HasPrefix(msg, "https://"):
 		safe.Go("broadcast clip", func() { b.relay(msg) })
 		return ""
 	}
-	return say.T("actions.broadcast.text")
+	return say.Speak("actions.broadcast.text")
 }
 
 func (b *Broadcaster) speak() {

@@ -13,13 +13,17 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/match"
 	"github.com/ygelfand/libcountertop/pkg/runtime/safe"
 	"github.com/ygelfand/libcountertop/pkg/say"
+	"github.com/ygelfand/libcountertop/pkg/voice"
 )
 
 const ActionName = "youtube_tv"
 
 func (g *Guide) VoiceAction() actions.Action {
-	trigger := func(sentence, operation string) actions.Trigger {
-		return actions.Trigger{Sentence: sentence, Args: map[string]string{"operation": operation}}
+	trigger := func(key, operation string) actions.Trigger {
+		return actions.Trigger{
+			Key:  "actions.youtube_tv.sentence." + key,
+			Args: map[string]string{"operation": operation},
+		}
 	}
 	return actions.Action{
 		Name:  ActionName,
@@ -39,10 +43,10 @@ func (g *Guide) VoiceAction() actions.Action {
 			},
 		},
 		Triggers: []actions.Trigger{
-			trigger("(watch|put on) {channel} on [the] {device}", "watch"),
-			trigger("(watch|put on) {channel}", "watch"),
-			trigger("what's on {channel}", "whats_on"),
-			trigger("what is on {channel}", "whats_on"),
+			trigger("watch_on", "watch"),
+			trigger("watch", "watch"),
+			trigger("whats_on", "whats_on"),
+			trigger("what_is_on", "whats_on"),
 		},
 		Run: g.voice,
 	}
@@ -51,12 +55,12 @@ func (g *Guide) VoiceAction() actions.Action {
 func (g *Guide) voice(c esphome.Call) (string, error) {
 	said := strings.TrimSpace(c.String("channel"))
 	if said == "" {
-		return say.T("actions.youtube_tv.channel"), nil
+		return say.Speak("actions.youtube_tv.channel"), nil
 	}
 	channels, tvs, err, _ := g.Load()
 	if len(channels) == 0 {
 		slog.Warn("youtube tv voice: no channel guide", "err", err)
-		return say.T("tv.failed"), nil
+		return say.Speak("tv.failed"), nil
 	}
 
 	now := time.Now()
@@ -66,7 +70,7 @@ func (g *Guide) voice(c esphome.Call) (string, error) {
 	}
 	channel, ok := findChannel(channels, said, now)
 	if !ok {
-		return say.F("actions.youtube_tv.unknown", map[string]any{"Channel": said}), nil
+		return say.SpeakF("actions.youtube_tv.unknown", map[string]any{"Channel": said}), nil
 	}
 
 	switch c.String("operation") {
@@ -103,9 +107,9 @@ func (g *Guide) watch(channel Channel, tvs []TV, named string, now time.Time) st
 	}
 	if a, ok := channel.At(now); ok && a.Title != "" {
 		data["Show"] = a.Title
-		return say.F(key, data)
+		return say.SpeakF(key, data)
 	}
-	return say.F(key+".channel", data)
+	return say.SpeakF(key+".channel", data)
 }
 
 func (g *Guide) target(tvs []TV, named string) (TV, string) {
@@ -113,7 +117,7 @@ func (g *Guide) target(tvs []TV, named string) (TV, string) {
 		if tv, ok := findTV(tvs, named); ok {
 			return tv, ""
 		}
-		return TV{}, say.F("actions.youtube_tv.device", map[string]any{"Device": named})
+		return TV{}, say.SpeakF("actions.youtube_tv.device", map[string]any{"Device": named})
 	}
 	for _, tv := range tvs {
 		if g.Mine(tv) {
@@ -128,15 +132,18 @@ func (g *Guide) target(tvs []TV, named string) (TV, string) {
 		}
 		return TV{Entity: entity}, ""
 	}
-	return TV{}, say.T("actions.youtube_tv.nowhere")
+	return TV{}, say.Speak("actions.youtube_tv.nowhere")
 }
 
 func whatsOn(c Channel, now time.Time) string {
 	a, ok := c.At(now)
 	if !ok || a.Title == "" {
-		return say.F("actions.youtube_tv.nothing", map[string]any{"Channel": c.Name})
+		return say.SpeakF("actions.youtube_tv.nothing", map[string]any{"Channel": c.Name})
 	}
-	return say.F("actions.youtube_tv.airing", map[string]any{"Channel": c.Name, "Title": a.Title})
+	return say.SpeakF(
+		"actions.youtube_tv.airing",
+		map[string]any{"Channel": c.Name, "Title": a.Title},
+	)
 }
 
 func label(tv TV) string {
@@ -183,8 +190,9 @@ func findTV(tvs []TV, said string) (TV, bool) {
 
 func splitDevice(said string, tvs []TV) (channel, device string) {
 	words := strings.Fields(said)
+	connectors := voice.Current().Connectors()
 	for i := len(words) - 2; i > 0; i-- {
-		if !strings.EqualFold(words[i], "on") {
+		if !slices.Contains(connectors, strings.ToLower(words[i])) {
 			continue
 		}
 		rest := strings.Join(words[i+1:], " ")

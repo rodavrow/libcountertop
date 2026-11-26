@@ -3,9 +3,14 @@ package actions
 import (
 	"encoding/json"
 	"errors"
+	"regexp"
+	"slices"
+	"strings"
 	"testing"
 
 	esphome "github.com/ygelfand/go-esphome-device"
+
+	"github.com/ygelfand/libcountertop/pkg/say"
 )
 
 func TestTheDeclarationCarriesEveryActionAndItsTriggers(t *testing.T) {
@@ -15,8 +20,8 @@ func TestTheDeclarationCarriesEveryActionAndItsTriggers(t *testing.T) {
 		Title: "Call a device",
 		Args:  []esphome.Arg{{Name: "peer", Type: esphome.ArgString}},
 		Triggers: []Trigger{
-			{Sentence: "call {peer}"},
-			{Sentence: "video call {peer}", Args: map[string]string{"video": "true"}},
+			{Key: "actions.call.sentence.call"},
+			{Key: "actions.call.sentence.video", Args: map[string]string{"video": "true"}},
 		},
 		Run: func(esphome.Call) (string, error) { return "", nil },
 	})
@@ -38,6 +43,9 @@ func TestTheDeclarationCarriesEveryActionAndItsTriggers(t *testing.T) {
 	}
 	if call.Triggers[1].Args["video"] != "true" {
 		t.Errorf("video trigger lost its args: %+v", call.Triggers[1])
+	}
+	if s := call.Triggers[1].Sentence; s != "video call [the] {peer}" {
+		t.Errorf("video trigger declared %q, want the English sentence", s)
 	}
 	if len(got.Actions[1].Triggers) != 0 {
 		t.Errorf("an action without triggers declared %+v", got.Actions[1].Triggers)
@@ -62,10 +70,44 @@ func TestASpeechArgIsDeclaredAsSpeech(t *testing.T) {
 
 func all(string) bool { return true }
 
+var slot = regexp.MustCompile(`\{[a-z_]+\}`)
+
+func slots(sentence string) []string {
+	found := slot.FindAllString(sentence, -1)
+	slices.Sort(found)
+	return slices.Compact(found)
+}
+
+func TestEveryLanguageSentenceHasTheEnglishSlots(t *testing.T) {
+	ids, err := say.Ids()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer say.UseVoice("")
+	english := map[string][]string{}
+	say.UseVoice("en")
+	for _, id := range ids {
+		if strings.Contains(id, ".sentence.") {
+			english[id] = slots(say.Speak(id))
+		}
+	}
+	if len(english) == 0 {
+		t.Fatal("no voice sentences in the catalog")
+	}
+	for _, tag := range say.Languages() {
+		say.UseVoice(tag)
+		for id, want := range english {
+			if got := slots(say.Speak(id)); !slices.Equal(got, want) {
+				t.Errorf("%s %s uses %v, want %v as in English", tag, id, got, want)
+			}
+		}
+	}
+}
+
 func TestASilencedActionDeclaresNoTriggers(t *testing.T) {
 	var r Registry
-	r.Add(Action{Name: "call", Triggers: []Trigger{{Sentence: "call {peer}"}}})
-	r.Add(Action{Name: "broadcast", Triggers: []Trigger{{Sentence: "broadcast"}}})
+	r.Add(Action{Name: "call", Triggers: []Trigger{{Key: "actions.call.sentence.call"}}})
+	r.Add(Action{Name: "broadcast", Triggers: []Trigger{{Key: "actions.broadcast.sentence.ask"}}})
 	var got declared
 	raw := r.Declaration(func(name string) bool { return name != "call" }, nil)["actions"]
 	if err := json.Unmarshal([]byte(raw), &got); err != nil {

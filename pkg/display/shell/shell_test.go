@@ -227,6 +227,34 @@ func TestTheTopViewsTimeoutRunsFirst(t *testing.T) {
 	}
 }
 
+func TestAChangeSaysWhetherItWentBackOrTimedOut(t *testing.T) {
+	s := &Shell{}
+	var heard []Change
+	s.Changed.Listen(func(c Change) { heard = append(heard, c) })
+	app, page := &view{wait: time.Hour, covers: true}, &view{covers: true}
+	s.Push(app)
+	s.Push(page)
+	s.Pop()
+	s.Push(page)
+	s.woke = time.Now().Add(-SettingsTimeout)
+	s.idled(s.generation)
+	want := []Change{
+		{To: app},
+		{From: app, To: page},
+		{From: page, To: app, Back: true},
+		{From: app, To: page},
+		{From: page, To: app, Back: true, Idle: true},
+	}
+	if len(heard) != len(want) {
+		t.Fatalf("heard %+v, want %+v", heard, want)
+	}
+	for i := range want {
+		if heard[i] != want[i] {
+			t.Errorf("change %d is %+v, want %+v", i, heard[i], want[i])
+		}
+	}
+}
+
 func TestIdlingClosesPagesOverALongLivedApp(t *testing.T) {
 	s := &Shell{}
 	app, page, sub := &view{wait: time.Hour}, &view{covers: true}, &view{covers: true}

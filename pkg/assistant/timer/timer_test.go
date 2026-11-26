@@ -236,6 +236,36 @@ func TestTheAlarmIsReleasedWhenTheRingingStops(t *testing.T) {
 	t.Error("the alarm was never released")
 }
 
+func TestALocalTimerShowsThenRingsByItself(t *testing.T) {
+	var sounded atomic.Bool
+	ts := New(Options{Chime: func() { sounded.Store(true) }})
+
+	ts.Count("step", "Simmer", time.Second)
+	if card := ts.Now(); !card.Showing || card.Name != "Simmer" || card.Of != time.Second {
+		t.Fatalf("showing %+v, want Simmer counting one second", card)
+	}
+	deadline := time.Now().Add(3 * time.Second)
+	for (!ts.Ringing() || !sounded.Load()) && time.Now().Before(deadline) {
+		time.Sleep(20 * time.Millisecond)
+	}
+	if !ts.Ringing() || !sounded.Load() {
+		t.Fatal("a local timer did not ring when it ran out")
+	}
+	ts.Stop()
+}
+
+func TestRestartingALocalTimerKeepsOnlyTheNewOne(t *testing.T) {
+	ts := New(Options{})
+	ts.Count("step", "Rest", time.Hour)
+	ts.Count("step", "Rest", 2*time.Hour)
+	ts.mu.Lock()
+	n := len(ts.local)
+	ts.mu.Unlock()
+	if card := ts.Now(); n != 1 || card.Of != 2*time.Hour {
+		t.Errorf("%d local timers, showing %+v, want one of two hours", n, card)
+	}
+}
+
 func TestASilentRingShowsWithoutTheAlarm(t *testing.T) {
 	var sounded atomic.Bool
 	ts := New(Options{

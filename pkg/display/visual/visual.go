@@ -10,6 +10,7 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/display/theme"
 	"github.com/ygelfand/libcountertop/pkg/display/ui"
 	"github.com/ygelfand/libcountertop/pkg/say"
+	setting "github.com/ygelfand/libcountertop/pkg/settings"
 )
 
 type Kind string
@@ -322,6 +323,15 @@ func Built() []Kind {
 		out,
 		func(a, b Kind) int { return strings.Compare(strings.ToLower(a.Label()), strings.ToLower(b.Label())) },
 	)
+	return out
+}
+
+func Choices() []setting.Option {
+	built := Built()
+	out := make([]setting.Option, len(built))
+	for i, k := range built {
+		out[i] = setting.Option{Value: string(k), Label: k.Label()}
+	}
 	return out
 }
 

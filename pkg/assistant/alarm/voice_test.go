@@ -6,6 +6,8 @@ import (
 	"time"
 
 	esphome "github.com/ygelfand/go-esphome-device"
+
+	"github.com/ygelfand/libcountertop/pkg/say"
 )
 
 func voiceCall(t *testing.T, values map[string]string) esphome.Call {
@@ -196,5 +198,41 @@ func TestAlarmVoiceDeclaration(t *testing.T) {
 		if !operations[operation] {
 			t.Errorf("no %s trigger", operation)
 		}
+	}
+}
+
+func TestVoiceSetsAlarmsInTheVoiceLanguage(t *testing.T) {
+	defer say.UseVoice("")
+	for _, tc := range []struct {
+		tag, time, reply string
+		hour, minute     int
+		days             string
+	}{
+		{"it", "alle sette e mezza ogni giorno", "ogni giorno", 7, 30, "sun,mon,tue,wed,thu,fri,sat"},
+		{"it", "otto meno un quarto nei giorni feriali", "nei giorni feriali", 7, 45, "mon,tue,wed,thu,fri"},
+		{"vi", "bảy giờ rưỡi sáng mỗi ngày", "hằng ngày", 7, 30, "sun,mon,tue,wed,thu,fri,sat"},
+		{"vi", "6 giờ chiều vào thứ hai và thứ sáu", "Thứ Hai", 18, 0, "mon,fri"},
+		{"de", "halb acht werktags", "werktags", 7, 30, "mon,tue,wed,thu,fri"},
+		{"de", "viertel vor sieben jeden tag", "jeden Tag", 6, 45, "sun,mon,tue,wed,thu,fri,sat"},
+		{"nl", "half acht doordeweeks", "op werkdagen", 7, 30, "mon,tue,wed,thu,fri"},
+		{"nl", "kwart over zes in het weekend", "in het weekend", 6, 15, "sun,sat"},
+	} {
+		t.Run(tc.tag+" "+tc.time, func(t *testing.T) {
+			say.UseVoice(tc.tag)
+			r := newRig(t)
+			reply, err := r.alarms.VoiceAction().
+				Run(voiceCall(t, map[string]string{"operation": "set", "time": tc.time}))
+			if err != nil {
+				t.Fatal(err)
+			}
+			list := r.alarms.List()
+			if len(list) != 1 || list[0].Hour != tc.hour || list[0].Minute != tc.minute ||
+				list[0].Days.String() != tc.days {
+				t.Fatalf("%q saved %+v, reply %q", tc.time, list, reply)
+			}
+			if !strings.Contains(reply, tc.reply) {
+				t.Errorf("reply %q, want it to say %q", reply, tc.reply)
+			}
+		})
 	}
 }

@@ -1,1959 +1,3118 @@
-language.name: Italiano
-# Catalogo italiano condiviso per tutti i dispositivi Countertop.
-# Le traduzioni mancanti ricadono sull'inglese.
-
-about.built: Compilato
-about.commit: Commit
-about.name: Nome
-about.title: Info
-about.version: Versione
-access.group.access: Accesso
-access.setting.adb: ADB in rete
-media.group.airplay: AirPlay
-media.setting.airplay: AirPlay
-media.setting.airplay_audio_mode: Modalità audio AirPlay
-media.option.airplay_audio_mode.instant: Immediato
-media.option.airplay_audio_mode.synced: Sincronizzato col video
-alarm.add: Aggiungi sveglia
-alarm.app: Sveglie
-alarm.daily: Ogni giorno
-alarm.day.fri: Venerdì
-alarm.day.mon: Lunedì
-alarm.day.sat: Sabato
-alarm.day.sun: Domenica
-alarm.day.thu: Giovedì
-alarm.day.tue: Martedì
-alarm.day.wed: Mercoledì
-alarm.delete: Elimina sveglia
-alarm.edit: Sveglia
-alarm.hour: Ora
-alarm.light: Luce sveglia
-alarm.minute: Minuto
-alarm.minutes: "{{.N}} min"
-alarm.name: Nome
-alarm.off: "Off"
-alarm.on: Sveglia attiva
-alarm.once: Una volta
-alarm.ramp: Avvio graduale
-alarm.repeat: Ripeti
-alarm.save: Salva
-alarm.seconds: "{{.N}} s"
-alarm.snooze: Posticipa
-alarm.snooze_for: "Posticipa {{.N}} min"
-alarm.snoozed: "Posticipata fino alle {{.T}}"
-alarm.stop: Ferma
-alarm.sound: Suono
-alarm.state.off: "Off"
-alarm.state.on: "On"
-alarm.volume: Volume
-alarm.volume.gentle: Graduale
-alarm.volume.silent: Silenzioso
-alarm.volume.static: Costante
-alarm.weekdays: Giorni feriali
-alarm.weekends: Weekend
-alerts.group.alerts: Avvisi e sveglie
-alerts.page: Avvisi e sveglie
-alerts.setting.alert: Suono di avviso
-alerts.setting.info: Suono informativo
-alerts.setting.ring_for: Durata suoneria timer
-alerts.setting.success: Suono di conferma
-alerts.setting.timer: Suono timer
-alerts.setting.wake: Luce sveglia
-alerts.setting.warning: Suono di attenzione
-alertstyle.banner: Banner
-alertstyle.screen: Come lo schermo
-alertstyle.none: Nessuno
-alertstyle.answer: Risposta automatica
-alertstyle.card: Scheda
-alertstyle.full: Schermo intero
-alertstyle.toast: Notifica breve
-align.center: Centro
-align.left: Sinistra
-align.random: Casuale
-align.right: Destra
-access.group.api: Home Assistant
-access.setting.adopted: Adottato da Home Assistant
-apps.group.apps: App
-apps.empty: Nessuna app
-apps.hint: Tocca la stella per tenere un'app nel dock. Tieni premuto un riquadro e trascinalo per spostarlo.
-apps.setting.dock: App nel dock
-apps.setting.order: Ordine app
-apps.title: App
-assistants.off: "Off"
-assistants.pipeline: Pipeline
-assistants.pipeline.preferred: Preferita
-assistants.reply: Riproduzione risposta
-assistants.group.pryon: Pryon
-assistants.setting.pryon: Parole di attivazione Amazon
-assistants.setting.pryon_stop: Parola di stop Amazon
-assistants.group.gemini: Gemini
-assistants.setting.gemini: Parola di attivazione Gemini
-assistants.group.announcements: Annunci
-assistants.setting.animate_announcements: Anima gli annunci
-assistants.group.captions: Sottotitoli
-assistants.setting.show_captions: Mostra sottotitoli
-assistants.group.stopword: Parola di stop
-assistants.setting.stop_sensitivity: Sensibilità parola di stop
-assistants.group.arbitration: Arbitraggio
-assistants.setting.arbitration_wait: Attesa arbitraggio
-assistants.arbitration.value: "{{.N}} ms"
-assistants.setting.arbitration_offset: Correzione arbitraggio
-assistants.arbitration.offset: "{{.N}} dB"
-assistants.setting.buffer: Buffer risposta
-assistants.setting.delivery: Riproduzione risposta
-assistants.setting.follow_up: Tempo per proseguire
-assistants.setting.known_voices: Solo voci riconosciute
-assistants.setting.max_listen: Ascolto massimo
-assistants.setting.max_think: Elaborazione massima
-assistants.setting.recordings: Registrazioni conservate
-assistants.setting.threshold: Sensibilità attivazione
-assistants.setting.tone: Suono di attivazione
-assistants.setting.wake_screen: Riattiva lo schermo
-assistants.slot: Assistente {{.N}}
-assistants.talk: Parla ora
-assistants.talk.hint: Senza parola di attivazione
-assistants.threshold: Sensibilità attivazione
-assistants.threshold.hint: Più alta, si attiva più facilmente
-assistants.title: Assistenti vocali
-assistants.tone: Suono di attivazione
-assistants.unset: Imposta la parola di attivazione in Home Assistant
-assistants.waiting: In attesa del modello
-assistants.word: Parola di attivazione
-assistants.word.ha: Abilita le azioni o scegli in Home Assistant
-bluetooth.group.bluetooth: Bluetooth
-ring.group.ring: Anello luminoso
-ring.setting.effect: Luce di attivazione
-ring.setting.incoming: Luce chiamata in arrivo
-ring.setting.muted: Luce microfono disattivato
-ring.setting.reaction: Reazione all'ambiente
-ring.setting.replying_effect: Luce risposta
-ring.setting.talking: Luce in chiamata
-ring.setting.thinking_effect: Luce elaborazione
-ring.setting.trouble: Luce errore
-speaker.group.speaker: Altoparlante
-speaker.setting.eq: Equalizzatore
-speaker.setting.resampling: Ricampionamento voce
-speaker.setting.speaker_output: Altoparlante
-speaker.setting.headphone_output: Jack cuffie
-speaker.setting.speaker_gain: Guadagno altoparlante
-bluetooth.setting.proxy: Proxy Bluetooth
-bluetooth.setting.scan: Scansione Bluetooth
-bluetooth.setting.speaker: Altoparlante Bluetooth
-bluetooth.connected_sources: Dispositivi connessi
-bluetooth.source_auto: Cambio sorgente automatico
-bluetooth.source_empty: Nessun dispositivo Bluetooth connesso
-bluetooth.source_selected: Sorgente selezionata
-boot.leaving: Riavvio in corso
-boot.skip: Salta
-broadcast.from: "Da {{.Peer}}"
-broadcast.title: Annuncio
-boot.stranded: Contatto con lo schermo perso
-buttons.dynamic: Contenuto in riproduzione
-buttons.static: Volume principale
-calendar.allday: Tutto il giorno
-calendar.app: Calendario
-calendar.chosen: "{{.N}} calendar{{if ne .N 1}}i{{else}}io{{end}}"
-calendar.add: Nuovo evento
-calendar.count: "{{.N}} giorn{{if ne .N 1}}i{{else}}o{{end}}"
-calendar.date: Data
-calendar.days: Giorni
-calendar.empty: Nessun impegno in arrivo
-calendar.failed: Impossibile aggiungere l'evento
-calendar.free: Niente in programma
-calendar.hour: Ora
-calendar.hours: "{{.N}} h"
-calendar.hours.half: "{{.N}} h e mezza"
-calendar.length: Durata
-calendar.location: Luogo
-calendar.minute: Minuto
-calendar.minutes: "{{.N}} min"
-calendar.more: "altri {{.N}}"
-calendar.needs.title: Inserisci un titolo
-calendar.notes: Note
-calendar.save: Salva
-calendar.title: Titolo
-calendar.week.start: monday
-calendar.group.calendar: Calendario
-calendar.none: Nessun calendario in Home Assistant
-calendar.off: "Off"
-calendar.pick: Scegli i calendari
-calendar.example.entities: calendar.family, calendar.work
-calendar.setting.entities: Calendari
-calendar.example.colors: calendar.family=#e8a33d, calendar.work=#3a7bd5
-calendar.setting.colors: Colori dei calendari
-calendar.setting.weather: Meteo sui giorni
-calendar.setting.opening: Si apre su
-calendar.setting.saver: Prossimo impegno sul salvaschermo
-calendar.opening.last: Ultima usata
-calendar.opening.day: Giorno
-calendar.opening.week: Settimana
-calendar.opening.month: Mese
-calendar.view.day: Giorno
-calendar.view.week: Settimana
-calendar.view.month: Mese
-calendar.today: Oggi
-calendar.tomorrow: Domani
-call.address: Indirizzo
-call.caps: Funzioni
-call.answer.count: "{{.N}} selezionati"
-call.answer.everyone: Tutti
-call.answer.from: Rispondi da
-call.answer.peers: Pannelli
-call.answer.users: Utenti
-call.answer.selected: Selezionati
-call.auto: Risposta automatica
-call.auto.hint: Risponde subito
-call.autovideo: Risposta automatica con fotocamera
-call.busy: Occupato
-call.calling: Chiamata in corso…
-call.camera.off: Fotocamera disattivata
-call.camera.on: Fotocamera attiva
-call.connected: Connesso
-call.declined: Rifiutata
-call.dropped: Chiamata interrotta
-call.empty: Nessun altro dispositivo trovato
-call.users.empty: Nessun utente Home Assistant trovato
-cameras.app: Videocamere
-cameras.group.cameras: Videocamere
-cameras.failed: Impossibile elencare le videocamere in Home Assistant
-cameras.loading: Caricamento videocamere
-cameras.none: Nessuna videocamera selezionata
-cameras.nosite: Indirizzo di Home Assistant sconosciuto. Imposta l'URL di Home Assistant in Impostazioni → Controllo casa → Videocamere
-cameras.off: "Off"
-cameras.pick: Seleziona
-cameras.seconds: "{{.N}} s"
-cameras.why.display: Video dal vivo non supportato su questo schermo
-cameras.why.failed: Video dal vivo non disponibile
-cameras.why.format: Formato video non supportato
-cameras.why.lost: Connessione persa
-cameras.why.nopicture: Nessun video dalla videocamera
-cameras.why.pictures: Nessuno stream dal vivo in Home Assistant
-cameras.why.refused: "Home Assistant: {{.Message}}"
-cameras.why.slow: Home Assistant non risponde
-cameras.why.webrtc: Installa l'integrazione EchoLocal per il video dal vivo
-cameras.setting.refresh: Aggiornamento
-cameras.setting.rotate: Pagine automatiche
-cameras.setting.scale: Dimensione miniature
-cameras.setting.tab: Scheda dashboard
-certs.entity.cert: Nome certificato Cert Warden
-certs.entity.cert_api_key: Chiave API certificato Cert Warden
-certs.entity.key_api_key: Chiave API chiave Cert Warden
-certs.entity.server: Server Cert Warden
-certs.example.cert: kitchen-display
-certs.example.server: https://certs.example.com
-certs.group.certificate: Certificato
-certs.setting.cert: Nome certificato
-certs.setting.cert_api_key: Chiave API certificato
-certs.setting.key_api_key: Chiave API della chiave
-certs.setting.server: Server Cert Warden
-certs.status.expired: Scaduto
-certs.status.fetching: Recupero in corso
-certs.status.refused: Chiave API errata
-certs.status.unreachable: Cert Warden non raggiungibile
-certs.status.unset: Autofirmato
-certs.status.valid: "{{.Name}}, valido fino al {{.Date}}"
-cameras.example.url: http://homeassistant.local:8123
-cameras.setting.url: URL di Home Assistant
-peer.cap.audio: Chiamate
-peer.cap.broadcast: Annunci
-peer.cap.sync: Sincronizzazione impostazioni
-peer.cap.video: Videochiamate
-peer.checking: Verifica in corso
-peer.foreign: Non in questa casa
-peer.home: In questa casa
-peer.open: Nessuna chiave casa
-call.failed: Chiamata non riuscita
-call.group.calls: Interfono
-call.gone: Non più in rete
-call.incoming: Chiamata in arrivo
-call.incoming.allow: Chiamate in arrivo
-call.incoming.video: Videochiamata in arrivo
-call.model: Modello
-call.mute: Disattiva audio
-call.no: "No"
-call.pausewake: Sospendi attivazione durante le chiamate
-call.reconnecting: Riconnessione…
-call.ring: Squillo
-call.ringback: Tono di chiamata
-call.seen: Ultimo accesso
-call.setting.answer_api: Risposta automatica chiamate API
-call.setting.answer_from: Risposta automatica da
-call.setting.answer_peers: Risposta automatica pannelli
-call.setting.answer_users: Risposta automatica utenti
-call.setting.auto_answer: Risposta automatica
-call.setting.auto_video: Risposta automatica con fotocamera
-call.setting.broadcasts: Ricevi annunci
-call.setting.incoming: Chiamate in arrivo
-call.setting.pause_wake: Sospendi attivazione durante le chiamate
-call.setting.ring: Suoneria
-call.setting.ringback: Tono di chiamata
-call.setting.stream: Stream video chiamata
-call.setting.video_ring: Suoneria video
-call.settings: Interfono
-call.settings.hint: Chiamate in arrivo e risposta automatica
-call.standing: Casa
-call.stream: Stream video
-call.stream.hint: Sub usa meno banda; passa a Principale quando lo stream Sub è disattivato
-call.stream.main: Principale
-call.stream.sub: Sub
-call.tab: Interfono
-call.unanswered: Nessuna risposta
-call.unavailable: Non accetta chiamate
-call.unreachable: Non raggiungibile
-call.unmute: Riattiva audio
-call.version: Versione
-call.videoring: Suoneria video
-call.volume: Volume
-camera.group.exposure: Esposizione
-camera.group.picture: Immagine
-camera.group.streams: Stream
-camera.group.whitebalance: Bilanciamento del bianco
-camera.option.banding.50hz: 50 Hz
-camera.option.banding.60hz: 60 Hz
-camera.option.banding.auto: Auto
-camera.option.banding.off: "Off"
-camera.option.brightness.high: Alta
-camera.option.brightness.low: Bassa
-camera.option.brightness.middle: Media
-camera.option.contrast.high: Alto
-camera.option.contrast.low: Basso
-camera.option.contrast.middle: Medio
-camera.option.effect.aqua: Acqua
-camera.option.effect.blackboard: Lavagna
-camera.option.effect.mono: Mono
-camera.option.effect.negative: Negativo
-camera.option.effect.none: Nessuno
-camera.option.effect.posterize: Posterizza
-camera.option.effect.sepia: Seppia
-camera.option.effect.solarize: Solarizza
-camera.option.effect.whiteboard: Lavagna bianca
-camera.option.hue.high: Alta
-camera.option.hue.low: Bassa
-camera.option.hue.middle: Media
-camera.option.noise.fast: Veloce
-camera.option.noise.high_quality: Alta qualità
-camera.option.noise.minimal: Minima
-camera.option.noise.off: "Off"
-camera.option.quality.high: Alta
-camera.option.quality.low: Bassa
-camera.option.quality.standard: Standard
-camera.option.saturation.high: Alta
-camera.option.saturation.low: Bassa
-camera.option.saturation.middle: Media
-camera.option.scene.action: Azione
-camera.option.scene.auto: Auto
-camera.option.scene.beach: Spiaggia
-camera.option.scene.candlelight: Lume di candela
-camera.option.scene.fireworks: Fuochi d'artificio
-camera.option.scene.hdr: HDR
-camera.option.scene.landscape: Paesaggio
-camera.option.scene.night: Notte
-camera.option.scene.night-portrait: Ritratto notturno
-camera.option.scene.party: Festa
-camera.option.scene.portrait: Ritratto
-camera.option.scene.snow: Neve
-camera.option.scene.sports: Sport
-camera.option.scene.steadyphoto: Foto stabile
-camera.option.scene.sunset: Tramonto
-camera.option.scene.theatre: Teatro
-camera.option.sharpness.high: Alta
-camera.option.sharpness.low: Bassa
-camera.option.sharpness.middle: Media
-camera.option.whitebalance.auto: Auto
-camera.option.whitebalance.cloudy-daylight: Nuvoloso
-camera.option.whitebalance.daylight: Luce diurna
-camera.option.whitebalance.fluorescent: Fluorescente
-camera.option.whitebalance.incandescent: Incandescenza
-camera.option.whitebalance.shade: Ombra
-camera.option.whitebalance.twilight: Crepuscolo
-camera.option.whitebalance.warm-fluorescent: Fluorescente caldo
-camera.reset: Ripristina predefiniti
-camera.reset.confirm: Tocca di nuovo per ripristinare
-camera.setting.banding: Anti-banding
-camera.setting.brightness: Luminosità
-camera.setting.contrast: Contrasto
-camera.setting.effect: Effetto
-camera.setting.ev: Compensazione esposizione
-camera.setting.framerate: Frequenza fotogrammi
-camera.setting.framerate_auto: Frequenza fotogrammi auto
-camera.setting.hue: Tonalità
-camera.setting.iso: ISO
-camera.setting.keyframe: Intervallo keyframe
-camera.setting.main_on: Stream principale
-camera.setting.main_size: Risoluzione principale
-camera.setting.noise: Riduzione rumore
-camera.setting.quality: Qualità
-camera.setting.saturation: Saturazione
-camera.setting.scene: Scena
-camera.setting.sharpness: Nitidezza
-camera.setting.sub_on: Stream secondario
-camera.setting.sub_size: Risoluzione secondaria
-camera.setting.whitebalance: Bilanciamento del bianco
-camera.starting: Avvio fotocamera
-camera.muted: Microfoni disattivati
-camera.shutter: Otturatore fotocamera chiuso
-cast.entity.receiver: Ricevitore Cast
-cast.entity.youtube.skip: Categorie SponsorBlock di YouTube
-cast.entity.oracle: Cast oracle
-cast.entity.bundle: Cast bundle
-cast.entity.forecast: Cast forecast
-cast.group.cast: Cast
-cast.starting: Avvio di {{.Name}}…
-cast.refused: "Chromecast: {{.Name}} non può essere riprodotto su questo dispositivo"
-cast.setting.receiver: Ricevitore
-cast.example.youtube.skip: sponsor, selfpromo, intro
-cast.setting.youtube.skip: Categorie SponsorBlock
-cast.setting.oracle: Oracle
-cast.setting.bundle: Bundle
-cast.setting.forecast: Forecast
-chime.chirp: Cinguettio
-chime.ding: Ding
-chime.none: Nessuno
-chime.ring: Squillo
-chime.ringback: Tono di chiamata
-chime.rise: Crescente
-chime.timer: Timer
-chime.trouble: Problema
-clock.group.clock: Orologio
-clock.backing: Sfondo
-clock.backing.card: Scheda
-clock.backing.none: Nessuno
-clock.backing.shade: Ombra
-clock.color: Colore
-clock.color.title: Colore orologio
-clock.date: Mostra data
-clock.face: Quadrante
-clock.hours: Formato 24 ore
-clock.setting.align: Posizione orizzontale orologio
-clock.setting.backing: Sfondo orologio
-clock.setting.color: Colore orologio
-clock.setting.date: Data orologio
-clock.setting.face: Quadrante orologio
-clock.setting.hours: Formato orologio
-clock.setting.position: Posizione verticale orologio
-clock.setting.size: Dimensione orologio
-clock.title: Orologio
-clock.zone: Fuso orario
-controls.dock: Posizione dock
-controls.dock.hide: Nascondi dock dopo
-controls.volume: Posizione pannello volume
-datetime.title: Data e ora
-dashboard.title: Dashboard
-debug.fps: Limite frame rate grafica
-diag.group.diagnostics: Diagnostica
-diag.setting.interval: Intervallo metriche
-diag.setting.min_cores: Core CPU minimi
-diag.setting.low_memory: Modalità memoria ridotta
-diag.setting.page_memory: Limite memoria pagina
-diag.option.page_memory.none: Nessun limite
-debug.fps.value: "{{.N}} fps"
-debug.page_memory.value: "{{.N}} MB"
-debug.seed: Seed grafica
-debug.seed.random: Casuale
-debug.seed.value: "#{{.N}}"
-debug.title: Opzioni sviluppatore
-debug.touches: "Dita sullo schermo: {{.N}}"
-debug.touches.gesture: "Ultimo gesto: {{.Name}}"
-debug.visuals: Grafica
-delay.10m: 10 minuti
-delay.10s: 10 secondi
-delay.15m: 15 minuti
-delay.15s: 15 secondi
-delay.1m: 1 minuto
-delay.2m: 2 minuti
-delay.30m: 30 minuti
-delay.30s: 30 secondi
-delay.45s: 45 secondi
-delay.3m: 3 minuti
-delay.5m: 5 minuti
-delay.5s: 5 secondi
-delay.never: Mai
-delivery.stream: Streaming
-delivery.whole: Scarica prima
-display.alerts: Stile avvisi
-display.auto: Luminosità adattiva
-display.brightness: Luminosità
-display.clock: Orologio
-display.idle: Salvaschermo
-display.marks: Indicatori privacy
-display.poster: Sfondo
-display.presence: Sensori
-display.size: Dimensione
-display.style: Stile
-display.font: Carattere
-display.theme: Tema
-display.timer: Stile timer
-display.title: Schermo
-edge.bottom: In basso
-edge.left: Sinistra
-edge.right: Destra
-edge.top: In alto
-face.analog: Analogico
-face.analog-seconds: Analogico con secondi
-face.cards: Schede
-face.none: Nessuno
-face.overlap: Sovrapposto
-face.roman: Romano
-face.railway: Ferroviario
-face.flip: Flip
-face.nixie: Nixie
-face.octagon: Ottagono
-face.atomic: Atomico
-face.spoken: Parlato
-face.math: Matematico
-face.smiley: Smile
-face.neon: Neon
-face.bars: Barre
-face.reel: Rullo
-face.binary: Binario
-face.plain: Semplice
-face.segments: Segmenti
-face.stack: Pila
-face.words: Parole
-features.cast: Ricevitore Cast
-features.cast.hint: Trasmetti da un telefono o da un'app
-features.proxy: Proxy Bluetooth
-features.proxy.hint: Proxy Bluetooth LE per Home Assistant
-features.rtsp: Stream videocamera
-features.rtsp.hint: RTSP e ONVIF, per Home Assistant e registratori
-features.airplay: AirPlay
-features.airplay.hint: Duplica lo schermo da un Mac o iPhone
-airplay.code: "Inserisci questo codice su {{.Client}}"
-features.sendspin: Sendspin
-features.sendspin.hint: Audio in tutta la casa
-features.speaker: Altoparlante Bluetooth
-features.speaker.hint: Riproduci da un telefono via Bluetooth
-features.title: Servizi connessi
-home.all: Tutti
-home.area.count: "{{.N}} di {{.Of}}"
-home.check: Verifica di nuovo
-home.checking: Verifica di Home Assistant…
-home.combine: Includi interruttori
-home.devices: Seleziona dispositivi
-home.empty: Niente da mostrare
-home.enable: Abilita
-home.enabled: Abilita controllo casa
-home.everything.cameras: Tutte le videocamere
-home.everything.lights: Tutte le luci
-home.everything.switches: Tutti gli interruttori
-home.failed: Impossibile caricare da Home Assistant
-home.group: Raggruppa per area
-home.group.all: Tutte le aree in una scheda
-home.group.from: "Aree con {{.N}} o più dispositivi"
-home.group.home: Controllo casa
-home.group.none: Ogni dispositivo nella sua scheda
-home.label.count: "{{.N}} dispositiv{{if ne .N 1}}i{{else}}o{{end}}"
-home.loading: Caricamento…
-home.dashboard: Modalità
-home.saver: Salvaschermo
-home.saver.off: Attiva lo standby automatico nelle impostazioni schermo di Tessera per usarne il salvaschermo
-mode.native: Nativa
-mode.tessera: Tessera
-mode.tessera_native: Tessera nativa
-mode.firmware: Tessera
-mode.lovelace: HA
-mode.rings: Anelli
-rings.look: Aspetto
-rings.look.wheel: Ruota
-rings.look.icicle: Ghiacciolo
-rings.look.burst: Raggiera
-rings.depth: Profondità
-home.setting.rings.depth: Profondità anelli
-rings.group: Raggruppa per
-rings.group.room: Stanza
-rings.group.system: Sistema
-home.setting.rings.group: "Anelli: raggruppa per"
-card.light.brightness: Luminosità
-card.light.hue: Colore
-card.light.warmth: Temperatura colore
-card.light.waiting: In attesa
-card.lock.lock: Blocca
-card.lock.unlock: Sblocca
-card.lock.open: Apri
-rings.side: Dettagli
-rings.side.left: Sinistra / in alto
-rings.side.right: Destra / in basso
-home.setting.rings.side: "Anelli: lato dettagli"
-rings.home: Casa
-rings.nofloor: Nessun piano
-rings.floors: Piani
-rings.areas: Aree
-rings.kinds: Tipi
-rings.summary: "{{.On}} accesi · {{.N}} dispositiv{{if eq .N 1}}o{{else}}i{{end}}"
-rings.kind.lights: Luci
-rings.kind.switches: Interruttori
-rings.kind.media: Media
-rings.kind.climate: Clima
-rings.kind.fans: Ventilatori
-rings.kind.covers: Tapparelle
-rings.kind.locks: Serrature
-rings.kind.access: Accessi
-rings.kind.presence: Presenza
-rings.kind.cameras: Videocamere
-home.setting.rings.look: Aspetto anelli
-home.setting.rings.hidden_floors: "Anelli: piani nascosti"
-home.setting.rings.hidden_areas: "Anelli: aree nascoste"
-home.setting.rings.hidden_kinds: "Anelli: tipi nascosti"
-home.setting.rings.labels: "Anelli: etichette"
-home.noarea: Nessuna area
-home.none: Nessuno
-home.off: Home Assistant disattivato
-home.off.hint: Attiva il controllo casa in Impostazioni → Controllo casa
-home.picked.areas: "{{.N}} are{{if ne .N 1}}e{{else}}a{{end}}"
-home.picked.entities: "{{.N}} dispositiv{{if ne .N 1}}i{{else}}o{{end}}"
-home.picked.labels: "{{.N}} etichett{{if ne .N 1}}e{{else}}a{{end}}"
-home.refused: Azioni non consentite
-home.refused.hint: Apri ESPHome, premi l'ingranaggio delle impostazioni su {{.Name}} e abilita “Consenti al dispositivo di eseguire azioni di Home Assistant”.
-home.retry: Riprova
-home.search: Cerca
-home.selection.cameras: Videocamere
-home.selection.lights: Luci
-home.selection.switches: Interruttori
-home.setting.combine: Includi interruttori
-home.setting.control.lights: Controlla luci
-home.setting.control.switches: Controlla interruttori
-home.setting.enabled: Abilita controllo casa
-home.setting.group.lights: Raggruppa luci da
-home.setting.group.switches: Raggruppa interruttori da
-home.setting.dashboard: Dashboard
-home.setting.tessera.columns: Riquadri Tessera sul lato lungo
-home.setting.tessera.home_after_idle: "Tessera: torna alla home dopo il salvaschermo"
-home.setting.tessera.landscape: "Tessera: schermo orizzontale"
-home.setting.tessera.portrait: "Tessera: schermo verticale"
-home.setting.tessera.rows: Riquadri Tessera sul lato corto
-home.setting.tessera.themed: "Tessera: usa il tema di questo dispositivo"
-home.setting.tessera.turn: "Tessera: transizione pagina"
-home.setting.tessera.bottom: "Tessera: scorri dal basso verso l'alto"
-home.setting.tessera.follow: "Tessera: la pagina segue il dito"
-home.tab.labels: Etichette
-home.tab.manual: Manuale
-home.tessera.grid: Griglia
-home.tessera.columns: Lato lungo
-home.tessera.landscape: Abilita orizzontale
-home.tessera.portrait: Abilita verticale
-home.tessera.return: Torna alla home dopo il salvaschermo
-home.tessera.rows: Lato corto
-home.tessera.themed: Usa il tema di questo dispositivo
-home.tessera.turn: Transizione pagina
-home.tessera.bottom: Scorri dal basso verso l'alto
-home.tessera.follow: La pagina segue il dito
-home.tile.all.off: Spegni tutto
-home.tile.all.on: Accendi tutto
-home.tile.area: "{{.N}} di {{.Of}} accesi"
-home.tile.level: "{{.N}}%"
-home.tile.off: "Off"
-home.tile.on: "On"
-home.tile.unavailable: Non disponibile
-home.title: Controllo casa
-home.reconnecting: Riconnessione a Home Assistant…
-home.unconnected: Non connesso
-home.unconnected.hint: Aggiungi {{.Name}} a Home Assistant
-hours.12: 12 ore
-hours.24: 24 ore
-idle.group.idle: Salvaschermo
-idle.after: Avvia dopo
-idle.after.title: Avvia dopo
-idle.face: Quadrante
-idle.label: Etichetta grafica
-idle.media: Chiudi player in pausa dopo
-idle.media.hint: Player audio e video
-idle.night: Modalità notte
-idle.night.after: Si avvia dopo
-idle.night.hint: Quando la stanza è buia
-idle.night.lux: Più buio di
-idle.night.lux.value: "{{.N}} lx"
-idle.night.mode: Modalità
-idle.none: Nessuno
-idle.off: Schermo spento
-idle.setting.after: Schermo inattivo dopo
-idle.setting.align: Posizione orizzontale orologio inattivo
-idle.setting.backing: Sfondo orologio inattivo
-idle.setting.face: Quadrante orologio inattivo
-idle.setting.media: Chiudi player in pausa dopo
-idle.setting.night: Modalità notte
-idle.setting.night.after: Modalità notte dopo
-idle.setting.night.lux: Modalità notte sotto
-idle.setting.wake: Gesto di riattivazione
-idle.setting.position: Posizione verticale orologio inattivo
-idle.setting.saver: Modalità salvaschermo
-idle.setting.size: Dimensione orologio inattivo
-idle.setting.visual1: Grafica inattiva 1
-idle.setting.visual1.source: Grafica inattiva 1 ascolta
-idle.setting.visual2: Grafica inattiva 2
-idle.setting.visual2.source: Grafica inattiva 2 ascolta
-idle.source1: Audio grafica 1
-idle.source2: Audio grafica 2
-idle.title: Salvaschermo
-idle.setting.photo_every: Foto successiva ogni
-idle.entity.photo_every: Salvaschermo foto successiva ogni
-idle.setting.photo_fit: Adattamento foto
-idle.entity.photo_fit: Salvaschermo adattamento foto
-idle.setting.photo_transition: Transizione
-idle.entity.photo_transition: Salvaschermo transizione foto
-idle.visual1: Grafica 1
-idle.visual2: Grafica 2
-ink.amber: Ambra
-ink.blue: Blu
-ink.cyan: Ciano
-ink.green: Verde
-ink.pink: Rosa
-ink.red: Rosso
-ink.theme: Tema
-ink.violet: Viola
-keyboard.cancel: Annulla
-keyboard.code_expired: Codice scaduto
-message.close: Chiudi
-keyboard.compact: Compatta
-keyboard.enter: Invio
-keyboard.full_width: Larghezza intera
-keyboard.hide: Nascondi
-keyboard.large: Grande
-keyboard.refresh: Aggiorna
-keyboard.save: Salva
-keyboard.search: Cerca
-keyboard.size: Dimensione tastiera
-keyboard.standard: Standard
-look.default: Predefinito
-look.full: Schermo intero
-look.panel: Nel pannello
-look.place: Posizione
-look.stage.listening: In ascolto
-look.stage.responding: Risposta
-look.stage.waiting: In attesa
-look.title: Grafica
-media.entity.buttons: Pulsanti volume
-media.entity.duck: Abbassamento musica
-media.group.media: Contenuti multimediali
-media.setting.autoplay: Riproduzione automatica
-media.setting.background: Riproduzione in background
-media.setting.buttons: Pulsanti volume
-media.setting.duck: Livello abbassamento
-media.setting.mini: Mini lettore
-media.setting.player: Lettore all'avvio
-microphone.group.microphone: Microfono
-microphone.setting.cancel: Cancellazione eco microfono
-microphone.setting.denoise: Soppressione rumore
-microphone.setting.gain: Guadagno microfono
-microphone.setting.leveling: Livellamento microfono
-microphone.setting.mixing: Mixaggio microfono
-microphone.setting.mute_led: Luminosità LED muto
-microphone.setting.sensitivity: Sensibilità ambiente
-mirror.app: Specchio
-mode.auto: Automatica
-mode.manual: Manuale
-network.group.network: Rete e Internet
-network.address: Indirizzo IP
-network.address.none: Nessuno
-network.lease: Rinnovo lease
-network.lease.hours: "{{.N}} h"
-network.lease.minutes: "{{.N}} min"
-network.lease.now: Ora
-network.mac: Indirizzo MAC
-network.router: Router
-network.setting.home_key: Chiave casa
-network.setting.internet: Accesso a internet
-network.internet.open: Aperto
-network.internet.quiet: Silenzioso
-network.internet.local: Solo rete locale
-network.internet.hint: Solo rete locale blocca tutto ciò che è fuori dalla tua rete
-network.setting.verify: Verifica certificati
-network.setting.via_home: Scarica tramite Home Assistant
-network.ssid: Rete Wi-Fi
-network.title: Rete e Internet
-network.via_home.hint: Aggiornamenti scaricati da Home Assistant
-night.clock: Attenua a orologio
-gesture.tap: Tocco
-gesture.double-tap: Doppio tocco
-gesture.hold: Pressione prolungata
-gesture.swipe-up: Scorri in alto
-gesture.swipe-down: Scorri in basso
-gesture.swipe-left: Scorri a sinistra
-gesture.swipe-right: Scorri a destra
-gesture.pinch-in: Pizzica per ridurre
-gesture.pinch-out: Pizzica per ingrandire
-gesture.fingers: "{{.Move}} con {{.N}} dita"
-night.dim: Attenua
-night.none: Niente
-night.off: Spegni lo schermo
-onboard.add: Scansiona il codice, poi aggiungi
-onboard.hint: Scansiona il codice, poi inserisci questo indirizzo.
-onboard.or: o inserisci questo indirizzo
-onboard.title: Aggiungimi a Home Assistant
-homealarm.app: Allarme casa
-homealarm.group.homealarm: Allarme casa
-homealarm.setting.entity: Centrale allarme
-homealarm.setting.look: Aspetto
-homealarm.entity.look: Aspetto allarme casa
-homealarm.setting.tab: Scheda dashboard
-homealarm.entity.tab: Scheda dashboard allarme casa
-homealarm.setting.triggered.show: Mostra quando scatta
-homealarm.entity.triggered.show: Allarme casa mostra quando scatta
-homealarm.setting.triggered.sound: Suono allarme scattato
-homealarm.entity.triggered.sound: Allarme casa suono allarme scattato
-homealarm.setting.pending.show: Mostra durante il ritardo d'ingresso
-homealarm.entity.pending.show: Allarme casa mostra durante il ritardo d'ingresso
-homealarm.setting.pending.sound: Suono ritardo d'ingresso
-homealarm.entity.pending.sound: Allarme casa suono ritardo d'ingresso
-homealarm.setting.arming.show: Mostra durante l'inserimento
-homealarm.entity.arming.show: Allarme casa mostra durante l'inserimento
-homealarm.setting.arming.sound: Suono inserimento
-homealarm.entity.arming.sound: Allarme casa suono inserimento
-homealarm.setting.settled.show: Mostra quando inserito o disinserito
-homealarm.entity.settled.show: Allarme casa mostra quando inserito o disinserito
-homealarm.setting.settled.for: Nascondi dopo
-homealarm.entity.settled.for: Allarme casa nascondi dopo
-homealarm.setting.settled.sound: Suono inserimento e disinserimento
-homealarm.entity.settled.sound: Allarme casa suono inserimento e disinserimento
-homealarm.look.keypad: Tastierino
-homealarm.look.shield: Scudo
-homealarm.look.card: Scheda
-homealarm.look.ring: Anello
-homealarm.look.dial: Ghiera
-homealarm.look.neon: Neon
-homealarm.look.hardware: Hardware
-homealarm.look.flip: Tabellone
-homealarm.look.terminal: Terminale
-homealarm.look.console: Console
-homealarm.look.minimal: Minimale
-homealarm.look.blueprint: Progetto
-homealarm.look.matrix: Matrix
-homealarm.look.vault: Caveau
-homealarm.blueprint.sheet: Foglio
-homealarm.blueprint.date: Data
-homealarm.blueprint.time: Ora
-homealarm.blueprint.link: Collegamento
-homealarm.blueprint.log: Registro stati
-homealarm.status.unset: Nessuna centrale allarme
-homealarm.status.waiting: In attesa di Home Assistant
-homealarm.status.unavailable: Non disponibile
-homealarm.status.disarmed: Disinserito
-homealarm.status.armed_home: Inserito in casa
-homealarm.status.armed_away: Inserito fuori casa
-homealarm.status.armed_night: Inserito notte
-homealarm.status.armed_vacation: Inserito vacanza
-homealarm.status.armed_custom_bypass: Inserito con esclusioni
-homealarm.status.arming: Inserimento
-homealarm.status.disarming: Disinserimento
-homealarm.status.pending: Ritardo d'ingresso
-homealarm.status.triggered: Scattato
-homealarm.mode.armed_home: In casa
-homealarm.mode.armed_away: Fuori casa
-homealarm.mode.armed_night: Notte
-homealarm.mode.armed_vacation: Vacanza
-homealarm.mode.armed_custom_bypass: Esclusioni
-homealarm.arm: Inserisci
-homealarm.disarm: Disinserisci
-homealarm.emergency: Emergenza
-homealarm.panic: Panico
-homealarm.hold: Tieni premuto per attivare
-homealarm.code.first: Prima inserisci il codice
-homealarm.code.enter: Inserisci codice
-homealarm.code.title: Inserisci codice
-homealarm.sending: Invio…
-homealarm.refused: Home Assistant ha rifiutato
-homealarm.none: Nessuna centrale allarme in Home Assistant
-homealarm.pick: Scegline una
-homealarm.cancel: Annulla
-homealarm.ok: OK
-homealarm.recent: Recenti
-homealarm.chip.ready: Pronto
-homealarm.chip.armed: Inserito
-homealarm.chip.delay: Ritardo
-homealarm.chip.alarm: Allarme
-homealarm.plate.time: Ora locale
-homealarm.plate.link: Collegamento
-homealarm.plate.lost: Perso
-homealarm.plate.normal: Normale
-homealarm.plate.system: Sistema
-homealarm.plate.mode: Modalità sistema
-homealarm.plate.idle: Inattivo
-homealarm.plate.exit: Uscita
-homealarm.plate.entry: Ingresso
-homealarm.neon.state: Stato sistema
-homealarm.flip.time: Ora
-homealarm.flip.state: Stato
-homealarm.terminal.status: Stato sistema
-homealarm.terminal.command: Comando
-homealarm.console.log: Registro eventi
-homealarm.console.by: da
-homealarm.console.prompt: Inserisci il codice o scegli una funzione
-homealarm.zone.lost: Persa
-homealarm.zone.bypassed: Esclusa
-homealarm.zone.active: Attiva
-homealarm.zone.idle: Inattiva
-homealarm.zone.fault: Guasto
-homealarm.zone.clear: Libera
-homealarm.zone.open: Aperta
-homealarm.zone.closed: Chiusa
-homealarm.zone.battery: Batteria scarica
-homealarm.zone.tamper: Manomissione
-homealarm.zone.trouble: Problema
-homealarm.notready.one: "Non pronto: {{.Zone}} aperta"
-homealarm.notready.many: "Non pronto: {{.N}} zone aperte"
-homealarm.zones: Zone
-homealarm.faults: Guasti
-homealarm.rehearsal: Prova, nulla inviato
-thermostat.app: Termostato
-thermostat.group.thermostat: Termostato
-thermostat.setting.look: Aspetto
-thermostat.entity.look: Aspetto termostato
-thermostat.setting.tab: Scheda dashboard
-thermostat.entity.tab: Scheda dashboard termostato
-thermostat.setting.entities: Termostati
-thermostat.chosen: "{{.N}} di {{.Of}}"
-thermostat.full: "Massimo {{.N}}; disattivane prima uno"
-thermostat.look.dial: Ghiera
-thermostat.look.column: Colonna
-thermostat.look.wheel: Manopola
-thermostat.look.bars: Barre
-thermostat.look.split: Diviso
-thermostat.look.terminal: Terminale
-thermostat.look.brass: Ottone
-thermostat.look.mission: Missione
-thermostat.choose.mode: Modalità
-thermostat.choose.preset: Preset
-thermostat.choose.fan: Ventola
-thermostat.inside: Interno
-thermostat.outside: Esterno
-thermostat.set: Imposta
-thermostat.setpoint: Setpoint
-thermostat.low: Min
-thermostat.high: Max
-thermostat.no-preset: Nessun preset
-thermostat.action.heating: Riscaldamento
-thermostat.action.cooling: Raffreddamento
-thermostat.action.drying: Deumidificazione
-thermostat.action.fan: Ventola
-thermostat.action.idle: Inattivo
-thermostat.action.off: "Off"
-thermostat.lamp.fan: Ventola attiva
-thermostat.environment: Controllo ambientale
-thermostat.preset.none: Nessuno
-thermostat.preset.away: Fuori casa
-thermostat.preset.eco: Eco
-thermostat.preset.home: In casa
-thermostat.preset.sleep: Notte
-thermostat.preset.comfort: Comfort
-thermostat.preset.boost: Boost
-thermostat.preset.activity: Attività
-thermostat.fanmode.auto: Auto
-thermostat.fanmode.on: "On"
-thermostat.fanmode.off: "Off"
-thermostat.fanmode.low: Bassa
-thermostat.fanmode.medium: Media
-thermostat.fanmode.middle: Intermedia
-thermostat.fanmode.high: Alta
-thermostat.fanmode.focus: Focalizzata
-thermostat.fanmode.diffuse: Diffusa
-thermostat.none: Nessun termostato scelto
-thermostat.waiting: In attesa di Home Assistant
-thermostat.unavailable: Non disponibile
-thermostat.off: "Off"
-thermostat.between: Mantiene tra
-thermostat.heating: Riscalda a
-thermostat.cooling: Raffredda a
-thermostat.drying: Deumidificazione
-thermostat.fanning: Ventola attiva
-thermostat.holding: Mantiene a
-thermostat.in: Int
-thermostat.out: Est
-thermostat.humidity: Umidità
-thermostat.fan: Ventola
-thermostat.temperature: Temperatura
-thermostat.target: Obiettivo
-thermostat.status: Stato
-thermostat.temp: Temp
-thermostat.dial: Impostazione
-thermostat.refused: Home Assistant ha rifiutato
-thermostat.mode.off: "Off"
-thermostat.mode.heat: Caldo
-thermostat.mode.cool: Freddo
-thermostat.mode.heat_cool: Auto
-thermostat.mode.auto: Auto
-thermostat.mode.dry: Deumidifica
-thermostat.mode.fan_only: Ventola
-homealarm.zones.count: "{{.Secure}} sicure / {{.Open}} aperte"
-homealarm.setting.zones: Zone mostrate
-homealarm.zones.shown: "{{.N}} di {{.Of}}"
-homealarm.zones.page: "Zone {{.From}}–{{.To}} / {{.Of}}"
-homealarm.blueprint.location: Posizione
-homealarm.blueprint.type: Tipo
-homealarm.class.door: Porta
-homealarm.class.window: Finestra
-homealarm.class.garage_door: Porta garage
-homealarm.class.opening: Apertura
-homealarm.class.motion: Movimento
-homealarm.class.occupancy: Occupazione
-homealarm.class.presence: Presenza
-homealarm.class.vibration: Vibrazione
-homealarm.class.tamper: Manomissione
-homealarm.class.smoke: Fumo
-homealarm.class.moisture: Acqua
-homealarm.class.gas: Gas
-homealarm.class.carbon_monoxide: CO
-homealarm.class.sound: Suono
-homealarm.class.safety: Sicurezza
-homealarm.on: "On"
-homealarm.off: "Off"
-doorbell.entity.chime: Suono campanello
-doorbell.group.doorbell: Campanello
-doorbell.setting.chime: Suono squillo
-doorbell.entity.notify: Suono notifica campanello
-doorbell.setting.notify: Suono notifica
-doorbell.entity.ring_for: Durata squillo campanello
-doorbell.setting.ring_for: Durata squillo
-doorbell.entity.live_for: Durata vista dal vivo campanello
-doorbell.setting.live_for: Tieni aperta la vista dal vivo
-doorbell.entity.style: Stile notifica campanello
-doorbell.setting.style: Stile notifica
-doorbell.entity.visitor: Stile squillo campanello
-doorbell.setting.visitor: Stile squillo
-doorbell.entity.tab: Scheda dashboard campanello
-doorbell.setting.tab: Scheda dashboard
-doorbell.add: Aggiungi campanello
-doorbell.app: Campanello
-doorbell.camera.pictures: Foto degli eventi da
-doorbell.camera.pictures.hint: Una videocamera di Home Assistant che inquadra questa porta
-doorbell.camera.title: Videocamera Home Assistant
-doorbell.cancel: Annulla
-doorbell.field.host: Indirizzo IP o nome host
-doorbell.field.host_port: Aggiungi :porta per saltare il rilevamento
-doorbell.field.name: Nome
-doorbell.field.password: Password
-doorbell.field.rtsp: URL RTSP
-doorbell.field.uid: UID
-doorbell.field.user: Utente
-doorbell.forget: Rimuovi
-doorbell.added: Aggiunto
-doorbell.entity.door.events: "Campanello {{.N}} sorgente eventi"
-doorbell.entity.door.name: "Campanello {{.N}} nome"
-doorbell.entity.door.talk: "Campanello {{.N}} sorgente audio bidirezionale"
-doorbell.entity.door.video: "Campanello {{.N}} sorgente video"
-doorbell.field.stream: Stream
-doorbell.setting.door.events: Eventi
-doorbell.setting.door.name: Nome
-doorbell.setting.door.talk: Parla
-doorbell.setting.door.video: Video
-doorbell.autosetup: Configurazione automatica
-doorbell.cameras: "{{.N}} videocamere"
-doorbell.channel: "Canale {{.N}}"
-doorbell.connect: Connetti
-doorbell.connecting: Connessione…
-doorbell.events.via: "{{.State}} via {{.Source}}"
-doorbell.offline: Offline
-doorbell.sensor.animal: Sensore animali
-doorbell.sensor.motion: Sensore movimento
-doorbell.sensor.none: Nessuno
-doorbell.sensor.package: Sensore pacchi
-doorbell.sensor.person: Sensore persone
-doorbell.sensor.vehicle: Sensore veicoli
-doorbell.sensor.visitor: Sensore squillo
-doorbell.source.ha_reolink: Home Assistant (integrazione Reolink)
-doorbell.source.nvr: NVR Reolink
-doorbell.status.events: Eventi
-doorbell.status.video: Video
-doorbell.video.connecting: "Connessione via {{.Source}}"
-doorbell.video.failed: "{{.Why}} ({{.Source}})"
-doorbell.tried: "{{.Source}} non riuscito: {{.Why}}"
-doorbell.video.working: "Funziona via {{.Source}}"
-doorbell.lock: Serratura
-doorbell.lock.confirm: Tocca di nuovo per sbloccare
-doorbell.looking: Ricerca in Home Assistant…
-doorbell.manual: Manuale
-doorbell.needs: Inserisci un UID, un indirizzo IP o un nome host
-doorbell.needs.host: Inserisci un indirizzo IP o un nome host
-doorbell.needs.rtsp: Inserisci un URL RTSP
-doorbell.none: Nessun campanello configurato
-doorbell.save: Salva
-doorbell.checking: Verifica…
-doorbell.notsaved: Non salvato
-doorbell.saved: Salvato
-doorbell.ok: OK
-doorbell.fellback: "{{.Line}} (Reolink non riuscito)"
-doorbell.slot: "Campanello {{.N}}"
-doorbell.watch: Guarda
-doorbell.why.camera: Nessun video dal vivo per questo campanello
-doorbell.why.lock: "Impossibile azionare la serratura: {{.Why}}"
-doorbell.why.lost: Campanello perso, nuovo tentativo
-doorbell.why.talk: "Impossibile parlare: {{.Why}}"
-doorbell.why.fallback: Video di Home Assistant, senza audio bidirezionale
-doorbell.why.toobig: Stream principale troppo grande per questo schermo, viene mostrato lo stream secondario
-doorbell.why.decoder: Questo schermo non può riprodurre il video di questo campanello
-doorbell.why.nopassword: Inserisci la password del campanello
-doorbell.why.nocamera: Scegli una videocamera di Home Assistant
-doorbell.why.refused: "Accesso rifiutato (codice {{.Code}})"
-doorbell.why.other: A quell'indirizzo risponde un altro campanello
-doorbell.why.unreachable: Campanello non raggiungibile
-doorbell.stream.main: Principale
-doorbell.stream.sub: Sub
-doorbell.source.auto: Automatica
-doorbell.source.ha: Home Assistant
-doorbell.source.onvif: ONVIF
-doorbell.source.reolink: Reolink
-doorbell.source.rtsp: RTSP
-doorbell.status.connected: Connesso
-doorbell.status.connecting: Connessione…
-doorbell.status.login: Utente o password errati
-doorbell.status.none: Nessun campanello in Home Assistant
-doorbell.status.ready: "{{.Count}} connessi"
-doorbell.status.unreachable: Campanelli non raggiungibili
-doorbell.status.unset: Non configurato
-doorbell.status.unsupported: Non disponibile da questa sorgente
-doorbell.event.visitor: "{{.Door}}: c'è qualcuno"
-doorbell.event.people: "{{.Door}}: persona"
-doorbell.event.package: "{{.Door}}: pacco"
-doorbell.event.vehicle: "{{.Door}}: veicolo"
-doorbell.event.dog_cat: "{{.Door}}: animale"
-doorbell.event.motion: "{{.Door}}: movimento"
-photos.entity.immich.albums: Album Immich
-photos.entity.immich.enabled: Foto Immich
-photos.entity.immich.favorites: Solo preferiti Immich
-photos.entity.immich.key: Chiave API Immich
-photos.entity.immich.memories: Prima i ricordi Immich
-photos.entity.immich.people: Persone Immich
-photos.entity.immich.server: Server Immich
-photos.entity.immich.tags: Tag Immich
-photos.entity.status: "Stato foto {{.Source}}"
-photos.group.immich: Immich
-photos.google: Google Photos
-photos.group.google: Google Photos
-photos.setting.google.enabled: Abilita
-photos.entity.google.enabled: Google Photos
-photos.setting.google.album1: Link album 1
-photos.entity.google.album1: Link album 1 Google Photos
-photos.example.google.album1: https://photos.app.goo.gl/…
-photos.setting.google.album1.weight: Quota album 1
-photos.entity.google.album1.weight: Quota album 1 Google Photos
-photos.setting.google.album2: Link album 2
-photos.entity.google.album2: Link album 2 Google Photos
-photos.example.google.album2: https://photos.app.goo.gl/…
-photos.setting.google.album2.weight: Quota album 2
-photos.entity.google.album2.weight: Quota album 2 Google Photos
-photos.setting.google.album3: Link album 3
-photos.entity.google.album3: Link album 3 Google Photos
-photos.example.google.album3: https://photos.app.goo.gl/…
-photos.setting.google.album3.weight: Quota album 3
-photos.entity.google.album3.weight: Quota album 3 Google Photos
-photos.setting.google.album4: Link album 4
-photos.entity.google.album4: Link album 4 Google Photos
-photos.example.google.album4: https://photos.app.goo.gl/…
-photos.setting.google.album4.weight: Quota album 4
-photos.entity.google.album4.weight: Quota album 4 Google Photos
-photos.group.photos: Foto
-photos.setting.app.every: App Foto, foto successiva ogni
-photos.entity.app.every: App Foto, foto successiva ogni
-photos.setting.app.fit: Adattamento app Foto
-photos.entity.app.fit: Adattamento app Foto
-photos.setting.app.transition: Transizione app Foto
-photos.entity.app.transition: Transizione app Foto
-phototransition.cut: Nessuna
-phototransition.fade: Dissolvenza
-phototransition.slide: Scorrimento
-phototransition.zoom: Zoom
-phototransition.wipe: Tendina
-phototransition.dissolve: Dissolvenza incrociata
-photos.setting.immich.quality: Qualità
-photos.entity.immich.quality: Qualità Immich
-photos.quality.preview: Anteprima
-photos.quality.fullsize: Dimensione originale
-photofit.auto: Auto
-photofit.cover: Riempi
-photofit.contain: Adatta, bordi sfocati
-photofit.bars: Adatta, bordi semplici
-photofit.framed: Con cornice
-photofit.kenburns: Panoramica lenta
-photos.app: Foto
-photos.example.immich.albums: Famiglia, Estate 2026
-photos.example.immich.people: Alex, Sam
-photos.example.immich.server: https://photos.example.com
-photos.example.immich.tags: cucina, preferiti
-photos.immich: Immich
-photos.page: Foto
-photos.sources: Sorgenti
-photos.status: Stato
-photos.setting.immich.albums: Album
-photos.setting.immich.enabled: Abilita
-photos.setting.immich.favorites: Solo preferiti
-photos.setting.immich.key: Chiave API
-photos.setting.immich.memories: Prima i ricordi
-photos.setting.immich.people: Persone
-photos.setting.immich.server: Server
-photos.setting.immich.tags: Tag
-photos.status.off: "Off"
-photos.status.connecting: Connessione…
-photos.status.empty: Nessuna foto corrispondente
-photos.status.key: Chiave API errata
-photos.status.permission: "La chiave API richiede {{.Name}}"
-photos.status.old: "Immich {{.Version}}: serve la 3.2 o successiva"
-photos.status.ready: Connesso
-photos.status.unknown: "Nessun elemento chiamato {{.Name}}"
-photos.status.unreachable: Server non raggiungibile
-photos.status.unset: Non configurato
-place.horizontal: Posizione orizzontale
-place.size: Dimensione
-place.vertical: Posizione verticale
-player.ad: Annuncio
-player.ad_clip: Annuncio {{.Clip}} di {{.Clips}}
-player.full: Lettore completo
-player.live: LIVE
-player.lyrics: Testo
-player.next: A seguire
-player.none: Niente
-player.now: In riproduzione
-music.app: Musica
-music.now: In riproduzione
-music.speakers: Altoparlanti
-music.quiet: Niente in riproduzione
-music.none: Nessun altoparlante di Music Assistant
-music.unavailable: Music Assistant non è raggiungibile
-music.integration: Aggiorna l'integrazione EchoLocal in Home Assistant
-music.find: Cerca un altoparlante
-music.starting: Avvio…
-music.home: Home
-music.search: Cerca
-music.library: Libreria
-music.searching: Cerca in Music Assistant
-music.nothing: Niente qui
-music.recent: Ascoltati di recente
-music.playlists: Playlist
-music.albums: Album
-music.artists: Artisti
-music.radio: Radio
-music.play: Riproduci
-music.next: Riproduci dopo
-music.add: Aggiungi alla coda
-music.similar: Simili
-music.back: Indietro
-music.kind.artist: Artista
-music.kind.album: Album
-music.kind.track: Brano
-music.kind.playlist: Playlist
-music.kind.radio: Stazione radio
-music.kind.podcast: Podcast
-music.kind.audiobook: Audiolibro
-music.group: Gruppo
-music.here: Sposta qui
-music.queue: A seguire
-position.bottom: In basso
-position.center: Centro
-position.random: Casuale
-position.top: In alto
-poster.daily: Ogni giorno
-poster.entity.every: Cambio sfondo
-poster.entity.on: Sfondo
-poster.every: Cambia ogni
-poster.group.poster: Sfondo
-poster.hourly: Ogni ora
-poster.never: Mai
-poster.off: "Off"
-poster.setting.every: Cambia ogni
-poster.setting.fit: Adattamento
-poster.entity.fit: Adattamento sfondo
-poster.setting.transition: Transizione
-poster.entity.transition: Transizione sfondo
-poster.setting.on: Mostra sfondo
-poster.show: Mostra sfondo
-poster.wake: A ogni riattivazione
-power.reboot: Riavvia dispositivo
-power.reboot.what: Tutto torna operativo in circa un minuto.
-power.restart: Riavvia app
-power.restart.what: Lo schermo si spegne per qualche secondo.
-power.title: Riavvio
-presence.group.presence: Presenza
-presence.setting.range: Raggio di rilevamento
-presence.setting.wake: Riattiva al movimento
-radar.app: Radar
-radar.credit.nws: "Immagini: NASA GIBS · Radar: NWS tramite Iowa Environmental Mesonet"
-radar.credit.rainviewer: "Immagini: NASA GIBS · Radar: RainViewer"
-radar.failed: Radar al momento non disponibile
-radar.miles: "{{.N}} mi"
-radar.source.auto: Auto
-radar.source.nws: NWS
-radar.source.rainviewer: RainViewer
-radar.updating: Aggiornamento…
-radar.forecast: "Previsione {{.Time}}"
-radio.app: Radio
-radio.empty: Aggiungi una stazione ai preferiti per metterla sulla manopola
-radio.idle: Scegli una stazione
-radio.local: Stazioni locali
-radio.more: "Altre {{.N}} non mostrate"
-radio.nothing: Nessuna stazione qui
-radio.playing: In riproduzione
-radio.popular: Popolari
-radio.stopped: Interrotta
-radio.unavailable: Radio Browser non è configurato in Home Assistant
-rail.media: Media
-rail.sleep: Riposo
-reply.download: Parte dopo, senza interruzioni
-reply.stream: Parte prima, può interrompersi
-reply.title: Riproduzione risposta
-actions.broadcast: Trasmetti un messaggio
-actions.alarm: Gestisci sveglie
-actions.alarm.time: Di' un orario come sette e trenta, seguito eventualmente da ogni giorno feriale, ogni weekend, ogni giorno o da giorni della settimana
-actions.alarm.exists: "{{.Alarm}} esiste già"
-actions.alarm.set: "Impostata {{.Alarm}}"
-actions.alarm.empty: Non hai sveglie salvate
-actions.alarm.off: "{{.Alarm}}, disattivata"
-actions.alarm.none: Non hai sveglie in programma
-actions.alarm.next: "La prossima sveglia è {{.Alarm}}, {{.When}}"
-actions.alarm.enable: "Attivata {{.Alarm}}"
-actions.alarm.disable: "Disattivata {{.Alarm}}"
-actions.alarm.delete: "Eliminata {{.Alarm}}"
-actions.alarm.not_ringing: Nessuna sveglia sta suonando
-actions.alarm.stopped: Sveglia fermata
-actions.alarm.not_snoozed: Nessuna sveglia in corso da posticipare
-actions.alarm.snoozed: Sveglia posticipata
-actions.alarm.target: Di' il nome della sveglia, l'orario o prossima sveglia
-actions.alarm.missing: Nessuna sveglia salvata corrisponde a quel nome o orario
-actions.alarm.ambiguous: Più sveglie corrispondono; di' il nome
-actions.alarm.once: una volta
-actions.broadcast.ask: Parla dopo il segnale
-actions.broadcast.text: Per trasmettere testo scritto serve l'integrazione Home Assistant
-actions.call: Chiama un dispositivo
-actions.call.busy: Già in chiamata
-actions.call.foreign: "{{.Peer}} non è in questa casa"
-actions.call.unknown: "Nessun dispositivo chiamato {{.Peer}}"
-actions.call.unreachable: "{{.Peer}} non è raggiungibile"
-actions.call_answer: Rispondi a una chiamata
-actions.call_answer.none: Nessuna chiamata in arrivo a cui rispondere
-actions.call_answer.done: Rispondo alla chiamata
-actions.call_hangup: Chiudi una chiamata
-actions.call_hangup.none: Nessuna chiamata da chiudere
-actions.call_hangup.done: Chiamata terminata
-actions.youtube_tv: Guarda YouTube TV
-actions.youtube_tv.channel: Di' un canale o un programma
-actions.youtube_tv.unknown: "Ho cercato {{.Channel}} su YouTube TV, ma non è disponibile o al momento non si può riprodurre"
-actions.youtube_tv.device: "Non c'è nessun dispositivo chiamato {{.Device}}"
-actions.youtube_tv.nowhere: Scegli una TV predefinita nell'app TV
-actions.youtube_tv.here: "Riproduco {{.Show}} su {{.Channel}}"
-actions.youtube_tv.here.channel: "Riproduco {{.Channel}}"
-actions.youtube_tv.watching: "Riproduco {{.Show}} su {{.Channel}} su {{.Device}}"
-actions.youtube_tv.watching.channel: "Riproduco {{.Channel}} su {{.Device}}"
-actions.youtube_tv.airing: "Su {{.Channel}} c'è {{.Title}}"
-actions.youtube_tv.nothing: "Al momento non c'è niente in programma su {{.Channel}}"
-lock.again: Inseriscilo di nuovo
-lock.change: Cambia PIN
-lock.clear: Rimuovi PIN
-lock.clear.what: Confermi? Le impostazioni verranno sbloccate.
-lock.enter: Inserisci il PIN
-lock.mismatch: I PIN non corrispondono. Inserisci un nuovo PIN
-lock.new: Inserisci un nuovo PIN, da 4 a 8 cifre
-lock.next: Avanti
-lock.off: "Off"
-lock.on: "On"
-lock.set: Imposta PIN
-lock.entity.pin: Blocco impostazioni
-screen.group.lock: Blocco
-screen.setting.lock_pin: Blocco impostazioni
-lock.title: Impostazioni
-lock.wait: "Riprova tra {{.Seconds}} s"
-lock.wrong: PIN errato
-lovelace.default: Dashboard predefinita
-lovelace.first: Prima vista
-lovelace.hint.integration: Installa l'integrazione EchoLocal in Home Assistant
-lovelace.hint.allow: Consenti un utente nelle opzioni dell'integrazione EchoLocal in Home Assistant
-lovelace.hint.user: Scegli un utente in Impostazioni › Dashboard
-lovelace.loading: Caricamento di Home Assistant
-lovelace.unreachable: Home Assistant non è raggiungibile
-lovelace.unreachable.retry: Nuovo tentativo automatico · tocca per riprovare ora
-lovelace.group.lovelace: Dashboard di Home Assistant
-lovelace.entity.user: Utente della dashboard
-lovelace.setting.user: Mostra come
-lovelace.entity.dashboard: Dashboard
-lovelace.setting.dashboard: Dashboard
-lovelace.entity.view: Vista della dashboard
-lovelace.setting.view: Vista
-lovelace.entity.theme: Tema della dashboard
-lovelace.setting.theme: Tema
-lovelace.theme.default: Predefinito di Home Assistant
-lovelace.entity.saver_dashboard: Dashboard del salvaschermo
-lovelace.setting.saver_dashboard: Dashboard del salvaschermo
-lovelace.entity.saver_view: Vista del salvaschermo
-lovelace.setting.saver_view: Vista del salvaschermo
-lovelace.entity.scale: Scala di rendering della dashboard
-lovelace.setting.scale: Scala di rendering
-lovelace.entity.saver_scale: Scala di rendering del salvaschermo
-lovelace.setting.saver_scale: Scala di rendering del salvaschermo
-lovelace.scale.value: "{{.N}}%"
-rtsp.entity.audio: Audio RTSP
-rtsp.entity.password: Password RTSP
-rtsp.entity.username: Nome utente RTSP
-rtsp.group.rtsp: RTSP
-rtsp.example.username: viewer
-rtsp.setting.audio: Includi audio
-rtsp.setting.enabled: Server RTSP
-rtsp.setting.password: Password
-rtsp.setting.username: Nome utente
-screen.group.panel: Schermo
-screen.setting.alert: Stile avvisi
-screen.setting.auto: Luminosità automatica
-screen.setting.backlight: Luminosità
-screen.setting.drawer: Posizione dock
-screen.setting.drawer.hide: Nascondi dock dopo
-screen.setting.keyboard: Dimensione tastiera
-screen.setting.language: Lingua
-screen.setting.marks: Indicatori privacy
-screen.setting.size: Dimensione
-screen.setting.font: Carattere
-screen.setting.style: Stile
-screen.setting.touches: Mostra tocchi
-touches.off: Spento
-touches.dots: Punti
-touches.details: Dettagli
-screen.setting.theme: Tema
-screen.setting.timer: Stile timer
-screen.setting.custom.background: Sfondo tema personalizzato
-screen.setting.custom.surface: Schede tema personalizzato
-screen.setting.custom.text: Testo tema personalizzato
-screen.setting.custom.muted: Testo secondario tema personalizzato
-screen.setting.custom.accent: Accento tema personalizzato
-screen.setting.custom.accent2: Secondo accento tema personalizzato
-media.group.sendspin: Sendspin
-media.setting.sendspin: Sendspin
-settings.about: Info
-settings.assistants: Assistenti vocali
-settings.camera: Fotocamera
-settings.debug: Opzioni sviluppatore
-settings.display: Schermo
-settings.features: Servizi connessi
-settings.language: Lingua
-settings.media: Contenuti multimediali
-settings.network: Rete e Internet
-settings.power: Riavvio
-settings.sync: Sincronizzazione config
-settings.system: Sistema
-settings.title: Impostazioni
-settings.search: Cerca nelle impostazioni
-settings.search.empty: Digita per trovare un'impostazione
-settings.search.none: Nessuna impostazione trovata
-settings.volume: Suono
-size.large: Grande
-size.medium: Media
-size.micro: Micro
-size.mini: Mini
-size.nano: Nano
-size.small: Piccola
-sound.alerts: Volume sveglia
-sound.feedback: Suoni di sistema
-sound.main: Volume principale
-sound.media: Volume contenuti
-sound.mute.alerts: Silenzia sveglie
-sound.mute.feedback: Silenzia suoni di sistema
-sound.mute.main: Silenzia tutto
-sound.mute.media: Silenzia contenuti
-sound.mute.voice: Silenzia assistente
-sound.voice: Volume assistente
-source.both: Microfono e altoparlante
-source.mic: Microfono
-source.speaker: Altoparlante
-stream.alerts: Avvisi
-stream.feedback: Feedback
-stream.main: Principale
-stream.media: Media
-stream.voice: Voce
-style.eink: E-ink
-style.glass: Vetro
-style.hifi: Hi-fi
-style.material: Material You
-style.metro: Metro
-style.neon: Neon
-style.skeuo: Skeuo
-style.standard: Standard
-style.terminal: Terminale
-style.title: Stile
-font.title: Carattere
-font.style: Predefinito dello stile
-sync.busy: "{{.Peer}} è occupato"
-sync.cancelled: Sincronizzazione annullata
-sync.empty: Nessun altro dispositivo con cui sincronizzare
-sync.enter: "Inserisci il codice mostrato su {{.Peer}}"
-sync.expired: Il codice è scaduto
-sync.failed: Sincronizzazione non riuscita
-sync.matched: "Già associato a {{.Peer}}"
-sync.received: "{{.N}} impostazioni applicate da {{.Peer}}"
-sync.receiving: Ricezione impostazioni…
-sync.sending: Invio impostazioni…
-sync.sent: "Impostazioni inviate a {{.Peer}}"
-sync.show: "Inserisci questo codice su {{.Peer}}"
-sync.title: Sincronizzazione config
-sync.tries: Troppi codici errati
-sync.wrong: "Codice errato, {{.N}} tentativi rimasti"
-system.adb: ADB in rete
-system.adb.hint: Shell root senza autenticazione sulla porta 5555
-system.certificates: Verifica certificati
-system.certificates.hint: Convalida certificati TLS
-system.title: Sistema
-tessera.alarm.armed_away: Fuori casa
-tessera.alarm.armed_custom_bypass: Esclusioni personalizzate
-tessera.alarm.armed_home: In casa
-tessera.alarm.armed_night: Notte
-tessera.alarm.armed_vacation: Vacanza
-tessera.alarm.cancel: Annulla
-tessera.alarm.clear: Cancella
-tessera.alarm.disarm: Disinserisci
-tessera.alarm.ok: OK
-tessera.alarm.text: Inserisci il codice di questo pannello in Home Assistant.
-tessera.alert.notification: Notifica
-tessera.again: Tocca di nuovo per sbloccare
-tessera.binary.battery.off: Normale
-tessera.binary.battery.on: Scarica
-tessera.binary.battery_charging.off: Non in carica
-tessera.binary.battery_charging.on: In carica
-tessera.binary.carbon_monoxide.off: Nessun rilevamento
-tessera.binary.carbon_monoxide.on: Rilevato
-tessera.binary.cold.off: Normale
-tessera.binary.cold.on: Freddo
-tessera.binary.connectivity.off: Disconnesso
-tessera.binary.connectivity.on: Connesso
-tessera.binary.door.off: Chiusa
-tessera.binary.door.on: Aperta
-tessera.binary.garage_door.off: Chiusa
-tessera.binary.garage_door.on: Aperta
-tessera.binary.gas.off: Nessun rilevamento
-tessera.binary.gas.on: Rilevato
-tessera.binary.heat.off: Normale
-tessera.binary.heat.on: Caldo
-tessera.binary.light.off: Nessuna luce
-tessera.binary.light.on: Luce rilevata
-tessera.binary.lock.off: Bloccato
-tessera.binary.lock.on: Sbloccato
-tessera.binary.moisture.off: Asciutto
-tessera.binary.moisture.on: Bagnato
-tessera.binary.motion.off: Nessun rilevamento
-tessera.binary.motion.on: Rilevato
-tessera.binary.moving.off: Fermo
-tessera.binary.moving.on: In movimento
-tessera.binary.occupancy.off: Libero
-tessera.binary.occupancy.on: Rilevato
-tessera.binary.opening.off: Chiuso
-tessera.binary.opening.on: Aperto
-tessera.binary.plug.off: Scollegato
-tessera.binary.plug.on: Collegato
-tessera.binary.power.off: "Off"
-tessera.binary.power.on: "On"
-tessera.binary.presence.off: Fuori casa
-tessera.binary.presence.on: In casa
-tessera.binary.problem.off: "OK"
-tessera.binary.problem.on: Problema
-tessera.binary.running.off: Non in funzione
-tessera.binary.running.on: In funzione
-tessera.binary.safety.off: Sicuro
-tessera.binary.safety.on: Non sicuro
-tessera.binary.smoke.off: Nessun rilevamento
-tessera.binary.smoke.on: Rilevato
-tessera.binary.sound.off: Nessun rilevamento
-tessera.binary.sound.on: Rilevato
-tessera.binary.tamper.off: Nessun rilevamento
-tessera.binary.tamper.on: Manomissione rilevata
-tessera.binary.update.off: Aggiornato
-tessera.binary.update.on: Aggiornamento disponibile
-tessera.binary.vibration.off: Nessun rilevamento
-tessera.binary.vibration.on: Rilevata
-tessera.binary.window.off: Chiusa
-tessera.binary.window.on: Aperta
-tessera.card.empty: Nessuno storico per questo intervallo
-tessera.card.high: "Max {{.V}} alle {{.T}}"
-tessera.card.loading: Caricamento storico…
-tessera.card.low: "Min {{.V}} alle {{.T}}"
-tessera.card.now: "Ora {{.T}}"
-tessera.card.since: "Da {{.T}}"
-tessera.last.date: "Ultimo {{.D}}"
-tessera.last.time: "Ultimo {{.T}}"
-tessera.last.yest: "Ieri {{.T}}"
-tessera.last.yesterday: "Ieri {{.T}}"
-tessera.light.brightness: Luminosità
-tessera.light.effect: Effetto
-tessera.light.effects: Effetti
-tessera.light.hue: Colore
-tessera.light.lamps: Lampade
-tessera.light.waiting: In attesa
-tessera.light.warmth: Temperatura colore
-tessera.lock.jammed: Inceppata
-tessera.lock.lock: Blocca
-tessera.lock.locked: Bloccata
-tessera.lock.locking: Blocco in corso
-tessera.lock.open: Apri
-tessera.lock.open.key: Apri
-tessera.lock.opening: Apertura
-tessera.lock.unlock: Sblocca
-tessera.lock.unlocked: Sbloccata
-tessera.lock.unlocking: Sblocco in corso
-tessera.never: Mai eseguito
-tessera.paused: "In pausa {{.T}}"
-tessera.range.day: 24 h
-tessera.range.hour: 1 h
-tessera.range.week: 7 g
-tessera.ago: "{{.T}} fa"
-tessera.connected: Configura questo schermo in Tessera
-tessera.empty: "Configura e aggiungi riquadri a questo schermo ({{.Name}}) in Tessera."
-tessera.enable: Attiva orizzontale o verticale in Impostazioni → Dashboard
-tessera.in: "tra {{.T}}"
-tessera.install: Installa Tessera Screen Manager in Home Assistant, poi aggiungi questo schermo.
-tessera.now: Adesso
-tessera.off: Tessera disattivato
-tessera.refused: Rifiutato
-tessera.running: In esecuzione...
-tessera.lapsed: Tessera non attivo
-tessera.key.activate: Attiva
-tessera.key.press: Premi
-tessera.key.run: Esegui
-tessera.silent: Nessuna risposta
-tessera.sun.name: "Sole"
-tessera.energy.solar: Solare
-tessera.energy.grid: Rete
-tessera.energy.battery: Batteria
-tessera.energy.home: Casa
-tessera.energy.other: Altro
-tessera.energy.untracked: Non tracciato
-tessera.sun.rise: "Alba {{.T}}"
-tessera.sun.set: "Tramonto {{.T}}"
-tessera.updating: Aggiornamento…
-tessera.bottom.dock: Pannello pagine
-tessera.bottom.home: Pagina home
-tessera.bottom.off: Niente
-tessera.turn.none: Nessuna
-tessera.turn.slide: Scorrimento
-tessera.turn.cover: Copertura
-tessera.turn.reveal: Rivela
-tessera.turn.deck: Mazzo
-tessera.turn.zoom: Zoom
-tessera.turn.fade: Dissolvenza
-tessera.vacuum.battery: "Batteria {{.N}}%"
-tessera.vacuum.dock: Base
-tessera.vacuum.locate: Trova
-tessera.vacuum.pause: Pausa
-tessera.vacuum.start: Avvia
-tessera.waiting: Installa Tessera
-tessera.weather.clear-night: Notte serena
-tessera.weather.cloudy: Nuvoloso
-tessera.weather.exceptional: Eccezionale
-tessera.weather.fog: Nebbia
-tessera.weather.hail: Grandine
-tessera.weather.lightning: Fulmini
-tessera.weather.lightning-rainy: Temporale
-tessera.weather.partlycloudy: Parzialmente nuvoloso
-tessera.weather.pouring: Rovesci
-tessera.weather.rainy: Pioggia
-tessera.weather.snowy: Neve
-tessera.weather.snowy-rainy: Neve e pioggia
-tessera.weather.sunny: Soleggiato
-tessera.weather.windy: Ventoso
-tessera.weather.windy-variant: Ventoso, nuvoloso
-tessera.weather.daily: Giornaliera
-tessera.weather.feels: "Percepita {{.T}}"
-tessera.weather.hourly: Oraria
-tessera.weather.none: Nessuna previsione
-tessera.weather.pressure: "Pressione {{.P}}"
-tessera.weather.visibility: "Visibilità {{.V}}"
-tessera.weather.wind: "Vento {{.W}}"
-theme.custom: Personalizzato
-theme.custom.title: Tema personalizzato
-theme.custom.background: Sfondo
-theme.custom.surface: Schede
-theme.custom.text: Testo
-theme.custom.muted: Testo secondario
-theme.custom.accent: Accento
-theme.custom.accent2: Secondo accento
-theme.default: Predefinito
-theme.title: Tema
-timer.stop: Ferma
-timerstyle.banner: Banner
-timerstyle.bar: Barra
-timerstyle.corner: Angolo
-timerstyle.dial: Ghiera
-timerstyle.face: Quadrante
-timerstyle.full: Schermo intero
-todo.add: Aggiungi elemento
-todo.app: Lista della spesa
-todo.clear: Cancella completati
-todo.empty: Lista vuota
-todo.entity: Liste di cose da fare
-todo.group.todo: Lista della spesa
-todo.lists: "{{.Count}} liste"
-todo.none: Nessuna lista di cose da fare in Home Assistant
-todo.off: "Off"
-todo.pick: Scegli una lista in Impostazioni → Controllo casa → Lista della spesa
-todo.setting.completed: Mostra elementi completati
-todo.example.entities: todo.shopping_list,todo.hardware
-todo.setting.entities: Liste di cose da fare
-todo.title: Lista della spesa
-tone.alert: Avviso
-tone.info: Info
-tone.success: Conferma
-tone.title: Suono di attivazione
-tone.warning: Attenzione
-tv.app: TV
-tv.empty: Nessun programma in onda
-tv.example.default: media_player.yttv_soggiorno
-tv.failed: Impossibile caricare la guida dei canali
-tv.find: Cerca un canale o un programma
-tv.group.tv: TV
-tv.here: Qui
-tv.next: "Alle {{.Time}}: {{.Title}}"
-tv.none: Nessun lettore YouTube TV in Home Assistant
-tv.quiet: Niente in riproduzione
-tv.setting.default: TV predefinita
-tv.setting.favorites: Preferiti
-tv.update: Aggiorna l'integrazione YouTube TV
-tv.watch: "Guarda su {{.TV}}"
-tv.watch_here: Guarda qui
-tv.youtube: YouTube TV
-uisize.compact: Compatta
-uisize.large: Grande
-uisize.medium: Media
-uisize.mini: Mini
-uisize.xlarge: Molto grande
-update.available: "{{.Version}} disponibile"
-update.channel: Canale aggiornamenti
-update.channel.dev: Sviluppo
-update.channel.stable: Stabile
-update.check: Cerca aggiornamenti
-update.checking: Verifica…
-update.current: Aggiornato
-update.install: "Scarica e installa {{.Version}}"
-update.ready: Aggiornamento disponibile
-update.running: Versione attuale
-update.title: Aggiornamento software
-update.unreachable: Impossibile raggiungere il server degli aggiornamenti
-update.versions: Altre versioni
-update.versions.confirm: "Installa {{.Version}}"
-update.versions.installed: Installata
-update.versions.what: "{{.Running}} verrà sostituita da {{.Version}} e l'app si riavvierà."
-update.versions.none: Nessun'altra versione
-upgrade.engine: il motore cast
-upgrade.installing: Installazione…
-upgrade.line: Aggiornamento a {{.Version}} · {{.Status}}
-upgrade.percent: "{{.N}}%"
-upgrade.preparing: Preparazione di {{.Name}} · {{.Status}}
-visual.group.visual: Grafica
-visual.aurora: Aurora
-visual.classic-vu: VU classico
-visual.cymatics: Cimatica
-visual.digital-vu: VU digitale
-visual.fire: Fuoco
-visual.fireflies: Lucciole
-visual.fireworks: Fuochi d'artificio
-visual.galaxy: Galassia
-visual.hal-9000: HAL 9000
-visual.halo: Alone
-visual.ink-in-water: Inchiostro nell'acqua
-visual.koi-pond: Laghetto koi
-visual.lava-lamp: Lampada lava
-visual.lcars: LCARS
-visual.lens-flares: Riflessi lente
-visual.light-cycles: Moto di luce
-visual.matrix: Matrix
-visual.mercury: Mercurio
-visual.mother: Mother
-visual.neon-sign: Insegna al neon
-visual.orb: Sfera
-visual.paint-splash: Schizzi di colore
-visual.phosphor: Fosfori
-visual.pipboy-3: PB 3000
-visual.pipboy-4: PB Mark IV
-visual.pipboy-76: PB 2000
-visual.pipboy-nv: PB New Vegas
-visual.pulsar: Pulsar
-visual.rain-on-glass: Pioggia sul vetro
-visual.ribbons: Nastri
-visual.setting.fps: Limite fotogrammi grafica
-visual.setting.kind: Grafica
-visual.example.label: Cucina
-visual.setting.label: Etichetta grafica
-visual.setting.lift: Sollevamento visualizzatore
-visual.setting.seed: Seed grafica
-visual.synthwave: Synthwave
-visual.tesla: Tesla
-visual.thunderstorm: Temporale
-voice.group.actions: Azioni
-voicematch.accept: Accetta
-voicematch.add: Aggiungi una voce
-voicematch.again: Riprova
-voicematch.cancel: Annulla
-voicematch.done: "Voice match è pronto per {{.Name}}"
-voicematch.failed: Impossibile configurare Voice match
-voicematch.finish: Fine
-voicematch.heard: Ricevuto
-voicematch.listening: In ascolto…
-voicematch.missed: Non ho capito. Ancora una volta.
-voicematch.pick: Scegli una persona
-voicematch.preparing: Preparazione…
-voicematch.redo: Registra di nuovo
-voicematch.remove: Rimuovi
-voicematch.say: "Di' “{{.Wake}}”, poi"
-voicematch.say_plain: Di' la parola di attivazione, poi
-voicematch.similar: "Questa voce somiglia molto a quella di {{.Name}}"
-voicematch.someone: Qualcun altro
-voicematch.threshold: Soglia di riconoscimento
-voicematch.title: Voice match
-voicematch.unconfirmed: Non sembrava la stessa voce
-voicematch.phrase.calendar: "cosa ho in agenda oggi"
-voicematch.phrase.door: "chiudi la porta d'ingresso"
-voicematch.phrase.lights: "accendi le luci"
-voicematch.phrase.music: "metti un po' di musica in cucina"
-voicematch.phrase.shopping: "aggiungi il latte alla lista della spesa"
-voicematch.phrase.timer: "imposta un timer di dieci minuti"
-voicematch.phrase.weather: "che tempo fa domani"
-voice.group.commands: Comandi
-voice.hacs: Integrazione EchoLocal
-voice.hacs.hint: Le azioni richiedono l'integrazione EchoLocal in Home Assistant. Scansiona il codice per aprirla in HACS, poi installala o aggiornala.
-voice.hacs.missing: Non installata
-voice.hacs.outdated: Aggiornamento necessario
-voice.hacs.unknown: Verifica
-voice.setting.action.broadcast: Trasmetti un messaggio
-voice.setting.action.alarm: Gestisci sveglie
-voice.setting.action.call_answer: Rispondi a una chiamata
-voice.setting.action.call_hangup: Chiudi una chiamata
-voice.setting.action.call: Chiama un dispositivo
-voice.setting.action.youtube_tv: Guarda YouTube TV
-voice.setting.actions: Tutte le azioni
-voice.setting.command.mirror: Specchio
-voice.setting.command.radar: Radar
-voice.setting.commands: Tutti i comandi
-voice.setting.label: Nomi di Home Assistant da ascoltare
-voice.option.label.none: Solo aree
-voice.title: Comandi vocali
-volume.chime: Suono notifiche
-wake.ember: Brace
-wake.sunrise: Alba
-wake.white: Bianco
-weather.group.weather: Meteo
-weather.alert.until: "Fino alle {{.T}}"
-weather.alert.dismiss: Ignora
-weather.alerts.hint: Allerte meteo gravi per la tua casa, dal National Weather Service
-weather.animate: Animazione
-weather.cond.clear-night: Sereno
-weather.cond.cloudy: Nuvoloso
-weather.cond.exceptional: Allerta
-weather.cond.fog: Nebbia
-weather.cond.hail: Grandine
-weather.cond.lightning: Temporale
-weather.cond.lightning-rainy: Temporale
-weather.cond.partlycloudy: Parz. nuvoloso
-weather.cond.pouring: Pioggia intensa
-weather.cond.rainy: Pioggia
-weather.cond.snowy: Neve
-weather.cond.snowy-rainy: Nevischio
-weather.cond.sunny: Soleggiato
-weather.cond.windy: Ventoso
-weather.cond.windy-variant: Ventoso
-weather.dashboard: Mostra nella dashboard
-weather.entity: Entità meteo
-weather.feels: "Percepita {{.T}}"
-weather.humidity: "Umidità {{.N}}%"
-weather.idle: Mostra nel salvaschermo
-weather.look: Aspetto
-weather.look.card: Scheda
-weather.look.compact: Compatto
-weather.look.detail: Dettagli
-weather.look.icon: Icona
-weather.look.stack: Pila
-weather.look.words: Parole
-weather.none: Nessuna entità meteo in Home Assistant
-weather.off: "Off"
-weather.setting.alerts: Allerte meteo
-weather.setting.align: Posizione orizzontale meteo dashboard
-weather.setting.animate: Animazione meteo dashboard
-weather.setting.dashboard: Meteo nella dashboard
-weather.example.entity: weather.home
-weather.setting.entity: Entità meteo
-weather.example.forecast: weather.home
-weather.setting.forecast: Entità per le previsioni
-weather.forecast: Previsioni
-weather.forecast.daily: Giornaliere
-weather.forecast.twice_daily: Due volte al giorno
-weather.forecast.hourly: Orarie
-weather.forecast.none: Nessuna previsione
-weather.setting.idle: Meteo nel salvaschermo
-weather.setting.look: Aspetto meteo dashboard
-weather.setting.position: Posizione verticale meteo dashboard
-weather.setting.radar_range: Raggio iniziale radar
-weather.setting.radar_source: Sorgente radar
-weather.setting.saver.align: Posizione orizzontale meteo salvaschermo
-weather.setting.saver.animate: Animazione meteo salvaschermo
-weather.setting.saver.look: Aspetto meteo salvaschermo
-weather.setting.saver.position: Posizione verticale meteo salvaschermo
-weather.setting.saver.size: Dimensione meteo salvaschermo
-weather.setting.saver.themed: Colori del tema per meteo salvaschermo
-weather.setting.size: Dimensione meteo dashboard
-weather.setting.themed: Colori del tema per meteo dashboard
-weather.themed: Colori del tema
-weather.themed.hint: "Se disattivato usa colori naturali: sole giallo, nuvole grigie, pioggia blu"
-weather.title: Meteo
-weather.uv: "UV {{.N}}"
-weather.wind: "Vento {{.N}} {{.Unit}}"
-webaccess.address: Indirizzo
-webaccess.title: Accesso web
-wifi.busy: Già in connessione a un'altra rete
-wifi.connected: Connesso
-wifi.failed: "Impossibile connettersi a {{.Network}}"
-wifi.join: Connetti
-wifi.joined: "Connesso a {{.Network}}"
-wifi.joining: "Connessione a {{.Network}}…"
-wifi.left: "{{.N}} s rimanenti"
-wifi.none: Nessuna rete trovata
-wifi.ok: OK
-wifi.password: Password
-wifi.refused: Password errata
-wifi.scan: Cerca di nuovo
-wifi.scan.failed: Ricerca non riuscita
-wifi.scanning: Ricerca…
-wifi.short: "Usa almeno {{.N}} caratteri"
-wifi.timeout: "Nessuna connessione entro {{.Minutes}} minuti"
-wifi.title: Wi-Fi
-wifi.unreachable: Riprova
-wifi.unsupported: "{{.Security}}, non supportata"
-youtube.account: Account YouTube
-youtube.accounts: Account
-youtube.add: Aggiungi account
-youtube.again: Nuovo codice
-youtube.anonymous: Anonimo
-youtube.app: YouTube
-youtube.asking: Richiesta del codice…
-youtube.cancel: Annulla
-youtube.category.filler: Riempitivo
-youtube.category.hook: Gancio
-youtube.category.interaction: Promemoria interazione
-youtube.category.intro: Intro
-youtube.category.music_offtopic: Parte non musicale
-youtube.category.outro: Outro
-youtube.category.preview: Anteprima
-youtube.category.selfpromo: Autopromozione
-youtube.category.sponsor: Sponsor
-youtube.empty: Ancora niente qui
-youtube.enter: e inserisci
-youtube.entity.lounge: YouTube lounge
-youtube.expired: Il codice è scaduto
-youtube.failed: Impossibile raggiungere YouTube
-youtube.go: Sul telefono o sul computer, vai su
-youtube.group.cast: Cast
-youtube.history: Cronologia
-youtube.home: Home
-youtube.later: Guarda più tardi
-youtube.option.lounge.always: Sempre
-youtube.option.lounge.demand: Su richiesta
-youtube.refused: Accesso rifiutato
-youtube.search: Cerca
-youtube.setting.lounge: YouTube lounge
-youtube.shorts: Shorts
-youtube.signin: Accedi a YouTube
-youtube.skip: Salta segmenti
-youtube.skip.none: Nessuno
-youtube.skip.some: "{{.N}} tipi"
-youtube.stay: Resta anonimo
-youtube.subscriptions: Iscrizioni
-youtube.unwatched: Guarda qualcosa per riempire Home
-youtube.waiting: In attesa di conferma…
-zone.title: Fuso orario
-
-feedback.group.feedback: Suoni di feedback
-feedback.setting.chime: Suono dispositivo
-feedback.setting.failure: Suono errore
-feedback.setting.cancel: Suono annullamento
-feedback.setting.mute: Suono microfono disattivato
-feedback.setting.unmute: Suono microfono attivato
-feedback.setting.hold: Suono pressione prolungata muto
-frontend.entity.password: Password amministratore
-access.group.frontend: Accesso web
-access.setting.password: Password amministratore
-microphone.setting.mute_sound: Suono microfono disattivato
+about:
+  built: Compilato
+  commit: Commit
+  name: Nome
+  title: Info
+  version: Versione
+access:
+  group:
+    access: Accesso
+    api: Home Assistant
+    frontend: Accesso web
+  setting:
+    adb:
+      _: ADB in rete
+      help: Apre adb in rete sulla porta 5555 con shell root; spento limita adb all'USB
+    adopted:
+      _: Adottato da Home Assistant
+      help: Attivo dopo l'iscrizione di Home Assistant; spento, il dispositivo offre il suo indirizzo per l'adozione
+    password:
+      _: Password amministratore
+      help: Password di accesso all'interfaccia web del dispositivo; se vuota ne viene creata una casuale
+actions:
+  alarm:
+    _: Gestisci sveglie
+    ambiguous: Più sveglie corrispondono; di' il nome
+    daily: ogni giorno
+    delete: Eliminata {{.Alarm}}
+    disable: Disattivata {{.Alarm}}
+    empty: Non hai sveglie salvate
+    enable: Attivata {{.Alarm}}
+    exists: '{{.Alarm}} esiste già'
+    missing: Nessuna sveglia salvata corrisponde a quel nome o orario
+    named: '{{.Name}} alle {{.Clock}}'
+    next: La prossima sveglia è {{.Alarm}}, {{.When}}
+    none: Non hai sveglie in programma
+    not_ringing: Nessuna sveglia sta suonando
+    not_snoozed: Nessuna sveglia in corso da posticipare
+    'off': '{{.Alarm}}, disattivata'
+    once: una volta
+    sentence:
+      delete: (elimina|cancella|rimuovi) [la] sveglia {target}
+      disable: (disattiva|spegni) [la] sveglia {target}
+      enable: (attiva|accendi) [la] sveglia {target}
+      list: (elenca|mostra) [le] [mie] sveglie
+      list_what: quali sono le mie sveglie
+      next: quando (suona|è) la prossima sveglia
+      set: (imposta|metti|crea|aggiungi) [una] sveglia (per le|per|alle|alla|a) {time}
+      set_named: (imposta|metti|crea|aggiungi) [una] sveglia (chiamata|di nome) {name} (per le|per|alle|alla|a) {time}
+      snooze: (posticipa|rimanda) [la] sveglia
+      snooze_bare: (posticipa|rimanda)
+      stop: (ferma|spegni) [la] sveglia
+    set: Impostata {{.Alarm}}
+    snoozed: Sveglia posticipata
+    stopped: Sveglia fermata
+    target: Di' il nome della sveglia, l'orario o prossima sveglia
+    time: Di' un orario come sette e trenta, seguito eventualmente da ogni giorno feriale, ogni weekend, ogni giorno o da giorni della settimana
+    weekdays: nei giorni feriali
+    weekends: nel fine settimana
+    when: '{{.Day}} alle {{.Clock}}'
+  broadcast:
+    _: Trasmetti un messaggio
+    ask: Parla dopo il segnale
+    sentence:
+      ask: (annuncia|trasmetti)
+      message: (annuncia|trasmetti) {message}
+      send: (invia|manda) un annuncio
+    text: Per trasmettere testo scritto serve l'integrazione Home Assistant
+  call:
+    _: Chiama un dispositivo
+    busy: Già in chiamata
+    foreign: '{{.Peer}} non è in questa casa'
+    sentence:
+      call: (chiama|citofona) {peer}
+      video: (videochiama|fai una videochiamata (a|con)) {peer}
+    unknown: Nessun dispositivo chiamato {{.Peer}}
+    unreachable: '{{.Peer}} non è raggiungibile'
+  call_answer:
+    _: Rispondi a una chiamata
+    done: Rispondo alla chiamata
+    none: Nessuna chiamata in arrivo a cui rispondere
+    sentence:
+      bare: rispondi
+      call: rispondi [alla] (chiamata|telefonata)
+      video: rispondi [alla] videochiamata
+  call_hangup:
+    _: Chiudi una chiamata
+    done: Chiamata terminata
+    none: Nessuna chiamata da chiudere
+    sentence:
+      bare: riattacca
+      call: (chiudi|termina) [la] (chiamata|telefonata)
+      end: (rifiuta|ignora) [la] chiamata
+  recipes:
+    _: Cucinare dalle ricette
+    amount: Ti serve {{.Amount}}
+    closed: Nessuna ricetta aperta in cucina
+    cooking: Cuciniamo {{.Recipe}}.
+    first: Questo è il primo passaggio
+    found: Ecco le ricette per {{.Query}}
+    last: Era l'ultimo passaggio
+    missing: '{{.Ingredient}} non è in questa ricetta'
+    none: Nessuna ricetta corrisponde a {{.Query}}
+    nosteps: Questa ricetta non ha passaggi
+    notimer: Questo passaggio non ha un timer
+    sentence:
+      amount: quanto {ingredient} [mi] serve
+      amount_many: quanti {ingredient} [mi] servono
+      cook: (iniziamo a cucinare|cuciniamo|voglio cucinare|prepariamo) {recipe}
+      find: (trova|cerca) (una ricetta|ricette) (per|con) {recipe}
+      find_named: (trova|cerca) [la] ricetta [del|della|dei|delle] {recipe}
+      next: prossimo passaggio
+      next_what: qual è il prossimo passaggio
+      previous: passaggio precedente
+      repeat: (ripeti|leggi) [il] passaggio
+      show: mostrami [la] ricetta (per|di|del|della) {recipe}
+      timer: avvia [il] timer del passaggio
+    showing: Ecco {{.Recipe}}
+    step: 'Passaggio {{.N}} di {{.Of}}: {{.Text}}'
+    timer: Timer avviato per {{.Minutes}} minut{{if eq .Minutes 1}}o{{else}}i{{end}}
+    unreachable: Non riesco a raggiungere Mealie
+    unset: Configura prima Mealie nell'app Ricette
+    which: Quale ricetta?
+  youtube_tv:
+    _: Guarda YouTube TV
+    airing: Su {{.Channel}} c'è {{.Title}}
+    channel: Di' un canale o un programma
+    device: Non c'è nessun dispositivo chiamato {{.Device}}
+    here:
+      _: Riproduco {{.Show}} su {{.Channel}}
+      channel: Riproduco {{.Channel}}
+    nothing: Al momento non c'è niente in programma su {{.Channel}}
+    nowhere: Scegli una TV predefinita nell'app TV
+    sentence:
+      watch: (guarda|sintonizza) {channel}
+      watch_on: (guarda|sintonizza) {channel} (sulla|sul|su) {device}
+      what_is_on: che cosa c'è su {channel}
+      whats_on: cosa c'è su {channel}
+    unknown: Ho cercato {{.Channel}} su YouTube TV, ma non è disponibile o al momento non si può riprodurre
+    watching:
+      _: Riproduco {{.Show}} su {{.Channel}} su {{.Device}}
+      channel: Riproduco {{.Channel}} su {{.Device}}
+airplay:
+  code: Inserisci questo codice su {{.Client}}
+alarm:
+  add: Aggiungi sveglia
+  app: Sveglie
+  daily: Ogni giorno
+  day:
+    fri: Venerdì
+    mon: Lunedì
+    sat: Sabato
+    sun: Domenica
+    thu: Giovedì
+    tue: Martedì
+    wed: Mercoledì
+  delete: Elimina sveglia
+  edit: Sveglia
+  hour: Ora
+  light: Luce sveglia
+  minute: Minuto
+  minutes: '{{.N}} min'
+  name: Nome
+  'off': 'Off'
+  'on': Sveglia attiva
+  once: Una volta
+  ramp: Avvio graduale
+  repeat: Ripeti
+  save: Salva
+  seconds: '{{.N}} s'
+  snooze: Posticipa
+  snooze_for: Posticipa {{.N}} min
+  snoozed: Posticipata fino alle {{.T}}
+  sound: Suono
+  state:
+    'off': 'Off'
+    'on': 'On'
+  stop: Ferma
+  volume:
+    _: Volume
+    gentle: Graduale
+    silent: Silenzioso
+    static: Costante
+  weekdays: Giorni feriali
+  weekends: Weekend
+alerts:
+  group:
+    alerts: Avvisi e sveglie
+  page: Avvisi e sveglie
+  setting:
+    alert:
+      _: Suono di avviso
+      help: Suono dei messaggi di allarme, ripetuto ogni 2 secondi fino alla fine del tempo di squillo
+    info:
+      _: Suono informativo
+      help: Suono riprodotto quando compare un messaggio informativo
+    ring_for:
+      _: Durata suoneria timer
+      help: 'Per quanto squillano timer, sveglie e messaggi di allarme: 1, 5, 15 o 30 minuti'
+    success:
+      _: Suono di conferma
+      help: Suono riprodotto quando compare un messaggio di successo
+    timer:
+      _: Suono timer
+      help: Suono riprodotto quando un timer squilla
+    wake:
+      _: Luce sveglia
+      help: 'Aspetto della luce che sale prima di una sveglia: alba, bianca o brace'
+    warning:
+      _: Suono di attenzione
+      help: Suono riprodotto quando compare un avviso
+alertstyle:
+  answer: Risposta automatica
+  banner: Banner
+  card: Scheda
+  full: Schermo intero
+  none: Nessuno
+  screen: Come lo schermo
+  toast: Notifica breve
+align:
+  center: Centro
+  left: Sinistra
+  random: Casuale
+  right: Destra
+apps:
+  empty: Nessuna app
+  group:
+    apps: App
+  hint: Tocca la stella per tenere un'app nel dock. Tieni premuto un riquadro e trascinalo per spostarlo.
+  setting:
+    dock:
+      _: App nel dock
+      help: ID delle app nel dock, separati da virgole, nell'ordine delle app
+    order:
+      _: Ordine app
+      help: ID delle app elencate per prime, separati da virgole, in quest'ordine; le altre seguono
+  title: App
+assistants:
+  arbitration:
+    offset: '{{.N}} dB'
+    value: '{{.N}} ms'
+  group:
+    announcements: Annunci
+    arbitration: Arbitraggio
+    captions: Sottotitoli
+    gemini: Gemini
+    pryon: Pryon
+    stopword: Parola di stop
+  'off': 'Off'
+  pipeline:
+    _: Pipeline
+    preferred: Preferita
+  reply: Riproduzione risposta
+  setting:
+    animate_announcements: Anima gli annunci
+    arbitration_offset:
+      _: Correzione arbitraggio
+      help: Decibel aggiunti al punteggio di risveglio di questo dispositivo quando i vicini competono per rispondere, ±20
+    arbitration_wait:
+      _: Attesa arbitraggio
+      help: Millisecondi di attesa per altri dispositivi che hanno sentito la stessa parola, fino a 500; 0 risponde subito
+    buffer:
+      _: Buffer risposta
+      help: Millisecondi di audio della risposta trattenuti prima di iniziare la riproduzione, da 0 a 3000
+    delivery:
+      _: Riproduzione risposta
+      help: Riproduce la risposta quando è completa oppure in streaming mentre arriva l'audio
+    follow_up:
+      _: Tempo per proseguire
+      help: Secondi di nuovo ascolto senza parola di attivazione dopo una risposta; 0 lo disattiva
+    gemini:
+      _: Parola di attivazione Gemini
+      help: Offre la parola di attivazione "Hey Google", scaricando il modello quando scelta
+    known_voices:
+      _: Solo voci riconosciute
+      help: Avvia una richiesta solo se la parola di attivazione corrisponde a un profilo vocale registrato
+    look:
+      listening:
+        _: Grafica in ascolto
+        help: Grafica mostrata mentre l'assistente ascolta, guidata dal microfono; Predefinito mantiene l'aspetto incluso
+      place:
+        _: Posizione grafica
+        help: Mostra la grafica dell'assistente nel pannello dell'assistente o a schermo intero
+      responding:
+        _: Grafica in risposta
+        help: Grafica mostrata mentre suona la risposta, guidata dall'altoparlante; Predefinito mantiene l'aspetto incluso
+      waiting:
+        _: Grafica in attesa
+        help: Grafica mostrata in attesa della risposta, guidata da microfono e altoparlante; Predefinito mantiene l'aspetto incluso
+    max_listen:
+      _: Ascolto massimo
+      help: Secondi di ascolto della richiesta prima di rinunciare, da 5 a 60
+    max_think:
+      _: Elaborazione massima
+      help: Secondi di attesa della risposta prima di rinunciare, da 5 a 300
+    pryon:
+      _: Parole di attivazione Amazon
+      help: Offre le parole di attivazione Pryon di Amazon, scaricando libreria e modelli quando scelte
+    pryon_stop:
+      _: Parola di stop Amazon
+      help: Usa la parola "Stop" di Pryon di Amazon per interrompere le risposte; richiede le parole Amazon
+    recordings:
+      _: Registrazioni conservate
+      help: Quante richieste recenti di questo assistente conservare come audio sul dispositivo, fino a 10; 0 nessuna
+    show_captions: Mostra sottotitoli
+    stop_sensitivity:
+      _: Sensibilità parola di stop
+      help: Soglia di rilevamento della parola stop che interrompe una risposta, dal 50 al 100%; 100% la disattiva
+    threshold:
+      _: Sensibilità attivazione
+      help: Punteggio che la parola di attivazione deve raggiungere per attivarsi, dal 50 al 99%
+    tone:
+      _: Suono di attivazione
+      help: Suono riprodotto quando la parola di attivazione viene accettata
+    wake_screen:
+      _: Riattiva lo schermo
+      help: Accende lo schermo quando si sente questa parola di attivazione
+  slot: Assistente {{.N}}
+  talk:
+    _: Parla ora
+    hint: Senza parola di attivazione
+  threshold:
+    _: Sensibilità attivazione
+    hint: Più alta, si attiva più facilmente
+  title: Assistenti vocali
+  tone: Suono di attivazione
+  unset: Imposta la parola di attivazione in Home Assistant
+  waiting: In attesa del modello
+  word:
+    _: Parola di attivazione
+    ha: Abilita le azioni o scegli in Home Assistant
+bluetooth:
+  connected_sources: Dispositivi connessi
+  group:
+    bluetooth: Bluetooth
+  setting:
+    proxy:
+      _: Proxy Bluetooth
+      help: Inoltra i dispositivi Bluetooth vicini a Home Assistant come proxy Bluetooth ESPHome
+    scan:
+      _: Scansione Bluetooth
+      help: 'Quota del tempo radio dedicata all''ascolto degli annunci Bluetooth: 1, 2, 5 o 9%'
+    speaker:
+      _: Altoparlante Bluetooth
+      help: Permette ai telefoni di riprodurre audio su questo dispositivo via Bluetooth (A2DP)
+  source_auto: Cambio sorgente automatico
+  source_empty: Nessun dispositivo Bluetooth connesso
+  source_selected: Sorgente selezionata
+boot:
+  leaving: Riavvio in corso
+  skip: Salta
+  stranded: Contatto con lo schermo perso
+broadcast:
+  from: Da {{.Peer}}
+  title: Annuncio
+buttons:
+  dynamic: Contenuto in riproduzione
+  static: Volume principale
+calendar:
+  add: Nuovo evento
+  allday: Tutto il giorno
+  app: Calendario
+  chosen: '{{.N}} calendar{{if ne .N 1}}i{{else}}io{{end}}'
+  count: '{{.N}} giorn{{if ne .N 1}}i{{else}}o{{end}}'
+  date: Data
+  days: Giorni
+  empty: Nessun impegno in arrivo
+  failed: Impossibile aggiungere l'evento
+  free: Niente in programma
+  group:
+    calendar: Calendario
+  hour: Ora
+  hours:
+    _: '{{.N}} h'
+    half: '{{.N}} h e mezza'
+  length: Durata
+  location: Luogo
+  minute: Minuto
+  minutes: '{{.N}} min'
+  more: altri {{.N}}
+  needs:
+    title: Inserisci un titolo
+  none: Nessun calendario in Home Assistant
+  notes: Note
+  'off': 'Off'
+  opening:
+    day: Giorno
+    last: Ultima usata
+    month: Mese
+    week: Settimana
+  pick: Scegli i calendari
+  save: Salva
+  setting:
+    colors:
+      _: Colori dei calendari
+      help: Coppie entità=#rrggbb separate da virgole; i calendari senza coppia prendono il colore successivo
+    entities:
+      _: Calendari
+      help: Entità calendario di Home Assistant di cui mostrare gli eventi, separate da virgole; vuoto non ne mostra nessuna
+    opening:
+      _: Si apre su
+      help: 'Vista con cui si apre il calendario: giorno, settimana, mese o l''ultima usata'
+    saver: Prossimo impegno sul salvaschermo
+    weather:
+      _: Meteo sui giorni
+      help: Mostra le previsioni giornaliere nei giorni del calendario
+  title: Titolo
+  today: Oggi
+  tomorrow: Domani
+  view:
+    day: Giorno
+    month: Mese
+    week: Settimana
+  week:
+    start: monday
+call:
+  address: Indirizzo
+  answer:
+    count: '{{.N}} selezionati'
+    everyone: Tutti
+    from: Rispondi da
+    peers: Pannelli
+    selected: Selezionati
+    users: Utenti
+  auto:
+    _: Risposta automatica
+    hint: Risponde subito
+  autovideo: Risposta automatica con fotocamera
+  busy: Occupato
+  calling: Chiamata in corso…
+  camera:
+    'off': Fotocamera disattivata
+    'on': Fotocamera attiva
+  caps: Funzioni
+  connected: Connesso
+  declined: Rifiutata
+  dropped: Chiamata interrotta
+  empty: Nessun altro dispositivo trovato
+  failed: Chiamata non riuscita
+  gone: Non più in rete
+  group:
+    calls: Interfono
+  incoming:
+    _: Chiamata in arrivo
+    allow: Chiamate in arrivo
+    video: Videochiamata in arrivo
+  model: Modello
+  mute: Disattiva audio
+  'no': 'No'
+  pausewake: Sospendi attivazione durante le chiamate
+  reconnecting: Riconnessione…
+  ring: Squillo
+  ringback: Tono di chiamata
+  seen: Ultimo accesso
+  setting:
+    answer_api:
+      _: Risposta automatica chiamate API
+      help: Con risposta automatica limitata, risponde alle chiamate fatte tramite l'API web del dispositivo
+    answer_from:
+      _: Risposta automatica da
+      help: Risponde automaticamente a tutti o solo ai pannelli, utenti e API selezionati
+    answer_peers:
+      _: Risposta automatica pannelli
+      help: ID dei dispositivi separati da spazi a cui rispondere automaticamente quando limitato
+    answer_users:
+      _: Risposta automatica utenti
+      help: ID utente di Home Assistant separati da spazi a cui rispondere automaticamente quando limitato
+    auto_answer:
+      _: Risposta automatica
+      help: Risponde alle chiamate in arrivo senza squillare, dopo un breve segnale
+    auto_video:
+      _: Risposta automatica con fotocamera
+      help: Tiene la fotocamera accesa nelle videochiamate con risposta automatica; spento le avvia a fotocamera spenta
+    broadcasts:
+      _: Ricevi annunci
+      help: Accetta gli annunci audio da altri dispositivi e dichiara di accettarli
+    incoming:
+      _: Chiamate in arrivo
+      help: Accetta le chiamate in arrivo; spento le rifiuta tutte
+    pause_wake:
+      _: Sospendi attivazione durante le chiamate
+      help: Sospende il rilevamento della parola di attivazione durante una chiamata
+    ring:
+      _: Suoneria
+      help: Suono di una chiamata audio in arrivo
+    ringback:
+      _: Tono di chiamata
+      help: Suono riprodotto mentre una chiamata in uscita attende risposta
+    stream:
+      _: Stream video chiamata
+      help: 'Flusso della fotocamera inviato nelle videochiamate: principale o secondario (sub), se presente'
+    video_ring:
+      _: Suoneria video
+      help: Suono di una videochiamata in arrivo
+  settings:
+    _: Interfono
+    hint: Chiamate in arrivo e risposta automatica
+  standing: Casa
+  stream:
+    _: Stream video
+    hint: Sub usa meno banda; passa a Principale quando lo stream Sub è disattivato
+    main: Principale
+    sub: Sub
+  tab: Interfono
+  unanswered: Nessuna risposta
+  unavailable: Non accetta chiamate
+  unmute: Riattiva audio
+  unreachable: Non raggiungibile
+  users:
+    empty: Nessun utente Home Assistant trovato
+  version: Versione
+  videoring: Suoneria video
+  volume: Volume
+camera:
+  group:
+    exposure: Esposizione
+    picture: Immagine
+    streams: Stream
+    whitebalance: Bilanciamento del bianco
+  muted: Microfoni disattivati
+  option:
+    banding:
+      50hz: 50 Hz
+      60hz: 60 Hz
+      auto: Auto
+      'off': 'Off'
+    brightness:
+      high: Alta
+      low: Bassa
+      middle: Media
+    contrast:
+      high: Alto
+      low: Basso
+      middle: Medio
+    effect:
+      aqua: Acqua
+      blackboard: Lavagna
+      mono: Mono
+      negative: Negativo
+      none: Nessuno
+      posterize: Posterizza
+      sepia: Seppia
+      solarize: Solarizza
+      whiteboard: Lavagna bianca
+    hue:
+      high: Alta
+      low: Bassa
+      middle: Media
+    noise:
+      fast: Veloce
+      high_quality: Alta qualità
+      minimal: Minima
+      'off': 'Off'
+    quality:
+      high: Alta
+      low: Bassa
+      standard: Standard
+    saturation:
+      high: Alta
+      low: Bassa
+      middle: Media
+    scene:
+      action: Azione
+      auto: Auto
+      beach: Spiaggia
+      candlelight: Lume di candela
+      fireworks: Fuochi d'artificio
+      hdr: HDR
+      landscape: Paesaggio
+      night: Notte
+      night-portrait: Ritratto notturno
+      party: Festa
+      portrait: Ritratto
+      snow: Neve
+      sports: Sport
+      steadyphoto: Foto stabile
+      sunset: Tramonto
+      theatre: Teatro
+    sharpness:
+      high: Alta
+      low: Bassa
+      middle: Media
+    whitebalance:
+      auto: Auto
+      cloudy-daylight: Nuvoloso
+      daylight: Luce diurna
+      fluorescent: Fluorescente
+      incandescent: Incandescenza
+      shade: Ombra
+      twilight: Crepuscolo
+      warm-fluorescent: Fluorescente caldo
+  reset:
+    _: Ripristina predefiniti
+    confirm: Tocca di nuovo per ripristinare
+  setting:
+    banding:
+      _: Anti-banding
+      help: 'Filtro antisfarfallio per l''illuminazione di rete: auto, spento, 50 Hz o 60 Hz'
+    brightness:
+      _: Luminosità
+      help: 'Luminosità dell''immagine inviata all''HAL della fotocamera: bassa/media/alta o da 0 a 10, secondo il produttore'
+    contrast:
+      _: Contrasto
+      help: 'Contrasto dell''immagine inviato all''HAL della fotocamera: basso/medio/alto o da 0 a 10, secondo il produttore'
+    effect:
+      _: Effetto
+      help: Effetto colore applicato dall'HAL della fotocamera, dall'elenco del produttore
+    ev:
+      _: Compensazione esposizione
+      help: Passi di compensazione dell'esposizione, entro l'intervallo indicato dalla fotocamera
+    framerate:
+      _: Frequenza fotogrammi
+      help: Frequenza fissa del sensore quando la frequenza automatica è spenta, arrotondata a una supportata
+    framerate_auto:
+      _: Frequenza fotogrammi auto
+      help: Lascia all'HAL della fotocamera la scelta della propria frequenza
+    hue:
+      _: Tonalità
+      help: 'Tonalità dell''immagine inviata all''HAL della fotocamera: bassa, media o alta'
+    iso:
+      _: ISO
+      help: Sensibilità ISO del sensore dall'elenco del produttore, o automatica
+    keyframe:
+      _: Intervallo keyframe
+      help: Secondi tra i keyframe H.264, da 1 a 10; sulle API 25 le foto possono attendere tanto
+    main_on:
+      _: Stream principale
+      help: Fornisce il flusso H.264 principale tramite RTSP e ONVIF
+    main_size:
+      _: Risoluzione principale
+      help: Risoluzione del flusso H.264 principale, dall'elenco della scheda
+    noise:
+      _: Riduzione rumore
+      help: Modalità di riduzione del rumore dall'elenco del produttore
+    quality:
+      _: Qualità
+      help: 'Bitrate del flusso: basso lo dimezza, alto lo raddoppia, entro 0,25 e 10 Mbit/s'
+    saturation:
+      _: Saturazione
+      help: 'Saturazione inviata all''HAL della fotocamera: bassa/media/alta o da 0 a 10, secondo il produttore'
+    scene:
+      _: Scena
+      help: Modalità scena usata dall'HAL della fotocamera, dall'elenco del produttore
+    sharpness:
+      _: Nitidezza
+      help: 'Nitidezza dei bordi inviata all''HAL della fotocamera: bassa/media/alta o da 0 a 6, secondo il produttore'
+    sub_on:
+      _: Stream secondario
+      help: Codifica un secondo flusso H.264 più piccolo e lo fornisce tramite RTSP e ONVIF
+    sub_size:
+      _: Risoluzione secondaria
+      help: Larghezza del flusso secondario in pixel; l'altezza segue la forma del principale
+    whitebalance:
+      _: Bilanciamento del bianco
+      help: Preimpostazione del bilanciamento del bianco dall'elenco del produttore, o automatico
+  shutter: Otturatore fotocamera chiuso
+  starting: Avvio fotocamera
+cameras:
+  app: Videocamere
+  failed: Impossibile elencare le videocamere in Home Assistant
+  group:
+    cameras: Videocamere
+  loading: Caricamento videocamere
+  none: Nessuna videocamera selezionata
+  nosite: Indirizzo di Home Assistant sconosciuto. Imposta l'URL di Home Assistant in Impostazioni → Controllo casa → Videocamere
+  'off': 'Off'
+  pick: Seleziona
+  seconds: '{{.N}} s'
+  setting:
+    refresh:
+      _: Aggiornamento
+      help: Secondi tra gli aggiornamenti delle immagini nella griglia delle telecamere; 0 li disattiva
+    rotate:
+      _: Pagine automatiche
+      help: Secondi tra i cambi pagina automatici nella griglia delle telecamere; 0 li disattiva
+    scale:
+      _: Dimensione miniature
+      help: Altezza dei riquadri delle telecamere, da 1 a 5, da un quinto della larghezza a tutta larghezza
+    tab:
+      _: Scheda dashboard
+      help: Aggiunge una scheda Telecamere alla dashboard quando sono scelte delle telecamere
+    url:
+      _: URL di Home Assistant
+      help: Indirizzo di Home Assistant per immagini e flussi delle telecamere; vuoto lo cerca via mDNS
+  why:
+    display: Video dal vivo non supportato su questo schermo
+    failed: Video dal vivo non disponibile
+    format: Formato video non supportato
+    lost: Connessione persa
+    nopicture: Nessun video dalla videocamera
+    pictures: Nessuno stream dal vivo in Home Assistant
+    refused: 'Home Assistant: {{.Message}}'
+    slow: Home Assistant non risponde
+    webrtc: Installa l'integrazione EchoLocal per il video dal vivo
+card:
+  light:
+    brightness: Luminosità
+    hue: Colore
+    waiting: In attesa
+    warmth: Temperatura colore
+  lock:
+    lock: Blocca
+    open: Apri
+    unlock: Sblocca
+cast:
+  entity:
+    bundle: Cast bundle
+    forecast: Cast forecast
+    oracle: Cast oracle
+    receiver: Ricevitore Cast
+    youtube:
+      skip: Categorie SponsorBlock di YouTube
+  group:
+    cast: Cast
+  refused: 'Chromecast: {{.Name}} non può essere riprodotto su questo dispositivo'
+  setting:
+    bundle:
+      _: Bundle
+      help: URL di un pacchetto di credenziali cast, provato per primo per le credenziali cast
+    forecast:
+      _: Forecast
+      help: URL di un servizio di firma forecast, usato quando il pacchetto non dà nulla e Oracle è vuoto
+    oracle:
+      _: Oracle
+      help: URL di un oracle per le credenziali cast quando il pacchetto non dà nulla; vuoto senza forecast le genera da sé
+    receiver:
+      _: Ricevitore
+      help: Esegue il ricevitore Google Cast sul dispositivo
+    youtube:
+      skip:
+        _: Categorie SponsorBlock
+        help: Categorie di segmenti SponsorBlock saltate nei video YouTube, separate da virgole
+  starting: Avvio di {{.Name}}…
+certs:
+  entity:
+    cert: Nome certificato Cert Warden
+    cert_api_key: Chiave API certificato Cert Warden
+    key_api_key: Chiave API chiave Cert Warden
+    server: Server Cert Warden
+  group:
+    certificate: Certificato
+  setting:
+    cert:
+      _: Nome certificato
+      help: Nome della catena di certificati privata di Cert Warden che il dispositivo scarica
+    cert_api_key:
+      _: Chiave API certificato
+      help: Chiave API di Cert Warden per il certificato
+    key_api_key:
+      _: Chiave API della chiave
+      help: Chiave API di Cert Warden per la chiave privata
+    server:
+      _: Server Cert Warden
+      help: Indirizzo del server Cert Warden; senza schema si assume https
+  status:
+    expired: Scaduto
+    fetching: Recupero in corso
+    refused: Chiave API errata
+    unreachable: Cert Warden non raggiungibile
+    unset: Autofirmato
+    valid: '{{.Name}}, valido fino al {{.Date}}'
+chime:
+  chirp: Cinguettio
+  ding: Ding
+  none: Nessuno
+  ring: Squillo
+  ringback: Tono di chiamata
+  rise: Crescente
+  timer: Timer
+  trouble: Problema
+clock:
+  backing:
+    _: Sfondo
+    card: Scheda
+    none: Nessuno
+    shade: Ombra
+  color:
+    _: Colore
+    title: Colore orologio
+  date: Mostra data
+  face: Quadrante
+  group:
+    clock: Orologio
+  hours: Formato 24 ore
+  setting:
+    align:
+      _: Posizione orizzontale orologio
+      help: Posiziona l'orologio della dashboard a sinistra, al centro o a destra
+    backing:
+      _: Sfondo orologio
+      help: 'Dietro l''orologio della dashboard: niente, un''ombra leggera o una scheda'
+    color:
+      _: Colore orologio
+      help: 'Colore dell''orologio della dashboard: quello del tema o un colore fisso'
+    date:
+      _: Data orologio
+      help: Mostra la data con l'orologio della dashboard
+    face:
+      _: Quadrante orologio
+      help: Stile dell'orologio della dashboard, come semplice, flip, analogico o nixie
+    hours:
+      _: Formato orologio
+      help: Mostra gli orari in formato 24 o 12 ore
+    position:
+      _: Posizione verticale orologio
+      help: Posiziona l'orologio della dashboard in alto, al centro o in basso
+    size:
+      _: Dimensione orologio
+      help: Dimensione dell'orologio della dashboard, da nano a grande, come quota della sua area
+  title: Orologio
+  zone: Fuso orario
+controls:
+  dock:
+    _: Posizione dock
+    hide: Nascondi dock dopo
+  volume: Posizione pannello volume
+dashboard:
+  title: Dashboard
+datetime:
+  title: Data e ora
+debug:
+  fps:
+    _: Limite frame rate grafica
+    value: '{{.N}} fps'
+  page_memory:
+    value: '{{.N}} MB'
+  seed:
+    _: Seed grafica
+    random: Casuale
+    value: '#{{.N}}'
+  title: Opzioni sviluppatore
+  touches:
+    _: 'Dita sullo schermo: {{.N}}'
+    gesture: 'Ultimo gesto: {{.Name}}'
+  visuals: Grafica
+delay:
+  10m: 10 minuti
+  10s: 10 secondi
+  15m: 15 minuti
+  15s: 15 secondi
+  1m: 1 minuto
+  2m: 2 minuti
+  30m: 30 minuti
+  30s: 30 secondi
+  3m: 3 minuti
+  45s: 45 secondi
+  5m: 5 minuti
+  5s: 5 secondi
+  never: Mai
+delivery:
+  stream: Streaming
+  whole: Scarica prima
+diag:
+  group:
+    diagnostics: Diagnostica
+  option:
+    page_memory:
+      none: Nessun limite
+  setting:
+    interval:
+      _: Intervallo metriche
+      help: Secondi tra gli aggiornamenti dei sensori diagnostici inviati a Home Assistant, da 10 a 3600
+    low_memory:
+      _: Modalità memoria ridotta
+      help: Esegue il motore cast in modalità dispositivo di fascia bassa di Chromium; cambiarlo riavvia il motore
+    min_cores:
+      _: Core CPU minimi
+      help: Numero minimo di core CPU che il driver hotplug MediaTek tiene attivi
+    page_memory:
+      _: Limite memoria pagina
+      help: Limite dell'heap JavaScript per le pagine del motore cast, in MB; Nessuno mantiene il valore di Chromium
+display:
+  alerts: Stile avvisi
+  auto: Luminosità adattiva
+  brightness: Luminosità
+  clock: Orologio
+  font: Carattere
+  idle: Salvaschermo
+  marks: Indicatori privacy
+  poster: Sfondo
+  presence: Sensori
+  size: Dimensione
+  style: Stile
+  theme: Tema
+  timer: Stile timer
+  title: Schermo
+doorbell:
+  add: Aggiungi campanello
+  added: Aggiunto
+  app: Campanello
+  autosetup: Configurazione automatica
+  camera:
+    pictures:
+      _: Foto degli eventi da
+      hint: Una videocamera di Home Assistant che inquadra questa porta
+    title: Videocamera Home Assistant
+  cameras: '{{.N}} videocamere'
+  cancel: Annulla
+  channel: Canale {{.N}}
+  checking: Verifica…
+  connect: Connetti
+  connecting: Connessione…
+  entity:
+    chime: Suono campanello
+    door:
+      events: Campanello {{.N}} sorgente eventi
+      name: Campanello {{.N}} nome
+      talk: Campanello {{.N}} sorgente audio bidirezionale
+      video: Campanello {{.N}} sorgente video
+    live_for: Durata vista dal vivo campanello
+    notify: Suono notifica campanello
+    ring_for: Durata squillo campanello
+    style: Stile notifica campanello
+    tab: Scheda dashboard campanello
+    visitor: Stile squillo campanello
+  event:
+    dog_cat: '{{.Door}}: animale'
+    motion: '{{.Door}}: movimento'
+    package: '{{.Door}}: pacco'
+    people: '{{.Door}}: persona'
+    vehicle: '{{.Door}}: veicolo'
+    visitor: '{{.Door}}: c''è qualcuno'
+  events:
+    via: '{{.State}} via {{.Source}}'
+  fellback: '{{.Line}} (Reolink non riuscito)'
+  field:
+    host: Indirizzo IP o nome host
+    host_port: Aggiungi :porta per saltare il rilevamento
+    name: Nome
+    password: Password
+    rtsp: URL RTSP
+    stream: Stream
+    uid: UID
+    user: Utente
+  forget: Rimuovi
+  group:
+    doorbell: Campanello
+  lock:
+    _: Serratura
+    confirm: Tocca di nuovo per sbloccare
+  looking: Ricerca in Home Assistant…
+  manual: Manuale
+  needs:
+    _: Inserisci un UID, un indirizzo IP o un nome host
+    host: Inserisci un indirizzo IP o un nome host
+    rtsp: Inserisci un URL RTSP
+  none: Nessun campanello configurato
+  notsaved: Non salvato
+  offline: Offline
+  ok: OK
+  save: Salva
+  saved: Salvato
+  sensor:
+    animal: Sensore animali
+    motion: Sensore movimento
+    none: Nessuno
+    package: Sensore pacchi
+    person: Sensore persone
+    vehicle: Sensore veicoli
+    visitor: Sensore squillo
+  setting:
+    chime:
+      _: Suono squillo
+      help: Suono riprodotto quando un visitatore suona il campanello
+    door:
+      events:
+        _: Eventi
+        help: 'Origine degli eventi del campanello: Reolink, ONVIF, Home Assistant o auto'
+      name:
+        _: Nome
+        help: Nome della porta mostrato come titolo dei suoi avvisi e della vista dal vivo
+      talk:
+        _: Parla
+        help: 'Come la risposta vocale raggiunge il campanello: Reolink, ONVIF o auto'
+      video:
+        _: Video
+        help: 'Origine del video dal vivo del campanello: Reolink, ONVIF, RTSP o Home Assistant'
+    live_for:
+      _: Tieni aperta la vista dal vivo
+      help: Per quanto resta aperta la vista dal vivo del campanello, da 1 a 10 minuti
+    notify:
+      _: Suono notifica
+      help: Suono per i rilevamenti del campanello diversi da una chiamata del visitatore
+    ring_for:
+      _: Durata squillo
+      help: Per quanto una chiamata del visitatore ripete il suono e mantiene l'avviso
+    style:
+      _: Stile notifica
+      help: 'Come sono mostrati i rilevamenti diversi da una chiamata: predefinito, nessuno, banner, scheda, schermo intero o toast'
+    tab:
+      _: Scheda dashboard
+      help: Aggiunge una scheda Campanello alla dashboard quando è configurata una porta
+    visitor:
+      _: Stile squillo
+      help: Come è mostrata una chiamata del visitatore; Rispondi apre subito la vista dal vivo
+  slot: Campanello {{.N}}
+  source:
+    auto: Automatica
+    ha: Home Assistant
+    ha_reolink: Home Assistant (integrazione Reolink)
+    nvr: NVR Reolink
+    onvif: ONVIF
+    reolink: Reolink
+    rtsp: RTSP
+  status:
+    connected: Connesso
+    connecting: Connessione…
+    events: Eventi
+    login: Utente o password errati
+    none: Nessun campanello in Home Assistant
+    ready: '{{.Count}} connessi'
+    unreachable: Campanelli non raggiungibili
+    unset: Non configurato
+    unsupported: Non disponibile da questa sorgente
+    video: Video
+  stream:
+    main: Principale
+    sub: Sub
+  tried: '{{.Source}} non riuscito: {{.Why}}'
+  video:
+    connecting: Connessione via {{.Source}}
+    failed: '{{.Why}} ({{.Source}})'
+    working: Funziona via {{.Source}}
+  watch: Guarda
+  why:
+    camera: Nessun video dal vivo per questo campanello
+    decoder: Questo schermo non può riprodurre il video di questo campanello
+    fallback: Video di Home Assistant, senza audio bidirezionale
+    lock: 'Impossibile azionare la serratura: {{.Why}}'
+    lost: Campanello perso, nuovo tentativo
+    nocamera: Scegli una videocamera di Home Assistant
+    nopassword: Inserisci la password del campanello
+    other: A quell'indirizzo risponde un altro campanello
+    refused: Accesso rifiutato (codice {{.Code}})
+    talk: 'Impossibile parlare: {{.Why}}'
+    toobig: Stream principale troppo grande per questo schermo, viene mostrato lo stream secondario
+    unreachable: Campanello non raggiungibile
+edge:
+  bottom: In basso
+  left: Sinistra
+  right: Destra
+  top: In alto
+face:
+  analog: Analogico
+  analog-seconds: Analogico con secondi
+  atomic: Atomico
+  bars: Barre
+  binary: Binario
+  cards: Schede
+  flip: Flip
+  math: Matematico
+  neon: Neon
+  nixie: Nixie
+  none: Nessuno
+  octagon: Ottagono
+  overlap: Sovrapposto
+  plain: Semplice
+  railway: Ferroviario
+  reel: Rullo
+  roman: Romano
+  segments: Segmenti
+  smiley: Smile
+  spoken: Parlato
+  stack: Pila
+  words: Parole
+features:
+  airplay:
+    _: AirPlay
+    hint: Duplica lo schermo da un Mac o iPhone
+  cast:
+    _: Ricevitore Cast
+    hint: Trasmetti da un telefono o da un'app
+  mealie:
+    _: Mealie
+    hint: Ricette e modalità cucina
+  proxy:
+    _: Proxy Bluetooth
+    hint: Proxy Bluetooth LE per Home Assistant
+  rtsp:
+    _: Stream videocamera
+    hint: RTSP e ONVIF, per Home Assistant e registratori
+  sendspin:
+    _: Sendspin
+    hint: Audio in tutta la casa
+  speaker:
+    _: Altoparlante Bluetooth
+    hint: Riproduci da un telefono via Bluetooth
+  title: Servizi connessi
+feedback:
+  group:
+    feedback: Suoni di feedback
+  setting:
+    cancel:
+      _: Suono annullamento
+      help: Suono riprodotto quando una richiesta vocale viene annullata
+    chime:
+      _: Suono dispositivo
+      help: Suono dei cambi di volume; Nessuno silenzia gli altri suoni di riscontro
+    failure:
+      _: Suono errore
+      help: Suono riprodotto quando una richiesta vocale non riesce
+    hold:
+      _: Suono pressione prolungata muto
+      help: Suono riprodotto tenendo premuto il tasto muto, anche con il segnale del dispositivo su Nessuno
+    mute:
+      _: Suono microfono disattivato
+      help: Suono riprodotto quando il microfono viene silenziato
+    unmute:
+      _: Suono microfono attivato
+      help: Suono riprodotto quando il microfono viene riattivato
+font:
+  style: Predefinito dello stile
+  title: Carattere
+frontend:
+  entity:
+    password: Password amministratore
+gesture:
+  double-tap: Doppio tocco
+  fingers: '{{.Move}} con {{.N}} dita'
+  hold: Pressione prolungata
+  pinch-in: Pizzica per ridurre
+  pinch-out: Pizzica per ingrandire
+  swipe-down: Scorri in basso
+  swipe-left: Scorri a sinistra
+  swipe-right: Scorri a destra
+  swipe-up: Scorri in alto
+  tap: Tocco
+home:
+  all: Tutti
+  area:
+    count: '{{.N}} di {{.Of}}'
+  check: Verifica di nuovo
+  checking: Verifica di Home Assistant…
+  combine: Includi interruttori
+  dashboard: Modalità
+  devices: Seleziona dispositivi
+  empty: Niente da mostrare
+  enable: Abilita
+  enabled: Abilita controllo casa
+  everything:
+    cameras: Tutte le videocamere
+    lights: Tutte le luci
+    switches: Tutti gli interruttori
+  failed: Impossibile caricare da Home Assistant
+  group:
+    _: Raggruppa per area
+    all: Tutte le aree in una scheda
+    from: Aree con {{.N}} o più dispositivi
+    home: Controllo casa
+    none: Ogni dispositivo nella sua scheda
+  label:
+    count: '{{.N}} dispositiv{{if ne .N 1}}i{{else}}o{{end}}'
+  loading: Caricamento…
+  noarea: Nessuna area
+  none: Nessuno
+  'off':
+    _: Home Assistant disattivato
+    hint: Attiva il controllo casa in Impostazioni → Controllo casa
+  picked:
+    areas: '{{.N}} are{{if ne .N 1}}e{{else}}a{{end}}'
+    entities: '{{.N}} dispositiv{{if ne .N 1}}i{{else}}o{{end}}'
+    labels: '{{.N}} etichett{{if ne .N 1}}e{{else}}a{{end}}'
+  reconnecting: Riconnessione a Home Assistant…
+  refused:
+    _: Azioni non consentite
+    hint: Apri ESPHome, premi l'ingranaggio delle impostazioni su {{.Name}} e abilita “Consenti al dispositivo di eseguire azioni di Home Assistant”.
+  retry: Riprova
+  saver:
+    _: Salvaschermo
+    'off': Attiva lo standby automatico nelle impostazioni schermo di Tessera per usarne il salvaschermo
+  search: Cerca
+  selection:
+    cameras: Videocamere
+    lights: Luci
+    switches: Interruttori
+  setting:
+    combine:
+      _: Includi interruttori
+      help: Mostra gli interruttori scelti di Home Assistant nella scheda Luci, quando Controllo luci è attivo
+    control:
+      lights:
+        _: Controlla luci
+        help: Aggiunge alla dashboard nativa una scheda Luci per accendere le luci scelte di Home Assistant
+      switches:
+        _: Controlla interruttori
+        help: Aggiunge alla dashboard nativa una scheda Interruttori per gli interruttori scelti di Home Assistant
+    dashboard:
+      _: Dashboard
+      help: 'Sceglie la dashboard principale: Nativa, Rings, Tessera o Home Assistant'
+    enabled:
+      _: Abilita controllo casa
+      help: Attiva o disattiva il controllo della casa; spento nasconde ogni dashboard e ferma le azioni di Home Assistant
+    group:
+      lights:
+        _: Raggruppa luci da
+        help: Le luci nelle aree con almeno questo numero condividono una scheda; 0 dà a ciascuna la sua
+      switches:
+        _: Raggruppa interruttori da
+        help: Gli interruttori nelle aree con almeno questo numero condividono una scheda; 0 dà a ciascuno la sua
+    rings:
+      depth:
+        _: Profondità anelli
+        help: Numero di livelli di anelli disegnati oltre quello a fuoco, da 1 a 4
+      group:
+        _: 'Anelli: raggruppa per'
+        help: Ordina Rings per stanza (piano, area, poi tipo) o per sistema (tipo, poi area)
+      hidden_areas:
+        _: 'Anelli: aree nascoste'
+        help: Aree di Home Assistant escluse da Rings, come ID area separati da virgole
+      hidden_floors:
+        _: 'Anelli: piani nascosti'
+        help: Piani di Home Assistant esclusi da Rings, come ID piano separati da virgole
+      hidden_kinds:
+        _: 'Anelli: tipi nascosti'
+        help: Tipi di dispositivo esclusi da Rings, come luci, serrature o telecamere
+      labels:
+        _: 'Anelli: etichette'
+        help: Rings mostra solo le entità con una di queste etichette di Home Assistant; vuoto mostra tutto
+      look:
+        _: Aspetto anelli
+        help: Disegna Rings come ruota, icicle o burst
+      side:
+        _: 'Anelli: lato dettagli'
+        help: Posiziona il pannello dei dettagli di Rings a sinistra o in alto, oppure a destra o in basso
+    tessera:
+      bottom:
+        _: 'Tessera: scorri dal basso verso l''alto'
+        help: 'Cosa apre in Tessera uno scorrimento verso l''alto dal bordo inferiore: pannello pagine, pagina principale o niente'
+      columns:
+        _: Riquadri Tessera sul lato lungo
+        help: Numero di riquadri Tessera lungo il lato lungo dello schermo, da 1 a 12
+      follow:
+        _: 'Tessera: la pagina segue il dito'
+        help: Le pagine di Tessera seguono il dito durante lo scorrimento
+      home_after_idle:
+        _: 'Tessera: torna alla home dopo il salvaschermo'
+        help: Tessera torna alla pagina principale quando termina il salvaschermo
+      landscape:
+        _: 'Tessera: schermo orizzontale'
+        help: Offre a Home Assistant la schermata Tessera orizzontale sulle schede che ruotano
+      portrait:
+        _: 'Tessera: schermo verticale'
+        help: Offre a Home Assistant la schermata Tessera verticale sulle schede che ruotano
+      rows:
+        _: Riquadri Tessera sul lato corto
+        help: Numero di riquadri Tessera lungo il lato corto dello schermo, da 1 a 12
+      themed:
+        _: 'Tessera: usa il tema di questo dispositivo'
+        help: Dà a Tessera i colori del tema di questo dispositivo al posto dei suoi
+      turn:
+        _: 'Tessera: transizione pagina'
+        help: 'Animazione di Tessera tra le pagine: nessuna, scorrimento, copertura, rivelazione, mazzo, zoom o dissolvenza'
+  tab:
+    labels: Etichette
+    manual: Manuale
+  tessera:
+    bottom: Scorri dal basso verso l'alto
+    columns: Lato lungo
+    follow: La pagina segue il dito
+    grid: Griglia
+    landscape: Abilita orizzontale
+    portrait: Abilita verticale
+    return: Torna alla home dopo il salvaschermo
+    rows: Lato corto
+    themed: Usa il tema di questo dispositivo
+    turn: Transizione pagina
+  tile:
+    all:
+      'off': Spegni tutto
+      'on': Accendi tutto
+    area: '{{.N}} di {{.Of}} accesi'
+    level: '{{.N}}%'
+    'off': 'Off'
+    'on': 'On'
+    unavailable: Non disponibile
+  title: Controllo casa
+  unconnected:
+    _: Non connesso
+    hint: Aggiungi {{.Name}} a Home Assistant
+homealarm:
+  app: Allarme casa
+  arm: Inserisci
+  blueprint:
+    date: Data
+    link: Collegamento
+    location: Posizione
+    log: Registro stati
+    sheet: Foglio
+    time: Ora
+    type: Tipo
+  cancel: Annulla
+  chip:
+    alarm: Allarme
+    armed: Inserito
+    delay: Ritardo
+    ready: Pronto
+  class:
+    carbon_monoxide: CO
+    door: Porta
+    garage_door: Porta garage
+    gas: Gas
+    moisture: Acqua
+    motion: Movimento
+    occupancy: Occupazione
+    opening: Apertura
+    presence: Presenza
+    safety: Sicurezza
+    smoke: Fumo
+    sound: Suono
+    tamper: Manomissione
+    vibration: Vibrazione
+    window: Finestra
+  code:
+    enter: Inserisci codice
+    first: Prima inserisci il codice
+    title: Inserisci codice
+  console:
+    by: da
+    log: Registro eventi
+    prompt: Inserisci il codice o scegli una funzione
+  disarm: Disinserisci
+  emergency: Emergenza
+  entity:
+    arming:
+      show: Allarme casa mostra durante l'inserimento
+      sound: Allarme casa suono inserimento
+    look: Aspetto allarme casa
+    pending:
+      show: Allarme casa mostra durante il ritardo d'ingresso
+      sound: Allarme casa suono ritardo d'ingresso
+    settled:
+      for: Allarme casa nascondi dopo
+      show: Allarme casa mostra quando inserito o disinserito
+      sound: Allarme casa suono inserimento e disinserimento
+    tab: Scheda dashboard allarme casa
+    triggered:
+      show: Allarme casa mostra quando scatta
+      sound: Allarme casa suono allarme scattato
+  faults: Guasti
+  flip:
+    state: Stato
+    time: Ora
+  group:
+    homealarm: Allarme casa
+  hold: Tieni premuto per attivare
+  look:
+    blueprint: Progetto
+    card: Scheda
+    console: Console
+    dial: Ghiera
+    flip: Tabellone
+    hardware: Hardware
+    keypad: Tastierino
+    matrix: Matrix
+    minimal: Minimale
+    neon: Neon
+    ring: Anello
+    shield: Scudo
+    terminal: Terminale
+    vault: Caveau
+  mode:
+    armed_away: Fuori casa
+    armed_custom_bypass: Esclusioni
+    armed_home: In casa
+    armed_night: Notte
+    armed_vacation: Vacanza
+  neon:
+    state: Stato sistema
+  none: Nessuna centrale allarme in Home Assistant
+  notready:
+    many: 'Non pronto: {{.N}} zone aperte'
+    one: 'Non pronto: {{.Zone}} aperta'
+  'off': 'Off'
+  ok: OK
+  'on': 'On'
+  panic: Panico
+  pick: Scegline una
+  plate:
+    entry: Ingresso
+    exit: Uscita
+    idle: Inattivo
+    link: Collegamento
+    lost: Perso
+    mode: Modalità sistema
+    normal: Normale
+    system: Sistema
+    time: Ora locale
+  recent: Recenti
+  refused: Home Assistant ha rifiutato
+  rehearsal: Prova, nulla inviato
+  sending: Invio…
+  setting:
+    arming:
+      show:
+        _: Mostra durante l'inserimento
+        help: Apre la schermata dell'allarme mentre la centrale si inserisce
+      sound:
+        _: Suono inserimento
+        help: Suono riprodotto una volta quando la centrale inizia a inserirsi
+    entity:
+      _: Centrale allarme
+      help: Entità centrale d'allarme di Home Assistant mostrata da questo dispositivo; vuoto sceglie l'unica presente
+    hidden:
+      _: Zone nascoste
+      help: Entità zona escluse dalla schermata dell'allarme, separate da virgole
+    look:
+      _: Aspetto
+      help: Stile visivo della schermata dell'allarme, come tastierino, scudo o terminale
+    pending:
+      show:
+        _: Mostra durante il ritardo d'ingresso
+        help: Apre la schermata dell'allarme durante il ritardo di ingresso
+      sound:
+        _: Suono ritardo d'ingresso
+        help: Suono ripetuto durante il ritardo di ingresso finché lo stato cambia o la schermata si chiude
+    settled:
+      for:
+        _: Nascondi dopo
+        help: 'Per quanto resta la schermata dell''allarme dopo inserimento o disinserimento: da 5 secondi a mai'
+      show:
+        _: Mostra quando inserito o disinserito
+        help: Apre la schermata dell'allarme quando la centrale finisce di inserirsi o disinserirsi
+      sound:
+        _: Suono inserimento e disinserimento
+        help: Suono riprodotto una volta quando la centrale finisce di inserirsi o disinserirsi
+    tab:
+      _: Scheda dashboard
+      help: Aggiunge una scheda Allarme casa alla dashboard quando è scelta una centrale
+    triggered:
+      show:
+        _: Mostra quando scatta
+        help: Apre la schermata dell'allarme quando l'allarme scatta
+      sound:
+        _: Suono allarme scattato
+        help: Suono ripetuto mentre l'allarme è scattato finché lo stato cambia o la schermata si chiude
+    zones:
+      _: Zone mostrate
+      help: Sceglie quali zone della centrale elenca la schermata dell'allarme
+  status:
+    armed_away: Inserito fuori casa
+    armed_custom_bypass: Inserito con esclusioni
+    armed_home: Inserito in casa
+    armed_night: Inserito notte
+    armed_vacation: Inserito vacanza
+    arming: Inserimento
+    disarmed: Disinserito
+    disarming: Disinserimento
+    pending: Ritardo d'ingresso
+    triggered: Scattato
+    unavailable: Non disponibile
+    unset: Nessuna centrale allarme
+    waiting: In attesa di Home Assistant
+  terminal:
+    command: Comando
+    status: Stato sistema
+  zone:
+    active: Attiva
+    battery: Batteria scarica
+    bypassed: Esclusa
+    clear: Libera
+    closed: Chiusa
+    fault: Guasto
+    idle: Inattiva
+    lost: Persa
+    open: Aperta
+    tamper: Manomissione
+    trouble: Problema
+  zones:
+    _: Zone
+    count: '{{.Secure}} sicure / {{.Open}} aperte'
+    page: Zone {{.From}}–{{.To}} / {{.Of}}
+    shown: '{{.N}} di {{.Of}}'
+hours:
+  '12': 12 ore
+  '24': 24 ore
+idle:
+  after:
+    _: Avvia dopo
+    title: Avvia dopo
+  entity:
+    photo_every: Salvaschermo foto successiva ogni
+    photo_fit: Salvaschermo adattamento foto
+    photo_transition: Salvaschermo transizione foto
+  face: Quadrante
+  group:
+    idle: Salvaschermo
+  label: Etichetta grafica
+  media:
+    _: Chiudi player in pausa dopo
+    hint: Player audio e video
+  night:
+    _: Modalità notte
+    after: Si avvia dopo
+    hint: Quando la stanza è buia
+    lux:
+      _: Più buio di
+      value: '{{.N}} lx'
+    mode: Modalità
+  none: Nessuno
+  'off': Schermo spento
+  setting:
+    after:
+      _: Schermo inattivo dopo
+      help: Inattività prima che si apra il salvaschermo; Mai non lo apre da solo
+    align:
+      _: Posizione orizzontale orologio inattivo
+      help: 'Posizione orizzontale dell''orologio del salvaschermo: sinistra, centro, destra o casuale'
+    backing:
+      _: Sfondo orologio inattivo
+      help: 'Dietro l''orologio del salvaschermo: niente, un''ombra o una scheda'
+    face:
+      _: Quadrante orologio inattivo
+      help: Orologio disegnato sul salvaschermo; Nessuno non mostra l'orologio
+    media:
+      _: Chiudi player in pausa dopo
+      help: Ferma un lettore audio o video in pausa dopo questo tempo; Mai lo lascia
+    night:
+      _: Modalità notte
+      after:
+        _: Modalità notte dopo
+        help: 'Inattività in una stanza buia prima della modalità notte: da 1 a 30 minuti'
+      help: 'Cosa succede in una stanza buia: niente, attenuazione, attenuazione con orologio o schermo spento'
+      lux:
+        _: Modalità notte sotto
+        help: Luce ambiente, da 0 a 100 lux, sotto cui la stanza è considerata buia
+    photo_every:
+      _: Foto successiva ogni
+      help: 'Ogni quanto il salvaschermo mostra la foto successiva: da 10 secondi a 5 minuti'
+    photo_fit:
+      _: Adattamento foto
+      help: Come le foto del salvaschermo riempiono lo schermo, come riempi, adatta, cornice o panoramica lenta
+    photo_transition:
+      _: Transizione
+      help: 'Effetto tra le foto del salvaschermo: nessuno, dissolvenza, scorrimento, zoom, tendina o dissolvimento'
+    position:
+      _: Posizione verticale orologio inattivo
+      help: 'Posizione verticale dell''orologio del salvaschermo: alto, centro, basso o casuale'
+    saver:
+      _: Modalità salvaschermo
+      help: 'Quale salvaschermo appare: quello del dispositivo, quello di Tessera o la dashboard di Home Assistant'
+    size:
+      _: Dimensione orologio inattivo
+      help: Dimensione dell'orologio del salvaschermo, da nano a grande
+    visual1:
+      _: Grafica inattiva 1
+      help: 'Primo spazio del salvaschermo: una grafica, foto, niente o schermo spento'
+      source:
+        _: Grafica inattiva 1 ascolta
+        help: 'Audio a cui reagisce la prima grafica del salvaschermo: microfono, altoparlante o entrambi'
+    visual2:
+      _: Grafica inattiva 2
+      help: 'Secondo spazio del salvaschermo, condiviso con il primo: una grafica, foto o niente'
+      source:
+        _: Grafica inattiva 2 ascolta
+        help: 'Audio a cui reagisce la seconda grafica del salvaschermo: microfono, altoparlante o entrambi'
+    wake:
+      _: Gesto di riattivazione
+      help: Gesto che chiude il salvaschermo; tocco come predefinito
+  source1: Audio grafica 1
+  source2: Audio grafica 2
+  title: Salvaschermo
+  visual1: Grafica 1
+  visual2: Grafica 2
+ink:
+  amber: Ambra
+  blue: Blu
+  cyan: Ciano
+  green: Verde
+  pink: Rosa
+  red: Rosso
+  theme: Tema
+  violet: Viola
+keyboard:
+  cancel: Annulla
+  code_expired: Codice scaduto
+  compact: Compatta
+  enter: Invio
+  full_width: Larghezza intera
+  hide: Nascondi
+  large: Grande
+  refresh: Aggiorna
+  save: Salva
+  search: Cerca
+  size: Dimensione tastiera
+  standard: Standard
+language:
+  name: Italiano
+lock:
+  again: Inseriscilo di nuovo
+  change: Cambia PIN
+  clear:
+    _: Rimuovi PIN
+    what: Confermi? Le impostazioni verranno sbloccate.
+  enter: Inserisci il PIN
+  entity:
+    pin: Blocco impostazioni
+  mismatch: I PIN non corrispondono. Inserisci un nuovo PIN
+  new: Inserisci un nuovo PIN, da 4 a 8 cifre
+  next: Avanti
+  'off': 'Off'
+  'on': 'On'
+  set: Imposta PIN
+  title: Impostazioni
+  wait: Riprova tra {{.Seconds}} s
+  wrong: PIN errato
+look:
+  default: Predefinito
+  full: Schermo intero
+  panel: Nel pannello
+  place: Posizione
+  stage:
+    listening: In ascolto
+    responding: Risposta
+    waiting: In attesa
+  title: Grafica
+lovelace:
+  default: Dashboard predefinita
+  entity:
+    dashboard: Dashboard
+    saver_dashboard: Dashboard del salvaschermo
+    saver_scale: Scala di rendering del salvaschermo
+    saver_view: Vista del salvaschermo
+    scale: Scala di rendering della dashboard
+    theme: Tema della dashboard
+    user: Utente della dashboard
+    view: Vista della dashboard
+  first: Prima vista
+  group:
+    lovelace: Dashboard di Home Assistant
+  hint:
+    allow: Consenti un utente nelle opzioni dell'integrazione EchoLocal in Home Assistant
+    integration: Installa l'integrazione EchoLocal in Home Assistant
+    user: Scegli un utente in Impostazioni › Dashboard
+  loading: Caricamento di Home Assistant
+  scale:
+    value: '{{.N}}%'
+  setting:
+    dashboard:
+      _: Dashboard
+      help: Dashboard di Home Assistant mostrata in modalità dashboard; vuoto usa quella predefinita
+    saver_dashboard:
+      _: Dashboard del salvaschermo
+      help: Dashboard di Home Assistant mostrata come salvaschermo; vuoto usa quella predefinita
+    saver_scale:
+      _: Scala di rendering del salvaschermo
+      help: Zoom della pagina dashboard del salvaschermo, dal 50 al 100 percento
+    saver_view:
+      _: Vista del salvaschermo
+      help: Vista della dashboard del salvaschermo da aprire; vuoto apre la prima
+    scale:
+      _: Scala di rendering
+      help: Zoom della pagina dashboard di Home Assistant, dal 50 al 100 percento
+    theme:
+      _: Tema
+      help: Tema di Home Assistant applicato alle pagine dashboard; vuoto mantiene quello predefinito
+    user:
+      _: Mostra come
+      help: Utente di Home Assistant con cui accede la dashboard
+    view:
+      _: Vista
+      help: Vista della dashboard di Home Assistant da aprire; vuoto apre la prima
+  theme:
+    default: Predefinito di Home Assistant
+  unreachable:
+    _: Home Assistant non è raggiungibile
+    retry: Nuovo tentativo automatico · tocca per riprovare ora
+mealie:
+  group:
+    mealie: Mealie
+  setting:
+    server:
+      _: Server Mealie
+      help: Indirizzo del server Mealie letto dall'app Ricette; senza schema si assume http
+    token:
+      _: Token API di Mealie
+      help: Token API creato in Mealie nel tuo profilo, sotto API Tokens; ricette e preferiti si leggono come quell'utente
+media:
+  entity:
+    buttons: Pulsanti volume
+    duck: Abbassamento musica
+  group:
+    airplay: AirPlay
+    media: Contenuti multimediali
+    sendspin: Sendspin
+  option:
+    airplay_audio_mode:
+      instant: Immediato
+      synced: Sincronizzato col video
+  setting:
+    airplay:
+      _: AirPlay
+      help: Esegue il ricevitore AirPlay
+    airplay_audio_mode:
+      _: Modalità audio AirPlay
+      help: Istantaneo riproduce l'audio AirPlay appena arriva; Sincronizzato segue i tempi del mittente
+    autoplay:
+      _: Riproduzione automatica
+      help: Il lettore YouTube passa al video successivo quando uno finisce
+    background:
+      _: Riproduzione in background
+      help: Uscire dalla pagina video mantiene la riproduzione con la scheda del lettore invece di fermarla
+    buttons:
+      _: Pulsanti volume
+      help: Statico regola il volume principale; Dinamico regola quello di ciò che è sullo schermo o in riproduzione
+    duck:
+      _: Livello abbassamento
+      help: Livello in dB a cui scendono i contenuti durante assistente, chiamate e sveglie, da -40 a -3
+    mini:
+      _: Mini lettore
+      help: Mostra una piccola barra del lettore durante la riproduzione quando nessuna pagina è aperta
+    player:
+      _: Lettore all'avvio
+      help: Se all'avvio della riproduzione si apre la scheda completa del lettore
+    sendspin:
+      _: Sendspin
+      help: Esegue il lettore Sendspin
+message:
+  close: Chiudi
+microphone:
+  group:
+    microphone: Microfono
+  setting:
+    cancel:
+      _: Cancellazione eco microfono
+      help: Rimuove dal microfono la riproduzione del dispositivo stesso mentre suona
+    denoise:
+      _: Soppressione rumore
+      help: Applica la riduzione del rumore alla cattura del microfono
+    gain:
+      _: Guadagno microfono
+      help: Guadagno hardware del microfono in dB
+    leveling:
+      _: Livellamento microfono
+      help: Regola automaticamente il livello del microfono verso un obiettivo vocale fisso, fino a 27 dB
+    mixing:
+      _: Mixaggio microfono
+      help: 'Come si combinano i microfoni: microfono centrale, delay and sum o il beamformer del produttore'
+    mute_led:
+      _: Luminosità LED muto
+      help: 'Luminosità del LED di microfono silenziato: Tenue o Intenso'
+    mute_sound:
+      _: Suono microfono disattivato
+      help: Suono riprodotto quando il microfono viene silenziato o riattivato
+    sensitivity:
+      _: Sensibilità ambiente
+      help: dB sopra il rumore della stanza prima che l'animazione di ascolto reagisca, da 4 a 20
+mirror:
+  app: Specchio
+mode:
+  auto: Automatica
+  firmware: Tessera
+  lovelace: HA
+  manual: Manuale
+  native: Nativa
+  rings: Anelli
+  tessera: Tessera
+  tessera_native: Tessera nativa
+music:
+  add: Aggiungi alla coda
+  albums: Album
+  app: Musica
+  artists: Artisti
+  back: Indietro
+  find: Cerca un altoparlante
+  group: Gruppo
+  here: Sposta qui
+  home: Home
+  integration: Aggiorna l'integrazione EchoLocal in Home Assistant
+  kind:
+    album: Album
+    artist: Artista
+    audiobook: Audiolibro
+    playlist: Playlist
+    podcast: Podcast
+    radio: Stazione radio
+    track: Brano
+  library: Libreria
+  next: Riproduci dopo
+  none: Nessun altoparlante di Music Assistant
+  nothing: Niente qui
+  now: In riproduzione
+  play: Riproduci
+  playlists: Playlist
+  queue: A seguire
+  quiet: Niente in riproduzione
+  radio: Radio
+  recent: Ascoltati di recente
+  search: Cerca
+  searching: Cerca in Music Assistant
+  similar: Simili
+  speakers: Altoparlanti
+  starting: Avvio…
+  unavailable: Music Assistant non è raggiungibile
+network:
+  address:
+    _: Indirizzo IP
+    none: Nessuno
+  group:
+    network: Rete e Internet
+  internet:
+    hint: Solo rete locale blocca tutto ciò che è fuori dalla tua rete
+    local: Solo rete locale
+    open: Aperto
+    quiet: Silenzioso
+  lease:
+    _: Rinnovo lease
+    hours: '{{.N}} h'
+    minutes: '{{.N}} min'
+    now: Ora
+  mac: Indirizzo MAC
+  router: Router
+  setting:
+    home_key:
+      _: Chiave casa
+      help: Chiave condivisa che i dispositivi vicini devono avere per essere considerati di questa casa
+    internet: Accesso a internet
+    verify:
+      _: Verifica certificati
+      help: Verifica i certificati TLS di download e richieste web del dispositivo
+    via_home:
+      _: Scarica tramite Home Assistant
+      help: I download da GitHub e dall'host dei rilasci passano attraverso Home Assistant
+  ssid: Rete Wi-Fi
+  title: Rete e Internet
+  via_home:
+    hint: Aggiornamenti scaricati da Home Assistant
+night:
+  clock: Attenua a orologio
+  dim: Attenua
+  none: Niente
+  'off': Spegni lo schermo
+onboard:
+  add: Scansiona il codice, poi aggiungi
+  hint: Scansiona il codice, poi inserisci questo indirizzo.
+  or: o inserisci questo indirizzo
+  title: Aggiungimi a Home Assistant
+peer:
+  cap:
+    audio: Chiamate
+    broadcast: Annunci
+    sync: Sincronizzazione impostazioni
+    video: Videochiamate
+  checking: Verifica in corso
+  foreign: Non in questa casa
+  home: In questa casa
+  open: Nessuna chiave casa
+photofit:
+  auto: Auto
+  bars: Adatta, bordi semplici
+  contain: Adatta, bordi sfocati
+  cover: Riempi
+  framed: Con cornice
+  kenburns: Panoramica lenta
+photos:
+  app: Foto
+  entity:
+    app:
+      every: App Foto, foto successiva ogni
+      fit: Adattamento app Foto
+      transition: Transizione app Foto
+    google:
+      album1:
+        _: Link album 1 Google Photos
+        weight: Quota album 1 Google Photos
+      album2:
+        _: Link album 2 Google Photos
+        weight: Quota album 2 Google Photos
+      album3:
+        _: Link album 3 Google Photos
+        weight: Quota album 3 Google Photos
+      album4:
+        _: Link album 4 Google Photos
+        weight: Quota album 4 Google Photos
+      enabled: Google Photos
+    immich:
+      albums: Album Immich
+      enabled: Foto Immich
+      favorites: Solo preferiti Immich
+      key: Chiave API Immich
+      memories: Prima i ricordi Immich
+      people: Persone Immich
+      quality: Qualità Immich
+      server: Server Immich
+      tags: Tag Immich
+    status: Stato foto {{.Source}}
+  google: Google Photos
+  group:
+    google: Google Photos
+    immich: Immich
+    photos: Foto
+  immich: Immich
+  page: Foto
+  quality:
+    fullsize: Dimensione originale
+    preview: Anteprima
+  setting:
+    app:
+      every:
+        _: App Foto, foto successiva ogni
+        help: Ogni quanto l'app Foto passa alla foto successiva; Mai resta su una
+      fit:
+        _: Adattamento app Foto
+        help: Come l'app Foto adatta ogni foto allo schermo
+      transition:
+        _: Transizione app Foto
+        help: Animazione dell'app Foto tra una foto e l'altra
+    google:
+      album1:
+        _: Link album 1
+        help: Link di un album condiviso di Google Foto usato come fonte di foto
+        weight:
+          _: Quota album 1
+          help: Quanto spesso viene scelto questo album rispetto agli altri, da 0 a 10; 0 lo salta
+      album2:
+        _: Link album 2
+        help: Link di un album condiviso di Google Foto usato come fonte di foto
+        weight:
+          _: Quota album 2
+          help: Quanto spesso viene scelto questo album rispetto agli altri, da 0 a 10; 0 lo salta
+      album3:
+        _: Link album 3
+        help: Link di un album condiviso di Google Foto usato come fonte di foto
+        weight:
+          _: Quota album 3
+          help: Quanto spesso viene scelto questo album rispetto agli altri, da 0 a 10; 0 lo salta
+      album4:
+        _: Link album 4
+        help: Link di un album condiviso di Google Foto usato come fonte di foto
+        weight:
+          _: Quota album 4
+          help: Quanto spesso viene scelto questo album rispetto agli altri, da 0 a 10; 0 lo salta
+      enabled:
+        _: Abilita
+        help: Usa gli album condivisi di Google Foto come fonte di foto
+    immich:
+      albums:
+        _: Album
+        example: Famiglia, Estate 2026
+        help: Nomi degli album Immich da cui attingere, separati da virgole; vuoto significa qualsiasi album
+      enabled:
+        _: Abilita
+        help: Usa un server Immich come fonte di foto
+      favorites:
+        _: Solo preferiti
+        help: Usa solo le foto contrassegnate come preferite in Immich
+      key:
+        _: Chiave API
+        help: Chiave API di Immich che il dispositivo usa per leggere le foto
+      memories:
+        _: Prima i ricordi
+        help: Mostra i ricordi "In questo giorno" di Immich prima delle foto casuali
+      people:
+        _: Persone
+        help: Nomi di persone in Immich da cui attingere, separati da virgole; vuoto significa chiunque
+      quality:
+        _: Qualità
+        help: Scarica l'anteprima di Immich o l'immagine a piena dimensione
+      server:
+        _: Server
+        help: Indirizzo del server Immich
+      tags:
+        _: Tag
+        example: cucina, preferiti
+        help: Nomi dei tag Immich da cui attingere, separati da virgole; vuoto significa qualsiasi tag
+  sources: Sorgenti
+  status:
+    _: Stato
+    connecting: Connessione…
+    empty: Nessuna foto corrispondente
+    key: Chiave API errata
+    'off': 'Off'
+    old: 'Immich {{.Version}}: serve la 3.2 o successiva'
+    permission: La chiave API richiede {{.Name}}
+    ready: Connesso
+    unknown: Nessun elemento chiamato {{.Name}}
+    unreachable: Server non raggiungibile
+    unset: Non configurato
+phototransition:
+  cut: Nessuna
+  dissolve: Dissolvenza incrociata
+  fade: Dissolvenza
+  slide: Scorrimento
+  wipe: Tendina
+  zoom: Zoom
+place:
+  horizontal: Posizione orizzontale
+  size: Dimensione
+  vertical: Posizione verticale
+player:
+  ad: Annuncio
+  ad_clip: Annuncio {{.Clip}} di {{.Clips}}
+  full: Lettore completo
+  live: LIVE
+  lyrics: Testo
+  next: A seguire
+  none: Niente
+  now: In riproduzione
+position:
+  bottom: In basso
+  center: Centro
+  random: Casuale
+  top: In alto
+poster:
+  daily: Ogni giorno
+  entity:
+    every: Cambio sfondo
+    fit: Adattamento sfondo
+    'on': Sfondo
+    transition: Transizione sfondo
+  every: Cambia ogni
+  group:
+    poster: Sfondo
+  hourly: Ogni ora
+  never: Mai
+  'off': 'Off'
+  setting:
+    every:
+      _: Cambia ogni
+      help: 'Quando cambia lo sfondo: al ritorno dopo 5 minuti di assenza, a intervalli fissi o mai'
+    fit:
+      _: Adattamento
+      help: Come la foto di sfondo si adatta allo schermo
+    'on':
+      _: Mostra sfondo
+      help: Mostra una foto dalle fonti di foto dietro la schermata di riposo
+    transition:
+      _: Transizione
+      help: Animazione usata quando cambia lo sfondo
+  show: Mostra sfondo
+  wake: A ogni riattivazione
+power:
+  reboot:
+    _: Riavvia dispositivo
+    what: Tutto torna operativo in circa un minuto.
+  restart:
+    _: Riavvia app
+    what: Lo schermo si spegne per qualche secondo.
+  title: Riavvio
+presence:
+  group:
+    presence: Presenza
+  setting:
+    range:
+      _: Raggio di rilevamento
+      help: Distanza entro cui il sensore di prossimità considera presente qualcuno, da 1 vicino a 5 lontano
+    wake:
+      _: Riattiva al movimento
+      help: Qualcuno vicino risveglia lo schermo dal riposo e lo tiene acceso
+radar:
+  app: Radar
+  credit:
+    nws: 'Immagini: NASA GIBS · Radar: NWS tramite Iowa Environmental Mesonet'
+    rainviewer: 'Immagini: NASA GIBS · Radar: RainViewer'
+  failed: Radar al momento non disponibile
+  forecast: Previsione {{.Time}}
+  miles: '{{.N}} mi'
+  source:
+    auto: Auto
+    nws: NWS
+    rainviewer: RainViewer
+  updating: Aggiornamento…
+radio:
+  app: Radio
+  empty: Aggiungi una stazione ai preferiti per metterla sulla manopola
+  idle: Scegli una stazione
+  local: Stazioni locali
+  more: Altre {{.N}} non mostrate
+  nothing: Nessuna stazione qui
+  playing: In riproduzione
+  popular: Popolari
+  stopped: Interrotta
+  unavailable: Radio Browser non è configurato in Home Assistant
+rail:
+  media: Media
+  sleep: Riposo
+recipes:
+  all: Tutte
+  app: Ricette
+  back: Indietro
+  cook: Inizia a cucinare
+  done: Fatto
+  favorites: Preferite
+  hours: '{{.N}} h'
+  hours_minutes: '{{.H}} h {{.M}} min'
+  ingredients: Ingredienti
+  listening: Di’ “next step”
+  minutes: '{{.N}} min'
+  more: Mostra altre
+  need: Per questo passaggio
+  next: Avanti
+  nofavorites: Ancora nessuna ricetta preferita
+  none: Nessuna ricetta trovata
+  page: Ricette
+  prep: Preparazione {{.Time}}
+  search: Cerca ricette
+  servings: '{{.N}} porzioni'
+  setup:
+    _: Collega Mealie
+    hint: Inserisci il server Mealie e il token API
+  status:
+    _: Stato
+    connecting: Connessione…
+    ready: Connesso
+    token: Mealie ha rifiutato il token API
+    unreachable: Mealie non raggiungibile
+    unset: Non configurato
+  step: Passaggio {{.N}} di {{.Of}}
+  steps: Passaggi
+  timer: Avvia timer di {{.Time}}
+reply:
+  download: Parte dopo, senza interruzioni
+  stream: Parte prima, può interrompersi
+  title: Riproduzione risposta
+ring:
+  group:
+    ring: Anello luminoso
+  setting:
+    effect:
+      _: Luce di attivazione
+      help: Effetto dell'anello luminoso mentre questo assistente ascolta dopo la parola di attivazione
+    incoming:
+      _: Luce chiamata in arrivo
+      help: Effetto dell'anello luminoso mentre squilla una chiamata in arrivo
+    muted:
+      _: Luce microfono disattivato
+      help: Effetto dell'anello luminoso mentre il microfono è silenziato
+    reaction:
+      _: Reazione all'ambiente
+      help: Effetto dell'anello luminoso che segue il livello sonoro della stanza
+    replying_effect:
+      _: Luce risposta
+      help: Effetto dell'anello luminoso mentre questo assistente risponde; Predefinito riproduce la luce di attivazione al contrario
+    talking:
+      _: Luce in chiamata
+      help: Effetto dell'anello luminoso durante l'avvio o lo svolgimento di una chiamata
+    thinking_effect:
+      _: Luce elaborazione
+      help: Effetto dell'anello luminoso mentre questo assistente elabora; Predefinito riproduce la luce di attivazione al contrario
+    trouble:
+      _: Luce errore
+      help: Effetto dell'anello luminoso lampeggiato in rosso per 1,5 s quando una richiesta vocale o un aggiornamento non riesce
+rings:
+  areas: Aree
+  depth: Profondità
+  floors: Piani
+  group:
+    _: Raggruppa per
+    room: Stanza
+    system: Sistema
+  home: Casa
+  kind:
+    access: Accessi
+    cameras: Videocamere
+    climate: Clima
+    covers: Tapparelle
+    fans: Ventilatori
+    lights: Luci
+    locks: Serrature
+    media: Media
+    presence: Presenza
+    switches: Interruttori
+  kinds: Tipi
+  look:
+    _: Aspetto
+    burst: Raggiera
+    icicle: Ghiacciolo
+    wheel: Ruota
+  nofloor: Nessun piano
+  side:
+    _: Dettagli
+    left: Sinistra / in alto
+    right: Destra / in basso
+  summary: '{{.On}} accesi · {{.N}} dispositiv{{if eq .N 1}}o{{else}}i{{end}}'
+rtsp:
+  entity:
+    audio: Audio RTSP
+    password: Password RTSP
+    username: Nome utente RTSP
+  group:
+    rtsp: RTSP
+  setting:
+    audio:
+      _: Includi audio
+      help: Aggiunge il microfono al flusso RTSP
+    enabled:
+      _: Server RTSP
+      help: Fornisce la fotocamera tramite RTSP sulla porta 8554
+    password:
+      _: Password
+      help: Password che i client RTSP devono fornire; vuota consente a chiunque
+    username:
+      _: Nome utente
+      help: Nome utente che i client RTSP devono fornire insieme alla password
+screen:
+  group:
+    lock: Blocco
+    panel: Schermo
+  setting:
+    alert:
+      _: Stile avvisi
+      help: 'Come compaiono i messaggi sullo schermo: banner, scheda, schermo intero o toast'
+    auto:
+      _: Luminosità automatica
+      help: Regola la luminosità dello schermo dal sensore di luce ambiente
+    backlight:
+      _: Luminosità
+      help: Luminosità dello schermo, da 0 a 100%; con la luminosità automatica sposta il livello automatico
+    custom:
+      accent:
+        _: Accento tema personalizzato
+        help: 'Colore d''accento del tema Personalizzato come #rrggbb; vuoto usa quello del tema predefinito'
+      accent2:
+        _: Secondo accento tema personalizzato
+        help: 'Secondo colore d''accento del tema Personalizzato come #rrggbb; vuoto usa quello del tema predefinito'
+      background:
+        _: Sfondo tema personalizzato
+        help: 'Colore di sfondo del tema Personalizzato come #rrggbb; vuoto usa quello del tema predefinito'
+      muted:
+        _: Testo secondario tema personalizzato
+        help: 'Colore del testo secondario del tema Personalizzato come #rrggbb; vuoto usa quello del tema predefinito'
+      surface:
+        _: Schede tema personalizzato
+        help: 'Colore di schede e pannelli del tema Personalizzato come #rrggbb; vuoto usa quello del tema predefinito'
+      text:
+        _: Testo tema personalizzato
+        help: 'Colore del testo principale del tema Personalizzato come #rrggbb; vuoto usa quello del tema predefinito'
+    drawer:
+      _: Posizione dock
+      help: Bordo dello schermo su cui si trova il dock e da cui si fa scorrere
+      hide:
+        _: Nascondi dock dopo
+        help: Tempo prima che il dock si nasconda, da 5 secondi a 1 minuto; Mai lo tiene visibile
+    font:
+      _: Carattere
+      help: Carattere del testo del pannello; il predefinito usa quello dello stile
+    keyboard:
+      _: Dimensione tastiera
+      help: 'Dimensione della tastiera su schermo: compatta, standard, grande o a tutta larghezza'
+    language:
+      _: Lingua
+      help: Lingua in cui è mostrato il testo del pannello
+    lock_pin:
+      _: Blocco impostazioni
+      help: PIN da 4 a 8 cifre chiesto prima di aprire le impostazioni sul pannello; vuoto significa nessun blocco
+    marks:
+      _: Indicatori privacy
+      help: Mostra segni sullo schermo mentre il microfono è silenziato o la fotocamera è bloccata
+    size:
+      _: Dimensione
+      help: Scala dell'interfaccia del pannello, da mini a extra grande; non impostata usa quella della scheda
+    style:
+      _: Stile
+      help: Aspetto dei controlli dell'interfaccia, con carattere e colori propri
+    theme:
+      _: Tema
+      help: Tavolozza dei colori; Predefinito segue lo stile, Personalizzato usa i colori personalizzati
+    timer:
+      _: Stile timer
+      help: 'Come sono disegnati i timer in corso: barra, banner, quadrante, schermo intero, orologio o angolo'
+    touches:
+      _: Mostra tocchi
+      help: Disegna punti dove si tocca lo schermo; dettagli aggiunge numero di tocchi e ultimo gesto
+    volume:
+      _: Posizione pannello volume
+      help: Lato dello schermo su cui compare il pannello del volume
+settings:
+  about: Info
+  assistants: Assistenti vocali
+  camera: Fotocamera
+  debug: Opzioni sviluppatore
+  display: Schermo
+  features: Servizi connessi
+  language: Lingua
+  media: Contenuti multimediali
+  network: Rete e Internet
+  power: Riavvio
+  search:
+    _: Cerca nelle impostazioni
+    empty: Digita per trovare un'impostazione
+    none: Nessuna impostazione trovata
+  sync: Sincronizzazione config
+  system: Sistema
+  title: Impostazioni
+  volume: Suono
+size:
+  large: Grande
+  medium: Media
+  micro: Micro
+  mini: Mini
+  nano: Nano
+  small: Piccola
+sound:
+  alerts: Volume sveglia
+  feedback: Suoni di sistema
+  main: Volume principale
+  media: Volume contenuti
+  mute:
+    alerts: Silenzia sveglie
+    feedback: Silenzia suoni di sistema
+    main: Silenzia tutto
+    media: Silenzia contenuti
+    voice: Silenzia assistente
+  voice: Volume assistente
+source:
+  both: Microfono e altoparlante
+  mic: Microfono
+  speaker: Altoparlante
+speaker:
+  group:
+    speaker: Altoparlante
+  setting:
+    eq:
+      _: Equalizzatore
+      help: Applica alla riproduzione i filtri di taratura dell'altoparlante del produttore della scheda
+    headphone_output:
+      _: Jack cuffie
+      help: Auto riproduce dalla presa cuffie quando sono collegate; Acceso o Spento lo forza
+    resampling:
+      _: Ricampionamento voce
+      help: Metodo usato per portare l'audio vocale a 16 kHz alla frequenza dell'altoparlante
+    speaker_gain:
+      _: Guadagno altoparlante
+      help: Passo di guadagno del driver del codec, da 0 a 12, applicato riproducendo dall'altoparlante
+    speaker_output:
+      _: Altoparlante
+      help: Auto riproduce dall'altoparlante solo senza cuffie collegate; Acceso o Spento lo forza
+stream:
+  alerts: Avvisi
+  feedback: Feedback
+  main: Principale
+  media: Media
+  voice: Voce
+style:
+  eink: E-ink
+  glass: Vetro
+  hifi: Hi-fi
+  material: Material You
+  metro: Metro
+  neon: Neon
+  skeuo: Skeuo
+  standard: Standard
+  terminal: Terminale
+  title: Stile
+sync:
+  busy: '{{.Peer}} è occupato'
+  cancelled: Sincronizzazione annullata
+  empty: Nessun altro dispositivo con cui sincronizzare
+  enter: Inserisci il codice mostrato su {{.Peer}}
+  expired: Il codice è scaduto
+  failed: Sincronizzazione non riuscita
+  matched: Già associato a {{.Peer}}
+  received: '{{.N}} impostazioni applicate da {{.Peer}}'
+  receiving: Ricezione impostazioni…
+  sending: Invio impostazioni…
+  sent: Impostazioni inviate a {{.Peer}}
+  show: Inserisci questo codice su {{.Peer}}
+  title: Sincronizzazione config
+  tries: Troppi codici errati
+  wrong: Codice errato, {{.N}} tentativi rimasti
+system:
+  adb:
+    _: ADB in rete
+    hint: Shell root senza autenticazione sulla porta 5555
+  certificates:
+    _: Verifica certificati
+    hint: Convalida certificati TLS
+  title: Sistema
+tessera:
+  again: Tocca di nuovo per sbloccare
+  ago: '{{.T}} fa'
+  alarm:
+    armed_away: Fuori casa
+    armed_custom_bypass: Esclusioni personalizzate
+    armed_home: In casa
+    armed_night: Notte
+    armed_vacation: Vacanza
+    cancel: Annulla
+    clear: Cancella
+    disarm: Disinserisci
+    ok: OK
+    text: Inserisci il codice di questo pannello in Home Assistant.
+  alert:
+    notification: Notifica
+  binary:
+    battery:
+      'off': Normale
+      'on': Scarica
+    battery_charging:
+      'off': Non in carica
+      'on': In carica
+    carbon_monoxide:
+      'off': Nessun rilevamento
+      'on': Rilevato
+    cold:
+      'off': Normale
+      'on': Freddo
+    connectivity:
+      'off': Disconnesso
+      'on': Connesso
+    door:
+      'off': Chiusa
+      'on': Aperta
+    garage_door:
+      'off': Chiusa
+      'on': Aperta
+    gas:
+      'off': Nessun rilevamento
+      'on': Rilevato
+    heat:
+      'off': Normale
+      'on': Caldo
+    light:
+      'off': Nessuna luce
+      'on': Luce rilevata
+    lock:
+      'off': Bloccato
+      'on': Sbloccato
+    moisture:
+      'off': Asciutto
+      'on': Bagnato
+    motion:
+      'off': Nessun rilevamento
+      'on': Rilevato
+    moving:
+      'off': Fermo
+      'on': In movimento
+    occupancy:
+      'off': Libero
+      'on': Rilevato
+    opening:
+      'off': Chiuso
+      'on': Aperto
+    plug:
+      'off': Scollegato
+      'on': Collegato
+    power:
+      'off': 'Off'
+      'on': 'On'
+    presence:
+      'off': Fuori casa
+      'on': In casa
+    problem:
+      'off': OK
+      'on': Problema
+    running:
+      'off': Non in funzione
+      'on': In funzione
+    safety:
+      'off': Sicuro
+      'on': Non sicuro
+    smoke:
+      'off': Nessun rilevamento
+      'on': Rilevato
+    sound:
+      'off': Nessun rilevamento
+      'on': Rilevato
+    tamper:
+      'off': Nessun rilevamento
+      'on': Manomissione rilevata
+    update:
+      'off': Aggiornato
+      'on': Aggiornamento disponibile
+    vibration:
+      'off': Nessun rilevamento
+      'on': Rilevata
+    window:
+      'off': Chiusa
+      'on': Aperta
+  bottom:
+    dock: Pannello pagine
+    home: Pagina home
+    'off': Niente
+  card:
+    empty: Nessuno storico per questo intervallo
+    high: Max {{.V}} alle {{.T}}
+    loading: Caricamento storico…
+    low: Min {{.V}} alle {{.T}}
+    now: Ora {{.T}}
+    since: Da {{.T}}
+  connected: Configura questo schermo in Tessera
+  empty: Configura e aggiungi riquadri a questo schermo ({{.Name}}) in Tessera.
+  enable: Attiva orizzontale o verticale in Impostazioni → Dashboard
+  energy:
+    battery: Batteria
+    grid: Rete
+    home: Casa
+    other: Altro
+    solar: Solare
+    untracked: Non tracciato
+  in: tra {{.T}}
+  install: Installa Tessera Screen Manager in Home Assistant, poi aggiungi questo schermo.
+  key:
+    activate: Attiva
+    press: Premi
+    run: Esegui
+  lapsed: Tessera non attivo
+  last:
+    date: Ultimo {{.D}}
+    time: Ultimo {{.T}}
+    yest: Ieri {{.T}}
+    yesterday: Ieri {{.T}}
+  light:
+    brightness: Luminosità
+    effect: Effetto
+    effects: Effetti
+    hue: Colore
+    lamps: Lampade
+    waiting: In attesa
+    warmth: Temperatura colore
+  lock:
+    jammed: Inceppata
+    lock: Blocca
+    locked: Bloccata
+    locking: Blocco in corso
+    open:
+      _: Apri
+      key: Apri
+    opening: Apertura
+    unlock: Sblocca
+    unlocked: Sbloccata
+    unlocking: Sblocco in corso
+  never: Mai eseguito
+  now: Adesso
+  'off': Tessera disattivato
+  paused: In pausa {{.T}}
+  range:
+    day: 24 h
+    hour: 1 h
+    week: 7 g
+  refused: Rifiutato
+  running: In esecuzione...
+  silent: Nessuna risposta
+  sun:
+    name: Sole
+    rise: Alba {{.T}}
+    set: Tramonto {{.T}}
+  turn:
+    cover: Copertura
+    deck: Mazzo
+    fade: Dissolvenza
+    none: Nessuna
+    reveal: Rivela
+    slide: Scorrimento
+    zoom: Zoom
+  updating: Aggiornamento…
+  vacuum:
+    battery: Batteria {{.N}}%
+    dock: Base
+    locate: Trova
+    pause: Pausa
+    start: Avvia
+  waiting: Installa Tessera
+  weather:
+    clear-night: Notte serena
+    cloudy: Nuvoloso
+    daily: Giornaliera
+    exceptional: Eccezionale
+    feels: Percepita {{.T}}
+    fog: Nebbia
+    hail: Grandine
+    hourly: Oraria
+    lightning: Fulmini
+    lightning-rainy: Temporale
+    none: Nessuna previsione
+    partlycloudy: Parzialmente nuvoloso
+    pouring: Rovesci
+    pressure: Pressione {{.P}}
+    rainy: Pioggia
+    snowy: Neve
+    snowy-rainy: Neve e pioggia
+    sunny: Soleggiato
+    visibility: Visibilità {{.V}}
+    wind: Vento {{.W}}
+    windy: Ventoso
+    windy-variant: Ventoso, nuvoloso
+theme:
+  custom:
+    _: Personalizzato
+    accent: Accento
+    accent2: Secondo accento
+    background: Sfondo
+    muted: Testo secondario
+    surface: Schede
+    text: Testo
+    title: Tema personalizzato
+  default: Predefinito
+  title: Tema
+thermostat:
+  action:
+    cooling: Raffreddamento
+    drying: Deumidificazione
+    fan: Ventola
+    heating: Riscaldamento
+    idle: Inattivo
+    'off': 'Off'
+  app: Termostato
+  between: Mantiene tra
+  choose:
+    fan: Ventola
+    mode: Modalità
+    preset: Preset
+  chosen: '{{.N}} di {{.Of}}'
+  cooling: Raffredda a
+  dial: Impostazione
+  drying: Deumidificazione
+  entity:
+    look: Aspetto termostato
+    tab: Scheda dashboard termostato
+  environment: Controllo ambientale
+  fan: Ventola
+  fanmode:
+    auto: Auto
+    diffuse: Diffusa
+    focus: Focalizzata
+    high: Alta
+    low: Bassa
+    medium: Media
+    middle: Intermedia
+    'off': 'Off'
+    'on': 'On'
+  fanning: Ventola attiva
+  full: Massimo {{.N}}; disattivane prima uno
+  group:
+    thermostat: Termostato
+  heating: Riscalda a
+  high: Max
+  holding: Mantiene a
+  humidity: Umidità
+  in: Int
+  inside: Interno
+  lamp:
+    fan: Ventola attiva
+  look:
+    bars: Barre
+    brass: Ottone
+    column: Colonna
+    dial: Ghiera
+    mission: Missione
+    split: Diviso
+    terminal: Terminale
+    wheel: Manopola
+  low: Min
+  mode:
+    auto: Auto
+    cool: Freddo
+    dry: Deumidifica
+    fan_only: Ventola
+    heat: Caldo
+    heat_cool: Auto
+    'off': 'Off'
+  no-preset: Nessun preset
+  none: Nessun termostato scelto
+  'off': 'Off'
+  out: Est
+  outside: Esterno
+  preset:
+    activity: Attività
+    away: Fuori casa
+    boost: Boost
+    comfort: Comfort
+    eco: Eco
+    home: In casa
+    none: Nessuno
+    sleep: Notte
+  refused: Home Assistant ha rifiutato
+  set: Imposta
+  setpoint: Setpoint
+  setting:
+    entities:
+      _: Termostati
+      help: Entità clima di Home Assistant mostrate nell'app termostato, al massimo 4
+    look:
+      _: Aspetto
+      help: Stile di disegno dell'app termostato, come quadrante, colonna o ruota
+    tab:
+      _: Scheda dashboard
+      help: Aggiunge una scheda termostato alla dashboard dopo aver scelto un termostato
+  status: Stato
+  target: Obiettivo
+  temp: Temp
+  temperature: Temperatura
+  unavailable: Non disponibile
+  waiting: In attesa di Home Assistant
+timer:
+  stop: Ferma
+timerstyle:
+  banner: Banner
+  bar: Barra
+  corner: Angolo
+  dial: Ghiera
+  face: Quadrante
+  full: Schermo intero
+todo:
+  add: Aggiungi elemento
+  app: Lista della spesa
+  clear: Cancella completati
+  empty: Lista vuota
+  entity: Liste di cose da fare
+  group:
+    todo: Lista della spesa
+  lists: '{{.Count}} liste'
+  none: Nessuna lista di cose da fare in Home Assistant
+  'off': 'Off'
+  pick: Scegli una lista in Impostazioni → Controllo casa → Lista della spesa
+  setting:
+    completed:
+      _: Mostra elementi completati
+      help: Elenca le voci spuntate sotto quelle aperte, con un pulsante per eliminarle
+    entities:
+      _: Liste di cose da fare
+      help: Entità elenco attività di Home Assistant mostrate, separate da virgole
+  title: Lista della spesa
+tone:
+  alert: Avviso
+  info: Info
+  success: Conferma
+  title: Suono di attivazione
+  warning: Attenzione
+touches:
+  details: Dettagli
+  dots: Punti
+  'off': Spento
+tv:
+  app: TV
+  empty: Nessun programma in onda
+  failed: Impossibile caricare la guida dei canali
+  find: Cerca un canale o un programma
+  group:
+    tv: TV
+  here: Qui
+  next: 'Alle {{.Time}}: {{.Title}}'
+  none: Nessun lettore YouTube TV in Home Assistant
+  quiet: Niente in riproduzione
+  setting:
+    default:
+      _: TV predefinita
+      example: media_player.yttv_soggiorno
+      help: TV su cui vanno le richieste vocali YouTube TV quando non è nominata una TV
+    favorites:
+      _: Preferiti
+      help: Canali YouTube TV preferiti elencati per primi nella guida TV
+  update: Aggiorna l'integrazione YouTube TV
+  watch: Guarda su {{.TV}}
+  watch_here: Guarda qui
+  youtube: YouTube TV
+uisize:
+  compact: Compatta
+  large: Grande
+  medium: Media
+  mini: Mini
+  xlarge: Molto grande
+update:
+  available: '{{.Version}} disponibile'
+  channel:
+    _: Canale aggiornamenti
+    dev: Sviluppo
+    stable: Stabile
+  check: Cerca aggiornamenti
+  checking: Verifica…
+  current: Aggiornato
+  group:
+    updates: Aggiornamenti
+  install: Scarica e installa {{.Version}}
+  ready: Aggiornamento disponibile
+  running: Versione attuale
+  setting:
+    channel:
+      _: Canale aggiornamenti
+      help: Canale di rilascio da cui arrivano gli aggiornamenti firmware; cambiarlo cerca un aggiornamento
+  title: Aggiornamento software
+  unreachable: Impossibile raggiungere il server degli aggiornamenti
+  versions:
+    _: Altre versioni
+    confirm: Installa {{.Version}}
+    installed: Installata
+    none: Nessun'altra versione
+    what: '{{.Running}} verrà sostituita da {{.Version}} e l''app si riavvierà.'
+upgrade:
+  engine: il motore cast
+  installing: Installazione…
+  line: Aggiornamento a {{.Version}} · {{.Status}}
+  percent: '{{.N}}%'
+  preparing: Preparazione di {{.Name}} · {{.Status}}
+visual:
+  aurora: Aurora
+  classic-vu: VU classico
+  cymatics: Cimatica
+  digital-vu: VU digitale
+  fire: Fuoco
+  fireflies: Lucciole
+  fireworks: Fuochi d'artificio
+  galaxy: Galassia
+  group:
+    visual: Grafica
+  hal-9000: HAL 9000
+  halo: Alone
+  ink-in-water: Inchiostro nell'acqua
+  koi-pond: Laghetto koi
+  lava-lamp: Lampada lava
+  lcars: LCARS
+  lens-flares: Riflessi lente
+  light-cycles: Moto di luce
+  matrix: Matrix
+  mercury: Mercurio
+  mother: Mother
+  neon-sign: Insegna al neon
+  orb: Sfera
+  paint-splash: Schizzi di colore
+  phosphor: Fosfori
+  pipboy-3: PB 3000
+  pipboy-4: PB Mark IV
+  pipboy-76: PB 2000
+  pipboy-nv: PB New Vegas
+  pulsar: Pulsar
+  rain-on-glass: Pioggia sul vetro
+  ribbons: Nastri
+  setting:
+    fps:
+      _: Limite fotogrammi grafica
+      help: 'Frequenza massima con cui si disegnano le grafiche: 10, 15, 20, 30, 45 o 60'
+    kind:
+      _: Grafica
+      help: Animazione che il visualizzatore disegna in risposta al suono
+    label:
+      _: Etichetta grafica
+      example: Cucina
+      help: Testo, fino a 32 caratteri, mostrato dalle grafiche che disegnano un'etichetta
+    lift:
+      _: Sollevamento visualizzatore
+      help: Guadagno, da 0 a 40 dB, aggiunto al suono del microfono a cui reagiscono le grafiche
+    seed:
+      _: Seed grafica
+      help: Fissa il motivo casuale delle grafiche, fino a 1024; 0 è casuale ogni volta
+  synthwave: Synthwave
+  tesla: Tesla
+  thunderstorm: Temporale
+voice:
+  group:
+    actions: Azioni
+    commands: Comandi
+  hacs:
+    _: Integrazione EchoLocal
+    hint: Le azioni richiedono l'integrazione EchoLocal in Home Assistant. Scansiona il codice per aprirla in HACS, poi installala o aggiornala.
+    missing: Non installata
+    outdated: Aggiornamento necessario
+    unknown: Verifica
+  option:
+    label:
+      none: Solo aree
+  setting:
+    action:
+      alarm:
+        _: Gestisci sveglie
+        help: Consente alle frasi di Home Assistant Assist di impostare, elencare, fermare o posticipare sveglie su questo dispositivo
+      broadcast:
+        _: Trasmetti un messaggio
+        help: Consente alle frasi di Home Assistant Assist come "annuncia" di diffondere un messaggio
+      call:
+        _: Chiama un dispositivo
+        help: Consente alle frasi di Home Assistant Assist di chiamare un altro dispositivo trovato in rete
+      call_answer:
+        _: Rispondi a una chiamata
+        help: Consente alle frasi di Home Assistant Assist come "rispondi" di accettare una chiamata
+      call_hangup:
+        _: Chiudi una chiamata
+        help: Consente alle frasi di Home Assistant Assist come "riaggancia" di chiudere o rifiutare una chiamata
+      recipes:
+        _: Cucinare dalle ricette
+        help: Permette alle frasi di Home Assistant Assist di trovare ricette, iniziare a cucinare e scorrere i passaggi su questo dispositivo
+      youtube_tv:
+        _: Guarda YouTube TV
+        help: Consente alle frasi di Home Assistant Assist di mettere un canale YouTube TV o dire cosa c'è in onda
+    actions:
+      _: Tutte le azioni
+      help: Offre a Home Assistant Assist le frasi di questo dispositivo; spento le ritira tutte
+    command:
+      cook:
+        _: Modalità cucina
+        help: Con la modalità cucina aperta, dire "next step", "previous step" o "start timer" (in inglese) scorre la ricetta
+      mirror:
+        _: Specchio
+        help: Dire "mirror" apre la vista specchio della fotocamera
+      radar:
+        _: Radar
+        help: Dire "radar" o "show the weather radar" apre la mappa radar
+    commands:
+      _: Tutti i comandi
+      help: Esegue il riconoscimento vocale sul dispositivo per comandi come mirror e radar
+    label:
+      _: Nomi di Home Assistant da ascoltare
+      help: Etichetta di Home Assistant le cui entità il riconoscimento ascolta per nome, oltre ai nomi delle aree
+    language:
+      _: Lingua delle azioni vocali
+      help: Lingua delle frasi delle azioni vocali a cui risponde questo dispositivo e delle sue risposte
+  title: Comandi vocali
+voicematch:
+  accept: Accetta
+  add: Aggiungi una voce
+  again: Riprova
+  cancel: Annulla
+  done: Voice match è pronto per {{.Name}}
+  failed: Impossibile configurare Voice match
+  finish: Fine
+  heard: Ricevuto
+  listening: In ascolto…
+  missed: Non ho capito. Ancora una volta.
+  phrase:
+    calendar: cosa ho in agenda oggi
+    door: chiudi la porta d'ingresso
+    lights: accendi le luci
+    music: metti un po' di musica in cucina
+    shopping: aggiungi il latte alla lista della spesa
+    timer: imposta un timer di dieci minuti
+    weather: che tempo fa domani
+  pick: Scegli una persona
+  preparing: Preparazione…
+  redo: Registra di nuovo
+  remove: Rimuovi
+  say: Di' “{{.Wake}}”, poi
+  say_plain: Di' la parola di attivazione, poi
+  similar: Questa voce somiglia molto a quella di {{.Name}}
+  someone: Qualcun altro
+  threshold: Soglia di riconoscimento
+  title: Voice match
+  unconfirmed: Non sembrava la stessa voce
+volume:
+  chime: Suono notifiche
+wake:
+  ember: Brace
+  sunrise: Alba
+  white: Bianco
+weather:
+  alert:
+    dismiss: Ignora
+    until: Fino alle {{.T}}
+  alerts:
+    hint: Allerte meteo gravi per la tua casa, dal National Weather Service
+  animate: Animazione
+  cond:
+    clear-night: Sereno
+    cloudy: Nuvoloso
+    exceptional: Allerta
+    fog: Nebbia
+    hail: Grandine
+    lightning: Temporale
+    lightning-rainy: Temporale
+    partlycloudy: Parz. nuvoloso
+    pouring: Pioggia intensa
+    rainy: Pioggia
+    snowy: Neve
+    snowy-rainy: Nevischio
+    sunny: Soleggiato
+    windy: Ventoso
+    windy-variant: Ventoso
+  dashboard: Mostra nella dashboard
+  entity: Entità meteo
+  feels: Percepita {{.T}}
+  forecast:
+    _: Previsioni
+    daily: Giornaliere
+    hourly: Orarie
+    none: Nessuna previsione
+    twice_daily: Due volte al giorno
+  group:
+    weather: Meteo
+  humidity: Umidità {{.N}}%
+  idle: Mostra nel salvaschermo
+  look:
+    _: Aspetto
+    card: Scheda
+    compact: Compatto
+    detail: Dettagli
+    icon: Icona
+    stack: Pila
+    words: Parole
+  none: Nessuna entità meteo in Home Assistant
+  'off': 'Off'
+  setting:
+    alerts:
+      _: Allerte meteo
+      help: Interroga gli avvisi del National Weather Service e mostra quelli gravi al posto del meteo
+    align:
+      _: Posizione orizzontale meteo dashboard
+      help: 'Posizione orizzontale del meteo nella dashboard: sinistra, centro o destra'
+    animate:
+      _: Animazione meteo dashboard
+      help: Anima l'icona del meteo nella dashboard
+    dashboard:
+      _: Meteo nella dashboard
+      help: Mostra il meteo attuale nella dashboard
+    entity:
+      _: Entità meteo
+      help: Entità meteo di Home Assistant per le condizioni attuali; vuoto sceglie la prima trovata
+    forecast:
+      _: Entità per le previsioni
+      help: Entità meteo da cui arrivano le previsioni giornaliere; vuoto usa l'entità meteo
+    idle:
+      _: Meteo nel salvaschermo
+      help: Mostra il meteo attuale sul salvaschermo
+    look:
+      _: Aspetto meteo dashboard
+      help: 'Disposizione del meteo nella dashboard: compatto, pila, icona, parole, scheda o dettaglio'
+    position:
+      _: Posizione verticale meteo dashboard
+      help: 'Posizione verticale del meteo nella dashboard: alto, centro o basso'
+    radar_range:
+      _: Raggio iniziale radar
+      help: Distanza in miglia coperta dalla mappa radar all'apertura, da 50 a 800
+    radar_source:
+      _: Sorgente radar
+      help: Fonte delle immagini radar; Auto usa NWS nei 48 stati contigui, RainViewer altrove
+    saver:
+      align:
+        _: Posizione orizzontale meteo salvaschermo
+        help: 'Posizione orizzontale del meteo sul salvaschermo: sinistra, centro o destra'
+      animate:
+        _: Animazione meteo salvaschermo
+        help: Anima l'icona del meteo sul salvaschermo
+      look:
+        _: Aspetto meteo salvaschermo
+        help: 'Disposizione del meteo sul salvaschermo: compatto, pila, icona, parole, scheda o dettaglio'
+      position:
+        _: Posizione verticale meteo salvaschermo
+        help: 'Posizione verticale del meteo sul salvaschermo: alto, centro o basso'
+      size:
+        _: Dimensione meteo salvaschermo
+        help: Dimensione del meteo sul salvaschermo, da nano a grande
+      themed:
+        _: Colori del tema per meteo salvaschermo
+        help: Disegna le icone meteo del salvaschermo nei colori del tema invece che naturali
+    size:
+      _: Dimensione meteo dashboard
+      help: Dimensione del meteo nella dashboard, da nano a grande
+    themed:
+      _: Colori del tema per meteo dashboard
+      help: Disegna le icone meteo della dashboard nei colori del tema invece che naturali
+  themed:
+    _: Colori del tema
+    hint: 'Se disattivato usa colori naturali: sole giallo, nuvole grigie, pioggia blu'
+  title: Meteo
+  uv: UV {{.N}}
+  wind: Vento {{.N}} {{.Unit}}
+webaccess:
+  address: Indirizzo
+  title: Accesso web
+wifi:
+  busy: Già in connessione a un'altra rete
+  connected: Connesso
+  failed: Impossibile connettersi a {{.Network}}
+  join: Connetti
+  joined: Connesso a {{.Network}}
+  joining: Connessione a {{.Network}}…
+  left: '{{.N}} s rimanenti'
+  none: Nessuna rete trovata
+  ok: OK
+  password: Password
+  refused: Password errata
+  scan:
+    _: Cerca di nuovo
+    failed: Ricerca non riuscita
+  scanning: Ricerca…
+  short: Usa almeno {{.N}} caratteri
+  timeout: Nessuna connessione entro {{.Minutes}} minuti
+  title: Wi-Fi
+  unreachable: Riprova
+  unsupported: '{{.Security}}, non supportata'
+youtube:
+  account: Account YouTube
+  accounts: Account
+  add: Aggiungi account
+  again: Nuovo codice
+  anonymous: Anonimo
+  app: YouTube
+  asking: Richiesta del codice…
+  cancel: Annulla
+  category:
+    filler: Riempitivo
+    hook: Gancio
+    interaction: Promemoria interazione
+    intro: Intro
+    music_offtopic: Parte non musicale
+    outro: Outro
+    preview: Anteprima
+    selfpromo: Autopromozione
+    sponsor: Sponsor
+  empty: Ancora niente qui
+  enter: e inserisci
+  entity:
+    lounge: YouTube lounge
+  expired: Il codice è scaduto
+  failed: Impossibile raggiungere YouTube
+  go: Sul telefono o sul computer, vai su
+  group:
+    cast: Cast
+  history: Cronologia
+  home: Home
+  later: Guarda più tardi
+  option:
+    lounge:
+      always: Sempre
+      demand: Su richiesta
+  refused: Accesso rifiutato
+  search: Cerca
+  setting:
+    lounge:
+      _: YouTube lounge
+      help: Mantiene sempre aperte le connessioni lounge di YouTube e YouTube Music, o le apre su richiesta
+  shorts: Shorts
+  signin: Accedi a YouTube
+  skip:
+    _: Salta segmenti
+    none: Nessuno
+    some: '{{.N}} tipi'
+  stay: Resta anonimo
+  subscriptions: Iscrizioni
+  unwatched: Guarda qualcosa per riempire Home
+  waiting: In attesa di conferma…
+zone:
+  title: Fuso orario

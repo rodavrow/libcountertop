@@ -439,12 +439,10 @@ func saveKeyboard(
 	saveScreen(section, stack, "screen.keyboard", func(c *config.Screen) { c.Keyboard = v })
 }
 func (p *BasicPages) setVolumeEdge(v config.Edge) {
-	saveScreen(
-		p.options.Preferences.Screen,
-		p.options.Shell,
-		"screen.volume",
-		func(c *config.Screen) { c.Volume = v },
-	)
+	if err := p.options.Screen.Set("volume", string(v)); err != nil {
+		slog.Error("saving the volume panel position failed", "err", err)
+	}
+	p.options.Shell.Redraw()
 }
 func (p *BasicPages) setAlert(v config.AlertStyle) {
 	if err := p.options.Screen.Set("alert", string(v)); err != nil {

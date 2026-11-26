@@ -7,6 +7,8 @@ import (
 	"sync"
 
 	esphome "github.com/ygelfand/go-esphome-device"
+
+	"github.com/ygelfand/libcountertop/pkg/say"
 )
 
 const (
@@ -15,6 +17,11 @@ const (
 )
 
 type Trigger struct {
+	Key  string
+	Args map[string]string
+}
+
+type declaredTrigger struct {
 	Sentence string            `json:"sentence"`
 	Args     map[string]string `json:"args,omitempty"`
 }
@@ -74,11 +81,11 @@ type declared struct {
 }
 
 type declaredAction struct {
-	Name     string        `json:"name"`
-	Title    string        `json:"title"`
-	Switch   string        `json:"switch,omitempty"`
-	Args     []declaredArg `json:"args"`
-	Triggers []Trigger     `json:"triggers,omitempty"`
+	Name     string            `json:"name"`
+	Title    string            `json:"title"`
+	Switch   string            `json:"switch,omitempty"`
+	Args     []declaredArg     `json:"args"`
+	Triggers []declaredTrigger `json:"triggers,omitempty"`
 }
 
 type declaredArg struct {
@@ -109,9 +116,14 @@ func (r *Registry) Declaration(
 ) map[string]string {
 	d := declared{Version: Version, Actions: []declaredAction{}}
 	for _, a := range r.all() {
-		triggers := a.Triggers
-		if !voiced(a.Name) {
-			triggers = nil
+		var triggers []declaredTrigger
+		if voiced(a.Name) {
+			for _, t := range a.Triggers {
+				triggers = append(
+					triggers,
+					declaredTrigger{Sentence: say.Speak(t.Key), Args: t.Args},
+				)
+			}
 		}
 		var toggle string
 		if switched != nil {

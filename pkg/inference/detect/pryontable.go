@@ -16,21 +16,22 @@ type PryonOptions struct {
 }
 
 type PryonSwitch struct {
-	engine  *Engine
-	options PryonOptions
+	engine   *Engine
+	options  PryonOptions
+	controls *setting.Controls[schema.Wake]
 }
 
 func NewPryonSwitch(engine *Engine, options PryonOptions) *PryonSwitch {
-	return &PryonSwitch{engine: engine, options: options}
-}
-
-func (p *PryonSwitch) Controls() *setting.Controls[schema.Wake] {
-	return &setting.Controls[schema.Wake]{
+	p := &PryonSwitch{engine: engine, options: options}
+	p.controls = &setting.Controls[schema.Wake]{
 		Table: PryonTable(),
-		Read:  p.options.Read,
+		Read:  options.Read,
 		Save:  p.save,
 	}
+	return p
 }
+
+func (p *PryonSwitch) Controls() *setting.Controls[schema.Wake] { return p.controls }
 
 func PryonTable() *setting.Table[schema.Wake] {
 	return setting.NewTable(
@@ -81,6 +82,7 @@ func (p *PryonSwitch) write(w schema.Wake) error {
 		p.engine.ClearKind(wake.KindPryon)
 	}
 	p.options.Changed()
+	p.controls.Publish()
 	return nil
 }
 

@@ -49,7 +49,7 @@ export function Search({ sections, entities, states, apps, go }: Props) {
           label: field.title,
           description: g.title === s.title ? s.title : `${s.title} › ${g.title}`,
           leftSection: <s.icon size={18} stroke={1.6} />,
-          keywords: [field.id, field.name, g.title, s.title],
+          keywords: [field.id, field.name, g.title, s.title, ...(field.help ? [field.help] : [])],
           onClick: () => go(s.slug, field.id),
         })),
       ),

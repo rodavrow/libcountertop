@@ -171,6 +171,7 @@ func New(o Options) *Thermostats {
 		Read:   o.Settings.Read,
 		Save: func(s Setting, v string) error {
 			err := setting.Store(o.Settings, s, v)
+			t.follow()
 			t.Updated.Emit(struct{}{})
 			return err
 		},

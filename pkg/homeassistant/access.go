@@ -11,7 +11,6 @@ var (
 	ErrNotAllowed   = errors.New(
 		"homeassistant: actions are not allowed for this device; enable them in the ESPHome integration's options",
 	)
-	ErrTooLarge = errors.New("homeassistant: the request is too large to send")
 )
 
 type Access int

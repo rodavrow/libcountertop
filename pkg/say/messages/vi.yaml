@@ -1,1958 +1,3117 @@
-# Bộ chuỗi tiếng Việt dùng chung cho mọi thiết bị Countertop.
-# Bản dịch thiếu sẽ quay về tiếng Anh.
-
-language.name: Tiếng Việt
-about.built: Bản dựng
-about.commit: Commit
-about.name: Tên
-about.title: Giới thiệu
-about.version: Phiên bản
-access.group.access: Truy cập
-access.setting.adb: ADB qua mạng
-media.group.airplay: AirPlay
-media.setting.airplay: AirPlay
-media.setting.airplay_audio_mode: Chế độ âm thanh AirPlay
-media.option.airplay_audio_mode.instant: Tức thời
-media.option.airplay_audio_mode.synced: Đồng bộ với video
-alarm.add: Thêm báo thức
-alarm.app: Báo thức
-alarm.daily: Mỗi ngày
-alarm.day.fri: Thứ Sáu
-alarm.day.mon: Thứ Hai
-alarm.day.sat: Thứ Bảy
-alarm.day.sun: Chủ Nhật
-alarm.day.thu: Thứ Năm
-alarm.day.tue: Thứ Ba
-alarm.day.wed: Thứ Tư
-alarm.delete: Xóa báo thức
-alarm.edit: Báo thức
-alarm.hour: Giờ
-alarm.light: Đèn đánh thức
-alarm.minute: Phút
-alarm.minutes: "{{.N}} phút"
-alarm.name: Tên
-alarm.off: Tắt
-alarm.on: Báo thức bật
-alarm.once: Một lần
-alarm.ramp: Khởi động nhẹ nhàng
-alarm.repeat: Lặp lại
-alarm.save: Lưu
-alarm.seconds: "{{.N}} giây"
-alarm.snooze: Báo lại
-alarm.snooze_for: Báo lại sau {{.N}} phút
-alarm.snoozed: Báo lại đến {{.T}}
-alarm.stop: Dừng
-alarm.sound: Âm thanh
-alarm.state.off: Tắt
-alarm.state.on: Bật
-alarm.volume: Âm lượng
-alarm.volume.gentle: Nhẹ nhàng
-alarm.volume.silent: Im lặng
-alarm.volume.static: Đều
-alarm.weekdays: Ngày thường
-alarm.weekends: Cuối tuần
-alerts.group.alerts: Cảnh báo & báo thức
-alerts.page: Cảnh báo & báo thức
-alerts.setting.alert: Chuông cảnh báo
-alerts.setting.info: Chuông thông tin
-alerts.setting.ring_for: Hẹn giờ đổ chuông trong
-alerts.setting.success: Chuông thành công
-alerts.setting.timer: Âm thanh hẹn giờ
-alerts.setting.wake: Đèn đánh thức
-alerts.setting.warning: Chuông nhắc nhở
-alertstyle.banner: Banner
-alertstyle.screen: Giống màn hình
-alertstyle.none: Không
-alertstyle.answer: Tự động trả lời
-alertstyle.card: Thẻ
-alertstyle.full: Toàn màn hình
-alertstyle.toast: Thông báo nhanh
-align.center: Giữa
-align.left: Trái
-align.random: Ngẫu nhiên
-align.right: Phải
-access.group.api: Home Assistant
-access.setting.adopted: Được Home Assistant tiếp nhận
-apps.group.apps: Ứng dụng
-apps.empty: Không có ứng dụng
-apps.hint: Chạm vào ngôi sao để giữ ứng dụng trên dock. Giữ một ô rồi kéo để di chuyển.
-apps.setting.dock: Ứng dụng trên dock
-apps.setting.order: Thứ tự ứng dụng
-apps.title: Ứng dụng
-assistants.off: Tắt
-assistants.pipeline: Pipeline
-assistants.pipeline.preferred: Ưu tiên
-assistants.reply: Phát phản hồi
-assistants.group.pryon: Pryon
-assistants.setting.pryon: Từ đánh thức Amazon
-assistants.setting.pryon_stop: Từ dừng Amazon
-assistants.group.gemini: Gemini
-assistants.setting.gemini: Từ đánh thức Gemini
-assistants.group.announcements: Thông báo
-assistants.setting.animate_announcements: Hoạt ảnh khi thông báo
-assistants.group.captions: Phụ đề
-assistants.setting.show_captions: Hiện phụ đề
-assistants.group.stopword: Từ dừng
-assistants.setting.stop_sensitivity: Độ nhạy từ dừng
-assistants.group.arbitration: Điều phối
-assistants.setting.arbitration_wait: Chờ điều phối
-assistants.arbitration.value: "{{.N}} ms"
-assistants.setting.arbitration_offset: Độ lệch điều phối
-assistants.arbitration.offset: "{{.N}} dB"
-assistants.setting.buffer: Bộ đệm phản hồi
-assistants.setting.delivery: Phát phản hồi
-assistants.setting.follow_up: Thời gian chờ nói tiếp
-assistants.setting.known_voices: Chỉ giọng nói đã nhận diện
-assistants.setting.max_listen: Thời gian nghe tối đa
-assistants.setting.max_think: Thời gian suy nghĩ tối đa
-assistants.setting.recordings: Số bản ghi giữ lại
-assistants.setting.threshold: Độ nhạy từ đánh thức
-assistants.setting.tone: Âm thanh đánh thức
-assistants.setting.wake_screen: Đánh thức màn hình
-assistants.slot: Trợ lý {{.N}}
-assistants.talk: Nói ngay
-assistants.talk.hint: Không cần từ đánh thức
-assistants.threshold: Độ nhạy từ đánh thức
-assistants.threshold.hint: Càng cao càng dễ đánh thức
-assistants.title: Trợ lý giọng nói
-assistants.tone: Âm thanh đánh thức
-assistants.unset: Đặt từ đánh thức trong Home Assistant
-assistants.waiting: Đang chờ mô hình
-assistants.word: Từ đánh thức
-assistants.word.ha: Bật hành động hoặc chọn trong Home Assistant
-bluetooth.group.bluetooth: Bluetooth
-ring.group.ring: Chuông
-ring.setting.effect: Đèn đánh thức
-ring.setting.incoming: Đèn cuộc gọi đến
-ring.setting.muted: Đèn tắt tiếng
-ring.setting.reaction: Phản ứng trong phòng
-ring.setting.replying_effect: Đèn phản hồi
-ring.setting.talking: Đèn khi đang gọi
-ring.setting.thinking_effect: Đèn suy nghĩ
-ring.setting.trouble: Đèn lỗi
-speaker.group.speaker: Loa
-speaker.setting.eq: EQ loa
-speaker.setting.resampling: Lấy mẫu lại giọng nói
-speaker.setting.speaker_output: Loa
-speaker.setting.headphone_output: Giắc tai nghe
-speaker.setting.speaker_gain: Độ lợi loa
-bluetooth.setting.proxy: Proxy Bluetooth
-bluetooth.setting.scan: Quét Bluetooth
-bluetooth.setting.speaker: Loa Bluetooth
-bluetooth.connected_sources: Thiết bị đã kết nối
-bluetooth.source_auto: Tự động chuyển nguồn
-bluetooth.source_empty: Không có thiết bị Bluetooth nào được kết nối
-bluetooth.source_selected: Nguồn đã chọn
-boot.leaving: Đang khởi động lại
-boot.skip: Bỏ qua
-broadcast.from: Từ {{.Peer}}
-broadcast.title: Phát thông báo
-boot.stranded: Mất liên lạc với màn hình
-buttons.dynamic: Đang phát gì
-buttons.static: Âm lượng chính
-calendar.allday: Cả ngày
-calendar.app: Lịch
-calendar.chosen: "{{.N}} lịch"
-calendar.add: Sự kiện mới
-calendar.count: "{{.N}} ngày"
-calendar.date: Ngày
-calendar.days: Số ngày
-calendar.empty: Không có gì sắp tới
-calendar.failed: Không thể thêm sự kiện
-calendar.free: Không có kế hoạch
-calendar.hour: Giờ
-calendar.hours: "{{.N}} giờ"
-calendar.hours.half: "{{.N}} giờ rưỡi"
-calendar.length: Thời lượng
-calendar.location: Địa điểm
-calendar.minute: Phút
-calendar.minutes: "{{.N}} phút"
-calendar.more: "+{{.N}} nữa"
-calendar.needs.title: Nhập tiêu đề
-calendar.notes: Ghi chú
-calendar.save: Lưu
-calendar.title: Tiêu đề
-calendar.week.start: monday
-calendar.group.calendar: Lịch
-calendar.none: Không có lịch trong Home Assistant
-calendar.off: Tắt
-calendar.pick: Chọn lịch
-calendar.example.entities: calendar.family, calendar.work
-calendar.setting.entities: Lịch
-calendar.example.colors: calendar.family=#e8a33d, calendar.work=#3a7bd5
-calendar.setting.colors: Màu lịch
-calendar.setting.weather: Thời tiết theo ngày
-calendar.setting.opening: Mở ở chế độ
-calendar.setting.saver: Sự kiện tiếp theo trên màn hình chờ
-calendar.opening.last: Lần dùng gần nhất
-calendar.opening.day: Ngày
-calendar.opening.week: Tuần
-calendar.opening.month: Tháng
-calendar.view.day: Ngày
-calendar.view.week: Tuần
-calendar.view.month: Tháng
-calendar.today: Hôm nay
-calendar.tomorrow: Ngày mai
-call.address: Địa chỉ
-call.caps: Có thể làm
-call.answer.count: Đã chọn {{.N}}
-call.answer.everyone: Mọi người
-call.answer.from: Trả lời từ
-call.answer.peers: Màn hình
-call.answer.users: Người dùng
-call.answer.selected: Đã chọn
-call.auto: Tự động trả lời
-call.auto.hint: Trả lời ngay
-call.autovideo: Tự động trả lời kèm camera
-call.busy: Đang bận
-call.calling: Đang gọi…
-call.camera.off: Camera tắt
-call.camera.on: Camera bật
-call.connected: Đã kết nối
-call.declined: Đã từ chối
-call.dropped: Cuộc gọi bị ngắt
-call.empty: Không tìm thấy thiết bị nào khác
-call.users.empty: Không tìm thấy người dùng Home Assistant nào
-cameras.app: Camera
-cameras.group.cameras: Camera
-cameras.failed: Không thể liệt kê camera trong Home Assistant
-cameras.loading: Đang tải camera
-cameras.none: Chưa chọn camera
-cameras.nosite: Chưa biết địa chỉ Home Assistant. Đặt URL Home Assistant trong Cài đặt → Điều khiển nhà → Camera
-cameras.off: Tắt
-cameras.pick: Chọn
-cameras.seconds: "{{.N}} giây"
-cameras.why.display: Màn hình này không hỗ trợ video trực tiếp
-cameras.why.failed: Video trực tiếp không khả dụng
-cameras.why.format: Định dạng video không được hỗ trợ
-cameras.why.lost: Mất kết nối
-cameras.why.nopicture: Camera không có video
-cameras.why.pictures: Không có luồng trực tiếp trong Home Assistant
-cameras.why.refused: "Home Assistant: {{.Message}}"
-cameras.why.slow: Home Assistant quá thời gian chờ
-cameras.why.webrtc: Cài tích hợp EchoLocal để xem video trực tiếp
-cameras.setting.refresh: Làm mới
-cameras.setting.rotate: Tự động chuyển trang
-cameras.setting.scale: Kích thước ảnh thu nhỏ
-cameras.setting.tab: Tab bảng điều khiển
-certs.entity.cert: Tên chứng chỉ Cert Warden
-certs.entity.cert_api_key: Khóa API chứng chỉ Cert Warden
-certs.entity.key_api_key: Khóa API khóa Cert Warden
-certs.entity.server: Máy chủ Cert Warden
-certs.example.cert: kitchen-display
-certs.example.server: https://certs.example.com
-certs.group.certificate: Chứng chỉ
-certs.setting.cert: Tên chứng chỉ
-certs.setting.cert_api_key: Khóa API chứng chỉ
-certs.setting.key_api_key: Khóa API khóa
-certs.setting.server: Máy chủ Cert Warden
-certs.status.expired: Đã hết hạn
-certs.status.fetching: Đang lấy
-certs.status.refused: Sai khóa API
-certs.status.unreachable: Không thể kết nối Cert Warden
-certs.status.unset: Tự ký
-certs.status.valid: "{{.Name}}, có hiệu lực đến {{.Date}}"
-cameras.example.url: http://homeassistant.local:8123
-cameras.setting.url: URL Home Assistant
-peer.cap.audio: Cuộc gọi
-peer.cap.broadcast: Phát thông báo
-peer.cap.sync: Đồng bộ cài đặt
-peer.cap.video: Gọi video
-peer.checking: Đang kiểm tra
-peer.foreign: Không thuộc nhà này
-peer.home: Trong nhà này
-peer.open: Không có khóa nhà
-call.failed: Cuộc gọi thất bại
-call.group.calls: Bộ đàm
-call.gone: Không còn trên mạng
-call.incoming: Cuộc gọi đến
-call.incoming.allow: Cuộc gọi đến
-call.incoming.video: Cuộc gọi video đến
-call.model: Kiểu máy
-call.mute: Tắt tiếng
-call.no: Không
-call.pausewake: Tạm dừng từ đánh thức khi gọi
-call.reconnecting: Đang kết nối lại…
-call.ring: Chuông
-call.ringback: Chuông hồi
-call.seen: Lần cuối thấy
-call.setting.answer_api: Tự động trả lời cuộc gọi API
-call.setting.answer_from: Tự động trả lời từ
-call.setting.answer_peers: Tự động trả lời màn hình
-call.setting.answer_users: Tự động trả lời người dùng
-call.setting.auto_answer: Tự động trả lời cuộc gọi
-call.setting.auto_video: Tự động trả lời kèm camera
-call.setting.broadcasts: Nhận thông báo phát
-call.setting.incoming: Cuộc gọi đến
-call.setting.pause_wake: Tạm dừng từ đánh thức khi gọi
-call.setting.ring: Âm chuông
-call.setting.ringback: Âm chuông hồi
-call.setting.stream: Luồng video cuộc gọi
-call.setting.video_ring: Âm chuông video
-call.settings: Bộ đàm
-call.settings.hint: Cuộc gọi đến và tự động trả lời
-call.standing: Nhà
-call.stream: Luồng video
-call.stream.hint: Luồng phụ dùng ít băng thông hơn; tự chuyển sang luồng chính khi luồng phụ tắt
-call.stream.main: Chính
-call.stream.sub: Phụ
-call.tab: Bộ đàm
-call.unanswered: Không trả lời
-call.unavailable: Không nhận cuộc gọi
-call.unreachable: Không thể liên lạc
-call.unmute: Bật tiếng
-call.version: Phiên bản
-call.videoring: Chuông video
-call.volume: Âm lượng
-camera.group.exposure: Phơi sáng
-camera.group.picture: Hình ảnh
-camera.group.streams: Luồng
-camera.group.whitebalance: Cân bằng trắng
-camera.option.banding.50hz: 50 Hz
-camera.option.banding.60hz: 60 Hz
-camera.option.banding.auto: Tự động
-camera.option.banding.off: Tắt
-camera.option.brightness.high: Cao
-camera.option.brightness.low: Thấp
-camera.option.brightness.middle: Trung bình
-camera.option.contrast.high: Cao
-camera.option.contrast.low: Thấp
-camera.option.contrast.middle: Trung bình
-camera.option.effect.aqua: Xanh nước
-camera.option.effect.blackboard: Bảng đen
-camera.option.effect.mono: Đơn sắc
-camera.option.effect.negative: Âm bản
-camera.option.effect.none: Không
-camera.option.effect.posterize: Posterize
-camera.option.effect.sepia: Sepia
-camera.option.effect.solarize: Solarize
-camera.option.effect.whiteboard: Bảng trắng
-camera.option.hue.high: Cao
-camera.option.hue.low: Thấp
-camera.option.hue.middle: Trung bình
-camera.option.noise.fast: Nhanh
-camera.option.noise.high_quality: Chất lượng cao
-camera.option.noise.minimal: Tối thiểu
-camera.option.noise.off: Tắt
-camera.option.quality.high: Cao
-camera.option.quality.low: Thấp
-camera.option.quality.standard: Tiêu chuẩn
-camera.option.saturation.high: Cao
-camera.option.saturation.low: Thấp
-camera.option.saturation.middle: Trung bình
-camera.option.scene.action: Hành động
-camera.option.scene.auto: Tự động
-camera.option.scene.beach: Bãi biển
-camera.option.scene.candlelight: Ánh nến
-camera.option.scene.fireworks: Pháo hoa
-camera.option.scene.hdr: HDR
-camera.option.scene.landscape: Phong cảnh
-camera.option.scene.night: Ban đêm
-camera.option.scene.night-portrait: Chân dung ban đêm
-camera.option.scene.party: Bữa tiệc
-camera.option.scene.portrait: Chân dung
-camera.option.scene.snow: Tuyết
-camera.option.scene.sports: Thể thao
-camera.option.scene.steadyphoto: Ảnh chống rung
-camera.option.scene.sunset: Hoàng hôn
-camera.option.scene.theatre: Nhà hát
-camera.option.sharpness.high: Cao
-camera.option.sharpness.low: Thấp
-camera.option.sharpness.middle: Trung bình
-camera.option.whitebalance.auto: Tự động
-camera.option.whitebalance.cloudy-daylight: Nhiều mây
-camera.option.whitebalance.daylight: Ánh sáng ban ngày
-camera.option.whitebalance.fluorescent: Đèn huỳnh quang
-camera.option.whitebalance.incandescent: Đèn sợi đốt
-camera.option.whitebalance.shade: Bóng râm
-camera.option.whitebalance.twilight: Chạng vạng
-camera.option.whitebalance.warm-fluorescent: Huỳnh quang ấm
-camera.reset: Đặt lại mặc định
-camera.reset.confirm: Chạm lần nữa để đặt lại
-camera.setting.banding: Chống nhấp nháy
-camera.setting.brightness: Độ sáng
-camera.setting.contrast: Độ tương phản
-camera.setting.effect: Hiệu ứng
-camera.setting.ev: Bù phơi sáng
-camera.setting.framerate: Tốc độ khung hình
-camera.setting.framerate_auto: Tự động tốc độ khung hình
-camera.setting.hue: Sắc độ
-camera.setting.iso: ISO
-camera.setting.keyframe: Khoảng khung hình khóa
-camera.setting.main_on: Luồng chính
-camera.setting.main_size: Độ phân giải chính
-camera.setting.noise: Khử nhiễu
-camera.setting.quality: Chất lượng
-camera.setting.saturation: Độ bão hòa
-camera.setting.scene: Cảnh
-camera.setting.sharpness: Độ nét
-camera.setting.sub_on: Luồng phụ
-camera.setting.sub_size: Độ phân giải phụ
-camera.setting.whitebalance: Cân bằng trắng
-camera.starting: Đang khởi động camera
-camera.muted: Micrô đang tắt tiếng
-camera.shutter: Cửa chập camera đang đóng
-cast.entity.receiver: Bộ nhận Cast
-cast.entity.youtube.skip: Danh mục YouTube SponsorBlock
-cast.entity.oracle: Cast oracle
-cast.entity.bundle: Cast bundle
-cast.entity.forecast: Cast forecast
-cast.group.cast: Cast
-cast.starting: Đang khởi động {{.Name}}…
-cast.refused: "Chromecast: {{.Name}} không thể phát trên thiết bị này"
-cast.setting.receiver: Bộ nhận
-cast.example.youtube.skip: sponsor, selfpromo, intro
-cast.setting.youtube.skip: Danh mục SponsorBlock
-cast.setting.oracle: Oracle
-cast.setting.bundle: Bundle
-cast.setting.forecast: Forecast
-chime.chirp: Líu lo
-chime.ding: Keng
-chime.none: Không
-chime.ring: Chuông
-chime.ringback: Chuông hồi
-chime.rise: Tăng dần
-chime.timer: Hẹn giờ
-chime.trouble: Sự cố
-clock.group.clock: Đồng hồ
-clock.backing: Nền đồng hồ
-clock.backing.card: Thẻ
-clock.backing.none: Không
-clock.backing.shade: Đổ bóng
-clock.color: Màu
-clock.color.title: Màu đồng hồ
-clock.date: Hiện ngày
-clock.face: Mặt đồng hồ
-clock.hours: Dùng định dạng 24 giờ
-clock.setting.align: Vị trí ngang đồng hồ
-clock.setting.backing: Nền đồng hồ
-clock.setting.color: Màu đồng hồ
-clock.setting.date: Ngày trên đồng hồ
-clock.setting.face: Mặt đồng hồ
-clock.setting.hours: Định dạng đồng hồ
-clock.setting.position: Vị trí dọc đồng hồ
-clock.setting.size: Kích thước đồng hồ
-clock.title: Đồng hồ
-clock.zone: Múi giờ
-controls.dock: Vị trí dock
-controls.dock.hide: Ẩn dock sau
-controls.volume: Vị trí bảng âm lượng
-datetime.title: Ngày & giờ
-dashboard.title: Bảng điều khiển
-debug.fps: Giới hạn tốc độ khung hình hiệu ứng
-diag.group.diagnostics: Chẩn đoán
-diag.setting.interval: Khoảng thời gian đo
-diag.setting.min_cores: Số lõi CPU tối thiểu
-diag.setting.low_memory: Chế độ ít bộ nhớ
-diag.setting.page_memory: Giới hạn bộ nhớ trang
-diag.option.page_memory.none: Không giới hạn
-debug.fps.value: "{{.N}} fps"
-debug.page_memory.value: "{{.N}} MB"
-debug.seed: Seed hiệu ứng
-debug.seed.random: Ngẫu nhiên
-debug.seed.value: "#{{.N}}"
-debug.title: Tùy chọn nhà phát triển
-debug.touches: "Số ngón tay chạm: {{.N}}"
-debug.touches.gesture: "Cử chỉ cuối: {{.Name}}"
-debug.visuals: Hiệu ứng
-delay.10m: 10 phút
-delay.10s: 10 giây
-delay.15m: 15 phút
-delay.15s: 15 giây
-delay.1m: 1 phút
-delay.2m: 2 phút
-delay.30m: 30 phút
-delay.30s: 30 giây
-delay.45s: 45 giây
-delay.3m: 3 phút
-delay.5m: 5 phút
-delay.5s: 5 giây
-delay.never: Không bao giờ
-delivery.stream: Phát trực tiếp
-delivery.whole: Tải về trước
-display.alerts: Kiểu cảnh báo
-display.auto: Độ sáng thích ứng
-display.brightness: Độ sáng
-display.clock: Đồng hồ
-display.idle: Màn hình chờ
-display.marks: Chỉ báo quyền riêng tư
-display.poster: Hình nền
-display.presence: Cảm biến
-display.size: Kích thước
-display.style: Kiểu
-display.font: Phông chữ
-display.theme: Giao diện
-display.timer: Kiểu hẹn giờ
-display.title: Màn hình
-edge.bottom: Dưới
-edge.left: Trái
-edge.right: Phải
-edge.top: Trên
-face.analog: Kim
-face.analog-seconds: Kim có giây
-face.cards: Thẻ
-face.none: Không
-face.overlap: Chồng lớp
-face.roman: La Mã
-face.railway: Đường sắt
-face.flip: Lật
-face.nixie: Nixie
-face.octagon: Bát giác
-face.atomic: Nguyên tử
-face.spoken: Đọc giờ
-face.math: Toán học
-face.smiley: Mặt cười
-face.neon: Neon
-face.bars: Cột
-face.reel: Cuộn
-face.binary: Nhị phân
-face.plain: Trơn
-face.segments: Phân đoạn
-face.stack: Xếp chồng
-face.words: Chữ
-features.cast: Bộ nhận Cast
-features.cast.hint: Phát từ điện thoại hoặc ứng dụng
-features.proxy: Proxy Bluetooth
-features.proxy.hint: Proxy Bluetooth LE cho Home Assistant
-features.rtsp: Luồng camera
-features.rtsp.hint: RTSP và ONVIF, cho Home Assistant và đầu ghi
-features.airplay: AirPlay
-features.airplay.hint: Phản chiếu từ Mac hoặc iPhone
-airplay.code: "Nhập mã này trên {{.Client}}"
-features.sendspin: Sendspin
-features.sendspin.hint: Âm thanh toàn nhà
-features.speaker: Loa Bluetooth
-features.speaker.hint: Phát từ điện thoại qua Bluetooth
-features.title: Dịch vụ kết nối
-home.all: Tất cả
-home.area.count: "{{.N}} / {{.Of}}"
-home.check: Kiểm tra lại
-home.checking: Đang kiểm tra Home Assistant…
-home.combine: Bao gồm công tắc
-home.devices: Chọn thiết bị
-home.empty: Không có gì để hiện
-home.enable: Bật
-home.enabled: Bật điều khiển nhà
-home.everything.cameras: Tất cả camera
-home.everything.lights: Tất cả đèn
-home.everything.switches: Tất cả công tắc
-home.failed: Không thể tải từ Home Assistant
-home.group: Nhóm theo khu vực
-home.group.all: Mọi khu vực trên một thẻ
-home.group.from: Khu vực có từ {{.N}} thiết bị trở lên
-home.group.home: Điều khiển nhà
-home.group.none: Mỗi thiết bị một thẻ riêng
-home.label.count: "{{.N}} thiết bị"
-home.loading: Đang tải…
-home.dashboard: Chế độ
-home.saver: Màn hình chờ
-home.saver.off: Bật Tự động chờ trong cài đặt màn hình Tessera để dùng màn hình chờ của Tessera
-mode.native: Native
-mode.tessera: Tessera
-mode.tessera_native: Tessera native
-mode.firmware: Tessera
-mode.lovelace: HA
-mode.rings: Rings
-rings.look: Kiểu hiển thị
-rings.look.wheel: Bánh xe
-rings.look.icicle: Nhũ băng
-rings.look.burst: Tỏa
-rings.depth: Độ sâu
-rings.group: Nhóm theo
-rings.group.room: Phòng
-rings.group.system: Hệ thống
-home.setting.rings.group: "Rings: nhóm theo"
-home.setting.rings.depth: Độ sâu Rings
-card.light.brightness: Độ sáng
-card.light.hue: Màu
-card.light.warmth: Nhiệt độ màu
-card.light.waiting: Đang chờ
-card.lock.lock: Khóa
-card.lock.unlock: Mở khóa
-card.lock.open: Mở
-rings.side: Chi tiết
-rings.side.left: Trái / trên
-rings.side.right: Phải / dưới
-home.setting.rings.side: "Rings: phía chi tiết"
-rings.home: Nhà
-rings.nofloor: Không tầng
-rings.floors: Tầng
-rings.areas: Khu vực
-rings.kinds: Loại
-rings.summary: "{{.On}} bật · {{.N}} thiết bị"
-rings.kind.lights: Đèn
-rings.kind.switches: Công tắc
-rings.kind.media: Media
-rings.kind.climate: Khí hậu
-rings.kind.fans: Quạt
-rings.kind.covers: Rèm & cửa
-rings.kind.locks: Khóa
-rings.kind.access: Ra vào
-rings.kind.presence: Hiện diện
-rings.kind.cameras: Camera
-home.setting.rings.look: "Rings: kiểu hiển thị"
-home.setting.rings.hidden_floors: "Rings: tầng ẩn"
-home.setting.rings.hidden_areas: "Rings: khu vực ẩn"
-home.setting.rings.hidden_kinds: "Rings: loại ẩn"
-home.setting.rings.labels: "Rings: nhãn"
-home.noarea: Không khu vực
-home.none: Không
-home.off: Home Assistant đang tắt
-home.off.hint: Bật điều khiển nhà trong Cài đặt → Điều khiển nhà
-home.picked.areas: "{{.N}} khu vực"
-home.picked.entities: "{{.N}} thiết bị"
-home.picked.labels: "{{.N}} nhãn"
-home.refused: Không được phép thực hiện hành động
-home.refused.hint: Mở ESPHome, nhấn biểu tượng cài đặt trên {{.Name}} rồi bật “Cho phép thiết bị thực hiện hành động Home Assistant.”
-home.retry: Thử lại
-home.search: Tìm kiếm
-home.selection.cameras: Camera
-home.selection.lights: Đèn
-home.selection.switches: Công tắc
-home.setting.combine: Bao gồm công tắc
-home.setting.control.lights: Điều khiển đèn
-home.setting.control.switches: Điều khiển công tắc
-home.setting.enabled: Bật điều khiển nhà
-home.setting.group.lights: Nhóm đèn từ
-home.setting.group.switches: Nhóm công tắc từ
-home.setting.dashboard: Bảng điều khiển
-home.setting.tessera.columns: Ô Tessera theo cạnh dài
-home.setting.tessera.home_after_idle: "Tessera: về trang chủ sau màn hình chờ"
-home.setting.tessera.landscape: "Tessera: màn hình ngang"
-home.setting.tessera.portrait: "Tessera: màn hình dọc"
-home.setting.tessera.rows: Ô Tessera theo cạnh ngắn
-home.setting.tessera.themed: "Tessera: dùng giao diện của thiết bị này"
-home.setting.tessera.turn: "Tessera: hiệu ứng chuyển trang"
-home.setting.tessera.bottom: "Tessera: vuốt lên từ đáy"
-home.setting.tessera.follow: "Tessera: trang theo ngón tay"
-home.tab.labels: Nhãn
-home.tab.manual: Thủ công
-home.tessera.grid: Lưới
-home.tessera.columns: Cạnh dài
-home.tessera.landscape: Bật màn hình ngang
-home.tessera.portrait: Bật màn hình dọc
-home.tessera.return: Về trang chủ sau màn hình chờ
-home.tessera.rows: Cạnh ngắn
-home.tessera.themed: Dùng giao diện của thiết bị này
-home.tessera.turn: Hiệu ứng chuyển trang
-home.tessera.bottom: Vuốt lên từ đáy
-home.tessera.follow: Trang theo ngón tay
-home.tile.all.off: Tắt tất cả
-home.tile.all.on: Bật tất cả
-home.tile.area: "{{.N}} / {{.Of}} đang bật"
-home.tile.level: "{{.N}}%"
-home.tile.off: Tắt
-home.tile.on: Bật
-home.tile.unavailable: Không khả dụng
-home.title: Điều khiển nhà
-home.reconnecting: Đang kết nối lại với Home Assistant…
-home.unconnected: Chưa kết nối
-home.unconnected.hint: Thêm {{.Name}} vào Home Assistant
-hours.12: 12 giờ
-hours.24: 24 giờ
-idle.group.idle: Màn hình chờ
-idle.after: Bắt đầu sau
-idle.after.title: Bắt đầu sau
-idle.face: Mặt đồng hồ
-idle.label: Nhãn hiệu ứng
-idle.media: Đóng trình phát đang tạm dừng sau
-idle.media.hint: Trình phát âm thanh và video
-idle.night: Chế độ ban đêm
-idle.night.after: Bắt đầu sau
-idle.night.hint: Khi phòng tối
-idle.night.lux: Tối hơn
-idle.night.lux.value: "{{.N}} lx"
-idle.night.mode: Chế độ
-idle.none: Không
-idle.off: Tắt màn hình
-idle.setting.after: Màn hình chờ sau
-idle.setting.align: Vị trí ngang đồng hồ chờ
-idle.setting.backing: Nền đồng hồ chờ
-idle.setting.face: Mặt đồng hồ chờ
-idle.setting.media: Đóng trình phát đang tạm dừng sau
-idle.setting.night: Chế độ ban đêm
-idle.setting.night.after: Chế độ ban đêm sau
-idle.setting.night.lux: Chế độ ban đêm dưới
-idle.setting.wake: Cử chỉ đánh thức
-idle.setting.position: Vị trí dọc đồng hồ chờ
-idle.setting.saver: Chế độ màn hình chờ
-idle.setting.size: Kích thước đồng hồ chờ
-idle.setting.visual1: Hiệu ứng chờ 1
-idle.setting.visual1.source: Hiệu ứng chờ 1 lắng nghe
-idle.setting.visual2: Hiệu ứng chờ 2
-idle.setting.visual2.source: Hiệu ứng chờ 2 lắng nghe
-idle.source1: Âm thanh hiệu ứng 1
-idle.source2: Âm thanh hiệu ứng 2
-idle.title: Màn hình chờ
-idle.setting.photo_every: Ảnh tiếp theo mỗi
-idle.entity.photo_every: Màn hình chờ đổi ảnh mỗi
-idle.setting.photo_fit: Cách vừa ảnh
-idle.entity.photo_fit: Cách vừa ảnh màn hình chờ
-idle.setting.photo_transition: Hiệu ứng chuyển
-idle.entity.photo_transition: Hiệu ứng chuyển ảnh màn hình chờ
-idle.visual1: Hiệu ứng 1
-idle.visual2: Hiệu ứng 2
-ink.amber: Hổ phách
-ink.blue: Xanh dương
-ink.cyan: Xanh lơ
-ink.green: Xanh lá
-ink.pink: Hồng
-ink.red: Đỏ
-ink.theme: Giao diện
-ink.violet: Tím
-keyboard.cancel: Hủy
-keyboard.code_expired: Mã đã hết hạn
-message.close: Đóng
-keyboard.compact: Gọn
-keyboard.enter: Nhập
-keyboard.full_width: Toàn chiều rộng
-keyboard.hide: Ẩn
-keyboard.large: Lớn
-keyboard.refresh: Làm mới
-keyboard.save: Lưu
-keyboard.search: Tìm kiếm
-keyboard.size: Kích thước bàn phím
-keyboard.standard: Tiêu chuẩn
-look.default: Mặc định
-look.full: Toàn màn hình
-look.panel: Trong bảng
-look.place: Vị trí
-look.stage.listening: Đang nghe
-look.stage.responding: Đang phản hồi
-look.stage.waiting: Đang chờ
-look.title: Hiệu ứng
-media.entity.buttons: Nút âm lượng
-media.entity.duck: Giảm âm nhạc
-media.group.media: Media
-media.setting.autoplay: Tự động phát
-media.setting.background: Phát trong nền
-media.setting.buttons: Nút âm lượng
-media.setting.duck: Độ giảm âm
-media.setting.mini: Trình phát thu nhỏ
-media.setting.player: Trình phát khi khởi động
-microphone.group.microphone: Micrô
-microphone.setting.cancel: Khử vọng micrô
-microphone.setting.denoise: Khử tiếng ồn
-microphone.setting.gain: Độ lợi micrô
-microphone.setting.leveling: Cân bằng âm lượng micrô
-microphone.setting.mixing: Trộn micrô
-microphone.setting.mute_led: Độ sáng đèn tắt tiếng
-microphone.setting.sensitivity: Độ nhạy trong phòng
-mirror.app: Gương
-mode.auto: Tự động
-mode.manual: Thủ công
-network.group.network: Mạng & internet
-network.address: Địa chỉ IP
-network.address.none: Không
-network.lease: Gia hạn thuê IP
-network.lease.hours: "{{.N}} giờ"
-network.lease.minutes: "{{.N}} phút"
-network.lease.now: Bây giờ
-network.mac: Địa chỉ MAC
-network.router: Bộ định tuyến
-network.setting.home_key: Khóa nhà
-network.internet.hint: Chỉ mạng nội bộ chặn mọi thứ bên ngoài mạng của bạn
-network.setting.internet: Truy cập internet
-network.internet.open: Mở
-network.internet.quiet: Yên lặng
-network.internet.local: Chỉ mạng nội bộ
-network.setting.verify: Xác minh chứng chỉ
-network.setting.via_home: Tải qua Home Assistant
-network.ssid: Mạng Wi-Fi
-network.title: Mạng & internet
-network.via_home.hint: Bản cập nhật do Home Assistant tải
-night.clock: Mờ thành đồng hồ
-gesture.tap: Chạm
-gesture.double-tap: Chạm hai lần
-gesture.hold: Giữ
-gesture.swipe-up: Vuốt lên
-gesture.swipe-down: Vuốt xuống
-gesture.swipe-left: Vuốt trái
-gesture.swipe-right: Vuốt phải
-gesture.pinch-in: Chụm vào
-gesture.pinch-out: Mở ra
-gesture.fingers: "{{.Move}} với {{.N}} ngón tay"
-night.dim: Mờ
-night.none: Không gì
-night.off: Tắt màn hình
-onboard.add: Quét mã rồi thêm
-onboard.hint: Quét mã rồi nhập địa chỉ này.
-onboard.or: hoặc nhập địa chỉ này
-onboard.title: Thêm tôi vào Home Assistant
-homealarm.app: Báo động nhà
-homealarm.group.homealarm: Báo động nhà
-homealarm.setting.entity: Bảng báo động
-homealarm.setting.look: Kiểu hiển thị
-homealarm.entity.look: Kiểu báo động nhà
-homealarm.setting.tab: Tab bảng điều khiển
-homealarm.entity.tab: Tab bảng điều khiển báo động nhà
-homealarm.setting.triggered.show: Hiện khi báo động
-homealarm.entity.triggered.show: Báo động nhà hiện khi báo động
-homealarm.setting.triggered.sound: Âm thanh khi báo động
-homealarm.entity.triggered.sound: Âm thanh báo động nhà khi báo động
-homealarm.setting.pending.show: Hiện trong thời gian chờ vào
-homealarm.entity.pending.show: Báo động nhà hiện trong thời gian chờ vào
-homealarm.setting.pending.sound: Âm thanh chờ vào
-homealarm.entity.pending.sound: Âm thanh chờ vào báo động nhà
-homealarm.setting.arming.show: Hiện khi đang bật
-homealarm.entity.arming.show: Báo động nhà hiện khi đang bật
-homealarm.setting.arming.sound: Âm thanh khi bật
-homealarm.entity.arming.sound: Âm thanh bật báo động nhà
-homealarm.setting.settled.show: Hiện khi đã bật hoặc tắt
-homealarm.entity.settled.show: Báo động nhà hiện khi đã bật hoặc tắt
-homealarm.setting.settled.for: Ẩn sau
-homealarm.entity.settled.for: Báo động nhà ẩn sau
-homealarm.setting.settled.sound: Âm thanh khi bật và tắt
-homealarm.entity.settled.sound: Âm thanh bật và tắt báo động nhà
-homealarm.look.keypad: Bàn phím
-homealarm.look.shield: Khiên
-homealarm.look.card: Thẻ
-homealarm.look.ring: Vòng
-homealarm.look.dial: Mặt số
-homealarm.look.neon: Neon
-homealarm.look.hardware: Phần cứng
-homealarm.look.flip: Bảng lật
-homealarm.look.terminal: Terminal
-homealarm.look.console: Bảng lệnh
-homealarm.look.minimal: Tối giản
-homealarm.look.blueprint: Bản vẽ
-homealarm.look.matrix: Matrix
-homealarm.look.vault: Két sắt
-homealarm.blueprint.sheet: Tờ
-homealarm.blueprint.date: Ngày
-homealarm.blueprint.time: Giờ
-homealarm.blueprint.link: Liên kết
-homealarm.blueprint.log: Nhật ký trạng thái
-homealarm.status.unset: Không có bảng báo động
-homealarm.status.waiting: Đang chờ Home Assistant
-homealarm.status.unavailable: Không khả dụng
-homealarm.status.disarmed: Đã tắt
-homealarm.status.armed_home: Đã bật tại nhà
-homealarm.status.armed_away: Đã bật vắng nhà
-homealarm.status.armed_night: Đã bật ban đêm
-homealarm.status.armed_vacation: Đã bật kỳ nghỉ
-homealarm.status.armed_custom_bypass: Đã bật bỏ qua
-homealarm.status.arming: Đang bật
-homealarm.status.disarming: Đang tắt
-homealarm.status.pending: Chờ vào
-homealarm.status.triggered: Đã báo động
-homealarm.mode.armed_home: Nhà
-homealarm.mode.armed_away: Vắng nhà
-homealarm.mode.armed_night: Ban đêm
-homealarm.mode.armed_vacation: Kỳ nghỉ
-homealarm.mode.armed_custom_bypass: Bỏ qua
-homealarm.arm: Bật
-homealarm.disarm: Tắt
-homealarm.emergency: Khẩn cấp
-homealarm.panic: Hoảng loạn
-homealarm.hold: Giữ để kích hoạt
-homealarm.code.first: Nhập mã trước
-homealarm.code.enter: Nhập mã
-homealarm.code.title: Nhập mã
-homealarm.sending: Đang gửi…
-homealarm.refused: Home Assistant đã từ chối
-homealarm.none: Không có bảng báo động trong Home Assistant
-homealarm.pick: Chọn một
-homealarm.cancel: Hủy
-homealarm.ok: OK
-homealarm.recent: Gần đây
-homealarm.chip.ready: Sẵn sàng
-homealarm.chip.armed: Đã bật
-homealarm.chip.delay: Chờ
-homealarm.chip.alarm: Báo động
-homealarm.plate.time: Giờ địa phương
-homealarm.plate.link: Liên kết
-homealarm.plate.lost: Mất
-homealarm.plate.normal: Bình thường
-homealarm.plate.system: Hệ thống
-homealarm.plate.mode: Chế độ hệ thống
-homealarm.plate.idle: Chờ
-homealarm.plate.exit: Ra
-homealarm.plate.entry: Vào
-homealarm.neon.state: Trạng thái hệ thống
-homealarm.flip.time: Giờ
-homealarm.flip.state: Trạng thái
-homealarm.terminal.status: Trạng thái hệ thống
-homealarm.terminal.command: Lệnh
-homealarm.console.log: Nhật ký sự kiện
-homealarm.console.by: bởi
-homealarm.console.prompt: Nhập mã hoặc chọn chức năng
-homealarm.zone.lost: Mất
-homealarm.zone.bypassed: Bỏ qua
-homealarm.zone.active: Hoạt động
-homealarm.zone.idle: Chờ
-homealarm.zone.fault: Lỗi
-homealarm.zone.clear: Bình thường
-homealarm.zone.open: Mở
-homealarm.zone.closed: Đóng
-homealarm.zone.battery: Pin yếu
-homealarm.zone.tamper: Bị can thiệp
-homealarm.zone.trouble: Sự cố
-homealarm.notready.one: "Chưa sẵn sàng: {{.Zone}} đang mở"
-homealarm.notready.many: "Chưa sẵn sàng: {{.N}} khu vực đang mở"
-homealarm.zones: Khu vực
-homealarm.faults: Lỗi
-homealarm.rehearsal: Diễn tập, không gửi gì
-thermostat.app: Bộ điều nhiệt
-thermostat.group.thermostat: Bộ điều nhiệt
-thermostat.setting.look: Kiểu hiển thị
-thermostat.entity.look: Kiểu bộ điều nhiệt
-thermostat.setting.tab: Tab bảng điều khiển
-thermostat.entity.tab: Tab bảng điều khiển bộ điều nhiệt
-thermostat.setting.entities: Bộ điều nhiệt
-thermostat.chosen: "{{.N}} / {{.Of}}"
-thermostat.full: Tối đa {{.N}}; hãy tắt một cái trước
-thermostat.look.dial: Mặt số
-thermostat.look.column: Cột
-thermostat.look.wheel: Bánh xe
-thermostat.look.bars: Thanh
-thermostat.look.split: Chia đôi
-thermostat.look.terminal: Terminal
-thermostat.look.brass: Đồng thau
-thermostat.look.mission: Mission
-thermostat.choose.mode: Chế độ
-thermostat.choose.preset: Cài sẵn
-thermostat.choose.fan: Quạt
-thermostat.inside: Trong nhà
-thermostat.outside: Ngoài trời
-thermostat.set: Đặt
-thermostat.setpoint: Điểm đặt
-thermostat.low: Thấp
-thermostat.high: Cao
-thermostat.no-preset: Không cài sẵn
-thermostat.action.heating: Đang sưởi
-thermostat.action.cooling: Đang làm mát
-thermostat.action.drying: Đang hút ẩm
-thermostat.action.fan: Quạt
-thermostat.action.idle: Chờ
-thermostat.action.off: Tắt
-thermostat.lamp.fan: Quạt chạy
-thermostat.environment: Điều khiển môi trường
-thermostat.preset.none: Không
-thermostat.preset.away: Vắng nhà
-thermostat.preset.eco: Tiết kiệm
-thermostat.preset.home: Nhà
-thermostat.preset.sleep: Ngủ
-thermostat.preset.comfort: Thoải mái
-thermostat.preset.boost: Tăng cường
-thermostat.preset.activity: Hoạt động
-thermostat.fanmode.auto: Tự động
-thermostat.fanmode.on: Bật
-thermostat.fanmode.off: Tắt
-thermostat.fanmode.low: Thấp
-thermostat.fanmode.medium: Trung bình
-thermostat.fanmode.middle: Trung bình
-thermostat.fanmode.high: Cao
-thermostat.fanmode.focus: Tập trung
-thermostat.fanmode.diffuse: Khuếch tán
-thermostat.none: Chưa chọn bộ điều nhiệt
-thermostat.waiting: Đang chờ Home Assistant
-thermostat.unavailable: Không khả dụng
-thermostat.off: Tắt
-thermostat.between: Giữ trong khoảng
-thermostat.heating: Đang sưởi đến
-thermostat.cooling: Đang làm mát đến
-thermostat.drying: Đang hút ẩm
-thermostat.fanning: Quạt đang chạy
-thermostat.holding: Giữ ở
-thermostat.in: Trong
-thermostat.out: Ngoài
-thermostat.humidity: Độ ẩm
-thermostat.fan: Quạt
-thermostat.temperature: Nhiệt độ
-thermostat.target: Mục tiêu
-thermostat.status: Trạng thái
-thermostat.temp: Nhiệt độ
-thermostat.dial: Cài đặt
-thermostat.refused: Home Assistant đã từ chối
-thermostat.mode.off: Tắt
-thermostat.mode.heat: Sưởi
-thermostat.mode.cool: Làm mát
-thermostat.mode.heat_cool: Tự động
-thermostat.mode.auto: Tự động
-thermostat.mode.dry: Hút ẩm
-thermostat.mode.fan_only: Quạt
-homealarm.zones.count: "{{.Secure}} an toàn / {{.Open}} mở"
-homealarm.setting.zones: Khu vực hiển thị
-homealarm.zones.shown: "{{.N}} / {{.Of}}"
-homealarm.zones.page: Khu vực {{.From}}–{{.To}} / {{.Of}}
-homealarm.blueprint.location: Vị trí
-homealarm.blueprint.type: Loại
-homealarm.class.door: Cửa
-homealarm.class.window: Cửa sổ
-homealarm.class.garage_door: Cửa gara
-homealarm.class.opening: Lối mở
-homealarm.class.motion: Chuyển động
-homealarm.class.occupancy: Có người
-homealarm.class.presence: Hiện diện
-homealarm.class.vibration: Rung
-homealarm.class.tamper: Can thiệp
-homealarm.class.smoke: Khói
-homealarm.class.moisture: Nước
-homealarm.class.gas: Gas
-homealarm.class.carbon_monoxide: CO
-homealarm.class.sound: Âm thanh
-homealarm.class.safety: An toàn
-homealarm.on: Bật
-homealarm.off: Tắt
-doorbell.entity.chime: Âm thanh chuông cửa
-doorbell.group.doorbell: Chuông cửa
-doorbell.setting.chime: Âm thanh chuông
-doorbell.entity.notify: Âm thanh thông báo chuông cửa
-doorbell.setting.notify: Âm thanh thông báo
-doorbell.entity.ring_for: Chuông cửa reo trong
-doorbell.setting.ring_for: Reo trong
-doorbell.entity.live_for: Mở xem trực tiếp chuông cửa trong
-doorbell.setting.live_for: Giữ xem trực tiếp mở
-doorbell.entity.style: Kiểu thông báo chuông cửa
-doorbell.setting.style: Kiểu thông báo
-doorbell.entity.visitor: Kiểu chuông khi có khách
-doorbell.setting.visitor: Kiểu chuông
-doorbell.entity.tab: Tab bảng điều khiển chuông cửa
-doorbell.setting.tab: Tab bảng điều khiển
-doorbell.add: Thêm chuông cửa
-doorbell.app: Chuông cửa
-doorbell.camera.pictures: Ảnh sự kiện từ
-doorbell.camera.pictures.hint: Camera Home Assistant hiển thị cửa này
-doorbell.camera.title: Camera Home Assistant
-doorbell.cancel: Hủy
-doorbell.field.host: Địa chỉ IP hoặc tên máy chủ
-doorbell.field.host_port: Thêm :port để bỏ qua tìm kiếm tự động
-doorbell.field.name: Tên
-doorbell.field.password: Mật khẩu
-doorbell.field.rtsp: URL RTSP
-doorbell.field.uid: UID
-doorbell.field.user: Người dùng
-doorbell.forget: Xóa
-doorbell.added: Đã thêm
-doorbell.entity.door.events: Nguồn sự kiện chuông cửa {{.N}}
-doorbell.entity.door.name: Tên chuông cửa {{.N}}
-doorbell.entity.door.talk: Nguồn nói chuyện chuông cửa {{.N}}
-doorbell.entity.door.video: Nguồn video chuông cửa {{.N}}
-doorbell.field.stream: Luồng
-doorbell.setting.door.events: Sự kiện
-doorbell.setting.door.name: Tên
-doorbell.setting.door.talk: Nói chuyện
-doorbell.setting.door.video: Video
-doorbell.autosetup: Tự động thiết lập
-doorbell.cameras: "{{.N}} camera"
-doorbell.channel: Kênh {{.N}}
-doorbell.connect: Kết nối
-doorbell.connecting: Đang kết nối…
-doorbell.events.via: "{{.State}} qua {{.Source}}"
-doorbell.offline: Ngoại tuyến
-doorbell.sensor.animal: Cảm biến động vật
-doorbell.sensor.motion: Cảm biến chuyển động
-doorbell.sensor.none: Không
-doorbell.sensor.package: Cảm biến bưu kiện
-doorbell.sensor.person: Cảm biến người
-doorbell.sensor.vehicle: Cảm biến xe
-doorbell.sensor.visitor: Cảm biến chuông
-doorbell.source.ha_reolink: Home Assistant (tích hợp Reolink)
-doorbell.source.nvr: Reolink NVR
-doorbell.status.events: Sự kiện
-doorbell.status.video: Video
-doorbell.video.connecting: Đang kết nối qua {{.Source}}
-doorbell.video.failed: "{{.Why}} ({{.Source}})"
-doorbell.tried: "{{.Source}} thất bại: {{.Why}}"
-doorbell.video.working: Hoạt động qua {{.Source}}
-doorbell.lock: Khóa
-doorbell.lock.confirm: Chạm lần nữa để mở khóa
-doorbell.looking: Đang tìm trong Home Assistant…
-doorbell.manual: Thủ công
-doorbell.needs: Nhập UID hoặc địa chỉ IP/tên máy chủ
-doorbell.needs.host: Nhập địa chỉ IP hoặc tên máy chủ
-doorbell.needs.rtsp: Nhập URL RTSP
-doorbell.none: Chưa thiết lập chuông cửa
-doorbell.save: Lưu
-doorbell.checking: Đang kiểm tra…
-doorbell.notsaved: Chưa lưu
-doorbell.saved: Đã lưu
-doorbell.ok: OK
-doorbell.fellback: "{{.Line}} (Reolink thất bại)"
-doorbell.slot: Chuông cửa {{.N}}
-doorbell.watch: Xem
-doorbell.why.camera: Không có video trực tiếp cho chuông cửa này
-doorbell.why.lock: "Không thể thay đổi khóa: {{.Why}}"
-doorbell.why.lost: Mất kết nối chuông cửa, đang thử lại
-doorbell.why.talk: "Không thể nói chuyện: {{.Why}}"
-doorbell.why.fallback: Đang hiện video Home Assistant, không có nói chuyện
-doorbell.why.toobig: Luồng chính quá lớn cho màn hình này, đang hiện luồng phụ
-doorbell.why.decoder: Màn hình này không phát được video của chuông cửa
-doorbell.why.nopassword: Nhập mật khẩu chuông cửa
-doorbell.why.nocamera: Chọn camera Home Assistant
-doorbell.why.refused: Đăng nhập bị từ chối (mã {{.Code}})
-doorbell.why.other: Một chuông cửa khác trả lời tại địa chỉ đó
-doorbell.why.unreachable: Không thể kết nối chuông cửa
-doorbell.stream.main: Chính
-doorbell.stream.sub: Phụ
-doorbell.source.auto: Tự động
-doorbell.source.ha: Home Assistant
-doorbell.source.onvif: ONVIF
-doorbell.source.reolink: Reolink
-doorbell.source.rtsp: RTSP
-doorbell.status.connected: Đã kết nối
-doorbell.status.connecting: Đang kết nối…
-doorbell.status.login: Sai người dùng hoặc mật khẩu
-doorbell.status.none: Không có chuông cửa trong Home Assistant
-doorbell.status.ready: "{{.Count}} đã kết nối"
-doorbell.status.unreachable: Không thể kết nối chuông cửa
-doorbell.status.unset: Chưa thiết lập
-doorbell.status.unsupported: Không khả dụng từ nguồn này
-doorbell.event.visitor: Có người ở {{.Door}}
-doorbell.event.people: Có người ở {{.Door}}
-doorbell.event.package: Bưu kiện ở {{.Door}}
-doorbell.event.vehicle: Xe ở {{.Door}}
-doorbell.event.dog_cat: Động vật ở {{.Door}}
-doorbell.event.motion: Chuyển động ở {{.Door}}
-photos.entity.immich.albums: Album Immich
-photos.entity.immich.enabled: Ảnh Immich
-photos.entity.immich.favorites: Chỉ ảnh yêu thích Immich
-photos.entity.immich.key: Khóa API Immich
-photos.entity.immich.memories: Ký ức Immich trước
-photos.entity.immich.people: Người trong Immich
-photos.entity.immich.server: Máy chủ Immich
-photos.entity.immich.tags: Thẻ Immich
-photos.entity.status: Trạng thái ảnh {{.Source}}
-photos.group.immich: Immich
-photos.google: Google Photos
-photos.group.google: Google Photos
-photos.setting.google.enabled: Bật
-photos.entity.google.enabled: Google Photos
-photos.setting.google.album1: Liên kết album 1
-photos.entity.google.album1: Liên kết album 1 Google Photos
-photos.example.google.album1: https://photos.app.goo.gl/…
-photos.setting.google.album1.weight: Tỷ lệ album 1
-photos.entity.google.album1.weight: Tỷ lệ album 1 Google Photos
-photos.setting.google.album2: Liên kết album 2
-photos.entity.google.album2: Liên kết album 2 Google Photos
-photos.example.google.album2: https://photos.app.goo.gl/…
-photos.setting.google.album2.weight: Tỷ lệ album 2
-photos.entity.google.album2.weight: Tỷ lệ album 2 Google Photos
-photos.setting.google.album3: Liên kết album 3
-photos.entity.google.album3: Liên kết album 3 Google Photos
-photos.example.google.album3: https://photos.app.goo.gl/…
-photos.setting.google.album3.weight: Tỷ lệ album 3
-photos.entity.google.album3.weight: Tỷ lệ album 3 Google Photos
-photos.setting.google.album4: Liên kết album 4
-photos.entity.google.album4: Liên kết album 4 Google Photos
-photos.example.google.album4: https://photos.app.goo.gl/…
-photos.setting.google.album4.weight: Tỷ lệ album 4
-photos.entity.google.album4.weight: Tỷ lệ album 4 Google Photos
-photos.group.photos: Ảnh
-photos.setting.app.every: Ứng dụng Ảnh đổi ảnh mỗi
-photos.entity.app.every: Ứng dụng Ảnh đổi ảnh mỗi
-photos.setting.app.fit: Cách vừa ảnh ứng dụng Ảnh
-photos.entity.app.fit: Cách vừa ảnh ứng dụng Ảnh
-photos.setting.app.transition: Hiệu ứng chuyển ứng dụng Ảnh
-photos.entity.app.transition: Hiệu ứng chuyển ứng dụng Ảnh
-phototransition.cut: Không
-phototransition.fade: Mờ dần
-phototransition.slide: Trượt
-phototransition.zoom: Thu phóng
-phototransition.wipe: Lau
-phototransition.dissolve: Tan
-photos.setting.immich.quality: Chất lượng
-photos.entity.immich.quality: Chất lượng Immich
-photos.quality.preview: Xem trước
-photos.quality.fullsize: Kích thước đầy đủ
-photofit.auto: Tự động
-photofit.cover: Lấp đầy
-photofit.contain: Vừa, viền mờ
-photofit.bars: Vừa, viền trơn
-photofit.framed: Đóng khung
-photofit.kenburns: Lia chậm
-photos.app: Ảnh
-photos.example.immich.albums: Gia đình, Mùa hè 2026
-photos.example.immich.people: Alex, Sam
-photos.example.immich.server: https://photos.example.com
-photos.example.immich.tags: nhà bếp, yêu thích
-photos.immich: Immich
-photos.page: Ảnh
-photos.sources: Nguồn
-photos.status: Trạng thái
-photos.setting.immich.albums: Album
-photos.setting.immich.enabled: Bật
-photos.setting.immich.favorites: Chỉ ảnh yêu thích
-photos.setting.immich.key: Khóa API
-photos.setting.immich.memories: Ký ức trước
-photos.setting.immich.people: Người
-photos.setting.immich.server: Máy chủ
-photos.setting.immich.tags: Thẻ
-photos.status.off: Tắt
-photos.status.connecting: Đang kết nối…
-photos.status.empty: Không có ảnh phù hợp
-photos.status.key: Sai khóa API
-photos.status.permission: Khóa API cần {{.Name}}
-photos.status.old: "Immich {{.Version}}: cần 3.2 trở lên"
-photos.status.ready: Đã kết nối
-photos.status.unknown: Không có gì tên {{.Name}}
-photos.status.unreachable: Không thể kết nối máy chủ
-photos.status.unset: Chưa thiết lập
-place.horizontal: Vị trí ngang
-place.size: Kích thước
-place.vertical: Vị trí dọc
-player.ad: Quảng cáo
-player.ad_clip: Quảng cáo {{.Clip}} / {{.Clips}}
-player.full: Trình phát đầy đủ
-player.live: TRỰC TIẾP
-player.lyrics: Lời bài hát
-player.next: Tiếp theo
-player.none: Không có gì
-player.now: Đang phát
-music.app: Nhạc
-music.now: Đang phát
-music.speakers: Loa
-music.quiet: Không phát gì
-music.none: Không có loa Music Assistant
-music.unavailable: Không thể kết nối Music Assistant
-music.integration: Cập nhật tích hợp EchoLocal trong Home Assistant
-music.find: Tìm loa
-music.starting: Đang khởi động…
-music.home: Trang chủ
-music.search: Tìm kiếm
-music.library: Thư viện
-music.searching: Tìm trong Music Assistant
-music.nothing: Không có gì ở đây
-music.recent: Phát gần đây
-music.playlists: Danh sách phát
-music.albums: Album
-music.artists: Nghệ sĩ
-music.radio: Radio
-music.play: Phát
-music.next: Phát tiếp
-music.add: Thêm vào hàng đợi
-music.similar: Tương tự
-music.back: Quay lại
-music.kind.artist: Nghệ sĩ
-music.kind.album: Album
-music.kind.track: Bài hát
-music.kind.playlist: Danh sách phát
-music.kind.radio: Đài phát thanh
-music.kind.podcast: Podcast
-music.kind.audiobook: Sách nói
-music.group: Nhóm
-music.here: Chuyển đến đây
-music.queue: Tiếp theo
-position.bottom: Dưới
-position.center: Giữa
-position.random: Ngẫu nhiên
-position.top: Trên
-poster.daily: Hằng ngày
-poster.entity.every: Hình nền thay đổi
-poster.entity.on: Hình nền
-poster.every: Thay đổi mỗi
-poster.group.poster: Hình nền
-poster.hourly: Hằng giờ
-poster.never: Không bao giờ
-poster.off: Tắt
-poster.setting.every: Thay đổi mỗi
-poster.setting.fit: Cách vừa
-poster.entity.fit: Cách vừa hình nền
-poster.setting.transition: Hiệu ứng chuyển
-poster.entity.transition: Hiệu ứng chuyển hình nền
-poster.setting.on: Hiện hình nền
-poster.show: Hiện hình nền
-poster.wake: Mỗi lần đánh thức
-power.reboot: Khởi động lại thiết bị
-power.reboot.what: Mọi thứ sẽ trở lại sau khoảng một phút.
-power.restart: Khởi động lại ứng dụng
-power.restart.what: Màn hình sẽ tối vài giây.
-power.title: Khởi động lại
-presence.group.presence: Hiện diện
-presence.setting.range: Phạm vi phát hiện
-presence.setting.wake: Đánh thức khi có chuyển động
-radar.app: Radar
-radar.credit.nws: "Hình ảnh: NASA GIBS · Radar: NWS qua Iowa Environmental Mesonet"
-radar.credit.rainviewer: "Hình ảnh: NASA GIBS · Radar: RainViewer"
-radar.failed: Radar hiện không khả dụng
-radar.miles: "{{.N}} dặm"
-radar.source.auto: Tự động
-radar.source.nws: NWS
-radar.source.rainviewer: RainViewer
-radar.updating: Đang cập nhật…
-radar.forecast: Dự báo {{.Time}}
-radio.app: Radio
-radio.empty: Gắn sao một đài để đưa lên mặt số
-radio.idle: Chọn một đài
-radio.local: Đài địa phương
-radio.more: Còn {{.N}} đài chưa hiển thị
-radio.nothing: Không có đài ở đây
-radio.playing: Đang phát
-radio.popular: Phổ biến
-radio.stopped: Đã dừng
-radio.unavailable: Radio Browser chưa được thiết lập trong Home Assistant
-rail.media: Media
-rail.sleep: Ngủ
-reply.download: Bắt đầu muộn hơn, không bị ngắt
-reply.stream: Bắt đầu sớm hơn, có thể bị ngắt
-reply.title: Phát phản hồi
-actions.broadcast: Phát một thông báo
-actions.alarm: Quản lý báo thức
-actions.alarm.time: Đọc giờ như bảy giờ ba mươi sáng, có thể kèm mỗi ngày thường, mỗi cuối tuần, mỗi ngày, hoặc vào các thứ được nêu tên
-actions.alarm.exists: "{{.Alarm}} đã tồn tại"
-actions.alarm.set: Đặt {{.Alarm}}
-actions.alarm.empty: Bạn không có báo thức nào đã lưu
-actions.alarm.off: "{{.Alarm}}, đã tắt"
-actions.alarm.none: Bạn không có báo thức sắp tới
-actions.alarm.next: Báo thức tiếp theo của bạn là {{.Alarm}}, {{.When}}
-actions.alarm.enable: Đã bật {{.Alarm}}
-actions.alarm.disable: Đã tắt {{.Alarm}}
-actions.alarm.delete: Đã xóa {{.Alarm}}
-actions.alarm.not_ringing: Không có báo thức nào đang reo
-actions.alarm.stopped: Đã dừng báo thức
-actions.alarm.not_snoozed: Không có báo thức đang reo để báo lại
-actions.alarm.snoozed: Đã báo lại báo thức
-actions.alarm.target: Đọc tên báo thức, giờ hoặc báo thức tiếp theo
-actions.alarm.missing: Không có báo thức nào khớp tên hoặc giờ đó
-actions.alarm.ambiguous: Có nhiều báo thức trùng khớp; hãy đọc tên
-actions.alarm.once: một lần
-actions.broadcast.ask: Nói sau tiếng chuông
-actions.broadcast.text: Phát văn bản đã nhập cần tích hợp Home Assistant
-actions.call: Gọi thiết bị
-actions.call.busy: Đang trong cuộc gọi
-actions.call.foreign: "{{.Peer}} không thuộc nhà này"
-actions.call.unknown: Không có thiết bị nào tên {{.Peer}}
-actions.call.unreachable: Không thể liên lạc {{.Peer}}
-actions.call_answer: Trả lời cuộc gọi
-actions.call_answer.none: Không có cuộc gọi đến để trả lời
-actions.call_answer.done: Đang trả lời cuộc gọi
-actions.call_hangup: Gác máy
-actions.call_hangup.none: Không có cuộc gọi để gác
-actions.call_hangup.done: Đã kết thúc cuộc gọi
-actions.youtube_tv: Xem YouTube TV
-actions.youtube_tv.channel: Đọc tên kênh hoặc chương trình
-actions.youtube_tv.unknown: Tôi đã tìm {{.Channel}} trên YouTube TV, nhưng kênh không khả dụng hoặc không thể phát lúc này
-actions.youtube_tv.device: Không có thiết bị nào tên {{.Device}}
-actions.youtube_tv.nowhere: Chọn TV mặc định trong ứng dụng TV
-actions.youtube_tv.here: Đang phát {{.Show}} trên {{.Channel}}
-actions.youtube_tv.here.channel: Đang phát {{.Channel}}
-actions.youtube_tv.watching: Đang phát {{.Show}} trên {{.Channel}} trên {{.Device}}
-actions.youtube_tv.watching.channel: Đang phát {{.Channel}} trên {{.Device}}
-actions.youtube_tv.airing: "{{.Channel}} đang chiếu {{.Title}}"
-actions.youtube_tv.nothing: Hiện không có gì trên {{.Channel}}
-lock.again: Nhập lại
-lock.change: Đổi mã PIN
-lock.clear: Xóa mã PIN
-lock.clear.what: Bạn chắc chứ? Thao tác này sẽ mở khóa phần cài đặt.
-lock.enter: Nhập mã PIN
-lock.mismatch: Mã PIN không khớp. Nhập mã PIN mới
-lock.new: Nhập mã PIN mới, 4 đến 8 chữ số
-lock.next: Tiếp
-lock.off: Tắt
-lock.on: Bật
-lock.set: Đặt mã PIN
-lock.entity.pin: Khóa cài đặt
-screen.group.lock: Khóa
-screen.setting.lock_pin: Khóa cài đặt
-lock.title: Cài đặt
-lock.wait: Thử lại sau {{.Seconds}} giây
-lock.wrong: Sai mã PIN
-lovelace.default: Bảng điều khiển mặc định
-lovelace.first: Chế độ xem đầu tiên
-lovelace.hint.integration: Cài tích hợp EchoLocal trong Home Assistant
-lovelace.hint.allow: Cho phép người dùng trong tùy chọn tích hợp EchoLocal của Home Assistant
-lovelace.hint.user: Chọn người dùng trong Cài đặt › Bảng điều khiển
-lovelace.loading: Đang tải Home Assistant
-lovelace.unreachable: Không thể kết nối Home Assistant
-lovelace.unreachable.retry: Tự động thử lại · chạm để thử ngay
-lovelace.group.lovelace: Bảng điều khiển Home Assistant
-lovelace.entity.user: Người dùng bảng điều khiển
-lovelace.setting.user: Hiển thị là
-lovelace.entity.dashboard: Bảng điều khiển
-lovelace.setting.dashboard: Bảng điều khiển
-lovelace.entity.view: Chế độ xem bảng điều khiển
-lovelace.setting.view: Chế độ xem
-lovelace.entity.theme: Giao diện bảng điều khiển
-lovelace.setting.theme: Giao diện
-lovelace.theme.default: Mặc định của Home Assistant
-lovelace.entity.saver_dashboard: Bảng điều khiển màn hình chờ
-lovelace.setting.saver_dashboard: Bảng điều khiển màn hình chờ
-lovelace.entity.saver_view: Chế độ xem màn hình chờ
-lovelace.setting.saver_view: Chế độ xem màn hình chờ
-lovelace.entity.scale: Tỷ lệ hiển thị bảng điều khiển
-lovelace.setting.scale: Tỷ lệ hiển thị
-lovelace.entity.saver_scale: Tỷ lệ hiển thị màn hình chờ
-lovelace.setting.saver_scale: Tỷ lệ hiển thị màn hình chờ
-lovelace.scale.value: "{{.N}}%"
-rtsp.entity.audio: Âm thanh RTSP
-rtsp.entity.password: Mật khẩu RTSP
-rtsp.entity.username: Tên người dùng RTSP
-rtsp.group.rtsp: RTSP
-rtsp.example.username: viewer
-rtsp.setting.audio: Gồm âm thanh
-rtsp.setting.enabled: Máy chủ RTSP
-rtsp.setting.password: Mật khẩu
-rtsp.setting.username: Tên người dùng
-screen.group.panel: Màn hình
-screen.setting.alert: Kiểu cảnh báo
-screen.setting.auto: Tự động chỉnh độ sáng
-screen.setting.backlight: Độ sáng
-screen.setting.drawer: Vị trí dock
-screen.setting.drawer.hide: Ẩn dock sau
-screen.setting.keyboard: Kích thước bàn phím
-screen.setting.language: Ngôn ngữ
-screen.setting.marks: Chỉ báo quyền riêng tư
-screen.setting.size: Kích thước
-screen.setting.font: Phông chữ
-screen.setting.style: Kiểu
-screen.setting.touches: Hiện điểm chạm
-touches.off: Tắt
-touches.dots: Chấm
-touches.details: Chi tiết
-screen.setting.theme: Giao diện
-screen.setting.timer: Kiểu hẹn giờ
-screen.setting.custom.background: Nền giao diện tùy chỉnh
-screen.setting.custom.surface: Thẻ giao diện tùy chỉnh
-screen.setting.custom.text: Chữ giao diện tùy chỉnh
-screen.setting.custom.muted: Chữ phụ giao diện tùy chỉnh
-screen.setting.custom.accent: Màu nhấn giao diện tùy chỉnh
-screen.setting.custom.accent2: Màu nhấn 2 giao diện tùy chỉnh
-media.group.sendspin: Sendspin
-media.setting.sendspin: Sendspin
-settings.about: Giới thiệu
-settings.assistants: Trợ lý giọng nói
-settings.camera: Camera
-settings.debug: Tùy chọn nhà phát triển
-settings.display: Màn hình
-settings.features: Dịch vụ kết nối
-settings.language: Ngôn ngữ
-settings.media: Media
-settings.network: Mạng & internet
-settings.power: Khởi động lại
-settings.sync: Đồng bộ cấu hình
-settings.system: Hệ thống
-settings.title: Cài đặt
-settings.search: Tìm trong cài đặt
-settings.search.empty: Nhập để tìm cài đặt
-settings.search.none: Không có cài đặt phù hợp
-settings.volume: Âm thanh
-size.large: Lớn
-size.medium: Vừa
-size.micro: Rất nhỏ
-size.mini: Nhỏ gọn
-size.nano: Tí hon
-size.small: Nhỏ
-sound.alerts: Âm lượng báo thức
-sound.feedback: Âm thanh hệ thống
-sound.main: Âm lượng chính
-sound.media: Âm lượng media
-sound.mute.alerts: Tắt tiếng báo thức
-sound.mute.feedback: Tắt âm thanh hệ thống
-sound.mute.main: Tắt mọi âm thanh
-sound.mute.media: Tắt tiếng media
-sound.mute.voice: Tắt tiếng trợ lý
-sound.voice: Âm lượng trợ lý
-source.both: Micrô và loa
-source.mic: Micrô
-source.speaker: Loa
-stream.alerts: Cảnh báo
-stream.feedback: Phản hồi
-stream.main: Chính
-stream.media: Media
-stream.voice: Giọng nói
-style.eink: E-ink
-style.glass: Kính
-style.hifi: Hi-fi
-style.material: Material You
-style.metro: Metro
-style.neon: Neon
-style.skeuo: Skeuo
-style.standard: Tiêu chuẩn
-style.terminal: Terminal
-style.title: Kiểu
-font.title: Phông chữ
-font.style: Mặc định theo kiểu
-sync.busy: "{{.Peer}} đang bận"
-sync.cancelled: Đã hủy đồng bộ
-sync.empty: Không có thiết bị khác để đồng bộ
-sync.enter: Nhập mã hiển thị trên {{.Peer}}
-sync.expired: Mã đã hết hạn
-sync.failed: Đồng bộ thất bại
-sync.matched: Đã ghép với {{.Peer}}
-sync.received: Đã áp dụng {{.N}} cài đặt từ {{.Peer}}
-sync.receiving: Đang nhận cài đặt…
-sync.sending: Đang gửi cài đặt…
-sync.sent: Đã gửi cài đặt đến {{.Peer}}
-sync.show: Nhập mã này trên {{.Peer}}
-sync.title: Đồng bộ cấu hình
-sync.tries: Quá nhiều mã sai
-sync.wrong: Sai mã, còn {{.N}} lần thử
-system.adb: ADB qua mạng
-system.adb.hint: Shell root không xác thực trên cổng 5555
-system.certificates: Xác minh chứng chỉ
-system.certificates.hint: Xác thực chứng chỉ TLS
-system.title: Hệ thống
-tessera.alarm.armed_away: Vắng nhà
-tessera.alarm.armed_custom_bypass: Bỏ qua tùy chỉnh
-tessera.alarm.armed_home: Nhà
-tessera.alarm.armed_night: Ban đêm
-tessera.alarm.armed_vacation: Kỳ nghỉ
-tessera.alarm.cancel: Hủy
-tessera.alarm.clear: Xóa
-tessera.alarm.disarm: Tắt
-tessera.alarm.ok: OK
-tessera.alarm.text: Nhập mã của bảng này trong Home Assistant.
-tessera.alert.notification: Thông báo
-tessera.again: Chạm lần nữa để mở khóa
-tessera.binary.battery.off: Bình thường
-tessera.binary.battery.on: Yếu
-tessera.binary.battery_charging.off: Không sạc
-tessera.binary.battery_charging.on: Đang sạc
-tessera.binary.carbon_monoxide.off: Bình thường
-tessera.binary.carbon_monoxide.on: Phát hiện
-tessera.binary.cold.off: Bình thường
-tessera.binary.cold.on: Lạnh
-tessera.binary.connectivity.off: Mất kết nối
-tessera.binary.connectivity.on: Đã kết nối
-tessera.binary.door.off: Đóng
-tessera.binary.door.on: Mở
-tessera.binary.garage_door.off: Đóng
-tessera.binary.garage_door.on: Mở
-tessera.binary.gas.off: Bình thường
-tessera.binary.gas.on: Phát hiện
-tessera.binary.heat.off: Bình thường
-tessera.binary.heat.on: Nóng
-tessera.binary.light.off: Không có ánh sáng
-tessera.binary.light.on: Phát hiện ánh sáng
-tessera.binary.lock.off: Đã khóa
-tessera.binary.lock.on: Đã mở khóa
-tessera.binary.moisture.off: Khô
-tessera.binary.moisture.on: Ướt
-tessera.binary.motion.off: Bình thường
-tessera.binary.motion.on: Phát hiện
-tessera.binary.moving.off: Không chuyển động
-tessera.binary.moving.on: Đang chuyển động
-tessera.binary.occupancy.off: Bình thường
-tessera.binary.occupancy.on: Phát hiện
-tessera.binary.opening.off: Đóng
-tessera.binary.opening.on: Mở
-tessera.binary.plug.off: Chưa cắm
-tessera.binary.plug.on: Đã cắm
-tessera.binary.power.off: Tắt
-tessera.binary.power.on: Bật
-tessera.binary.presence.off: Vắng nhà
-tessera.binary.presence.on: Nhà
-tessera.binary.problem.off: OK
-tessera.binary.problem.on: Sự cố
-tessera.binary.running.off: Không chạy
-tessera.binary.running.on: Đang chạy
-tessera.binary.safety.off: An toàn
-tessera.binary.safety.on: Không an toàn
-tessera.binary.smoke.off: Bình thường
-tessera.binary.smoke.on: Phát hiện
-tessera.binary.sound.off: Bình thường
-tessera.binary.sound.on: Phát hiện
-tessera.binary.tamper.off: Bình thường
-tessera.binary.tamper.on: Phát hiện can thiệp
-tessera.binary.update.off: Đã cập nhật
-tessera.binary.update.on: Có bản cập nhật
-tessera.binary.vibration.off: Bình thường
-tessera.binary.vibration.on: Phát hiện
-tessera.binary.window.off: Đóng
-tessera.binary.window.on: Mở
-tessera.card.empty: Không có lịch sử cho khoảng này
-tessera.card.high: Cao {{.V}} lúc {{.T}}
-tessera.card.loading: Đang tải lịch sử…
-tessera.card.low: Thấp {{.V}} lúc {{.T}}
-tessera.card.now: Hiện tại {{.T}}
-tessera.card.since: Từ {{.T}}
-tessera.last.date: Lần cuối {{.D}}
-tessera.last.time: Lần cuối {{.T}}
-tessera.last.yest: Hôm qua {{.T}}
-tessera.last.yesterday: Hôm qua {{.T}}
-tessera.light.brightness: Độ sáng
-tessera.light.effect: Hiệu ứng
-tessera.light.effects: Hiệu ứng
-tessera.light.hue: Màu
-tessera.light.lamps: Đèn
-tessera.light.waiting: Đang chờ
-tessera.light.warmth: Nhiệt độ màu
-tessera.lock.jammed: Kẹt
-tessera.lock.lock: Khóa
-tessera.lock.locked: Đã khóa
-tessera.lock.locking: Đang khóa
-tessera.lock.open: Mở
-tessera.lock.open.key: Mở
-tessera.lock.opening: Đang mở
-tessera.lock.unlock: Mở khóa
-tessera.lock.unlocked: Đã mở khóa
-tessera.lock.unlocking: Đang mở khóa
-tessera.never: Chưa từng chạy
-tessera.paused: Tạm dừng {{.T}}
-tessera.range.day: 24 giờ
-tessera.range.hour: 1 giờ
-tessera.range.week: 7 ngày
-tessera.ago: "{{.T}} trước"
-tessera.connected: Thiết lập màn hình này trong Tessera
-tessera.empty: Cấu hình và thêm ô cho màn hình này ({{.Name}}) trong Tessera.
-tessera.enable: Bật màn hình ngang hoặc dọc trong Cài đặt → Bảng điều khiển
-tessera.in: trong {{.T}}
-tessera.install: Cài Tessera Screen Manager trong Home Assistant, rồi thêm màn hình này vào.
-tessera.now: Vừa xong
-tessera.off: Tessera đang tắt
-tessera.refused: Bị từ chối
-tessera.running: Đang chạy...
-tessera.lapsed: Tessera không hoạt động
-tessera.key.activate: Kích hoạt
-tessera.key.press: Nhấn
-tessera.key.run: Chạy
-tessera.silent: Không trả lời
-tessera.sun.name: Mặt trời
-tessera.energy.solar: Điện mặt trời
-tessera.energy.grid: Lưới điện
-tessera.energy.battery: Pin
-tessera.energy.home: Nhà
-tessera.energy.other: Khác
-tessera.energy.untracked: Không theo dõi
-tessera.sun.rise: Bình minh {{.T}}
-tessera.sun.set: Hoàng hôn {{.T}}
-tessera.updating: Đang cập nhật…
-tessera.bottom.dock: Bảng trang
-tessera.bottom.home: Trang chủ
-tessera.bottom.off: Không gì
-tessera.turn.none: Không
-tessera.turn.slide: Trượt
-tessera.turn.cover: Che
-tessera.turn.reveal: Mở ra
-tessera.turn.deck: Bộ bài
-tessera.turn.zoom: Thu phóng
-tessera.turn.fade: Mờ dần
-tessera.vacuum.battery: Pin {{.N}}%
-tessera.vacuum.dock: Đế sạc
-tessera.vacuum.locate: Định vị
-tessera.vacuum.pause: Tạm dừng
-tessera.vacuum.start: Bắt đầu
-tessera.waiting: Cài Tessera
-tessera.weather.clear-night: Đêm quang
-tessera.weather.cloudy: Nhiều mây
-tessera.weather.exceptional: Bất thường
-tessera.weather.fog: Sương mù
-tessera.weather.hail: Mưa đá
-tessera.weather.lightning: Sấm sét
-tessera.weather.lightning-rainy: Sấm sét, mưa
-tessera.weather.partlycloudy: Ít mây
-tessera.weather.pouring: Mưa lớn
-tessera.weather.rainy: Mưa
-tessera.weather.snowy: Tuyết
-tessera.weather.snowy-rainy: Tuyết, mưa
-tessera.weather.sunny: Nắng
-tessera.weather.windy: Gió
-tessera.weather.windy-variant: Gió, nhiều mây
-tessera.weather.daily: Hằng ngày
-tessera.weather.feels: Cảm giác như {{.T}}
-tessera.weather.hourly: Hằng giờ
-tessera.weather.none: Không có dự báo
-tessera.weather.pressure: Áp suất {{.P}}
-tessera.weather.visibility: Tầm nhìn {{.V}}
-tessera.weather.wind: Gió {{.W}}
-theme.custom: Tùy chỉnh
-theme.custom.title: Giao diện tùy chỉnh
-theme.custom.background: Nền
-theme.custom.surface: Thẻ
-theme.custom.text: Chữ
-theme.custom.muted: Chữ phụ
-theme.custom.accent: Màu nhấn
-theme.custom.accent2: Màu nhấn 2
-theme.default: Mặc định
-theme.title: Giao diện
-timer.stop: Dừng
-timerstyle.banner: Banner
-timerstyle.bar: Thanh
-timerstyle.corner: Góc
-timerstyle.dial: Mặt số
-timerstyle.face: Mặt đồng hồ
-timerstyle.full: Toàn màn hình
-todo.add: Thêm mục
-todo.app: Danh sách mua sắm
-todo.clear: Xóa mục đã xong
-todo.empty: Danh sách trống
-todo.entity: Danh sách việc cần làm
-todo.group.todo: Danh sách mua sắm
-todo.lists: "{{.Count}} danh sách"
-todo.none: Không có danh sách việc cần làm trong Home Assistant
-todo.off: Tắt
-todo.pick: Chọn danh sách trong Cài đặt → Điều khiển nhà → Danh sách mua sắm
-todo.setting.completed: Hiện mục đã xong
-todo.example.entities: todo.shopping_list,todo.hardware
-todo.setting.entities: Danh sách việc cần làm
-todo.title: Danh sách mua sắm
-tone.alert: Cảnh báo
-tone.info: Thông tin
-tone.success: Thành công
-tone.title: Âm thanh đánh thức
-tone.warning: Nhắc nhở
-tv.app: TV
-tv.empty: Không có gì đang chiếu
-tv.example.default: media_player.yttv_living_room
-tv.failed: Không thể tải hướng dẫn kênh
-tv.find: Tìm kênh hoặc chương trình
-tv.group.tv: TV
-tv.here: Ở đây
-tv.next: "Tiếp lúc {{.Time}}: {{.Title}}"
-tv.none: Không có trình phát YouTube TV trong Home Assistant
-tv.quiet: Không phát gì
-tv.setting.default: TV mặc định
-tv.setting.favorites: Yêu thích
-tv.update: Cập nhật tích hợp YouTube TV
-tv.watch: Xem trên {{.TV}}
-tv.watch_here: Xem ở đây
-tv.youtube: YouTube TV
-uisize.compact: Gọn
-uisize.large: Lớn
-uisize.medium: Vừa
-uisize.mini: Nhỏ
-uisize.xlarge: Rất lớn
-update.available: Có {{.Version}}
-update.channel: Kênh cập nhật
-update.channel.dev: Phát triển
-update.channel.stable: Ổn định
-update.check: Kiểm tra cập nhật
-update.checking: Đang kiểm tra…
-update.current: Đã cập nhật
-update.install: Tải và cài đặt {{.Version}}
-update.ready: Có bản cập nhật
-update.running: Phiên bản hiện tại
-update.title: Cập nhật phần mềm
-update.unreachable: Không thể kết nối máy chủ cập nhật
-update.versions: Phiên bản khác
-update.versions.confirm: Cài đặt {{.Version}}
-update.versions.installed: Đã cài đặt
-update.versions.what: "{{.Running}} sẽ được thay bằng {{.Version}} và ứng dụng sẽ khởi động lại."
-update.versions.none: Không có phiên bản khác
-upgrade.engine: công cụ Cast
-upgrade.installing: Đang cài đặt…
-upgrade.line: Đang cập nhật lên {{.Version}} · {{.Status}}
-upgrade.percent: "{{.N}}%"
-upgrade.preparing: Đang chuẩn bị {{.Name}} · {{.Status}}
-visual.group.visual: Hiệu ứng
-visual.aurora: Cực quang
-visual.classic-vu: VU cổ điển
-visual.cymatics: Sóng âm
-visual.digital-vu: VU số
-visual.fire: Lửa
-visual.fireflies: Đom đóm
-visual.fireworks: Pháo hoa
-visual.galaxy: Thiên hà
-visual.hal-9000: HAL 9000
-visual.halo: Quầng sáng
-visual.ink-in-water: Mực trong nước
-visual.koi-pond: Hồ cá koi
-visual.lava-lamp: Đèn dung nham
-visual.lcars: LCARS
-visual.lens-flares: Lóe ống kính
-visual.light-cycles: Xe ánh sáng
-visual.matrix: Matrix
-visual.mercury: Thủy ngân
-visual.mother: Mother
-visual.neon-sign: Biển neon
-visual.orb: Quả cầu
-visual.paint-splash: Văng sơn
-visual.phosphor: Phosphor
-visual.pipboy-3: PB 3000
-visual.pipboy-4: PB Mark IV
-visual.pipboy-76: PB 2000
-visual.pipboy-nv: PB New Vegas
-visual.pulsar: Sao xung
-visual.rain-on-glass: Mưa trên kính
-visual.ribbons: Dải lụa
-visual.setting.fps: Giới hạn khung hình hiệu ứng
-visual.setting.kind: Hiệu ứng
-visual.example.label: Nhà bếp
-visual.setting.label: Nhãn hiệu ứng
-visual.setting.lift: Độ nâng hiệu ứng
-visual.setting.seed: Seed hiệu ứng
-visual.synthwave: Synthwave
-visual.tesla: Tesla
-visual.thunderstorm: Giông bão
-voice.group.actions: Hành động
-voicematch.accept: Chấp nhận
-voicematch.add: Thêm giọng nói
-voicematch.again: Thử lại
-voicematch.cancel: Hủy
-voicematch.done: "Nhận diện giọng nói đã sẵn sàng cho {{.Name}}"
-voicematch.failed: Không thể thiết lập nhận diện giọng nói
-voicematch.finish: Xong
-voicematch.heard: Đã nghe
-voicematch.listening: Đang nghe…
-voicematch.missed: Chưa nghe rõ. Nói lại lần nữa.
-voicematch.pick: Chọn một người
-voicematch.preparing: Đang chuẩn bị…
-voicematch.redo: Ghi lại
-voicematch.remove: Xóa
-voicematch.say: "Nói “{{.Wake}}”, rồi"
-voicematch.say_plain: Nói từ đánh thức, rồi
-voicematch.similar: "Giọng này nghe rất giống {{.Name}}"
-voicematch.someone: Người khác
-voicematch.threshold: Ngưỡng nhận diện
-voicematch.title: Nhận diện giọng nói
-voicematch.unconfirmed: Giọng đó nghe không giống cùng một người
-voicematch.phrase.calendar: hôm nay tôi có gì trong lịch
-voicematch.phrase.door: khóa cửa trước
-voicematch.phrase.lights: bật đèn
-voicematch.phrase.music: phát nhạc trong bếp
-voicematch.phrase.shopping: thêm sữa vào danh sách mua sắm
-voicematch.phrase.timer: đặt hẹn giờ mười phút
-voicematch.phrase.weather: thời tiết ngày mai thế nào
-voice.group.commands: Lệnh
-voice.hacs: Tích hợp EchoLocal
-voice.hacs.hint: Hành động cần tích hợp EchoLocal trong Home Assistant. Quét mã để mở trong HACS, rồi cài đặt hoặc cập nhật.
-voice.hacs.missing: Chưa cài đặt
-voice.hacs.outdated: Cần cập nhật
-voice.hacs.unknown: Đang kiểm tra
-voice.setting.action.broadcast: Phát một thông báo
-voice.setting.action.alarm: Quản lý báo thức
-voice.setting.action.call_answer: Trả lời cuộc gọi
-voice.setting.action.call_hangup: Gác máy
-voice.setting.action.call: Gọi thiết bị
-voice.setting.action.youtube_tv: Xem YouTube TV
-voice.setting.actions: Tất cả hành động
-voice.setting.command.mirror: Gương
-voice.setting.command.radar: Radar
-voice.setting.commands: Tất cả lệnh
-voice.setting.label: Tên Home Assistant cần nghe
-voice.option.label.none: Chỉ khu vực
-voice.title: Kích hoạt giọng nói
-volume.chime: Âm thanh thông báo
-wake.ember: Than hồng
-wake.sunrise: Bình minh
-wake.white: Trắng
-weather.group.weather: Thời tiết
-weather.alert.until: Đến {{.T}}
-weather.alert.dismiss: Bỏ qua
-weather.alerts.hint: Cảnh báo thời tiết nguy hiểm tại Mỹ cho nhà bạn, từ National Weather Service
-weather.animate: Hoạt ảnh
-weather.cond.clear-night: Quang
-weather.cond.cloudy: Nhiều mây
-weather.cond.exceptional: Cảnh báo
-weather.cond.fog: Sương mù
-weather.cond.hail: Mưa đá
-weather.cond.lightning: Giông bão
-weather.cond.lightning-rainy: Giông bão
-weather.cond.partlycloudy: Ít mây
-weather.cond.pouring: Mưa lớn
-weather.cond.rainy: Mưa
-weather.cond.snowy: Tuyết
-weather.cond.snowy-rainy: Mưa tuyết
-weather.cond.sunny: Nắng
-weather.cond.windy: Gió
-weather.cond.windy-variant: Gió
-weather.dashboard: Hiện trên bảng điều khiển
-weather.entity: Thực thể thời tiết
-weather.feels: Cảm giác như {{.T}}
-weather.humidity: Độ ẩm {{.N}}%
-weather.idle: Hiện trên màn hình chờ
-weather.look: Kiểu hiển thị
-weather.look.card: Thẻ
-weather.look.compact: Gọn
-weather.look.detail: Chi tiết
-weather.look.icon: Biểu tượng
-weather.look.stack: Xếp chồng
-weather.look.words: Chữ
-weather.none: Không có thực thể thời tiết trong Home Assistant
-weather.off: Tắt
-weather.setting.alerts: Cảnh báo thời tiết
-weather.setting.align: Vị trí ngang thời tiết trên bảng điều khiển
-weather.setting.animate: Hoạt ảnh thời tiết trên bảng điều khiển
-weather.setting.dashboard: Thời tiết trên bảng điều khiển
-weather.example.entity: weather.home
-weather.setting.entity: Thực thể thời tiết
-weather.example.forecast: weather.home
-weather.setting.forecast: Thực thể dự báo
-weather.forecast: Dự báo
-weather.forecast.daily: Hằng ngày
-weather.forecast.twice_daily: Hai lần mỗi ngày
-weather.forecast.hourly: Hằng giờ
-weather.forecast.none: Không có dự báo
-weather.setting.idle: Thời tiết trên màn hình chờ
-weather.setting.look: Kiểu thời tiết trên bảng điều khiển
-weather.setting.position: Vị trí dọc thời tiết trên bảng điều khiển
-weather.setting.radar_range: Phạm vi radar ban đầu
-weather.setting.radar_source: Nguồn radar
-weather.setting.saver.align: Vị trí ngang thời tiết trên màn hình chờ
-weather.setting.saver.animate: Hoạt ảnh thời tiết trên màn hình chờ
-weather.setting.saver.look: Kiểu thời tiết trên màn hình chờ
-weather.setting.saver.position: Vị trí dọc thời tiết trên màn hình chờ
-weather.setting.saver.size: Kích thước thời tiết trên màn hình chờ
-weather.setting.saver.themed: Màu thời tiết theo giao diện trên màn hình chờ
-weather.setting.size: Kích thước thời tiết trên bảng điều khiển
-weather.setting.themed: Màu thời tiết theo giao diện trên bảng điều khiển
-weather.themed: Màu theo giao diện
-weather.themed.hint: "Tắt dùng màu tự nhiên: mặt trời vàng, mây xám, mưa xanh"
-weather.title: Thời tiết
-weather.uv: UV {{.N}}
-weather.wind: Gió {{.N}} {{.Unit}}
-webaccess.address: Địa chỉ
-webaccess.title: Truy cập web
-wifi.busy: Đang tham gia mạng khác
-wifi.connected: Đã kết nối
-wifi.failed: Không thể tham gia {{.Network}}
-wifi.join: Tham gia
-wifi.joined: Đã kết nối với {{.Network}}
-wifi.joining: Đang tham gia {{.Network}}…
-wifi.left: Còn {{.N}} giây
-wifi.none: Không tìm thấy mạng
-wifi.ok: OK
-wifi.password: Mật khẩu
-wifi.refused: Sai mật khẩu
-wifi.scan: Quét lại
-wifi.scan.failed: Quét thất bại
-wifi.scanning: Đang quét…
-wifi.short: Dùng ít nhất {{.N}} ký tự
-wifi.timeout: Không kết nối trong {{.Minutes}} phút
-wifi.title: Wi-Fi
-wifi.unreachable: Thử lại
-wifi.unsupported: "{{.Security}}, không được hỗ trợ"
-youtube.account: Tài khoản YouTube
-youtube.accounts: Tài khoản
-youtube.add: Thêm tài khoản
-youtube.again: Mã mới
-youtube.anonymous: Ẩn danh
-youtube.app: YouTube
-youtube.asking: Đang lấy mã…
-youtube.cancel: Hủy
-youtube.category.filler: Nội dung phụ
-youtube.category.hook: Mở đầu thu hút
-youtube.category.interaction: Nhắc tương tác
-youtube.category.intro: Giới thiệu
-youtube.category.music_offtopic: Phần ngoài âm nhạc
-youtube.category.outro: Kết thúc
-youtube.category.preview: Xem trước
-youtube.category.selfpromo: Tự quảng bá
-youtube.category.sponsor: Nhà tài trợ
-youtube.empty: Chưa có gì ở đây
-youtube.enter: và nhập
-youtube.entity.lounge: Phòng chờ YouTube
-youtube.expired: Mã đã hết hạn
-youtube.failed: Không kết nối được YouTube
-youtube.go: Trên điện thoại hoặc máy tính, truy cập
-youtube.group.cast: Cast
-youtube.history: Lịch sử
-youtube.home: Trang chủ
-youtube.later: Xem sau
-youtube.option.lounge.always: Luôn luôn
-youtube.option.lounge.demand: Theo yêu cầu
-youtube.refused: Đăng nhập bị từ chối
-youtube.search: Tìm kiếm
-youtube.setting.lounge: Phòng chờ YouTube
-youtube.shorts: Shorts
-youtube.signin: Đăng nhập YouTube
-youtube.skip: Bỏ qua phân đoạn
-youtube.skip.none: Không
-youtube.skip.some: "{{.N}} loại"
-youtube.stay: Tiếp tục ẩn danh
-youtube.subscriptions: Kênh đăng ký
-youtube.unwatched: Xem một video để có nội dung cho Trang chủ
-youtube.waiting: Đang chờ xác nhận…
-zone.title: Múi giờ
-feedback.group.feedback: Âm thanh phản hồi
-feedback.setting.chime: Chuông thiết bị
-feedback.setting.failure: Âm thanh lỗi
-feedback.setting.cancel: Âm thanh hủy
-feedback.setting.mute: Âm thanh tắt tiếng
-feedback.setting.unmute: Âm thanh bật tiếng
-feedback.setting.hold: Âm thanh giữ tắt tiếng
-frontend.entity.password: Mật khẩu quản trị
-access.group.frontend: Truy cập web
-access.setting.password: Mật khẩu quản trị
-microphone.setting.mute_sound: Âm thanh tắt tiếng
+about:
+  built: Bản dựng
+  commit: Commit
+  name: Tên
+  title: Giới thiệu
+  version: Phiên bản
+access:
+  group:
+    access: Truy cập
+    api: Home Assistant
+    frontend: Truy cập web
+  setting:
+    adb:
+      _: ADB qua mạng
+      help: Mở adb qua mạng ở cổng 5555 với shell root; tắt thì chỉ dùng adb qua USB
+    adopted:
+      _: Được Home Assistant tiếp nhận
+      help: Bật khi Home Assistant đã đăng ký; khi tắt, thiết bị công bố địa chỉ để được nhận
+    password:
+      _: Mật khẩu quản trị
+      help: Mật khẩu đăng nhập giao diện web của thiết bị; để trống thì tạo ngẫu nhiên
+actions:
+  alarm:
+    _: Quản lý báo thức
+    ambiguous: Có nhiều báo thức trùng khớp; hãy đọc tên
+    daily: hằng ngày
+    delete: Đã xóa {{.Alarm}}
+    disable: Đã tắt {{.Alarm}}
+    empty: Bạn không có báo thức nào đã lưu
+    enable: Đã bật {{.Alarm}}
+    exists: '{{.Alarm}} đã tồn tại'
+    missing: Không có báo thức nào khớp tên hoặc giờ đó
+    named: '{{.Name}} lúc {{.Clock}}'
+    next: Báo thức tiếp theo của bạn là {{.Alarm}}, {{.When}}
+    none: Bạn không có báo thức sắp tới
+    not_ringing: Không có báo thức nào đang reo
+    not_snoozed: Không có báo thức đang reo để báo lại
+    'off': '{{.Alarm}}, đã tắt'
+    once: một lần
+    sentence:
+      delete: (xóa|xoá|hủy|huỷ) báo thức {target}
+      disable: tắt báo thức {target}
+      enable: (bật|kích hoạt) báo thức {target}
+      list: liệt kê [các] báo thức [của tôi]
+      list_what: (tôi có|có) những báo thức nào
+      next: báo thức tiếp theo (là|vào) (lúc nào|khi nào)
+      set: (đặt|tạo|thêm) [một] báo thức (lúc|vào lúc|vào|cho) {time}
+      set_named: (đặt|tạo|thêm) [một] báo thức (tên|tên là|có tên) {name} (lúc|vào lúc|vào) {time}
+      snooze: (hoãn|tạm hoãn) báo thức
+      snooze_bare: báo lại
+      stop: (dừng|tắt) báo thức
+    set: Đặt {{.Alarm}}
+    snoozed: Đã báo lại báo thức
+    stopped: Đã dừng báo thức
+    target: Đọc tên báo thức, giờ hoặc báo thức tiếp theo
+    time: Đọc giờ như bảy giờ ba mươi sáng, có thể kèm mỗi ngày thường, mỗi cuối tuần, mỗi ngày, hoặc vào các thứ được nêu tên
+    weekdays: các ngày trong tuần
+    weekends: cuối tuần
+    when: '{{.Day}} lúc {{.Clock}}'
+  broadcast:
+    _: Phát một thông báo
+    ask: Nói sau tiếng chuông
+    sentence:
+      ask: (thông báo|phát thông báo)
+      message: (thông báo|phát thông báo) {message}
+      send: gửi thông báo
+    text: Phát văn bản đã nhập cần tích hợp Home Assistant
+  call:
+    _: Gọi thiết bị
+    busy: Đang trong cuộc gọi
+    foreign: '{{.Peer}} không thuộc nhà này'
+    sentence:
+      call: (gọi|gọi điện) cho {peer}
+      video: gọi video cho {peer}
+    unknown: Không có thiết bị nào tên {{.Peer}}
+    unreachable: Không thể liên lạc {{.Peer}}
+  call_answer:
+    _: Trả lời cuộc gọi
+    done: Đang trả lời cuộc gọi
+    none: Không có cuộc gọi đến để trả lời
+    sentence:
+      bare: nghe máy
+      call: (trả lời|nghe) [cuộc] (gọi|điện thoại)
+      video: (trả lời|nghe) [cuộc] gọi video
+  call_hangup:
+    _: Gác máy
+    done: Đã kết thúc cuộc gọi
+    none: Không có cuộc gọi để gác
+    sentence:
+      bare: cúp máy
+      call: (cúp|tắt) [cuộc] (gọi|điện thoại)
+      end: (kết thúc|từ chối) cuộc gọi
+  recipes:
+    _: Nấu theo công thức
+    amount: Bạn cần {{.Amount}}
+    closed: Chưa mở công thức nào để nấu
+    cooking: Cùng nấu {{.Recipe}} nhé.
+    first: Đây là bước đầu tiên
+    found: Đây là các công thức cho {{.Query}}
+    last: Đó là bước cuối cùng
+    missing: Công thức này không có {{.Ingredient}}
+    none: Không có công thức nào khớp với {{.Query}}
+    nosteps: Công thức này không có bước nào
+    notimer: Bước này không có hẹn giờ
+    sentence:
+      amount: cần bao nhiêu {ingredient}
+      amount_many: cần mấy {ingredient}
+      cook: (bắt đầu nấu|nấu món|mình nấu) {recipe}
+      find: tìm công thức [nấu] {recipe}
+      find_named: tìm [cho tôi] món {recipe}
+      next: bước tiếp theo
+      next_what: bước tiếp theo là gì
+      previous: bước (trước|trước đó)
+      repeat: (nhắc lại|đọc lại) bước [này]
+      show: cho (tôi|mình) xem công thức [món] {recipe}
+      timer: (bắt đầu|bật) hẹn giờ [cho] bước [này]
+    showing: Đây là {{.Recipe}}
+    step: 'Bước {{.N}} trên {{.Of}}: {{.Text}}'
+    timer: Đã hẹn giờ {{.Minutes}} phút
+    unreachable: Tôi không kết nối được Mealie
+    unset: Hãy thiết lập Mealie trong ứng dụng Công thức trước
+    which: Công thức nào?
+  youtube_tv:
+    _: Xem YouTube TV
+    airing: '{{.Channel}} đang chiếu {{.Title}}'
+    channel: Đọc tên kênh hoặc chương trình
+    device: Không có thiết bị nào tên {{.Device}}
+    here:
+      _: Đang phát {{.Show}} trên {{.Channel}}
+      channel: Đang phát {{.Channel}}
+    nothing: Hiện không có gì trên {{.Channel}}
+    nowhere: Chọn TV mặc định trong ứng dụng TV
+    sentence:
+      watch: (xem|mở) {channel}
+      watch_on: (xem|mở) {channel} trên {device}
+      what_is_on: trên {channel} đang có gì
+      whats_on: '{channel} đang chiếu gì'
+    unknown: Tôi đã tìm {{.Channel}} trên YouTube TV, nhưng kênh không khả dụng hoặc không thể phát lúc này
+    watching:
+      _: Đang phát {{.Show}} trên {{.Channel}} trên {{.Device}}
+      channel: Đang phát {{.Channel}} trên {{.Device}}
+airplay:
+  code: Nhập mã này trên {{.Client}}
+alarm:
+  add: Thêm báo thức
+  app: Báo thức
+  daily: Mỗi ngày
+  day:
+    fri: Thứ Sáu
+    mon: Thứ Hai
+    sat: Thứ Bảy
+    sun: Chủ Nhật
+    thu: Thứ Năm
+    tue: Thứ Ba
+    wed: Thứ Tư
+  delete: Xóa báo thức
+  edit: Báo thức
+  hour: Giờ
+  light: Đèn đánh thức
+  minute: Phút
+  minutes: '{{.N}} phút'
+  name: Tên
+  'off': Tắt
+  'on': Báo thức bật
+  once: Một lần
+  ramp: Khởi động nhẹ nhàng
+  repeat: Lặp lại
+  save: Lưu
+  seconds: '{{.N}} giây'
+  snooze: Báo lại
+  snooze_for: Báo lại sau {{.N}} phút
+  snoozed: Báo lại đến {{.T}}
+  sound: Âm thanh
+  state:
+    'off': Tắt
+    'on': Bật
+  stop: Dừng
+  volume:
+    _: Âm lượng
+    gentle: Nhẹ nhàng
+    silent: Im lặng
+    static: Đều
+  weekdays: Ngày thường
+  weekends: Cuối tuần
+alerts:
+  group:
+    alerts: Cảnh báo & báo thức
+  page: Cảnh báo & báo thức
+  setting:
+    alert:
+      _: Chuông cảnh báo
+      help: Âm thanh cho tin báo động, lặp lại mỗi 2 giây cho đến hết thời gian đổ chuông
+    info:
+      _: Chuông thông tin
+      help: Âm thanh phát khi có tin thông tin
+    ring_for:
+      _: Hẹn giờ đổ chuông trong
+      help: 'Thời gian hẹn giờ, báo thức và tin báo động đổ chuông: 1, 5, 15 hoặc 30 phút'
+    success:
+      _: Chuông thành công
+      help: Âm thanh phát khi có tin thành công
+    timer:
+      _: Âm thanh hẹn giờ
+      help: Âm thanh phát khi hẹn giờ đổ chuông
+    wake:
+      _: Đèn đánh thức
+      help: 'Kiểu ánh sáng tăng dần trước báo thức: bình minh, trắng hoặc than hồng'
+    warning:
+      _: Chuông nhắc nhở
+      help: Âm thanh phát khi có tin cảnh báo
+alertstyle:
+  answer: Tự động trả lời
+  banner: Banner
+  card: Thẻ
+  full: Toàn màn hình
+  none: Không
+  screen: Giống màn hình
+  toast: Thông báo nhanh
+align:
+  center: Giữa
+  left: Trái
+  random: Ngẫu nhiên
+  right: Phải
+apps:
+  empty: Không có ứng dụng
+  group:
+    apps: Ứng dụng
+  hint: Chạm vào ngôi sao để giữ ứng dụng trên dock. Giữ một ô rồi kéo để di chuyển.
+  setting:
+    dock:
+      _: Ứng dụng trên dock
+      help: Mã ứng dụng trên dock, cách nhau bằng dấu phẩy, theo thứ tự ứng dụng
+    order:
+      _: Thứ tự ứng dụng
+      help: Mã ứng dụng xếp đầu, cách nhau bằng dấu phẩy, theo thứ tự này; các ứng dụng khác theo sau
+  title: Ứng dụng
+assistants:
+  arbitration:
+    offset: '{{.N}} dB'
+    value: '{{.N}} ms'
+  group:
+    announcements: Thông báo
+    arbitration: Điều phối
+    captions: Phụ đề
+    gemini: Gemini
+    pryon: Pryon
+    stopword: Từ dừng
+  'off': Tắt
+  pipeline:
+    _: Pipeline
+    preferred: Ưu tiên
+  reply: Phát phản hồi
+  setting:
+    animate_announcements: Hoạt ảnh khi thông báo
+    arbitration_offset:
+      _: Độ lệch điều phối
+      help: Số decibel cộng vào điểm đánh thức của thiết bị này khi các thiết bị gần đó tranh trả lời, ±20
+    arbitration_wait:
+      _: Chờ điều phối
+      help: Số mili giây chờ các thiết bị khác nghe cùng từ đánh thức, tối đa 500; 0 trả lời ngay
+    buffer:
+      _: Bộ đệm phản hồi
+      help: Số mili giây âm thanh trả lời được giữ trước khi phát, từ 0 đến 3000
+    delivery:
+      _: Phát phản hồi
+      help: Phát câu trả lời khi đã đầy đủ, hoặc phát trực tiếp khi âm thanh đến
+    follow_up:
+      _: Thời gian chờ nói tiếp
+      help: Số giây nghe tiếp không cần từ đánh thức sau khi trả lời; 0 để tắt
+    gemini:
+      _: Từ đánh thức Gemini
+      help: Cung cấp từ đánh thức "Hey Google" của Google, tải mô hình khi được chọn
+    known_voices:
+      _: Chỉ giọng nói đã nhận diện
+      help: Chỉ bắt đầu yêu cầu khi từ đánh thức khớp với hồ sơ giọng nói đã đăng ký
+    look:
+      listening:
+        _: Hiệu ứng khi nghe
+        help: Hiệu ứng hiển thị khi trợ lý đang nghe, theo micrô; Mặc định giữ kiểu có sẵn
+      place:
+        _: Vị trí hiệu ứng
+        help: Hiển thị hiệu ứng của trợ lý trong bảng trợ lý hoặc toàn màn hình
+      responding:
+        _: Hiệu ứng khi phản hồi
+        help: Hiệu ứng hiển thị khi phát câu trả lời, theo loa; Mặc định giữ kiểu có sẵn
+      waiting:
+        _: Hiệu ứng khi chờ
+        help: Hiệu ứng hiển thị khi chờ câu trả lời, theo micrô và loa; Mặc định giữ kiểu có sẵn
+    max_listen:
+      _: Thời gian nghe tối đa
+      help: Số giây trợ lý nghe yêu cầu trước khi dừng, từ 5 đến 60
+    max_think:
+      _: Thời gian suy nghĩ tối đa
+      help: Số giây chờ câu trả lời trước khi dừng, từ 5 đến 300
+    pryon:
+      _: Từ đánh thức Amazon
+      help: Cung cấp các từ đánh thức Pryon của Amazon, tải thư viện và mô hình khi được chọn
+    pryon_stop:
+      _: Từ dừng Amazon
+      help: Dùng từ "Stop" của Pryon Amazon để ngắt câu trả lời; cần bật từ đánh thức Amazon
+    recordings:
+      _: Số bản ghi giữ lại
+      help: Số yêu cầu gần nhất của trợ lý này được lưu âm thanh trên thiết bị, tối đa 10; 0 không lưu
+    show_captions: Hiện phụ đề
+    stop_sensitivity:
+      _: Độ nhạy từ dừng
+      help: Ngưỡng nhận diện từ dừng để ngắt câu trả lời, từ 50 đến 100%; 100% để tắt
+    threshold:
+      _: Độ nhạy từ đánh thức
+      help: Điểm từ đánh thức phải đạt để kích hoạt, từ 50 đến 99%
+    tone:
+      _: Âm thanh đánh thức
+      help: Âm thanh phát khi từ đánh thức được chấp nhận
+    wake_screen:
+      _: Đánh thức màn hình
+      help: Bật màn hình khi nghe thấy từ đánh thức này
+  slot: Trợ lý {{.N}}
+  talk:
+    _: Nói ngay
+    hint: Không cần từ đánh thức
+  threshold:
+    _: Độ nhạy từ đánh thức
+    hint: Càng cao càng dễ đánh thức
+  title: Trợ lý giọng nói
+  tone: Âm thanh đánh thức
+  unset: Đặt từ đánh thức trong Home Assistant
+  waiting: Đang chờ mô hình
+  word:
+    _: Từ đánh thức
+    ha: Bật hành động hoặc chọn trong Home Assistant
+bluetooth:
+  connected_sources: Thiết bị đã kết nối
+  group:
+    bluetooth: Bluetooth
+  setting:
+    proxy:
+      _: Proxy Bluetooth
+      help: Chuyển tiếp các thiết bị Bluetooth gần đó tới Home Assistant như một proxy Bluetooth ESPHome
+    scan:
+      _: Quét Bluetooth
+      help: 'Phần thời gian radio dành để nghe quảng bá Bluetooth: 1, 2, 5 hoặc 9%'
+    speaker:
+      _: Loa Bluetooth
+      help: Cho phép điện thoại phát âm thanh qua thiết bị này bằng Bluetooth (A2DP)
+  source_auto: Tự động chuyển nguồn
+  source_empty: Không có thiết bị Bluetooth nào được kết nối
+  source_selected: Nguồn đã chọn
+boot:
+  leaving: Đang khởi động lại
+  skip: Bỏ qua
+  stranded: Mất liên lạc với màn hình
+broadcast:
+  from: Từ {{.Peer}}
+  title: Phát thông báo
+buttons:
+  dynamic: Đang phát gì
+  static: Âm lượng chính
+calendar:
+  add: Sự kiện mới
+  allday: Cả ngày
+  app: Lịch
+  chosen: '{{.N}} lịch'
+  count: '{{.N}} ngày'
+  date: Ngày
+  days: Số ngày
+  empty: Không có gì sắp tới
+  failed: Không thể thêm sự kiện
+  free: Không có kế hoạch
+  group:
+    calendar: Lịch
+  hour: Giờ
+  hours:
+    _: '{{.N}} giờ'
+    half: '{{.N}} giờ rưỡi'
+  length: Thời lượng
+  location: Địa điểm
+  minute: Phút
+  minutes: '{{.N}} phút'
+  more: +{{.N}} nữa
+  needs:
+    title: Nhập tiêu đề
+  none: Không có lịch trong Home Assistant
+  notes: Ghi chú
+  'off': Tắt
+  opening:
+    day: Ngày
+    last: Lần dùng gần nhất
+    month: Tháng
+    week: Tuần
+  pick: Chọn lịch
+  save: Lưu
+  setting:
+    colors:
+      _: Màu lịch
+      help: Các cặp thực thể=#rrggbb cách nhau bằng dấu phẩy; lịch không có cặp nhận màu kế tiếp
+    entities:
+      _: Lịch
+      help: Các thực thể lịch Home Assistant được hiển thị sự kiện, cách nhau bằng dấu phẩy; để trống thì không hiển thị
+    opening:
+      _: Mở ở chế độ
+      help: 'Chế độ xem khi mở lịch: ngày, tuần, tháng hoặc lần dùng gần nhất'
+    saver: Sự kiện tiếp theo trên màn hình chờ
+    weather:
+      _: Thời tiết theo ngày
+      help: Hiển thị dự báo hằng ngày trên các ngày trong lịch
+  title: Tiêu đề
+  today: Hôm nay
+  tomorrow: Ngày mai
+  view:
+    day: Ngày
+    month: Tháng
+    week: Tuần
+  week:
+    start: monday
+call:
+  address: Địa chỉ
+  answer:
+    count: Đã chọn {{.N}}
+    everyone: Mọi người
+    from: Trả lời từ
+    peers: Màn hình
+    selected: Đã chọn
+    users: Người dùng
+  auto:
+    _: Tự động trả lời
+    hint: Trả lời ngay
+  autovideo: Tự động trả lời kèm camera
+  busy: Đang bận
+  calling: Đang gọi…
+  camera:
+    'off': Camera tắt
+    'on': Camera bật
+  caps: Có thể làm
+  connected: Đã kết nối
+  declined: Đã từ chối
+  dropped: Cuộc gọi bị ngắt
+  empty: Không tìm thấy thiết bị nào khác
+  failed: Cuộc gọi thất bại
+  gone: Không còn trên mạng
+  group:
+    calls: Bộ đàm
+  incoming:
+    _: Cuộc gọi đến
+    allow: Cuộc gọi đến
+    video: Cuộc gọi video đến
+  model: Kiểu máy
+  mute: Tắt tiếng
+  'no': Không
+  pausewake: Tạm dừng từ đánh thức khi gọi
+  reconnecting: Đang kết nối lại…
+  ring: Chuông
+  ringback: Chuông hồi
+  seen: Lần cuối thấy
+  setting:
+    answer_api:
+      _: Tự động trả lời cuộc gọi API
+      help: Khi giới hạn tự động trả lời, trả lời các cuộc gọi qua API web của thiết bị
+    answer_from:
+      _: Tự động trả lời từ
+      help: Tự động trả lời mọi người hoặc chỉ các màn hình, người dùng và API đã chọn
+    answer_peers:
+      _: Tự động trả lời màn hình
+      help: Mã thiết bị cách nhau bằng dấu cách được tự động trả lời khi có giới hạn
+    answer_users:
+      _: Tự động trả lời người dùng
+      help: Mã người dùng Home Assistant cách nhau bằng dấu cách được tự động trả lời khi có giới hạn
+    auto_answer:
+      _: Tự động trả lời cuộc gọi
+      help: Trả lời cuộc gọi đến mà không đổ chuông, sau một tiếng báo ngắn
+    auto_video:
+      _: Tự động trả lời kèm camera
+      help: Giữ camera bật trong cuộc gọi video tự động trả lời; tắt thì bắt đầu với camera tắt
+    broadcasts:
+      _: Nhận thông báo phát
+      help: Nhận thông báo âm thanh từ thiết bị khác và cho biết là có nhận
+    incoming:
+      _: Cuộc gọi đến
+      help: Nhận cuộc gọi đến; tắt thì từ chối mọi cuộc gọi
+    pause_wake:
+      _: Tạm dừng từ đánh thức khi gọi
+      help: Tạm dừng nhận diện từ đánh thức trong khi đang gọi
+    ring:
+      _: Âm chuông
+      help: Âm thanh cho cuộc gọi thoại đến
+    ringback:
+      _: Âm chuông hồi
+      help: Âm thanh phát khi cuộc gọi đi đang chờ trả lời
+    stream:
+      _: Luồng video cuộc gọi
+      help: 'Luồng camera gửi trong cuộc gọi video: luồng chính, hoặc luồng phụ nếu có'
+    video_ring:
+      _: Âm chuông video
+      help: Âm thanh cho cuộc gọi video đến
+  settings:
+    _: Bộ đàm
+    hint: Cuộc gọi đến và tự động trả lời
+  standing: Nhà
+  stream:
+    _: Luồng video
+    hint: Luồng phụ dùng ít băng thông hơn; tự chuyển sang luồng chính khi luồng phụ tắt
+    main: Chính
+    sub: Phụ
+  tab: Bộ đàm
+  unanswered: Không trả lời
+  unavailable: Không nhận cuộc gọi
+  unmute: Bật tiếng
+  unreachable: Không thể liên lạc
+  users:
+    empty: Không tìm thấy người dùng Home Assistant nào
+  version: Phiên bản
+  videoring: Chuông video
+  volume: Âm lượng
+camera:
+  group:
+    exposure: Phơi sáng
+    picture: Hình ảnh
+    streams: Luồng
+    whitebalance: Cân bằng trắng
+  muted: Micrô đang tắt tiếng
+  option:
+    banding:
+      50hz: 50 Hz
+      60hz: 60 Hz
+      auto: Tự động
+      'off': Tắt
+    brightness:
+      high: Cao
+      low: Thấp
+      middle: Trung bình
+    contrast:
+      high: Cao
+      low: Thấp
+      middle: Trung bình
+    effect:
+      aqua: Xanh nước
+      blackboard: Bảng đen
+      mono: Đơn sắc
+      negative: Âm bản
+      none: Không
+      posterize: Posterize
+      sepia: Sepia
+      solarize: Solarize
+      whiteboard: Bảng trắng
+    hue:
+      high: Cao
+      low: Thấp
+      middle: Trung bình
+    noise:
+      fast: Nhanh
+      high_quality: Chất lượng cao
+      minimal: Tối thiểu
+      'off': Tắt
+    quality:
+      high: Cao
+      low: Thấp
+      standard: Tiêu chuẩn
+    saturation:
+      high: Cao
+      low: Thấp
+      middle: Trung bình
+    scene:
+      action: Hành động
+      auto: Tự động
+      beach: Bãi biển
+      candlelight: Ánh nến
+      fireworks: Pháo hoa
+      hdr: HDR
+      landscape: Phong cảnh
+      night: Ban đêm
+      night-portrait: Chân dung ban đêm
+      party: Bữa tiệc
+      portrait: Chân dung
+      snow: Tuyết
+      sports: Thể thao
+      steadyphoto: Ảnh chống rung
+      sunset: Hoàng hôn
+      theatre: Nhà hát
+    sharpness:
+      high: Cao
+      low: Thấp
+      middle: Trung bình
+    whitebalance:
+      auto: Tự động
+      cloudy-daylight: Nhiều mây
+      daylight: Ánh sáng ban ngày
+      fluorescent: Đèn huỳnh quang
+      incandescent: Đèn sợi đốt
+      shade: Bóng râm
+      twilight: Chạng vạng
+      warm-fluorescent: Huỳnh quang ấm
+  reset:
+    _: Đặt lại mặc định
+    confirm: Chạm lần nữa để đặt lại
+  setting:
+    banding:
+      _: Chống nhấp nháy
+      help: 'Bộ lọc nhấp nháy cho đèn điện lưới: tự động, tắt, 50 Hz hoặc 60 Hz'
+    brightness:
+      _: Độ sáng
+      help: 'Độ sáng hình ảnh gửi tới HAL camera: thấp/vừa/cao hoặc từ 0 đến 10, tùy nhà sản xuất'
+    contrast:
+      _: Độ tương phản
+      help: 'Độ tương phản gửi tới HAL camera: thấp/vừa/cao hoặc từ 0 đến 10, tùy nhà sản xuất'
+    effect:
+      _: Hiệu ứng
+      help: Hiệu ứng màu HAL camera áp dụng, từ danh sách của nhà sản xuất
+    ev:
+      _: Bù phơi sáng
+      help: Số bước bù phơi sáng, trong phạm vi camera báo
+    framerate:
+      _: Tốc độ khung hình
+      help: Tốc độ khung hình cố định của cảm biến khi tắt tự động, làm tròn về mức được hỗ trợ
+    framerate_auto:
+      _: Tự động tốc độ khung hình
+      help: Để HAL camera tự chọn khoảng tốc độ khung hình
+    hue:
+      _: Sắc độ
+      help: 'Sắc độ hình ảnh gửi tới HAL camera: thấp, vừa hoặc cao'
+    iso:
+      _: ISO
+      help: Độ nhạy ISO của cảm biến từ danh sách nhà sản xuất, hoặc tự động
+    keyframe:
+      _: Khoảng khung hình khóa
+      help: Số giây giữa các keyframe H.264, từ 1 đến 10; trên API 25 ảnh chụp có thể chờ chừng ấy
+    main_on:
+      _: Luồng chính
+      help: Cung cấp luồng H.264 chính qua RTSP và ONVIF
+    main_size:
+      _: Độ phân giải chính
+      help: Độ phân giải luồng H.264 chính, từ danh sách của bo mạch
+    noise:
+      _: Khử nhiễu
+      help: Chế độ giảm nhiễu từ danh sách của nhà sản xuất
+    quality:
+      _: Chất lượng
+      help: 'Bitrate của luồng: thấp giảm một nửa, cao tăng gấp đôi, trong khoảng 0,25 đến 10 Mbit/s'
+    saturation:
+      _: Độ bão hòa
+      help: 'Độ bão hòa màu gửi tới HAL camera: thấp/vừa/cao hoặc từ 0 đến 10, tùy nhà sản xuất'
+    scene:
+      _: Cảnh
+      help: Chế độ cảnh HAL camera dùng, từ danh sách của nhà sản xuất
+    sharpness:
+      _: Độ nét
+      help: 'Độ sắc nét viền gửi tới HAL camera: thấp/vừa/cao hoặc từ 0 đến 6, tùy nhà sản xuất'
+    sub_on:
+      _: Luồng phụ
+      help: Mã hóa thêm một luồng H.264 nhỏ hơn và cung cấp qua RTSP và ONVIF
+    sub_size:
+      _: Độ phân giải phụ
+      help: Chiều rộng luồng phụ tính bằng pixel; chiều cao theo tỷ lệ của luồng chính
+    whitebalance:
+      _: Cân bằng trắng
+      help: Cài đặt cân bằng trắng từ danh sách của nhà sản xuất, hoặc tự động
+  shutter: Cửa chập camera đang đóng
+  starting: Đang khởi động camera
+cameras:
+  app: Camera
+  failed: Không thể liệt kê camera trong Home Assistant
+  group:
+    cameras: Camera
+  loading: Đang tải camera
+  none: Chưa chọn camera
+  nosite: Chưa biết địa chỉ Home Assistant. Đặt URL Home Assistant trong Cài đặt → Điều khiển nhà → Camera
+  'off': Tắt
+  pick: Chọn
+  seconds: '{{.N}} giây'
+  setting:
+    refresh:
+      _: Làm mới
+      help: Số giây giữa các lần làm mới ảnh trong lưới camera; 0 để tắt
+    rotate:
+      _: Tự động chuyển trang
+      help: Số giây giữa các lần tự chuyển trang trong lưới camera; 0 để tắt
+    scale:
+      _: Kích thước ảnh thu nhỏ
+      help: Chiều cao ô camera, từ 1 đến 5, từ một phần năm chiều rộng đến toàn chiều rộng
+    tab:
+      _: Tab bảng điều khiển
+      help: Thêm thẻ Camera vào bảng điều khiển khi đã chọn camera
+    url:
+      _: URL Home Assistant
+      help: Địa chỉ Home Assistant cho ảnh và luồng camera; để trống thì tìm qua mDNS
+  why:
+    display: Màn hình này không hỗ trợ video trực tiếp
+    failed: Video trực tiếp không khả dụng
+    format: Định dạng video không được hỗ trợ
+    lost: Mất kết nối
+    nopicture: Camera không có video
+    pictures: Không có luồng trực tiếp trong Home Assistant
+    refused: 'Home Assistant: {{.Message}}'
+    slow: Home Assistant quá thời gian chờ
+    webrtc: Cài tích hợp EchoLocal để xem video trực tiếp
+card:
+  light:
+    brightness: Độ sáng
+    hue: Màu
+    waiting: Đang chờ
+    warmth: Nhiệt độ màu
+  lock:
+    lock: Khóa
+    open: Mở
+    unlock: Mở khóa
+cast:
+  entity:
+    bundle: Cast bundle
+    forecast: Cast forecast
+    oracle: Cast oracle
+    receiver: Bộ nhận Cast
+    youtube:
+      skip: Danh mục YouTube SponsorBlock
+  group:
+    cast: Cast
+  refused: 'Chromecast: {{.Name}} không thể phát trên thiết bị này'
+  setting:
+    bundle:
+      _: Bundle
+      help: URL của gói chứng thực cast, được thử đầu tiên khi lấy chứng thực cast
+    forecast:
+      _: Forecast
+      help: URL của dịch vụ ký forecast, dùng khi gói không cho gì và Oracle để trống
+    oracle:
+      _: Oracle
+      help: URL của oracle cấp chứng thực cast khi gói không cho gì; để trống mà không có forecast thì tự cấp
+    receiver:
+      _: Bộ nhận
+      help: Chạy bộ thu Google Cast trên thiết bị
+    youtube:
+      skip:
+        _: Danh mục SponsorBlock
+        help: Các loại đoạn SponsorBlock được bỏ qua trong video YouTube, cách nhau bằng dấu phẩy
+  starting: Đang khởi động {{.Name}}…
+certs:
+  entity:
+    cert: Tên chứng chỉ Cert Warden
+    cert_api_key: Khóa API chứng chỉ Cert Warden
+    key_api_key: Khóa API khóa Cert Warden
+    server: Máy chủ Cert Warden
+  group:
+    certificate: Chứng chỉ
+  setting:
+    cert:
+      _: Tên chứng chỉ
+      help: Tên chuỗi chứng chỉ riêng trên Cert Warden mà thiết bị tải về
+    cert_api_key:
+      _: Khóa API chứng chỉ
+      help: Khóa API Cert Warden cho chứng chỉ
+    key_api_key:
+      _: Khóa API khóa
+      help: Khóa API Cert Warden cho khóa riêng
+    server:
+      _: Máy chủ Cert Warden
+      help: Địa chỉ máy chủ Cert Warden; không ghi giao thức thì dùng https
+  status:
+    expired: Đã hết hạn
+    fetching: Đang lấy
+    refused: Sai khóa API
+    unreachable: Không thể kết nối Cert Warden
+    unset: Tự ký
+    valid: '{{.Name}}, có hiệu lực đến {{.Date}}'
+chime:
+  chirp: Líu lo
+  ding: Keng
+  none: Không
+  ring: Chuông
+  ringback: Chuông hồi
+  rise: Tăng dần
+  timer: Hẹn giờ
+  trouble: Sự cố
+clock:
+  backing:
+    _: Nền đồng hồ
+    card: Thẻ
+    none: Không
+    shade: Đổ bóng
+  color:
+    _: Màu
+    title: Màu đồng hồ
+  date: Hiện ngày
+  face: Mặt đồng hồ
+  group:
+    clock: Đồng hồ
+  hours: Dùng định dạng 24 giờ
+  setting:
+    align:
+      _: Vị trí ngang đồng hồ
+      help: Đặt đồng hồ bảng điều khiển ở trái, giữa hoặc phải
+    backing:
+      _: Nền đồng hồ
+      help: 'Phía sau đồng hồ bảng điều khiển: không có gì, bóng mờ hoặc thẻ'
+    color:
+      _: Màu đồng hồ
+      help: 'Màu đồng hồ bảng điều khiển: màu giao diện hoặc một màu cố định'
+    date:
+      _: Ngày trên đồng hồ
+      help: Hiển thị ngày cùng đồng hồ bảng điều khiển
+    face:
+      _: Mặt đồng hồ
+      help: Kiểu đồng hồ trên bảng điều khiển, như đơn giản, lật, kim hoặc nixie
+    hours:
+      _: Định dạng đồng hồ
+      help: Hiển thị giờ theo dạng 24 giờ hoặc 12 giờ
+    position:
+      _: Vị trí dọc đồng hồ
+      help: Đặt đồng hồ bảng điều khiển ở trên, giữa hoặc dưới
+    size:
+      _: Kích thước đồng hồ
+      help: Kích thước đồng hồ bảng điều khiển, từ nhỏ nhất đến lớn, theo phần diện tích của nó
+  title: Đồng hồ
+  zone: Múi giờ
+controls:
+  dock:
+    _: Vị trí dock
+    hide: Ẩn dock sau
+  volume: Vị trí bảng âm lượng
+dashboard:
+  title: Bảng điều khiển
+datetime:
+  title: Ngày & giờ
+debug:
+  fps:
+    _: Giới hạn tốc độ khung hình hiệu ứng
+    value: '{{.N}} fps'
+  page_memory:
+    value: '{{.N}} MB'
+  seed:
+    _: Seed hiệu ứng
+    random: Ngẫu nhiên
+    value: '#{{.N}}'
+  title: Tùy chọn nhà phát triển
+  touches:
+    _: 'Số ngón tay chạm: {{.N}}'
+    gesture: 'Cử chỉ cuối: {{.Name}}'
+  visuals: Hiệu ứng
+delay:
+  10m: 10 phút
+  10s: 10 giây
+  15m: 15 phút
+  15s: 15 giây
+  1m: 1 phút
+  2m: 2 phút
+  30m: 30 phút
+  30s: 30 giây
+  3m: 3 phút
+  45s: 45 giây
+  5m: 5 phút
+  5s: 5 giây
+  never: Không bao giờ
+delivery:
+  stream: Phát trực tiếp
+  whole: Tải về trước
+diag:
+  group:
+    diagnostics: Chẩn đoán
+  option:
+    page_memory:
+      none: Không giới hạn
+  setting:
+    interval:
+      _: Khoảng thời gian đo
+      help: Số giây giữa các lần gửi cảm biến chẩn đoán tới Home Assistant, từ 10 đến 3600
+    low_memory:
+      _: Chế độ ít bộ nhớ
+      help: Chạy công cụ cast ở chế độ thiết bị cấu hình thấp của Chromium; thay đổi sẽ khởi động lại công cụ
+    min_cores:
+      _: Số lõi CPU tối thiểu
+      help: Số lõi CPU tối thiểu mà trình điều khiển hotplug MediaTek giữ hoạt động
+    page_memory:
+      _: Giới hạn bộ nhớ trang
+      help: Giới hạn heap JavaScript cho các trang của công cụ cast, tính bằng MB; Không giữ mặc định của Chromium
+display:
+  alerts: Kiểu cảnh báo
+  auto: Độ sáng thích ứng
+  brightness: Độ sáng
+  clock: Đồng hồ
+  font: Phông chữ
+  idle: Màn hình chờ
+  marks: Chỉ báo quyền riêng tư
+  poster: Hình nền
+  presence: Cảm biến
+  size: Kích thước
+  style: Kiểu
+  theme: Giao diện
+  timer: Kiểu hẹn giờ
+  title: Màn hình
+doorbell:
+  add: Thêm chuông cửa
+  added: Đã thêm
+  app: Chuông cửa
+  autosetup: Tự động thiết lập
+  camera:
+    pictures:
+      _: Ảnh sự kiện từ
+      hint: Camera Home Assistant hiển thị cửa này
+    title: Camera Home Assistant
+  cameras: '{{.N}} camera'
+  cancel: Hủy
+  channel: Kênh {{.N}}
+  checking: Đang kiểm tra…
+  connect: Kết nối
+  connecting: Đang kết nối…
+  entity:
+    chime: Âm thanh chuông cửa
+    door:
+      events: Nguồn sự kiện chuông cửa {{.N}}
+      name: Tên chuông cửa {{.N}}
+      talk: Nguồn nói chuyện chuông cửa {{.N}}
+      video: Nguồn video chuông cửa {{.N}}
+    live_for: Mở xem trực tiếp chuông cửa trong
+    notify: Âm thanh thông báo chuông cửa
+    ring_for: Chuông cửa reo trong
+    style: Kiểu thông báo chuông cửa
+    tab: Tab bảng điều khiển chuông cửa
+    visitor: Kiểu chuông khi có khách
+  event:
+    dog_cat: Động vật ở {{.Door}}
+    motion: Chuyển động ở {{.Door}}
+    package: Bưu kiện ở {{.Door}}
+    people: Có người ở {{.Door}}
+    vehicle: Xe ở {{.Door}}
+    visitor: Có người ở {{.Door}}
+  events:
+    via: '{{.State}} qua {{.Source}}'
+  fellback: '{{.Line}} (Reolink thất bại)'
+  field:
+    host: Địa chỉ IP hoặc tên máy chủ
+    host_port: Thêm :port để bỏ qua tìm kiếm tự động
+    name: Tên
+    password: Mật khẩu
+    rtsp: URL RTSP
+    stream: Luồng
+    uid: UID
+    user: Người dùng
+  forget: Xóa
+  group:
+    doorbell: Chuông cửa
+  lock:
+    _: Khóa
+    confirm: Chạm lần nữa để mở khóa
+  looking: Đang tìm trong Home Assistant…
+  manual: Thủ công
+  needs:
+    _: Nhập UID hoặc địa chỉ IP/tên máy chủ
+    host: Nhập địa chỉ IP hoặc tên máy chủ
+    rtsp: Nhập URL RTSP
+  none: Chưa thiết lập chuông cửa
+  notsaved: Chưa lưu
+  offline: Ngoại tuyến
+  ok: OK
+  save: Lưu
+  saved: Đã lưu
+  sensor:
+    animal: Cảm biến động vật
+    motion: Cảm biến chuyển động
+    none: Không
+    package: Cảm biến bưu kiện
+    person: Cảm biến người
+    vehicle: Cảm biến xe
+    visitor: Cảm biến chuông
+  setting:
+    chime:
+      _: Âm thanh chuông
+      help: Âm thanh phát khi khách bấm chuông cửa
+    door:
+      events:
+        _: Sự kiện
+        help: 'Nguồn sự kiện chuông cửa: Reolink, ONVIF, Home Assistant hoặc tự động'
+      name:
+        _: Tên
+        help: Tên cửa hiển thị làm tiêu đề cảnh báo và chế độ xem trực tiếp
+      talk:
+        _: Nói chuyện
+        help: 'Cách đàm thoại tới chuông cửa: Reolink, ONVIF hoặc tự động'
+      video:
+        _: Video
+        help: 'Nguồn video trực tiếp của chuông cửa: Reolink, ONVIF, RTSP hoặc Home Assistant'
+    live_for:
+      _: Giữ xem trực tiếp mở
+      help: Thời gian chế độ xem trực tiếp của chuông cửa mở, từ 1 đến 10 phút
+    notify:
+      _: Âm thanh thông báo
+      help: Âm thanh cho các phát hiện của chuông cửa ngoài tiếng bấm chuông của khách
+    ring_for:
+      _: Reo trong
+      help: Thời gian tiếng chuông của khách lặp lại và giữ cảnh báo
+    style:
+      _: Kiểu thông báo
+      help: 'Cách hiển thị các phát hiện ngoài tiếng bấm chuông: mặc định, không, banner, thẻ, toàn màn hình hoặc toast'
+    tab:
+      _: Tab bảng điều khiển
+      help: Thêm thẻ Chuông cửa vào bảng điều khiển khi đã thiết lập cửa
+    visitor:
+      _: Kiểu chuông
+      help: Cách hiển thị khi khách bấm chuông; Trả lời mở ngay chế độ xem trực tiếp
+  slot: Chuông cửa {{.N}}
+  source:
+    auto: Tự động
+    ha: Home Assistant
+    ha_reolink: Home Assistant (tích hợp Reolink)
+    nvr: Reolink NVR
+    onvif: ONVIF
+    reolink: Reolink
+    rtsp: RTSP
+  status:
+    connected: Đã kết nối
+    connecting: Đang kết nối…
+    events: Sự kiện
+    login: Sai người dùng hoặc mật khẩu
+    none: Không có chuông cửa trong Home Assistant
+    ready: '{{.Count}} đã kết nối'
+    unreachable: Không thể kết nối chuông cửa
+    unset: Chưa thiết lập
+    unsupported: Không khả dụng từ nguồn này
+    video: Video
+  stream:
+    main: Chính
+    sub: Phụ
+  tried: '{{.Source}} thất bại: {{.Why}}'
+  video:
+    connecting: Đang kết nối qua {{.Source}}
+    failed: '{{.Why}} ({{.Source}})'
+    working: Hoạt động qua {{.Source}}
+  watch: Xem
+  why:
+    camera: Không có video trực tiếp cho chuông cửa này
+    decoder: Màn hình này không phát được video của chuông cửa
+    fallback: Đang hiện video Home Assistant, không có nói chuyện
+    lock: 'Không thể thay đổi khóa: {{.Why}}'
+    lost: Mất kết nối chuông cửa, đang thử lại
+    nocamera: Chọn camera Home Assistant
+    nopassword: Nhập mật khẩu chuông cửa
+    other: Một chuông cửa khác trả lời tại địa chỉ đó
+    refused: Đăng nhập bị từ chối (mã {{.Code}})
+    talk: 'Không thể nói chuyện: {{.Why}}'
+    toobig: Luồng chính quá lớn cho màn hình này, đang hiện luồng phụ
+    unreachable: Không thể kết nối chuông cửa
+edge:
+  bottom: Dưới
+  left: Trái
+  right: Phải
+  top: Trên
+face:
+  analog: Kim
+  analog-seconds: Kim có giây
+  atomic: Nguyên tử
+  bars: Cột
+  binary: Nhị phân
+  cards: Thẻ
+  flip: Lật
+  math: Toán học
+  neon: Neon
+  nixie: Nixie
+  none: Không
+  octagon: Bát giác
+  overlap: Chồng lớp
+  plain: Trơn
+  railway: Đường sắt
+  reel: Cuộn
+  roman: La Mã
+  segments: Phân đoạn
+  smiley: Mặt cười
+  spoken: Đọc giờ
+  stack: Xếp chồng
+  words: Chữ
+features:
+  airplay:
+    _: AirPlay
+    hint: Phản chiếu từ Mac hoặc iPhone
+  cast:
+    _: Bộ nhận Cast
+    hint: Phát từ điện thoại hoặc ứng dụng
+  mealie:
+    _: Mealie
+    hint: Công thức và chế độ nấu ăn
+  proxy:
+    _: Proxy Bluetooth
+    hint: Proxy Bluetooth LE cho Home Assistant
+  rtsp:
+    _: Luồng camera
+    hint: RTSP và ONVIF, cho Home Assistant và đầu ghi
+  sendspin:
+    _: Sendspin
+    hint: Âm thanh toàn nhà
+  speaker:
+    _: Loa Bluetooth
+    hint: Phát từ điện thoại qua Bluetooth
+  title: Dịch vụ kết nối
+feedback:
+  group:
+    feedback: Âm thanh phản hồi
+  setting:
+    cancel:
+      _: Âm thanh hủy
+      help: Âm thanh phát khi yêu cầu giọng nói bị hủy
+    chime:
+      _: Chuông thiết bị
+      help: Âm thanh khi đổi âm lượng; Không sẽ tắt các âm phản hồi khác
+    failure:
+      _: Âm thanh lỗi
+      help: Âm thanh phát khi yêu cầu giọng nói thất bại
+    hold:
+      _: Âm thanh giữ tắt tiếng
+      help: Âm thanh phát khi giữ nút tắt tiếng, kể cả khi tiếng báo thiết bị là Không
+    mute:
+      _: Âm thanh tắt tiếng
+      help: Âm thanh phát khi tắt micrô
+    unmute:
+      _: Âm thanh bật tiếng
+      help: Âm thanh phát khi bật lại micrô
+font:
+  style: Mặc định theo kiểu
+  title: Phông chữ
+frontend:
+  entity:
+    password: Mật khẩu quản trị
+gesture:
+  double-tap: Chạm hai lần
+  fingers: '{{.Move}} với {{.N}} ngón tay'
+  hold: Giữ
+  pinch-in: Chụm vào
+  pinch-out: Mở ra
+  swipe-down: Vuốt xuống
+  swipe-left: Vuốt trái
+  swipe-right: Vuốt phải
+  swipe-up: Vuốt lên
+  tap: Chạm
+home:
+  all: Tất cả
+  area:
+    count: '{{.N}} / {{.Of}}'
+  check: Kiểm tra lại
+  checking: Đang kiểm tra Home Assistant…
+  combine: Bao gồm công tắc
+  dashboard: Chế độ
+  devices: Chọn thiết bị
+  empty: Không có gì để hiện
+  enable: Bật
+  enabled: Bật điều khiển nhà
+  everything:
+    cameras: Tất cả camera
+    lights: Tất cả đèn
+    switches: Tất cả công tắc
+  failed: Không thể tải từ Home Assistant
+  group:
+    _: Nhóm theo khu vực
+    all: Mọi khu vực trên một thẻ
+    from: Khu vực có từ {{.N}} thiết bị trở lên
+    home: Điều khiển nhà
+    none: Mỗi thiết bị một thẻ riêng
+  label:
+    count: '{{.N}} thiết bị'
+  loading: Đang tải…
+  noarea: Không khu vực
+  none: Không
+  'off':
+    _: Home Assistant đang tắt
+    hint: Bật điều khiển nhà trong Cài đặt → Điều khiển nhà
+  picked:
+    areas: '{{.N}} khu vực'
+    entities: '{{.N}} thiết bị'
+    labels: '{{.N}} nhãn'
+  reconnecting: Đang kết nối lại với Home Assistant…
+  refused:
+    _: Không được phép thực hiện hành động
+    hint: Mở ESPHome, nhấn biểu tượng cài đặt trên {{.Name}} rồi bật “Cho phép thiết bị thực hiện hành động Home Assistant.”
+  retry: Thử lại
+  saver:
+    _: Màn hình chờ
+    'off': Bật Tự động chờ trong cài đặt màn hình Tessera để dùng màn hình chờ của Tessera
+  search: Tìm kiếm
+  selection:
+    cameras: Camera
+    lights: Đèn
+    switches: Công tắc
+  setting:
+    combine:
+      _: Bao gồm công tắc
+      help: Hiển thị các công tắc Home Assistant đã chọn trong thẻ Đèn, khi bật Điều khiển đèn
+    control:
+      lights:
+        _: Điều khiển đèn
+        help: Thêm thẻ Đèn vào bảng điều khiển gốc để bật tắt các đèn Home Assistant đã chọn
+      switches:
+        _: Điều khiển công tắc
+        help: Thêm thẻ Công tắc vào bảng điều khiển gốc để bật tắt các công tắc Home Assistant đã chọn
+    dashboard:
+      _: Bảng điều khiển
+      help: 'Chọn bảng điều khiển chính: Gốc, Rings, Tessera hoặc Home Assistant'
+    enabled:
+      _: Bật điều khiển nhà
+      help: Bật hoặc tắt điều khiển nhà; tắt sẽ ẩn mọi bảng điều khiển và dừng thao tác Home Assistant
+    group:
+      lights:
+        _: Nhóm đèn từ
+        help: Đèn trong khu vực có ít nhất số này dùng chung một thẻ; 0 cho mỗi đèn một thẻ
+      switches:
+        _: Nhóm công tắc từ
+        help: Công tắc trong khu vực có ít nhất số này dùng chung một thẻ; 0 cho mỗi công tắc một thẻ
+    rings:
+      depth:
+        _: Độ sâu Rings
+        help: Số tầng vòng vẽ bên ngoài vòng đang chọn, từ 1 đến 4
+      group:
+        _: 'Rings: nhóm theo'
+        help: Sắp xếp Rings theo phòng (tầng, khu vực, rồi loại) hoặc theo hệ thống (loại, rồi khu vực)
+      hidden_areas:
+        _: 'Rings: khu vực ẩn'
+        help: Các khu vực Home Assistant không đưa vào Rings, là mã khu vực cách nhau bằng dấu phẩy
+      hidden_floors:
+        _: 'Rings: tầng ẩn'
+        help: Các tầng Home Assistant không đưa vào Rings, là mã tầng cách nhau bằng dấu phẩy
+      hidden_kinds:
+        _: 'Rings: loại ẩn'
+        help: Các loại thiết bị không đưa vào Rings, như đèn, khóa hoặc camera
+      labels:
+        _: 'Rings: nhãn'
+        help: Rings chỉ hiển thị thực thể có một trong các nhãn Home Assistant này; để trống thì hiển thị tất cả
+      look:
+        _: 'Rings: kiểu hiển thị'
+        help: Vẽ Rings dạng bánh xe, icicle hoặc burst
+      side:
+        _: 'Rings: phía chi tiết'
+        help: Đặt bảng chi tiết của Rings ở trái hoặc trên, hay ở phải hoặc dưới
+    tessera:
+      bottom:
+        _: 'Tessera: vuốt lên từ đáy'
+        help: 'Vuốt lên từ cạnh dưới trong Tessera mở gì: bảng trang, trang chính hoặc không gì'
+      columns:
+        _: Ô Tessera theo cạnh dài
+        help: Số ô Tessera theo cạnh dài của màn hình, từ 1 đến 12
+      follow:
+        _: 'Tessera: trang theo ngón tay'
+        help: Các trang Tessera theo ngón tay khi vuốt giữa chúng
+      home_after_idle:
+        _: 'Tessera: về trang chủ sau màn hình chờ'
+        help: Tessera về trang chính khi trình bảo vệ màn hình kết thúc
+      landscape:
+        _: 'Tessera: màn hình ngang'
+        help: Cung cấp màn hình Tessera ngang cho Home Assistant trên các bo mạch xoay được
+      portrait:
+        _: 'Tessera: màn hình dọc'
+        help: Cung cấp màn hình Tessera dọc cho Home Assistant trên các bo mạch xoay được
+      rows:
+        _: Ô Tessera theo cạnh ngắn
+        help: Số ô Tessera theo cạnh ngắn của màn hình, từ 1 đến 12
+      themed:
+        _: 'Tessera: dùng giao diện của thiết bị này'
+        help: Cho Tessera dùng màu giao diện của thiết bị này thay cho màu riêng
+      turn:
+        _: 'Tessera: hiệu ứng chuyển trang'
+        help: 'Hiệu ứng chuyển trang của Tessera: không, trượt, phủ, lộ, xếp bài, phóng to hoặc mờ dần'
+  tab:
+    labels: Nhãn
+    manual: Thủ công
+  tessera:
+    bottom: Vuốt lên từ đáy
+    columns: Cạnh dài
+    follow: Trang theo ngón tay
+    grid: Lưới
+    landscape: Bật màn hình ngang
+    portrait: Bật màn hình dọc
+    return: Về trang chủ sau màn hình chờ
+    rows: Cạnh ngắn
+    themed: Dùng giao diện của thiết bị này
+    turn: Hiệu ứng chuyển trang
+  tile:
+    all:
+      'off': Tắt tất cả
+      'on': Bật tất cả
+    area: '{{.N}} / {{.Of}} đang bật'
+    level: '{{.N}}%'
+    'off': Tắt
+    'on': Bật
+    unavailable: Không khả dụng
+  title: Điều khiển nhà
+  unconnected:
+    _: Chưa kết nối
+    hint: Thêm {{.Name}} vào Home Assistant
+homealarm:
+  app: Báo động nhà
+  arm: Bật
+  blueprint:
+    date: Ngày
+    link: Liên kết
+    location: Vị trí
+    log: Nhật ký trạng thái
+    sheet: Tờ
+    time: Giờ
+    type: Loại
+  cancel: Hủy
+  chip:
+    alarm: Báo động
+    armed: Đã bật
+    delay: Chờ
+    ready: Sẵn sàng
+  class:
+    carbon_monoxide: CO
+    door: Cửa
+    garage_door: Cửa gara
+    gas: Gas
+    moisture: Nước
+    motion: Chuyển động
+    occupancy: Có người
+    opening: Lối mở
+    presence: Hiện diện
+    safety: An toàn
+    smoke: Khói
+    sound: Âm thanh
+    tamper: Can thiệp
+    vibration: Rung
+    window: Cửa sổ
+  code:
+    enter: Nhập mã
+    first: Nhập mã trước
+    title: Nhập mã
+  console:
+    by: bởi
+    log: Nhật ký sự kiện
+    prompt: Nhập mã hoặc chọn chức năng
+  disarm: Tắt
+  emergency: Khẩn cấp
+  entity:
+    arming:
+      show: Báo động nhà hiện khi đang bật
+      sound: Âm thanh bật báo động nhà
+    look: Kiểu báo động nhà
+    pending:
+      show: Báo động nhà hiện trong thời gian chờ vào
+      sound: Âm thanh chờ vào báo động nhà
+    settled:
+      for: Báo động nhà ẩn sau
+      show: Báo động nhà hiện khi đã bật hoặc tắt
+      sound: Âm thanh bật và tắt báo động nhà
+    tab: Tab bảng điều khiển báo động nhà
+    triggered:
+      show: Báo động nhà hiện khi báo động
+      sound: Âm thanh báo động nhà khi báo động
+  faults: Lỗi
+  flip:
+    state: Trạng thái
+    time: Giờ
+  group:
+    homealarm: Báo động nhà
+  hold: Giữ để kích hoạt
+  look:
+    blueprint: Bản vẽ
+    card: Thẻ
+    console: Bảng lệnh
+    dial: Mặt số
+    flip: Bảng lật
+    hardware: Phần cứng
+    keypad: Bàn phím
+    matrix: Matrix
+    minimal: Tối giản
+    neon: Neon
+    ring: Vòng
+    shield: Khiên
+    terminal: Terminal
+    vault: Két sắt
+  mode:
+    armed_away: Vắng nhà
+    armed_custom_bypass: Bỏ qua
+    armed_home: Nhà
+    armed_night: Ban đêm
+    armed_vacation: Kỳ nghỉ
+  neon:
+    state: Trạng thái hệ thống
+  none: Không có bảng báo động trong Home Assistant
+  notready:
+    many: 'Chưa sẵn sàng: {{.N}} khu vực đang mở'
+    one: 'Chưa sẵn sàng: {{.Zone}} đang mở'
+  'off': Tắt
+  ok: OK
+  'on': Bật
+  panic: Hoảng loạn
+  pick: Chọn một
+  plate:
+    entry: Vào
+    exit: Ra
+    idle: Chờ
+    link: Liên kết
+    lost: Mất
+    mode: Chế độ hệ thống
+    normal: Bình thường
+    system: Hệ thống
+    time: Giờ địa phương
+  recent: Gần đây
+  refused: Home Assistant đã từ chối
+  rehearsal: Diễn tập, không gửi gì
+  sending: Đang gửi…
+  setting:
+    arming:
+      show:
+        _: Hiện khi đang bật
+        help: Mở màn hình báo động khi bảng báo động đang kích hoạt
+      sound:
+        _: Âm thanh khi bật
+        help: Âm thanh phát một lần khi bảng báo động bắt đầu kích hoạt
+    entity:
+      _: Bảng báo động
+      help: Thực thể bảng báo động Home Assistant mà thiết bị này hiển thị; để trống thì chọn cái duy nhất
+    hidden:
+      _: Khu vực ẩn
+      help: Các thực thể khu vực bị ẩn khỏi màn hình báo động, cách nhau bằng dấu phẩy
+    look:
+      _: Kiểu hiển thị
+      help: Kiểu hiển thị màn hình báo động, như bàn phím, khiên hoặc terminal
+    pending:
+      show:
+        _: Hiện trong thời gian chờ vào
+        help: Mở màn hình báo động trong thời gian chờ vào
+      sound:
+        _: Âm thanh chờ vào
+        help: Âm thanh lặp lại trong thời gian chờ vào cho đến khi trạng thái đổi hoặc màn hình đóng
+    settled:
+      for:
+        _: Ẩn sau
+        help: 'Thời gian màn hình báo động ở lại sau khi kích hoạt hoặc hủy: từ 5 giây đến không bao giờ'
+      show:
+        _: Hiện khi đã bật hoặc tắt
+        help: Mở màn hình báo động khi bảng báo động kích hoạt hoặc hủy xong
+      sound:
+        _: Âm thanh khi bật và tắt
+        help: Âm thanh phát một lần khi bảng báo động kích hoạt hoặc hủy xong
+    tab:
+      _: Tab bảng điều khiển
+      help: Thêm thẻ Báo động nhà vào bảng điều khiển khi đã chọn bảng báo động
+    triggered:
+      show:
+        _: Hiện khi báo động
+        help: Mở màn hình báo động khi báo động bị kích hoạt
+      sound:
+        _: Âm thanh khi báo động
+        help: Âm thanh lặp lại khi báo động bị kích hoạt cho đến khi trạng thái đổi hoặc màn hình đóng
+    zones:
+      _: Khu vực hiển thị
+      help: Chọn những khu vực của bảng báo động được liệt kê trên màn hình báo động
+  status:
+    armed_away: Đã bật vắng nhà
+    armed_custom_bypass: Đã bật bỏ qua
+    armed_home: Đã bật tại nhà
+    armed_night: Đã bật ban đêm
+    armed_vacation: Đã bật kỳ nghỉ
+    arming: Đang bật
+    disarmed: Đã tắt
+    disarming: Đang tắt
+    pending: Chờ vào
+    triggered: Đã báo động
+    unavailable: Không khả dụng
+    unset: Không có bảng báo động
+    waiting: Đang chờ Home Assistant
+  terminal:
+    command: Lệnh
+    status: Trạng thái hệ thống
+  zone:
+    active: Hoạt động
+    battery: Pin yếu
+    bypassed: Bỏ qua
+    clear: Bình thường
+    closed: Đóng
+    fault: Lỗi
+    idle: Chờ
+    lost: Mất
+    open: Mở
+    tamper: Bị can thiệp
+    trouble: Sự cố
+  zones:
+    _: Khu vực
+    count: '{{.Secure}} an toàn / {{.Open}} mở'
+    page: Khu vực {{.From}}–{{.To}} / {{.Of}}
+    shown: '{{.N}} / {{.Of}}'
+hours:
+  '12': 12 giờ
+  '24': 24 giờ
+idle:
+  after:
+    _: Bắt đầu sau
+    title: Bắt đầu sau
+  entity:
+    photo_every: Màn hình chờ đổi ảnh mỗi
+    photo_fit: Cách vừa ảnh màn hình chờ
+    photo_transition: Hiệu ứng chuyển ảnh màn hình chờ
+  face: Mặt đồng hồ
+  group:
+    idle: Màn hình chờ
+  label: Nhãn hiệu ứng
+  media:
+    _: Đóng trình phát đang tạm dừng sau
+    hint: Trình phát âm thanh và video
+  night:
+    _: Chế độ ban đêm
+    after: Bắt đầu sau
+    hint: Khi phòng tối
+    lux:
+      _: Tối hơn
+      value: '{{.N}} lx'
+    mode: Chế độ
+  none: Không
+  'off': Tắt màn hình
+  setting:
+    after:
+      _: Màn hình chờ sau
+      help: Thời gian không hoạt động trước khi mở trình bảo vệ màn hình; Không bao giờ thì không tự mở
+    align:
+      _: Vị trí ngang đồng hồ chờ
+      help: 'Vị trí ngang của đồng hồ trên trình bảo vệ màn hình: trái, giữa, phải hoặc ngẫu nhiên'
+    backing:
+      _: Nền đồng hồ chờ
+      help: 'Phía sau đồng hồ trình bảo vệ màn hình: không có gì, bóng mờ hoặc thẻ'
+    face:
+      _: Mặt đồng hồ chờ
+      help: Kiểu đồng hồ trên trình bảo vệ màn hình; Không thì không hiện đồng hồ
+    media:
+      _: Đóng trình phát đang tạm dừng sau
+      help: Dừng trình phát âm thanh hoặc video đang tạm dừng sau khoảng này; Không bao giờ thì giữ nguyên
+    night:
+      _: Chế độ ban đêm
+      after:
+        _: Chế độ ban đêm sau
+        help: 'Thời gian không hoạt động trong phòng tối trước chế độ đêm: từ 1 đến 30 phút'
+      help: 'Việc xảy ra khi phòng tối: không gì, giảm sáng, giảm sáng còn đồng hồ hoặc tắt màn hình'
+      lux:
+        _: Chế độ ban đêm dưới
+        help: Mức ánh sáng môi trường, từ 0 đến 100 lux, dưới mức đó phòng được coi là tối
+    photo_every:
+      _: Ảnh tiếp theo mỗi
+      help: 'Tần suất trình bảo vệ màn hình chuyển ảnh: từ 10 giây đến 5 phút'
+    photo_fit:
+      _: Cách vừa ảnh
+      help: Cách ảnh của trình bảo vệ màn hình lấp màn hình, như lấp đầy, vừa khít, khung hoặc lia chậm
+    photo_transition:
+      _: Hiệu ứng chuyển
+      help: 'Hiệu ứng giữa các ảnh của trình bảo vệ màn hình: không, mờ dần, trượt, phóng to, quét hoặc tan'
+    position:
+      _: Vị trí dọc đồng hồ chờ
+      help: 'Vị trí dọc của đồng hồ trên trình bảo vệ màn hình: trên, giữa, dưới hoặc ngẫu nhiên'
+    saver:
+      _: Chế độ màn hình chờ
+      help: 'Trình bảo vệ màn hình được dùng: của thiết bị, của Tessera hoặc bảng điều khiển Home Assistant'
+    size:
+      _: Kích thước đồng hồ chờ
+      help: Kích thước đồng hồ trên trình bảo vệ màn hình, từ nhỏ nhất đến lớn
+    visual1:
+      _: Hiệu ứng chờ 1
+      help: 'Ô thứ nhất của trình bảo vệ màn hình: hiệu ứng, ảnh, không gì hoặc tắt màn hình'
+      source:
+        _: Hiệu ứng chờ 1 lắng nghe
+        help: 'Âm thanh mà hiệu ứng thứ nhất phản ứng theo: micrô, loa hoặc cả hai'
+    visual2:
+      _: Hiệu ứng chờ 2
+      help: 'Ô thứ hai của trình bảo vệ màn hình, dùng chung màn hình với ô thứ nhất: hiệu ứng, ảnh hoặc không gì'
+      source:
+        _: Hiệu ứng chờ 2 lắng nghe
+        help: 'Âm thanh mà hiệu ứng thứ hai phản ứng theo: micrô, loa hoặc cả hai'
+    wake:
+      _: Cử chỉ đánh thức
+      help: Cử chỉ chạm để đóng trình bảo vệ màn hình; mặc định là chạm
+  source1: Âm thanh hiệu ứng 1
+  source2: Âm thanh hiệu ứng 2
+  title: Màn hình chờ
+  visual1: Hiệu ứng 1
+  visual2: Hiệu ứng 2
+ink:
+  amber: Hổ phách
+  blue: Xanh dương
+  cyan: Xanh lơ
+  green: Xanh lá
+  pink: Hồng
+  red: Đỏ
+  theme: Giao diện
+  violet: Tím
+keyboard:
+  cancel: Hủy
+  code_expired: Mã đã hết hạn
+  compact: Gọn
+  enter: Nhập
+  full_width: Toàn chiều rộng
+  hide: Ẩn
+  large: Lớn
+  refresh: Làm mới
+  save: Lưu
+  search: Tìm kiếm
+  size: Kích thước bàn phím
+  standard: Tiêu chuẩn
+language:
+  name: Tiếng Việt
+lock:
+  again: Nhập lại
+  change: Đổi mã PIN
+  clear:
+    _: Xóa mã PIN
+    what: Bạn chắc chứ? Thao tác này sẽ mở khóa phần cài đặt.
+  enter: Nhập mã PIN
+  entity:
+    pin: Khóa cài đặt
+  mismatch: Mã PIN không khớp. Nhập mã PIN mới
+  new: Nhập mã PIN mới, 4 đến 8 chữ số
+  next: Tiếp
+  'off': Tắt
+  'on': Bật
+  set: Đặt mã PIN
+  title: Cài đặt
+  wait: Thử lại sau {{.Seconds}} giây
+  wrong: Sai mã PIN
+look:
+  default: Mặc định
+  full: Toàn màn hình
+  panel: Trong bảng
+  place: Vị trí
+  stage:
+    listening: Đang nghe
+    responding: Đang phản hồi
+    waiting: Đang chờ
+  title: Hiệu ứng
+lovelace:
+  default: Bảng điều khiển mặc định
+  entity:
+    dashboard: Bảng điều khiển
+    saver_dashboard: Bảng điều khiển màn hình chờ
+    saver_scale: Tỷ lệ hiển thị màn hình chờ
+    saver_view: Chế độ xem màn hình chờ
+    scale: Tỷ lệ hiển thị bảng điều khiển
+    theme: Giao diện bảng điều khiển
+    user: Người dùng bảng điều khiển
+    view: Chế độ xem bảng điều khiển
+  first: Chế độ xem đầu tiên
+  group:
+    lovelace: Bảng điều khiển Home Assistant
+  hint:
+    allow: Cho phép người dùng trong tùy chọn tích hợp EchoLocal của Home Assistant
+    integration: Cài tích hợp EchoLocal trong Home Assistant
+    user: Chọn người dùng trong Cài đặt › Bảng điều khiển
+  loading: Đang tải Home Assistant
+  scale:
+    value: '{{.N}}%'
+  setting:
+    dashboard:
+      _: Bảng điều khiển
+      help: Bảng điều khiển Home Assistant hiển thị ở chế độ bảng điều khiển; để trống thì dùng mặc định
+    saver_dashboard:
+      _: Bảng điều khiển màn hình chờ
+      help: Bảng điều khiển Home Assistant dùng làm trình bảo vệ màn hình; để trống thì dùng mặc định
+    saver_scale:
+      _: Tỷ lệ hiển thị màn hình chờ
+      help: Mức thu phóng trang bảng điều khiển của trình bảo vệ màn hình, từ 50 đến 100 phần trăm
+    saver_view:
+      _: Chế độ xem màn hình chờ
+      help: Chế độ xem mở trên bảng điều khiển của trình bảo vệ màn hình; để trống thì mở chế độ xem đầu
+    scale:
+      _: Tỷ lệ hiển thị
+      help: Mức thu phóng trang bảng điều khiển Home Assistant, từ 50 đến 100 phần trăm
+    theme:
+      _: Giao diện
+      help: Giao diện Home Assistant áp dụng cho các trang bảng điều khiển; để trống thì giữ mặc định
+    user:
+      _: Hiển thị là
+      help: Người dùng Home Assistant mà bảng điều khiển đăng nhập
+    view:
+      _: Chế độ xem
+      help: Chế độ xem mở trên bảng điều khiển Home Assistant; để trống thì mở chế độ xem đầu
+  theme:
+    default: Mặc định của Home Assistant
+  unreachable:
+    _: Không thể kết nối Home Assistant
+    retry: Tự động thử lại · chạm để thử ngay
+mealie:
+  group:
+    mealie: Mealie
+  setting:
+    server:
+      _: Máy chủ Mealie
+      help: Địa chỉ máy chủ Mealie mà ứng dụng Công thức đọc; không ghi giao thức thì dùng http
+    token:
+      _: Mã API Mealie
+      help: Mã API tạo trong Mealie ở hồ sơ, mục API Tokens; công thức và mục yêu thích được đọc theo người dùng đó
+media:
+  entity:
+    buttons: Nút âm lượng
+    duck: Giảm âm nhạc
+  group:
+    airplay: AirPlay
+    media: Media
+    sendspin: Sendspin
+  option:
+    airplay_audio_mode:
+      instant: Tức thời
+      synced: Đồng bộ với video
+  setting:
+    airplay:
+      _: AirPlay
+      help: Chạy bộ thu AirPlay
+    airplay_audio_mode:
+      _: Chế độ âm thanh AirPlay
+      help: Tức thì phát âm thanh AirPlay ngay khi đến; Đồng bộ phát theo thời gian của thiết bị gửi
+    autoplay:
+      _: Tự động phát
+      help: Trình phát YouTube chuyển sang video tiếp theo khi video kết thúc
+    background:
+      _: Phát trong nền
+      help: Rời trang video vẫn tiếp tục phát với thẻ trình phát thay vì dừng
+    buttons:
+      _: Nút âm lượng
+      help: Tĩnh chỉnh âm lượng chính; Động chỉnh âm lượng của nội dung đang hiển thị hoặc đang phát
+    duck:
+      _: Độ giảm âm
+      help: Mức dB mà nội dung giảm xuống khi trợ lý nói, khi gọi và khi báo thức, từ -40 đến -3
+    mini:
+      _: Trình phát thu nhỏ
+      help: Hiển thị thanh trình phát nhỏ khi đang phát và không có trang nào mở
+    player:
+      _: Trình phát khi khởi động
+      help: Có mở thẻ trình phát đầy đủ khi bắt đầu phát hay không
+    sendspin:
+      _: Sendspin
+      help: Chạy trình phát Sendspin
+message:
+  close: Đóng
+microphone:
+  group:
+    microphone: Micrô
+  setting:
+    cancel:
+      _: Khử vọng micrô
+      help: Loại bỏ âm thanh do chính thiết bị phát ra khỏi micrô trong khi phát
+    denoise:
+      _: Khử tiếng ồn
+      help: Chạy giảm nhiễu trên âm thanh thu từ micrô
+    gain:
+      _: Độ lợi micrô
+      help: Độ khuếch đại phần cứng của micrô tính bằng dB
+    leveling:
+      _: Cân bằng âm lượng micrô
+      help: Tự động điều chỉnh mức micrô về mức giọng nói cố định, tối đa 27 dB
+    mixing:
+      _: Trộn micrô
+      help: 'Cách kết hợp các micrô: micrô giữa, delay and sum hoặc beamformer của nhà sản xuất'
+    mute_led:
+      _: Độ sáng đèn tắt tiếng
+      help: 'Độ sáng đèn LED báo tắt micrô: Mờ hoặc Sáng'
+    mute_sound:
+      _: Âm thanh tắt tiếng
+      help: Âm thanh phát khi tắt hoặc bật lại micrô
+    sensitivity:
+      _: Độ nhạy trong phòng
+      help: Số dB trên mức ồn của phòng trước khi hiệu ứng nghe phản ứng, từ 4 đến 20
+mirror:
+  app: Gương
+mode:
+  auto: Tự động
+  firmware: Tessera
+  lovelace: HA
+  manual: Thủ công
+  native: Native
+  rings: Rings
+  tessera: Tessera
+  tessera_native: Tessera native
+music:
+  add: Thêm vào hàng đợi
+  albums: Album
+  app: Nhạc
+  artists: Nghệ sĩ
+  back: Quay lại
+  find: Tìm loa
+  group: Nhóm
+  here: Chuyển đến đây
+  home: Trang chủ
+  integration: Cập nhật tích hợp EchoLocal trong Home Assistant
+  kind:
+    album: Album
+    artist: Nghệ sĩ
+    audiobook: Sách nói
+    playlist: Danh sách phát
+    podcast: Podcast
+    radio: Đài phát thanh
+    track: Bài hát
+  library: Thư viện
+  next: Phát tiếp
+  none: Không có loa Music Assistant
+  nothing: Không có gì ở đây
+  now: Đang phát
+  play: Phát
+  playlists: Danh sách phát
+  queue: Tiếp theo
+  quiet: Không phát gì
+  radio: Radio
+  recent: Phát gần đây
+  search: Tìm kiếm
+  searching: Tìm trong Music Assistant
+  similar: Tương tự
+  speakers: Loa
+  starting: Đang khởi động…
+  unavailable: Không thể kết nối Music Assistant
+network:
+  address:
+    _: Địa chỉ IP
+    none: Không
+  group:
+    network: Mạng & internet
+  internet:
+    hint: Chỉ mạng nội bộ chặn mọi thứ bên ngoài mạng của bạn
+    local: Chỉ mạng nội bộ
+    open: Mở
+    quiet: Yên lặng
+  lease:
+    _: Gia hạn thuê IP
+    hours: '{{.N}} giờ'
+    minutes: '{{.N}} phút'
+    now: Bây giờ
+  mac: Địa chỉ MAC
+  router: Bộ định tuyến
+  setting:
+    home_key:
+      _: Khóa nhà
+      help: Khóa chung mà các thiết bị gần đó phải có để được tin là cùng nhà
+    internet: Truy cập internet
+    verify:
+      _: Xác minh chứng chỉ
+      help: Kiểm tra chứng chỉ TLS khi thiết bị tải về và gửi yêu cầu web
+    via_home:
+      _: Tải qua Home Assistant
+      help: Tải từ GitHub và máy chủ bản phát hành thông qua Home Assistant
+  ssid: Mạng Wi-Fi
+  title: Mạng & internet
+  via_home:
+    hint: Bản cập nhật do Home Assistant tải
+night:
+  clock: Mờ thành đồng hồ
+  dim: Mờ
+  none: Không gì
+  'off': Tắt màn hình
+onboard:
+  add: Quét mã rồi thêm
+  hint: Quét mã rồi nhập địa chỉ này.
+  or: hoặc nhập địa chỉ này
+  title: Thêm tôi vào Home Assistant
+peer:
+  cap:
+    audio: Cuộc gọi
+    broadcast: Phát thông báo
+    sync: Đồng bộ cài đặt
+    video: Gọi video
+  checking: Đang kiểm tra
+  foreign: Không thuộc nhà này
+  home: Trong nhà này
+  open: Không có khóa nhà
+photofit:
+  auto: Tự động
+  bars: Vừa, viền trơn
+  contain: Vừa, viền mờ
+  cover: Lấp đầy
+  framed: Đóng khung
+  kenburns: Lia chậm
+photos:
+  app: Ảnh
+  entity:
+    app:
+      every: Ứng dụng Ảnh đổi ảnh mỗi
+      fit: Cách vừa ảnh ứng dụng Ảnh
+      transition: Hiệu ứng chuyển ứng dụng Ảnh
+    google:
+      album1:
+        _: Liên kết album 1 Google Photos
+        weight: Tỷ lệ album 1 Google Photos
+      album2:
+        _: Liên kết album 2 Google Photos
+        weight: Tỷ lệ album 2 Google Photos
+      album3:
+        _: Liên kết album 3 Google Photos
+        weight: Tỷ lệ album 3 Google Photos
+      album4:
+        _: Liên kết album 4 Google Photos
+        weight: Tỷ lệ album 4 Google Photos
+      enabled: Google Photos
+    immich:
+      albums: Album Immich
+      enabled: Ảnh Immich
+      favorites: Chỉ ảnh yêu thích Immich
+      key: Khóa API Immich
+      memories: Ký ức Immich trước
+      people: Người trong Immich
+      quality: Chất lượng Immich
+      server: Máy chủ Immich
+      tags: Thẻ Immich
+    status: Trạng thái ảnh {{.Source}}
+  google: Google Photos
+  group:
+    google: Google Photos
+    immich: Immich
+    photos: Ảnh
+  immich: Immich
+  page: Ảnh
+  quality:
+    fullsize: Kích thước đầy đủ
+    preview: Xem trước
+  setting:
+    app:
+      every:
+        _: Ứng dụng Ảnh đổi ảnh mỗi
+        help: Tần suất ứng dụng Ảnh chuyển sang ảnh tiếp theo; Không bao giờ thì giữ một ảnh
+      fit:
+        _: Cách vừa ảnh ứng dụng Ảnh
+        help: Cách ứng dụng Ảnh khớp từng ảnh với màn hình
+      transition:
+        _: Hiệu ứng chuyển ứng dụng Ảnh
+        help: Hiệu ứng ứng dụng Ảnh dùng giữa các ảnh
+    google:
+      album1:
+        _: Liên kết album 1
+        help: Liên kết album chia sẻ của Google Photos dùng làm nguồn ảnh
+        weight:
+          _: Tỷ lệ album 1
+          help: Tần suất chọn album này so với các album khác, từ 0 đến 10; 0 bỏ qua
+      album2:
+        _: Liên kết album 2
+        help: Liên kết album chia sẻ của Google Photos dùng làm nguồn ảnh
+        weight:
+          _: Tỷ lệ album 2
+          help: Tần suất chọn album này so với các album khác, từ 0 đến 10; 0 bỏ qua
+      album3:
+        _: Liên kết album 3
+        help: Liên kết album chia sẻ của Google Photos dùng làm nguồn ảnh
+        weight:
+          _: Tỷ lệ album 3
+          help: Tần suất chọn album này so với các album khác, từ 0 đến 10; 0 bỏ qua
+      album4:
+        _: Liên kết album 4
+        help: Liên kết album chia sẻ của Google Photos dùng làm nguồn ảnh
+        weight:
+          _: Tỷ lệ album 4
+          help: Tần suất chọn album này so với các album khác, từ 0 đến 10; 0 bỏ qua
+      enabled:
+        _: Bật
+        help: Dùng các album chia sẻ của Google Photos làm nguồn ảnh
+    immich:
+      albums:
+        _: Album
+        example: Gia đình, Mùa hè 2026
+        help: Tên album Immich để lấy ảnh, cách nhau bằng dấu phẩy; để trống là mọi album
+      enabled:
+        _: Bật
+        help: Dùng máy chủ Immich làm nguồn ảnh
+      favorites:
+        _: Chỉ ảnh yêu thích
+        help: Chỉ lấy ảnh được đánh dấu yêu thích trong Immich
+      key:
+        _: Khóa API
+        help: Khóa API Immich mà thiết bị dùng để đọc ảnh
+      memories:
+        _: Ký ức trước
+        help: Hiển thị kỷ niệm "Ngày này năm xưa" của Immich trước ảnh ngẫu nhiên
+      people:
+        _: Người
+        help: Tên người trong Immich để lấy ảnh, cách nhau bằng dấu phẩy; để trống là bất kỳ ai
+      quality:
+        _: Chất lượng
+        help: Tải ảnh xem trước của Immich hoặc ảnh kích thước đầy đủ
+      server:
+        _: Máy chủ
+        help: Địa chỉ máy chủ Immich
+      tags:
+        _: Thẻ
+        example: nhà bếp, yêu thích
+        help: Tên thẻ Immich để lấy ảnh, cách nhau bằng dấu phẩy; để trống là mọi thẻ
+  sources: Nguồn
+  status:
+    _: Trạng thái
+    connecting: Đang kết nối…
+    empty: Không có ảnh phù hợp
+    key: Sai khóa API
+    'off': Tắt
+    old: 'Immich {{.Version}}: cần 3.2 trở lên'
+    permission: Khóa API cần {{.Name}}
+    ready: Đã kết nối
+    unknown: Không có gì tên {{.Name}}
+    unreachable: Không thể kết nối máy chủ
+    unset: Chưa thiết lập
+phototransition:
+  cut: Không
+  dissolve: Tan
+  fade: Mờ dần
+  slide: Trượt
+  wipe: Lau
+  zoom: Thu phóng
+place:
+  horizontal: Vị trí ngang
+  size: Kích thước
+  vertical: Vị trí dọc
+player:
+  ad: Quảng cáo
+  ad_clip: Quảng cáo {{.Clip}} / {{.Clips}}
+  full: Trình phát đầy đủ
+  live: TRỰC TIẾP
+  lyrics: Lời bài hát
+  next: Tiếp theo
+  none: Không có gì
+  now: Đang phát
+position:
+  bottom: Dưới
+  center: Giữa
+  random: Ngẫu nhiên
+  top: Trên
+poster:
+  daily: Hằng ngày
+  entity:
+    every: Hình nền thay đổi
+    fit: Cách vừa hình nền
+    'on': Hình nền
+    transition: Hiệu ứng chuyển hình nền
+  every: Thay đổi mỗi
+  group:
+    poster: Hình nền
+  hourly: Hằng giờ
+  never: Không bao giờ
+  'off': Tắt
+  setting:
+    every:
+      _: Thay đổi mỗi
+      help: 'Khi nào đổi hình nền: khi quay lại sau 5 phút vắng mặt, theo chu kỳ hoặc không bao giờ'
+    fit:
+      _: Cách vừa
+      help: Cách ảnh nền khớp với màn hình
+    'on':
+      _: Hiện hình nền
+      help: Hiển thị ảnh từ các nguồn ảnh phía sau màn hình chờ
+    transition:
+      _: Hiệu ứng chuyển
+      help: Hiệu ứng dùng khi đổi hình nền
+  show: Hiện hình nền
+  wake: Mỗi lần đánh thức
+power:
+  reboot:
+    _: Khởi động lại thiết bị
+    what: Mọi thứ sẽ trở lại sau khoảng một phút.
+  restart:
+    _: Khởi động lại ứng dụng
+    what: Màn hình sẽ tối vài giây.
+  title: Khởi động lại
+presence:
+  group:
+    presence: Hiện diện
+  setting:
+    range:
+      _: Phạm vi phát hiện
+      help: Khoảng cách cảm biến tiệm cận coi là có người, từ 1 gần đến 5 xa
+    wake:
+      _: Đánh thức khi có chuyển động
+      help: Có người ở gần sẽ đánh thức màn hình khỏi chế độ chờ và giữ nó sáng
+radar:
+  app: Radar
+  credit:
+    nws: 'Hình ảnh: NASA GIBS · Radar: NWS qua Iowa Environmental Mesonet'
+    rainviewer: 'Hình ảnh: NASA GIBS · Radar: RainViewer'
+  failed: Radar hiện không khả dụng
+  forecast: Dự báo {{.Time}}
+  miles: '{{.N}} dặm'
+  source:
+    auto: Tự động
+    nws: NWS
+    rainviewer: RainViewer
+  updating: Đang cập nhật…
+radio:
+  app: Radio
+  empty: Gắn sao một đài để đưa lên mặt số
+  idle: Chọn một đài
+  local: Đài địa phương
+  more: Còn {{.N}} đài chưa hiển thị
+  nothing: Không có đài ở đây
+  playing: Đang phát
+  popular: Phổ biến
+  stopped: Đã dừng
+  unavailable: Radio Browser chưa được thiết lập trong Home Assistant
+rail:
+  media: Media
+  sleep: Ngủ
+recipes:
+  all: Tất cả
+  app: Công thức
+  back: Quay lại
+  cook: Bắt đầu nấu
+  done: Xong
+  favorites: Yêu thích
+  hours: '{{.N}} giờ'
+  hours_minutes: '{{.H}} giờ {{.M}} phút'
+  ingredients: Nguyên liệu
+  listening: Nói “next step”
+  minutes: '{{.N}} phút'
+  more: Xem thêm
+  need: Cho bước này
+  next: Tiếp
+  nofavorites: Chưa có công thức yêu thích
+  none: Không tìm thấy công thức
+  page: Công thức
+  prep: Chuẩn bị {{.Time}}
+  search: Tìm công thức
+  servings: '{{.N}} khẩu phần'
+  setup:
+    _: Kết nối Mealie
+    hint: Nhập máy chủ Mealie và mã API
+  status:
+    _: Trạng thái
+    connecting: Đang kết nối…
+    ready: Đã kết nối
+    token: Mealie từ chối mã API
+    unreachable: Không kết nối được Mealie
+    unset: Chưa thiết lập
+  step: Bước {{.N}}/{{.Of}}
+  steps: Các bước
+  timer: Hẹn giờ {{.Time}}
+reply:
+  download: Bắt đầu muộn hơn, không bị ngắt
+  stream: Bắt đầu sớm hơn, có thể bị ngắt
+  title: Phát phản hồi
+ring:
+  group:
+    ring: Chuông
+  setting:
+    effect:
+      _: Đèn đánh thức
+      help: Hiệu ứng vòng đèn khi trợ lý này nghe sau từ đánh thức
+    incoming:
+      _: Đèn cuộc gọi đến
+      help: Hiệu ứng vòng đèn khi có cuộc gọi đến đang đổ chuông
+    muted:
+      _: Đèn tắt tiếng
+      help: Hiệu ứng vòng đèn khi micrô bị tắt
+    reaction:
+      _: Phản ứng trong phòng
+      help: Hiệu ứng vòng đèn theo mức âm thanh nghe được trong phòng
+    replying_effect:
+      _: Đèn phản hồi
+      help: Hiệu ứng vòng đèn khi trợ lý này trả lời; Mặc định phát ngược đèn đánh thức
+    talking:
+      _: Đèn khi đang gọi
+      help: Hiệu ứng vòng đèn khi đang gọi đi hoặc trong cuộc gọi
+    thinking_effect:
+      _: Đèn suy nghĩ
+      help: Hiệu ứng vòng đèn khi trợ lý này đang xử lý; Mặc định phát ngược đèn đánh thức
+    trouble:
+      _: Đèn lỗi
+      help: Hiệu ứng vòng đèn nháy đỏ 1,5 giây khi yêu cầu giọng nói hoặc cập nhật thất bại
+rings:
+  areas: Khu vực
+  depth: Độ sâu
+  floors: Tầng
+  group:
+    _: Nhóm theo
+    room: Phòng
+    system: Hệ thống
+  home: Nhà
+  kind:
+    access: Ra vào
+    cameras: Camera
+    climate: Khí hậu
+    covers: Rèm & cửa
+    fans: Quạt
+    lights: Đèn
+    locks: Khóa
+    media: Media
+    presence: Hiện diện
+    switches: Công tắc
+  kinds: Loại
+  look:
+    _: Kiểu hiển thị
+    burst: Tỏa
+    icicle: Nhũ băng
+    wheel: Bánh xe
+  nofloor: Không tầng
+  side:
+    _: Chi tiết
+    left: Trái / trên
+    right: Phải / dưới
+  summary: '{{.On}} bật · {{.N}} thiết bị'
+rtsp:
+  entity:
+    audio: Âm thanh RTSP
+    password: Mật khẩu RTSP
+    username: Tên người dùng RTSP
+  group:
+    rtsp: RTSP
+  setting:
+    audio:
+      _: Gồm âm thanh
+      help: Thêm micrô vào luồng RTSP
+    enabled:
+      _: Máy chủ RTSP
+      help: Cung cấp camera qua RTSP ở cổng 8554
+    password:
+      _: Mật khẩu
+      help: Mật khẩu ứng dụng RTSP phải nhập; để trống thì ai cũng xem được
+    username:
+      _: Tên người dùng
+      help: Tên người dùng ứng dụng RTSP phải nhập cùng mật khẩu
+screen:
+  group:
+    lock: Khóa
+    panel: Màn hình
+  setting:
+    alert:
+      _: Kiểu cảnh báo
+      help: 'Cách tin nhắn hiện trên màn hình: banner, thẻ, toàn màn hình hoặc toast'
+    auto:
+      _: Tự động chỉnh độ sáng
+      help: Đặt độ sáng màn hình theo cảm biến ánh sáng môi trường
+    backlight:
+      _: Độ sáng
+      help: Độ sáng màn hình, từ 0 đến 100%; khi bật tự động thì dịch mức tự động
+    custom:
+      accent:
+        _: Màu nhấn giao diện tùy chỉnh
+        help: 'Màu nhấn của giao diện Tùy chỉnh dạng #rrggbb; để trống dùng màu của giao diện mặc định'
+      accent2:
+        _: Màu nhấn 2 giao diện tùy chỉnh
+        help: 'Màu nhấn thứ hai của giao diện Tùy chỉnh dạng #rrggbb; để trống dùng màu của giao diện mặc định'
+      background:
+        _: Nền giao diện tùy chỉnh
+        help: 'Màu nền của giao diện Tùy chỉnh dạng #rrggbb; để trống dùng màu của giao diện mặc định'
+      muted:
+        _: Chữ phụ giao diện tùy chỉnh
+        help: 'Màu chữ phụ của giao diện Tùy chỉnh dạng #rrggbb; để trống dùng màu của giao diện mặc định'
+      surface:
+        _: Thẻ giao diện tùy chỉnh
+        help: 'Màu thẻ và bảng của giao diện Tùy chỉnh dạng #rrggbb; để trống dùng màu của giao diện mặc định'
+      text:
+        _: Chữ giao diện tùy chỉnh
+        help: 'Màu chữ chính của giao diện Tùy chỉnh dạng #rrggbb; để trống dùng màu của giao diện mặc định'
+    drawer:
+      _: Vị trí dock
+      help: Cạnh màn hình đặt dock và để vuốt dock vào
+      hide:
+        _: Ẩn dock sau
+        help: Thời gian trước khi ẩn dock, từ 5 giây đến 1 phút; Không bao giờ thì luôn hiện
+    font:
+      _: Phông chữ
+      help: Phông chữ cho chữ trên màn hình; mặc định dùng phông của kiểu
+    keyboard:
+      _: Kích thước bàn phím
+      help: 'Kích thước bàn phím ảo: gọn, chuẩn, lớn hoặc toàn chiều rộng'
+    language:
+      _: Ngôn ngữ
+      help: Ngôn ngữ hiển thị chữ trên màn hình
+    lock_pin:
+      _: Khóa cài đặt
+      help: Mã PIN 4 đến 8 chữ số được hỏi trước khi mở cài đặt trên màn hình; để trống là không khóa
+    marks:
+      _: Chỉ báo quyền riêng tư
+      help: Hiển thị dấu trên màn hình khi micrô bị tắt hoặc camera bị che
+    size:
+      _: Kích thước
+      help: Tỷ lệ giao diện màn hình, từ mini đến cực lớn; không đặt thì dùng kích thước của bo mạch
+    style:
+      _: Kiểu
+      help: Kiểu điều khiển của giao diện, với phông và màu mặc định riêng
+    theme:
+      _: Giao diện
+      help: Bảng màu; Mặc định theo kiểu, Tùy chỉnh dùng các màu tùy chỉnh
+    timer:
+      _: Kiểu hẹn giờ
+      help: 'Cách vẽ hẹn giờ đang chạy: thanh, banner, mặt số, toàn màn hình, mặt đồng hồ hoặc góc'
+    touches:
+      _: Hiện điểm chạm
+      help: Vẽ chấm tại chỗ chạm màn hình; chi tiết thêm số lần chạm và cử chỉ cuối
+    volume:
+      _: Vị trí bảng âm lượng
+      help: Cạnh màn hình nơi bảng âm lượng xuất hiện
+settings:
+  about: Giới thiệu
+  assistants: Trợ lý giọng nói
+  camera: Camera
+  debug: Tùy chọn nhà phát triển
+  display: Màn hình
+  features: Dịch vụ kết nối
+  language: Ngôn ngữ
+  media: Media
+  network: Mạng & internet
+  power: Khởi động lại
+  search:
+    _: Tìm trong cài đặt
+    empty: Nhập để tìm cài đặt
+    none: Không có cài đặt phù hợp
+  sync: Đồng bộ cấu hình
+  system: Hệ thống
+  title: Cài đặt
+  volume: Âm thanh
+size:
+  large: Lớn
+  medium: Vừa
+  micro: Rất nhỏ
+  mini: Nhỏ gọn
+  nano: Tí hon
+  small: Nhỏ
+sound:
+  alerts: Âm lượng báo thức
+  feedback: Âm thanh hệ thống
+  main: Âm lượng chính
+  media: Âm lượng media
+  mute:
+    alerts: Tắt tiếng báo thức
+    feedback: Tắt âm thanh hệ thống
+    main: Tắt mọi âm thanh
+    media: Tắt tiếng media
+    voice: Tắt tiếng trợ lý
+  voice: Âm lượng trợ lý
+source:
+  both: Micrô và loa
+  mic: Micrô
+  speaker: Loa
+speaker:
+  group:
+    speaker: Loa
+  setting:
+    eq:
+      _: EQ loa
+      help: Cho âm thanh phát qua bộ lọc tinh chỉnh loa của nhà sản xuất bo mạch
+    headphone_output:
+      _: Giắc tai nghe
+      help: Tự động phát qua giắc tai nghe khi cắm; Bật hoặc Tắt để ép buộc
+    resampling:
+      _: Lấy mẫu lại giọng nói
+      help: Phương pháp nâng mẫu âm thanh giọng nói 16 kHz lên tần số của loa
+    speaker_gain:
+      _: Độ lợi loa
+      help: Bậc khuếch đại của trình điều khiển codec, từ 0 đến 12, dùng khi phát qua loa
+    speaker_output:
+      _: Loa
+      help: Tự động phát qua loa chỉ khi không cắm tai nghe; Bật hoặc Tắt để ép buộc
+stream:
+  alerts: Cảnh báo
+  feedback: Phản hồi
+  main: Chính
+  media: Media
+  voice: Giọng nói
+style:
+  eink: E-ink
+  glass: Kính
+  hifi: Hi-fi
+  material: Material You
+  metro: Metro
+  neon: Neon
+  skeuo: Skeuo
+  standard: Tiêu chuẩn
+  terminal: Terminal
+  title: Kiểu
+sync:
+  busy: '{{.Peer}} đang bận'
+  cancelled: Đã hủy đồng bộ
+  empty: Không có thiết bị khác để đồng bộ
+  enter: Nhập mã hiển thị trên {{.Peer}}
+  expired: Mã đã hết hạn
+  failed: Đồng bộ thất bại
+  matched: Đã ghép với {{.Peer}}
+  received: Đã áp dụng {{.N}} cài đặt từ {{.Peer}}
+  receiving: Đang nhận cài đặt…
+  sending: Đang gửi cài đặt…
+  sent: Đã gửi cài đặt đến {{.Peer}}
+  show: Nhập mã này trên {{.Peer}}
+  title: Đồng bộ cấu hình
+  tries: Quá nhiều mã sai
+  wrong: Sai mã, còn {{.N}} lần thử
+system:
+  adb:
+    _: ADB qua mạng
+    hint: Shell root không xác thực trên cổng 5555
+  certificates:
+    _: Xác minh chứng chỉ
+    hint: Xác thực chứng chỉ TLS
+  title: Hệ thống
+tessera:
+  again: Chạm lần nữa để mở khóa
+  ago: '{{.T}} trước'
+  alarm:
+    armed_away: Vắng nhà
+    armed_custom_bypass: Bỏ qua tùy chỉnh
+    armed_home: Nhà
+    armed_night: Ban đêm
+    armed_vacation: Kỳ nghỉ
+    cancel: Hủy
+    clear: Xóa
+    disarm: Tắt
+    ok: OK
+    text: Nhập mã của bảng này trong Home Assistant.
+  alert:
+    notification: Thông báo
+  binary:
+    battery:
+      'off': Bình thường
+      'on': Yếu
+    battery_charging:
+      'off': Không sạc
+      'on': Đang sạc
+    carbon_monoxide:
+      'off': Bình thường
+      'on': Phát hiện
+    cold:
+      'off': Bình thường
+      'on': Lạnh
+    connectivity:
+      'off': Mất kết nối
+      'on': Đã kết nối
+    door:
+      'off': Đóng
+      'on': Mở
+    garage_door:
+      'off': Đóng
+      'on': Mở
+    gas:
+      'off': Bình thường
+      'on': Phát hiện
+    heat:
+      'off': Bình thường
+      'on': Nóng
+    light:
+      'off': Không có ánh sáng
+      'on': Phát hiện ánh sáng
+    lock:
+      'off': Đã khóa
+      'on': Đã mở khóa
+    moisture:
+      'off': Khô
+      'on': Ướt
+    motion:
+      'off': Bình thường
+      'on': Phát hiện
+    moving:
+      'off': Không chuyển động
+      'on': Đang chuyển động
+    occupancy:
+      'off': Bình thường
+      'on': Phát hiện
+    opening:
+      'off': Đóng
+      'on': Mở
+    plug:
+      'off': Chưa cắm
+      'on': Đã cắm
+    power:
+      'off': Tắt
+      'on': Bật
+    presence:
+      'off': Vắng nhà
+      'on': Nhà
+    problem:
+      'off': OK
+      'on': Sự cố
+    running:
+      'off': Không chạy
+      'on': Đang chạy
+    safety:
+      'off': An toàn
+      'on': Không an toàn
+    smoke:
+      'off': Bình thường
+      'on': Phát hiện
+    sound:
+      'off': Bình thường
+      'on': Phát hiện
+    tamper:
+      'off': Bình thường
+      'on': Phát hiện can thiệp
+    update:
+      'off': Đã cập nhật
+      'on': Có bản cập nhật
+    vibration:
+      'off': Bình thường
+      'on': Phát hiện
+    window:
+      'off': Đóng
+      'on': Mở
+  bottom:
+    dock: Bảng trang
+    home: Trang chủ
+    'off': Không gì
+  card:
+    empty: Không có lịch sử cho khoảng này
+    high: Cao {{.V}} lúc {{.T}}
+    loading: Đang tải lịch sử…
+    low: Thấp {{.V}} lúc {{.T}}
+    now: Hiện tại {{.T}}
+    since: Từ {{.T}}
+  connected: Thiết lập màn hình này trong Tessera
+  empty: Cấu hình và thêm ô cho màn hình này ({{.Name}}) trong Tessera.
+  enable: Bật màn hình ngang hoặc dọc trong Cài đặt → Bảng điều khiển
+  energy:
+    battery: Pin
+    grid: Lưới điện
+    home: Nhà
+    other: Khác
+    solar: Điện mặt trời
+    untracked: Không theo dõi
+  in: trong {{.T}}
+  install: Cài Tessera Screen Manager trong Home Assistant, rồi thêm màn hình này vào.
+  key:
+    activate: Kích hoạt
+    press: Nhấn
+    run: Chạy
+  lapsed: Tessera không hoạt động
+  last:
+    date: Lần cuối {{.D}}
+    time: Lần cuối {{.T}}
+    yest: Hôm qua {{.T}}
+    yesterday: Hôm qua {{.T}}
+  light:
+    brightness: Độ sáng
+    effect: Hiệu ứng
+    effects: Hiệu ứng
+    hue: Màu
+    lamps: Đèn
+    waiting: Đang chờ
+    warmth: Nhiệt độ màu
+  lock:
+    jammed: Kẹt
+    lock: Khóa
+    locked: Đã khóa
+    locking: Đang khóa
+    open:
+      _: Mở
+      key: Mở
+    opening: Đang mở
+    unlock: Mở khóa
+    unlocked: Đã mở khóa
+    unlocking: Đang mở khóa
+  never: Chưa từng chạy
+  now: Vừa xong
+  'off': Tessera đang tắt
+  paused: Tạm dừng {{.T}}
+  range:
+    day: 24 giờ
+    hour: 1 giờ
+    week: 7 ngày
+  refused: Bị từ chối
+  running: Đang chạy...
+  silent: Không trả lời
+  sun:
+    name: Mặt trời
+    rise: Bình minh {{.T}}
+    set: Hoàng hôn {{.T}}
+  turn:
+    cover: Che
+    deck: Bộ bài
+    fade: Mờ dần
+    none: Không
+    reveal: Mở ra
+    slide: Trượt
+    zoom: Thu phóng
+  updating: Đang cập nhật…
+  vacuum:
+    battery: Pin {{.N}}%
+    dock: Đế sạc
+    locate: Định vị
+    pause: Tạm dừng
+    start: Bắt đầu
+  waiting: Cài Tessera
+  weather:
+    clear-night: Đêm quang
+    cloudy: Nhiều mây
+    daily: Hằng ngày
+    exceptional: Bất thường
+    feels: Cảm giác như {{.T}}
+    fog: Sương mù
+    hail: Mưa đá
+    hourly: Hằng giờ
+    lightning: Sấm sét
+    lightning-rainy: Sấm sét, mưa
+    none: Không có dự báo
+    partlycloudy: Ít mây
+    pouring: Mưa lớn
+    pressure: Áp suất {{.P}}
+    rainy: Mưa
+    snowy: Tuyết
+    snowy-rainy: Tuyết, mưa
+    sunny: Nắng
+    visibility: Tầm nhìn {{.V}}
+    wind: Gió {{.W}}
+    windy: Gió
+    windy-variant: Gió, nhiều mây
+theme:
+  custom:
+    _: Tùy chỉnh
+    accent: Màu nhấn
+    accent2: Màu nhấn 2
+    background: Nền
+    muted: Chữ phụ
+    surface: Thẻ
+    text: Chữ
+    title: Giao diện tùy chỉnh
+  default: Mặc định
+  title: Giao diện
+thermostat:
+  action:
+    cooling: Đang làm mát
+    drying: Đang hút ẩm
+    fan: Quạt
+    heating: Đang sưởi
+    idle: Chờ
+    'off': Tắt
+  app: Bộ điều nhiệt
+  between: Giữ trong khoảng
+  choose:
+    fan: Quạt
+    mode: Chế độ
+    preset: Cài sẵn
+  chosen: '{{.N}} / {{.Of}}'
+  cooling: Đang làm mát đến
+  dial: Cài đặt
+  drying: Đang hút ẩm
+  entity:
+    look: Kiểu bộ điều nhiệt
+    tab: Tab bảng điều khiển bộ điều nhiệt
+  environment: Điều khiển môi trường
+  fan: Quạt
+  fanmode:
+    auto: Tự động
+    diffuse: Khuếch tán
+    focus: Tập trung
+    high: Cao
+    low: Thấp
+    medium: Trung bình
+    middle: Trung bình
+    'off': Tắt
+    'on': Bật
+  fanning: Quạt đang chạy
+  full: Tối đa {{.N}}; hãy tắt một cái trước
+  group:
+    thermostat: Bộ điều nhiệt
+  heating: Đang sưởi đến
+  high: Cao
+  holding: Giữ ở
+  humidity: Độ ẩm
+  in: Trong
+  inside: Trong nhà
+  lamp:
+    fan: Quạt chạy
+  look:
+    bars: Thanh
+    brass: Đồng thau
+    column: Cột
+    dial: Mặt số
+    mission: Mission
+    split: Chia đôi
+    terminal: Terminal
+    wheel: Bánh xe
+  low: Thấp
+  mode:
+    auto: Tự động
+    cool: Làm mát
+    dry: Hút ẩm
+    fan_only: Quạt
+    heat: Sưởi
+    heat_cool: Tự động
+    'off': Tắt
+  no-preset: Không cài sẵn
+  none: Chưa chọn bộ điều nhiệt
+  'off': Tắt
+  out: Ngoài
+  outside: Ngoài trời
+  preset:
+    activity: Hoạt động
+    away: Vắng nhà
+    boost: Tăng cường
+    comfort: Thoải mái
+    eco: Tiết kiệm
+    home: Nhà
+    none: Không
+    sleep: Ngủ
+  refused: Home Assistant đã từ chối
+  set: Đặt
+  setpoint: Điểm đặt
+  setting:
+    entities:
+      _: Bộ điều nhiệt
+      help: Các thực thể điều hòa Home Assistant hiển thị trong ứng dụng điều nhiệt, tối đa 4
+    look:
+      _: Kiểu hiển thị
+      help: Kiểu vẽ của ứng dụng điều nhiệt, như mặt số, cột hoặc bánh xe
+    tab:
+      _: Tab bảng điều khiển
+      help: Thêm thẻ điều nhiệt vào bảng điều khiển khi đã chọn bộ điều nhiệt
+  status: Trạng thái
+  target: Mục tiêu
+  temp: Nhiệt độ
+  temperature: Nhiệt độ
+  unavailable: Không khả dụng
+  waiting: Đang chờ Home Assistant
+timer:
+  stop: Dừng
+timerstyle:
+  banner: Banner
+  bar: Thanh
+  corner: Góc
+  dial: Mặt số
+  face: Mặt đồng hồ
+  full: Toàn màn hình
+todo:
+  add: Thêm mục
+  app: Danh sách mua sắm
+  clear: Xóa mục đã xong
+  empty: Danh sách trống
+  entity: Danh sách việc cần làm
+  group:
+    todo: Danh sách mua sắm
+  lists: '{{.Count}} danh sách'
+  none: Không có danh sách việc cần làm trong Home Assistant
+  'off': Tắt
+  pick: Chọn danh sách trong Cài đặt → Điều khiển nhà → Danh sách mua sắm
+  setting:
+    completed:
+      _: Hiện mục đã xong
+      help: Liệt kê mục đã đánh dấu bên dưới mục chưa xong, kèm nút xóa chúng
+    entities:
+      _: Danh sách việc cần làm
+      help: Các thực thể danh sách việc cần làm Home Assistant được hiển thị, cách nhau bằng dấu phẩy
+  title: Danh sách mua sắm
+tone:
+  alert: Cảnh báo
+  info: Thông tin
+  success: Thành công
+  title: Âm thanh đánh thức
+  warning: Nhắc nhở
+touches:
+  details: Chi tiết
+  dots: Chấm
+  'off': Tắt
+tv:
+  app: TV
+  empty: Không có gì đang chiếu
+  failed: Không thể tải hướng dẫn kênh
+  find: Tìm kênh hoặc chương trình
+  group:
+    tv: TV
+  here: Ở đây
+  next: 'Tiếp lúc {{.Time}}: {{.Title}}'
+  none: Không có trình phát YouTube TV trong Home Assistant
+  quiet: Không phát gì
+  setting:
+    default:
+      _: TV mặc định
+      help: TV mà yêu cầu giọng nói YouTube TV phát lên khi không nêu tên TV
+    favorites:
+      _: Yêu thích
+      help: Các kênh YouTube TV được gắn sao, xếp đầu trong lịch phát sóng
+  update: Cập nhật tích hợp YouTube TV
+  watch: Xem trên {{.TV}}
+  watch_here: Xem ở đây
+  youtube: YouTube TV
+uisize:
+  compact: Gọn
+  large: Lớn
+  medium: Vừa
+  mini: Nhỏ
+  xlarge: Rất lớn
+update:
+  available: Có {{.Version}}
+  channel:
+    _: Kênh cập nhật
+    dev: Phát triển
+    stable: Ổn định
+  check: Kiểm tra cập nhật
+  checking: Đang kiểm tra…
+  current: Đã cập nhật
+  group:
+    updates: Cập nhật
+  install: Tải và cài đặt {{.Version}}
+  ready: Có bản cập nhật
+  running: Phiên bản hiện tại
+  setting:
+    channel:
+      _: Kênh cập nhật
+      help: Kênh phát hành cung cấp bản cập nhật firmware; thay đổi sẽ kiểm tra cập nhật
+  title: Cập nhật phần mềm
+  unreachable: Không thể kết nối máy chủ cập nhật
+  versions:
+    _: Phiên bản khác
+    confirm: Cài đặt {{.Version}}
+    installed: Đã cài đặt
+    none: Không có phiên bản khác
+    what: '{{.Running}} sẽ được thay bằng {{.Version}} và ứng dụng sẽ khởi động lại.'
+upgrade:
+  engine: công cụ Cast
+  installing: Đang cài đặt…
+  line: Đang cập nhật lên {{.Version}} · {{.Status}}
+  percent: '{{.N}}%'
+  preparing: Đang chuẩn bị {{.Name}} · {{.Status}}
+visual:
+  aurora: Cực quang
+  classic-vu: VU cổ điển
+  cymatics: Sóng âm
+  digital-vu: VU số
+  fire: Lửa
+  fireflies: Đom đóm
+  fireworks: Pháo hoa
+  galaxy: Thiên hà
+  group:
+    visual: Hiệu ứng
+  hal-9000: HAL 9000
+  halo: Quầng sáng
+  ink-in-water: Mực trong nước
+  koi-pond: Hồ cá koi
+  lava-lamp: Đèn dung nham
+  lcars: LCARS
+  lens-flares: Lóe ống kính
+  light-cycles: Xe ánh sáng
+  matrix: Matrix
+  mercury: Thủy ngân
+  mother: Mother
+  neon-sign: Biển neon
+  orb: Quả cầu
+  paint-splash: Văng sơn
+  phosphor: Phosphor
+  pipboy-3: PB 3000
+  pipboy-4: PB Mark IV
+  pipboy-76: PB 2000
+  pipboy-nv: PB New Vegas
+  pulsar: Sao xung
+  rain-on-glass: Mưa trên kính
+  ribbons: Dải lụa
+  setting:
+    fps:
+      _: Giới hạn khung hình hiệu ứng
+      help: 'Tốc độ khung hình tối đa khi vẽ hiệu ứng: 10, 15, 20, 30, 45 hoặc 60'
+    kind:
+      _: Hiệu ứng
+      help: Hoạt ảnh mà trình hiển thị vẽ theo âm thanh
+    label:
+      _: Nhãn hiệu ứng
+      example: Nhà bếp
+      help: Văn bản, tối đa 32 ký tự, hiển thị bởi các hiệu ứng có vẽ nhãn
+    lift:
+      _: Độ nâng hiệu ứng
+      help: Độ khuếch đại, từ 0 đến 40 dB, cộng vào âm thanh micrô mà hiệu ứng phản ứng theo
+    seed:
+      _: Seed hiệu ứng
+      help: Cố định mẫu ngẫu nhiên của hiệu ứng, tối đa 1024; 0 là ngẫu nhiên mỗi lần
+  synthwave: Synthwave
+  tesla: Tesla
+  thunderstorm: Giông bão
+voice:
+  group:
+    actions: Hành động
+    commands: Lệnh
+  hacs:
+    _: Tích hợp EchoLocal
+    hint: Hành động cần tích hợp EchoLocal trong Home Assistant. Quét mã để mở trong HACS, rồi cài đặt hoặc cập nhật.
+    missing: Chưa cài đặt
+    outdated: Cần cập nhật
+    unknown: Đang kiểm tra
+  option:
+    label:
+      none: Chỉ khu vực
+  setting:
+    action:
+      alarm:
+        _: Quản lý báo thức
+        help: Cho phép câu lệnh Home Assistant Assist đặt, liệt kê, dừng hoặc hoãn báo thức trên thiết bị này
+      broadcast:
+        _: Phát một thông báo
+        help: Cho phép câu lệnh Home Assistant Assist như "broadcast" phát một thông báo
+      call:
+        _: Gọi thiết bị
+        help: Cho phép câu lệnh Home Assistant Assist gọi một thiết bị khác tìm thấy trên mạng
+      call_answer:
+        _: Trả lời cuộc gọi
+        help: Cho phép câu lệnh Home Assistant Assist như "answer" nhận cuộc gọi đang đổ chuông
+      call_hangup:
+        _: Gác máy
+        help: Cho phép câu lệnh Home Assistant Assist như "hang up" kết thúc hoặc từ chối cuộc gọi
+      recipes:
+        _: Nấu theo công thức
+        help: Cho phép các câu của Home Assistant Assist tìm công thức, bắt đầu nấu và chuyển qua các bước trên thiết bị này
+      youtube_tv:
+        _: Xem YouTube TV
+        help: Cho phép câu lệnh Home Assistant Assist mở kênh YouTube TV hoặc cho biết đang chiếu gì
+    actions:
+      _: Tất cả hành động
+      help: Cung cấp các câu lệnh của thiết bị này cho Home Assistant Assist; tắt sẽ rút lại tất cả
+    command:
+      cook:
+        _: Chế độ nấu
+        help: Khi chế độ nấu đang mở, nói "next step", "previous step" hoặc "start timer" (tiếng Anh) để chuyển qua công thức
+      mirror:
+        _: Gương
+        help: Nói "mirror" để mở chế độ gương của camera
+      radar:
+        _: Radar
+        help: Nói "radar" hoặc "show the weather radar" để mở bản đồ radar
+    commands:
+      _: Tất cả lệnh
+      help: Chạy nhận dạng giọng nói trên thiết bị cho các lệnh như mirror và radar
+    label:
+      _: Tên Home Assistant cần nghe
+      help: Nhãn Home Assistant mà bộ nhận dạng nghe tên các thực thể của nó, ngoài tên khu vực
+    language:
+      _: Ngôn ngữ hành động giọng nói
+      help: Ngôn ngữ của các câu lệnh hành động giọng nói mà thiết bị này trả lời và của lời đáp
+  title: Kích hoạt giọng nói
+voicematch:
+  accept: Chấp nhận
+  add: Thêm giọng nói
+  again: Thử lại
+  cancel: Hủy
+  done: Nhận diện giọng nói đã sẵn sàng cho {{.Name}}
+  failed: Không thể thiết lập nhận diện giọng nói
+  finish: Xong
+  heard: Đã nghe
+  listening: Đang nghe…
+  missed: Chưa nghe rõ. Nói lại lần nữa.
+  phrase:
+    calendar: hôm nay tôi có gì trong lịch
+    door: khóa cửa trước
+    lights: bật đèn
+    music: phát nhạc trong bếp
+    shopping: thêm sữa vào danh sách mua sắm
+    timer: đặt hẹn giờ mười phút
+    weather: thời tiết ngày mai thế nào
+  pick: Chọn một người
+  preparing: Đang chuẩn bị…
+  redo: Ghi lại
+  remove: Xóa
+  say: Nói “{{.Wake}}”, rồi
+  say_plain: Nói từ đánh thức, rồi
+  similar: Giọng này nghe rất giống {{.Name}}
+  someone: Người khác
+  threshold: Ngưỡng nhận diện
+  title: Nhận diện giọng nói
+  unconfirmed: Giọng đó nghe không giống cùng một người
+volume:
+  chime: Âm thanh thông báo
+wake:
+  ember: Than hồng
+  sunrise: Bình minh
+  white: Trắng
+weather:
+  alert:
+    dismiss: Bỏ qua
+    until: Đến {{.T}}
+  alerts:
+    hint: Cảnh báo thời tiết nguy hiểm tại Mỹ cho nhà bạn, từ National Weather Service
+  animate: Hoạt ảnh
+  cond:
+    clear-night: Quang
+    cloudy: Nhiều mây
+    exceptional: Cảnh báo
+    fog: Sương mù
+    hail: Mưa đá
+    lightning: Giông bão
+    lightning-rainy: Giông bão
+    partlycloudy: Ít mây
+    pouring: Mưa lớn
+    rainy: Mưa
+    snowy: Tuyết
+    snowy-rainy: Mưa tuyết
+    sunny: Nắng
+    windy: Gió
+    windy-variant: Gió
+  dashboard: Hiện trên bảng điều khiển
+  entity: Thực thể thời tiết
+  feels: Cảm giác như {{.T}}
+  forecast:
+    _: Dự báo
+    daily: Hằng ngày
+    hourly: Hằng giờ
+    none: Không có dự báo
+    twice_daily: Hai lần mỗi ngày
+  group:
+    weather: Thời tiết
+  humidity: Độ ẩm {{.N}}%
+  idle: Hiện trên màn hình chờ
+  look:
+    _: Kiểu hiển thị
+    card: Thẻ
+    compact: Gọn
+    detail: Chi tiết
+    icon: Biểu tượng
+    stack: Xếp chồng
+    words: Chữ
+  none: Không có thực thể thời tiết trong Home Assistant
+  'off': Tắt
+  setting:
+    alerts:
+      _: Cảnh báo thời tiết
+      help: Lấy cảnh báo của National Weather Service và hiển thị cảnh báo nghiêm trọng thay cho thời tiết
+    align:
+      _: Vị trí ngang thời tiết trên bảng điều khiển
+      help: 'Vị trí ngang của thời tiết trên bảng điều khiển: trái, giữa hoặc phải'
+    animate:
+      _: Hoạt ảnh thời tiết trên bảng điều khiển
+      help: Tạo chuyển động cho biểu tượng thời tiết trên bảng điều khiển
+    dashboard:
+      _: Thời tiết trên bảng điều khiển
+      help: Hiển thị thời tiết hiện tại trên bảng điều khiển
+    entity:
+      _: Thực thể thời tiết
+      help: Thực thể thời tiết Home Assistant cho điều kiện hiện tại; để trống thì chọn cái đầu tiên tìm thấy
+    forecast:
+      _: Thực thể dự báo
+      help: Thực thể thời tiết cung cấp dự báo hằng ngày; để trống thì dùng thực thể thời tiết
+    idle:
+      _: Thời tiết trên màn hình chờ
+      help: Hiển thị thời tiết hiện tại trên trình bảo vệ màn hình
+    look:
+      _: Kiểu thời tiết trên bảng điều khiển
+      help: 'Bố cục thời tiết trên bảng điều khiển: gọn, chồng, biểu tượng, chữ, thẻ hoặc chi tiết'
+    position:
+      _: Vị trí dọc thời tiết trên bảng điều khiển
+      help: 'Vị trí dọc của thời tiết trên bảng điều khiển: trên, giữa hoặc dưới'
+    radar_range:
+      _: Phạm vi radar ban đầu
+      help: Khoảng cách tính bằng dặm mà bản đồ radar bao phủ khi mở, từ 50 đến 800
+    radar_source:
+      _: Nguồn radar
+      help: Nguồn ảnh radar; Tự động dùng NWS ở 48 tiểu bang liền kề, RainViewer ở nơi khác
+    saver:
+      align:
+        _: Vị trí ngang thời tiết trên màn hình chờ
+        help: 'Vị trí ngang của thời tiết trên trình bảo vệ màn hình: trái, giữa hoặc phải'
+      animate:
+        _: Hoạt ảnh thời tiết trên màn hình chờ
+        help: Tạo chuyển động cho biểu tượng thời tiết trên trình bảo vệ màn hình
+      look:
+        _: Kiểu thời tiết trên màn hình chờ
+        help: 'Bố cục thời tiết trên trình bảo vệ màn hình: gọn, chồng, biểu tượng, chữ, thẻ hoặc chi tiết'
+      position:
+        _: Vị trí dọc thời tiết trên màn hình chờ
+        help: 'Vị trí dọc của thời tiết trên trình bảo vệ màn hình: trên, giữa hoặc dưới'
+      size:
+        _: Kích thước thời tiết trên màn hình chờ
+        help: Kích thước thời tiết trên trình bảo vệ màn hình, từ nhỏ nhất đến lớn
+      themed:
+        _: Màu thời tiết theo giao diện trên màn hình chờ
+        help: Vẽ biểu tượng thời tiết trên trình bảo vệ màn hình bằng màu giao diện thay vì màu tự nhiên
+    size:
+      _: Kích thước thời tiết trên bảng điều khiển
+      help: Kích thước thời tiết trên bảng điều khiển, từ nhỏ nhất đến lớn
+    themed:
+      _: Màu thời tiết theo giao diện trên bảng điều khiển
+      help: Vẽ biểu tượng thời tiết trên bảng điều khiển bằng màu giao diện thay vì màu tự nhiên
+  themed:
+    _: Màu theo giao diện
+    hint: 'Tắt dùng màu tự nhiên: mặt trời vàng, mây xám, mưa xanh'
+  title: Thời tiết
+  uv: UV {{.N}}
+  wind: Gió {{.N}} {{.Unit}}
+webaccess:
+  address: Địa chỉ
+  title: Truy cập web
+wifi:
+  busy: Đang tham gia mạng khác
+  connected: Đã kết nối
+  failed: Không thể tham gia {{.Network}}
+  join: Tham gia
+  joined: Đã kết nối với {{.Network}}
+  joining: Đang tham gia {{.Network}}…
+  left: Còn {{.N}} giây
+  none: Không tìm thấy mạng
+  ok: OK
+  password: Mật khẩu
+  refused: Sai mật khẩu
+  scan:
+    _: Quét lại
+    failed: Quét thất bại
+  scanning: Đang quét…
+  short: Dùng ít nhất {{.N}} ký tự
+  timeout: Không kết nối trong {{.Minutes}} phút
+  title: Wi-Fi
+  unreachable: Thử lại
+  unsupported: '{{.Security}}, không được hỗ trợ'
+youtube:
+  account: Tài khoản YouTube
+  accounts: Tài khoản
+  add: Thêm tài khoản
+  again: Mã mới
+  anonymous: Ẩn danh
+  app: YouTube
+  asking: Đang lấy mã…
+  cancel: Hủy
+  category:
+    filler: Nội dung phụ
+    hook: Mở đầu thu hút
+    interaction: Nhắc tương tác
+    intro: Giới thiệu
+    music_offtopic: Phần ngoài âm nhạc
+    outro: Kết thúc
+    preview: Xem trước
+    selfpromo: Tự quảng bá
+    sponsor: Nhà tài trợ
+  empty: Chưa có gì ở đây
+  enter: và nhập
+  entity:
+    lounge: Phòng chờ YouTube
+  expired: Mã đã hết hạn
+  failed: Không kết nối được YouTube
+  go: Trên điện thoại hoặc máy tính, truy cập
+  group:
+    cast: Cast
+  history: Lịch sử
+  home: Trang chủ
+  later: Xem sau
+  option:
+    lounge:
+      always: Luôn luôn
+      demand: Theo yêu cầu
+  refused: Đăng nhập bị từ chối
+  search: Tìm kiếm
+  setting:
+    lounge:
+      _: Phòng chờ YouTube
+      help: Luôn giữ kết nối lounge của YouTube và YouTube Music, hoặc chỉ mở khi cần
+  shorts: Shorts
+  signin: Đăng nhập YouTube
+  skip:
+    _: Bỏ qua phân đoạn
+    none: Không
+    some: '{{.N}} loại'
+  stay: Tiếp tục ẩn danh
+  subscriptions: Kênh đăng ký
+  unwatched: Xem một video để có nội dung cho Trang chủ
+  waiting: Đang chờ xác nhận…
+zone:
+  title: Múi giờ

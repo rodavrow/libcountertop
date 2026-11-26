@@ -55,16 +55,10 @@ func (p *LookPages) place(slot int, place config.LookPlace) {
 
 func (p *LookPages) Stage(slot int, st config.Stage) *shell.Page {
 	use := func(kind string) {
-		if err := p.options.Preferences.Word(slot, func(w *config.WakeWord) {
-			switch st {
-			case config.StageListening:
-				w.Look.Listening = kind
-			case config.StageWaiting:
-				w.Look.Waiting = kind
-			case config.StageResponding:
-				w.Look.Responding = kind
-			}
-		}); err != nil {
+		if err := p.options.Preferences.Word(
+			slot,
+			func(w *config.WakeWord) { w.Look.Set(st, kind) },
+		); err != nil {
 			slog.Error(
 				"saving the assistant visual failed",
 				"slot",

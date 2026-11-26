@@ -182,7 +182,7 @@ type Options struct {
 	Assistant *assistant.Assistant
 	Stage     Stage
 	// Captions tells whether what was heard and the reply are shown as text; nil shows them.
-	Captions func() bool
+	Captions  func() bool
 	Badge     func(id, name string, size float32) gogui.View
 	Timers    *timer.Timers
 	Poster    *poster.Poster
@@ -246,6 +246,8 @@ type App struct {
 	papered   atomic.Bool
 	papering  bool
 	homeDrawn bool
+
+	moves mover
 
 	mu sync.Mutex
 	w  *gogui.Window
@@ -563,7 +565,8 @@ func (a *App) Run(ctx context.Context) error {
 
 	stopShell := sh.Redrawn.Listen(func(struct{}) { redraw() })
 	defer stopShell()
-	stopMoved := sh.Changed.Listen(func(shell.Change) {
+	stopMoved := sh.Changed.Listen(func(c shell.Change) {
+		a.changed(c)
 		w.QueueCommand(func(w *gogui.Window) {
 			a.ui.Editor.Shift, a.ui.Editor.Symbols = false, false
 			w.ClearFocus()

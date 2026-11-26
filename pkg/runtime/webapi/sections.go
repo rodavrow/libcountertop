@@ -15,7 +15,7 @@ var sections = []section{
 	{"settings.network", []string{"network", "certs", "access"}},
 	{"settings.features", []string{
 		"cast", "youtube", "media", "bluetooth", "rtsp", "call",
-		"calendar", "todo", "tv",
+		"calendar", "todo", "tv", "mealie",
 	}},
 	{"settings.display", []string{
 		"screen", "clock", "idle", "visual", "poster", "photos", "weather", "apps", "cameras",
@@ -27,7 +27,7 @@ var sections = []section{
 	{"settings.camera", []string{"camera"}},
 	{"voice.title", []string{"voice"}},
 	{"settings.assistants", []string{"assistants", "ring"}},
-	{systemSection, []string{"diag"}},
+	{systemSection, []string{"diag", "update"}},
 }
 
 const systemSection = "settings.system"
