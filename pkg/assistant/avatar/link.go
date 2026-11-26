@@ -91,8 +91,12 @@ type link struct {
 	// primedAt is when the decoder started being fed for this showing.
 	primedAt time.Time
 	// delayOn is the stream the reply's lip-sync delay was last set on.
-	delayOn   screen
-	published [2]string
+	delayOn screen
+	// reopenAt is when a new stream may open after the last was refused; reopenWait doubles with
+	// each refusal in a row, until a picture is shown.
+	reopenAt   time.Time
+	reopenWait time.Duration
+	published  [2]string
 }
 
 func (l *link) snapshot() (State, string) {
@@ -355,16 +359,10 @@ func (l *link) frame(gen uint64, f rtc.Frame) {
 	scr.Show(f)
 
 	// A decoder refused outright, not one only slow to start, may be one too many for the
-	// board. With the other avatar's closed, this stream, refused for good, is dropped too, and
-	// the next frame the look is wanted makes a new one and asks for a keyframe.
-	if scr.Refused() && l.a.makeRoom(l) {
-		l.mu.Lock()
-		if l.scr == scr {
-			l.scr, l.delayOn = nil, nil
-			l.feeding, l.visible, l.pictured = false, false, false
-		}
-		l.mu.Unlock()
-		scr.Close()
+	// board, so the other avatar's is closed. Either way this stream, refused for good, is
+	// dropped, and a later showing makes a new one and asks for a keyframe.
+	if scr.Refused() {
+		l.refused(scr, l.a.makeRoom(l))
 		return
 	}
 	shown := scr.Stats().Shown
@@ -383,11 +381,31 @@ func (l *link) frame(gen uint64, f rtc.Frame) {
 	if l.feeding && shown > l.shownBase {
 		first = !l.pictured
 		l.shownAt, l.shownBase, l.pictured = l.a.now(), shown, true
+		l.reopenWait = 0
 	}
 	l.mu.Unlock()
 	if first {
 		slog.Info("avatar picture up", "slot", l.slot+1)
 	}
+}
+
+// refused drops scr, whose decoder would not open. With room made the next stream may open at
+// once; without, nothing else was in the way, so it waits, longer with each refusal in a row,
+// rather than open and break a decoder every frame.
+func (l *link) refused(scr screen, madeRoom bool) {
+	l.mu.Lock()
+	if l.scr == scr {
+		l.scr, l.delayOn = nil, nil
+		l.feeding, l.visible, l.pictured = false, false, false
+		if !madeRoom {
+			l.reopenWait = min(max(2*l.reopenWait, l.a.timing.retry), l.a.timing.maxRetry)
+			l.reopenAt = l.a.now().Add(l.reopenWait)
+			slog.Warn("avatar stream refused, opening a new one later",
+				"slot", l.slot+1, "wait", l.reopenWait)
+		}
+	}
+	l.mu.Unlock()
+	scr.Close()
 }
 
 func (l *link) heard(gen uint64, pcm []int16) {
@@ -411,6 +429,9 @@ func (l *link) prime(busy bool) bool {
 		return false
 	}
 	if l.scr == nil {
+		if l.a.now().Before(l.reopenAt) {
+			return false
+		}
 		if l.scr = l.a.screen(l.slot); l.scr == nil {
 			return false
 		}
