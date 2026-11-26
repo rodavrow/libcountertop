@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -132,9 +133,29 @@ type liveTalking struct {
 	interrupted int
 	speaking    bool
 	uploaded    chan struct{}
+	// reply is the streamed reply open on the session, as /is_speaking names it.
+	reply string
+	// failing is how many status calls fail before they answer again.
+	failing int
+	// gate holds the clip's first bytes back until it is closed.
+	gate chan struct{}
+}
+
+func (lt *liveTalking) set(f func(*liveTalking)) {
+	lt.mu.Lock()
+	defer lt.mu.Unlock()
+	f(lt)
 }
 
 func (lt *liveTalking) handler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/clip.mp3" {
+		lt.mu.Lock()
+		gate := lt.gate
+		lt.mu.Unlock()
+		if gate != nil {
+			<-gate
+		}
+	}
 	lt.mu.Lock()
 	defer lt.mu.Unlock()
 	switch r.URL.Path {
@@ -161,11 +182,16 @@ func (lt *liveTalking) handler(w http.ResponseWriter, r *http.Request) {
 		lt.interrupted++
 		_, _ = io.WriteString(w, `{"code":0}`)
 	case "/is_speaking":
-		if lt.speaking {
-			_, _ = io.WriteString(w, `{"code":0,"data":true}`)
-		} else {
-			_, _ = io.WriteString(w, `{"code":0,"data":false}`)
+		if lt.failing > 0 {
+			lt.failing--
+			http.Error(w, "down", http.StatusBadGateway)
+			return
 		}
+		reply := "null"
+		if lt.reply != "" {
+			reply = `"` + lt.reply + `"`
+		}
+		_, _ = fmt.Fprintf(w, `{"code":0,"data":%t,"reply_id":%s}`, lt.speaking, reply)
 	default:
 		http.NotFound(w, r)
 	}
@@ -832,7 +858,7 @@ func TestSpeakingWithoutAConnectionLetsTheCallerPlay(t *testing.T) {
 	cfg.On = false
 	r := newRig(t, cfg)
 
-	handled, err := r.a.Speak(context.Background(), 0, r.url+"/clip.mp3", &lane{}, nil)
+	handled, _, err := r.a.Speak(context.Background(), 0, r.url+"/clip.mp3", &lane{}, nil)
 
 	if handled || err != nil {
 		t.Fatalf("handled %v, err %v", handled, err)
@@ -847,6 +873,8 @@ func realTime(r *rig) {
 	r.a.timing.firstSound = 300 * time.Millisecond
 	r.a.timing.silent = 2 * time.Second
 	r.a.timing.waitLink = 200 * time.Millisecond
+	r.a.timing.fedFirstSound = 300 * time.Millisecond
+	r.a.timing.fedSilent = 150 * time.Millisecond
 }
 
 func TestAReplyIsSpokenByTheAvatarAndEndsAfterItGoesQuiet(t *testing.T) {
@@ -859,7 +887,7 @@ func TestAReplyIsSpokenByTheAvatarAndEndsAfterItGoesQuiet(t *testing.T) {
 
 	done := make(chan bool)
 	go func() {
-		handled, err := r.a.Speak(context.Background(), 0, r.url+"/clip.mp3", sink, func() { close(started) })
+		handled, _, err := r.a.Speak(context.Background(), 0, r.url+"/clip.mp3", sink, func() { close(started) })
 		if err != nil {
 			t.Error(err)
 		}
@@ -897,7 +925,7 @@ func TestAnAvatarThatStaysSilentHandsTheReplyBack(t *testing.T) {
 	r.connect(t)
 	realTime(r)
 
-	handled, err := r.a.Speak(context.Background(), 0, r.url+"/clip.mp3", &lane{}, nil)
+	handled, _, err := r.a.Speak(context.Background(), 0, r.url+"/clip.mp3", &lane{}, nil)
 
 	if handled || err != nil {
 		t.Fatalf("handled %v, err %v", handled, err)
@@ -920,7 +948,7 @@ func TestStoppingAReplyInterruptsTheAvatar(t *testing.T) {
 		r.peer().play(chunk(4000))
 		cancel()
 	}()
-	handled, err := r.a.Speak(ctx, 0, r.url+"/clip.mp3", sink, nil)
+	handled, _, err := r.a.Speak(ctx, 0, r.url+"/clip.mp3", sink, nil)
 
 	if !handled || err != nil {
 		t.Fatalf("handled %v, err %v", handled, err)
@@ -957,14 +985,18 @@ func TestTheEntitiesUseTheAgreedObjectIDs(t *testing.T) {
 	r := newRig(t, schema.Avatar{})
 	want := []string{
 		"avatar_mode_2", "avatar_url_2", "avatar_id_2",
-		"avatar_connection_2", "avatar_session_2", "avatar_state_2",
+		"avatar_connection_2", "avatar_session_2", "avatar_state_2", "avatar_fed_2",
 	}
 	// Home Assistant integrations find these by display name, so they stay English literals.
 	names := []string{
 		"Avatar mode", "Avatar URL", "Avatar ID",
-		"Avatar connection", "Avatar session", "Avatar state",
+		"Avatar connection", "Avatar session", "Avatar state", "Avatar fed by Home Assistant",
 	}
-	for i, e := range r.a.Entities(1) {
+	got := r.a.Entities(1)
+	if len(got) != len(want) {
+		t.Fatalf("%d entities, want %d", len(got), len(want))
+	}
+	for i, e := range got {
 		if b := baseOf(e); b.ObjectID != want[i] || b.Name != names[i] {
 			t.Errorf("entity %d is %q named %q, want %q named %q", i, b.ObjectID, b.Name, want[i], names[i])
 		}
@@ -972,6 +1004,25 @@ func TestTheEntitiesUseTheAgreedObjectIDs(t *testing.T) {
 	if got := r.a.ents[0].connection.Options; len(got) != 2 || got[0] != "Always connected" ||
 		got[1] != "Connect when woken" {
 		t.Errorf("connection options %q", got)
+	}
+}
+
+// ha-vam feeds a session only while this switch is on, so it must be saved and shown again.
+func TestTheFedSwitchIsSavedAndRestored(t *testing.T) {
+	r := newRig(t, always())
+
+	r.a.ents[0].fed.OnCommand(true)
+
+	if !r.m.Read().Slot(0).Avatar.Fed {
+		t.Fatal("the fed switch was not saved")
+	}
+	if !r.a.ents[0].fed.Get() {
+		t.Error("the fed switch does not show it is on")
+	}
+	r.a.ents[0].fed.Set(false)
+	r.a.Restore(r.m.Read().Words)
+	if !r.a.ents[0].fed.Get() {
+		t.Error("the saved fed switch was not restored")
 	}
 }
 
@@ -1012,7 +1063,7 @@ func TestAReplyIsNotOverBeforeLiveTalkingStartsIt(t *testing.T) {
 
 	done := make(chan bool, 1)
 	go func() {
-		handled, _ := r.a.Speak(context.Background(), 0, r.url+"/clip.mp3", &lane{}, nil)
+		handled, _, _ := r.a.Speak(context.Background(), 0, r.url+"/clip.mp3", &lane{}, nil)
 		done <- handled
 	}()
 	<-r.uploaded

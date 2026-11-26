@@ -67,7 +67,11 @@ type timing struct {
 	linger, unplaced, stall        time.Duration
 	waitLink, firstSound, poll     time.Duration
 	quiet, silent, most            time.Duration
-	pending, hold, heldUnplaced    time.Duration
+	// A reply Home Assistant feeds: how long its first sound may take once it is open, how long
+	// it may go quiet before it counts as broken off, how far before the break the clip resumes,
+	// and how long the clip's first bytes may take.
+	fedFirstSound, fedSilent, rewind, backup time.Duration
+	pending, hold, heldUnplaced              time.Duration
 }
 
 var defaults = timing{
@@ -84,8 +88,13 @@ var defaults = timing{
 	quiet:      300 * time.Millisecond,
 	silent:     3 * time.Second,
 	most:       10 * time.Minute,
-	pending:    time.Second,
-	hold:       time.Minute,
+
+	fedFirstSound: 3 * time.Second,
+	fedSilent:     1500 * time.Millisecond,
+	rewind:        300 * time.Millisecond,
+	backup:        30 * time.Second,
+	pending:       time.Second,
+	hold:          time.Minute,
 	// The screen redraws a held avatar only once a second.
 	heldUnplaced: 2 * time.Second,
 }
@@ -315,19 +324,20 @@ func (a *Avatars) Place(slot int, box display.Rect, above bool) bool {
 }
 
 // Speak has slot's avatar say the clip at url, playing its voice into sink, and returns once it
-// is done. handled is false when the clip was not spoken and the caller should play it itself:
-// the link is down, LiveTalking refused it, or no sound came back in time.
+// is done. handled is false when the clip was not spoken and the caller should play it itself,
+// from from on: the link is down, LiveTalking refused it, no sound came back in time, or a reply
+// Home Assistant fed into the session broke off there.
 func (a *Avatars) Speak(
 	ctx context.Context,
 	slot int,
 	url string,
 	sink Sink,
 	started func(),
-) (handled bool, err error) {
+) (handled bool, from time.Duration, err error) {
 	cfg, ok := a.slot(slot)
 	if !ok || !cfg.Ready() || url == "" {
 		slog.Info("avatar not ready, speaking locally", "slot", slot+1, "clip", url != "")
-		return false, nil
+		return false, 0, nil
 	}
 	l := a.links[slot]
 	a.replying(true)
@@ -335,8 +345,27 @@ func (a *Avatars) Speak(
 	id, gen, ok := a.connected(ctx, l)
 	if !ok {
 		slog.Info("avatar not connected, speaking locally", "slot", slot+1)
-		return false, nil
+		return false, 0, nil
 	}
+	if cfg.Fed {
+		return a.speakFed(ctx, l, cfg, id, gen, url, sink, started)
+	}
+	handled, err = a.speakClip(ctx, l, cfg, id, gen, url, sink, started)
+	return handled, 0, err
+}
+
+// speakClip sends the whole clip to the session and follows it as LiveTalking speaks it.
+func (a *Avatars) speakClip(
+	ctx context.Context,
+	l *link,
+	cfg schema.Avatar,
+	id string,
+	gen uint64,
+	url string,
+	sink Sink,
+	started func(),
+) (handled bool, err error) {
+	slot := l.slot
 	clip, err := a.fetch(ctx, url)
 	if err != nil {
 		slog.Warn("avatar could not fetch the reply, speaking locally", "slot", slot+1, "err", err)

@@ -555,6 +555,10 @@ func (w WakeWriter) AvatarID(v string) error {
 	return w.word(func(word *WakeWord) { word.Avatar.ID = v })
 }
 
+func (w WakeWriter) AvatarFed(on bool) error {
+	return w.word(func(word *WakeWord) { word.Avatar.Fed = on })
+}
+
 func (w WakeWriter) AvatarConnection(v AvatarConnection) error {
 	return w.word(func(word *WakeWord) { word.Avatar.Connection = v })
 }

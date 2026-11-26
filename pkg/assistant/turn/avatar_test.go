@@ -18,9 +18,13 @@ type fakeAvatar struct {
 	slots   []int
 	held    map[int]int
 	woke    []int
+	fed     map[int]bool
+	// from is where a reply handed back resumes.
+	from time.Duration
 }
 
 func (a *fakeAvatar) Wants(slot int) bool { return a.wants[slot] }
+func (a *fakeAvatar) Fed(slot int) bool   { return a.fed[slot] }
 func (a *fakeAvatar) Wake(slot int) {
 	a.held[slot]++
 	a.woke = append(a.woke, slot)
@@ -32,16 +36,21 @@ func (a *fakeAvatar) Speak(
 	url string,
 	_ VoiceSink,
 	started func(),
-) (bool, error) {
+) (bool, time.Duration, error) {
 	a.spoke, a.slots = append(a.spoke, url), append(a.slots, slot)
 	if a.handled && started != nil {
 		started()
 	}
-	return a.handled, nil
+	return a.handled, a.from, nil
 }
 
 func withAvatar(a *announcing, wants ...int) *fakeAvatar {
-	av := &fakeAvatar{wants: map[int]bool{}, handled: true, held: map[int]int{}}
+	av := &fakeAvatar{
+		wants:   map[int]bool{},
+		handled: true,
+		held:    map[int]int{},
+		fed:     map[int]bool{},
+	}
 	for _, s := range wants {
 		av.wants[s] = true
 	}
@@ -84,7 +93,11 @@ func TestAnAnnouncementTheAvatarCannotSpeakPlaysOnTheSpeaker(t *testing.T) {
 	a.plays()
 
 	if !slices.Equal(av.spoke, []string{"speech"}) || !slices.Equal(a.fetched, []string{"speech"}) {
-		t.Fatalf("avatar %v, speaker %v, want the avatar tried then the speaker", av.spoke, a.fetched)
+		t.Fatalf(
+			"avatar %v, speaker %v, want the avatar tried then the speaker",
+			av.spoke,
+			a.fetched,
+		)
 	}
 }
 
@@ -178,5 +191,89 @@ func TestATurnHoldsItsAvatarUntilItEnds(t *testing.T) {
 
 	if av.held[0] != 0 || av.held[1] != 0 {
 		t.Fatalf("holds %v after the turn", av.held)
+	}
+}
+
+type countingVoice struct {
+	fakeVoice
+	played []int
+}
+
+func (v *countingVoice) PlayVoice(pcm []int16) { v.played = append(v.played, len(pcm)) }
+
+// A reply the avatar broke off is spoken on, from where it stopped, not from the start again.
+func TestAReplyTheAvatarBrokeOffResumesOnTheSpeaker(t *testing.T) {
+	a := announcer(t)
+	av := withAvatar(a, 1)
+	av.handled, av.from = false, 500*time.Millisecond
+	voice := &countingVoice{}
+	a.speaker = voice
+	a.fetch = func(_ context.Context, url string, _ int) ([]int16, error) {
+		a.fetched = append(a.fetched, url)
+		return make([]int16, 2*16000), nil
+	}
+	a.slot = 1
+	a.phase = phaseThinking
+	a.arm(time.Hour)
+
+	a.speak("reply.mp3")
+	a.plays()
+
+	if len(voice.played) == 0 || voice.played[0] != 2*16000-16000/2 {
+		t.Fatalf("played %v samples, want the clip from 0.5 s on", voice.played)
+	}
+}
+
+// fedTurn is a turn thinking on slot 1, whose avatar Home Assistant feeds when fed.
+func fedTurn(t *testing.T, fed bool) (*announcing, *fakeAvatar) {
+	t.Helper()
+	a := announcer(t)
+	av := withAvatar(a, 1)
+	av.fed[1] = fed
+	a.slot = 1
+	a.phase = phaseThinking
+	a.arm(time.Hour)
+	a.holdAvatar(1)
+	return a, av
+}
+
+// Home Assistant starts streaming a long reply before its text is complete, and ha-vam feeds it
+// to the avatar from then on: the reply starts there, not seconds later at the clip.
+func TestAFedReplyStartsWhenHomeAssistantStartsStreamingIt(t *testing.T) {
+	a, av := fedTurn(t, true)
+
+	a.handle(event{kind: evRunURL, url: "reply.flac"})
+	a.handle(event{kind: evStreamOffered})
+	a.handle(event{kind: evReplyURL, url: "reply.flac"})
+	a.plays()
+
+	if !slices.Equal(av.spoke, []string{"reply.flac"}) {
+		t.Fatalf("avatar spoke %v, want the reply once, from the stream's start", av.spoke)
+	}
+	if len(a.sound.claims) != 1 {
+		t.Errorf("%d replies claimed the speaker, want one", len(a.sound.claims))
+	}
+}
+
+func TestAnAvatarNotFedWaitsForTheWholeClip(t *testing.T) {
+	a, av := fedTurn(t, false)
+
+	a.handle(event{kind: evRunURL, url: "reply.flac"})
+	a.handle(event{kind: evStreamOffered})
+
+	if a.phase != phaseThinking || len(av.spoke) != 0 {
+		t.Fatalf("phase %v, avatar spoke %v, want it to wait for the clip", a.phase, av.spoke)
+	}
+}
+
+func TestAFedReplyWithoutARunURLStartsAtTheClip(t *testing.T) {
+	a, av := fedTurn(t, true)
+
+	a.handle(event{kind: evStreamOffered})
+	a.handle(event{kind: evReplyURL, url: "reply.flac"})
+	a.plays()
+
+	if !slices.Equal(av.spoke, []string{"reply.flac"}) {
+		t.Fatalf("avatar spoke %v", av.spoke)
 	}
 }

@@ -55,6 +55,8 @@ type speech struct {
 	loudAt  time.Time
 	started func()
 	delayed time.Duration
+	// handed is how much of the reply went to the voice lane.
+	handed time.Duration
 }
 
 func newSpeech(sink Sink, started func(), now func() time.Time) *speech {
@@ -106,6 +108,7 @@ func (s *speech) hear(pcm []int16) {
 }
 
 func (s *speech) play(pcm []int16) {
+	s.handed += time.Duration(len(pcm)/rtc.PlayChannels) * time.Second / rtc.PlayRate
 	if s.native != nil {
 		s.native.PlayVoiceAt(rtc.PlayRate, rtc.PlayChannels, pcm)
 		return
@@ -121,6 +124,15 @@ func (s *speech) stop(drain bool) {
 	if d, ok := s.sink.(Drainer); ok && drain {
 		d.Drain()
 	}
+}
+
+// spoken is how far into the reply the speaker has played: what went to the voice lane, less
+// what still waits in its queue.
+func (s *speech) spoken() time.Duration {
+	s.mu.Lock()
+	handed := s.handed
+	s.mu.Unlock()
+	return max(handed-(s.latency()-jitter), 0)
 }
 
 // heard reports when audible audio first and last arrived; zero when it has not.
