@@ -74,6 +74,7 @@ type Server struct {
 func New(deps Dependencies) *Server {
 	a := &Server{deps: deps, reconnect: make(chan struct{}, 1), settle: newSettle(deps.Busy)}
 	a.knobs = a.controls()
+	a.settle.gaveUp = func() { a.Fire(component.Event{Name: voiceNotSubscribed}) }
 	return a
 }
 
