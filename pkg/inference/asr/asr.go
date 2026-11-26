@@ -98,7 +98,13 @@ func (c *Client) session(ctx context.Context) error {
 	}
 	defer func() {
 		ours.Close()
-		if err := proc.Wait(); err != nil {
+		err := proc.Wait()
+		switch {
+		case err == nil:
+		case ctx.Err() == nil:
+			// The helper went on its own; how it ended (a signal, an exit code) is the clue.
+			slog.Warn("speech helper exited", "err", err)
+		default:
 			slog.Debug("speech helper exit", "err", err)
 		}
 	}()
