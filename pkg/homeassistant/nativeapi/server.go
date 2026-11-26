@@ -67,11 +67,12 @@ type Server struct {
 	announced sync.Once
 	port      atomic.Int32
 
-	knobs *setting.Controls[schema.API]
+	knobs  *setting.Controls[schema.API]
+	settle *settle
 }
 
 func New(deps Dependencies) *Server {
-	a := &Server{deps: deps, reconnect: make(chan struct{}, 1)}
+	a := &Server{deps: deps, reconnect: make(chan struct{}, 1), settle: newSettle(deps.Busy)}
 	a.knobs = a.controls()
 	return a
 }
@@ -174,7 +175,9 @@ func (a *Server) register() error {
 		info.BluetoothFeatures = a.deps.Bluetooth()
 	}
 	a.srv.Info = info
-	a.srv.Handler = esphome.Chain(append([]esphome.Handler{ents}, a.deps.Registry.Handlers()...)...)
+	a.settle.expectVoice(info.VoiceFeatures != 0)
+	handlers := append([]esphome.Handler{ents, a.settle}, a.deps.Registry.Handlers()...)
+	a.srv.Handler = esphome.Chain(handlers...)
 	return nil
 }
 
