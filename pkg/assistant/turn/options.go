@@ -73,9 +73,15 @@ type Avatar interface {
 	Wake(slot int)
 	Rest(slot int)
 
+	// Fed reports whether Home Assistant streams slot's replies into its avatar session, so the
+	// reply starts as soon as Home Assistant starts streaming it.
+	Fed(slot int) bool
+
 	// Speak has slot's avatar say the clip at url, its voice going into sink. handled is false
-	// when the caller should play the clip itself.
-	Speak(ctx context.Context, slot int, url string, sink VoiceSink, started func()) (handled bool, err error)
+	// when the caller should play the clip itself, from from on.
+	Speak(
+		ctx context.Context, slot int, url string, sink VoiceSink, started func(),
+	) (handled bool, from time.Duration, err error)
 }
 
 type Dependencies struct {

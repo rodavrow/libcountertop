@@ -19,6 +19,7 @@ type entities struct {
 	connection *esphome.Select
 	session    *esphome.TextSensor
 	state      *esphome.TextSensor
+	fed        *esphome.Switch
 }
 
 func (a *Avatars) newEntities(n int) entities {
@@ -70,6 +71,14 @@ func (a *Avatars) newEntities(n int) entities {
 			Icon:     "mdi:access-point-network",
 			Category: esphome.CategoryDiagnostic,
 		}},
+		// ha-vam streams a reply into the session only while this is on, so a device without it
+		// never has a reply spoken twice.
+		fed: &esphome.Switch{Base: esphome.Base{
+			ObjectID: fmt.Sprintf("avatar_fed_%d", n+1),
+			Name:     "Avatar fed by Home Assistant",
+			Icon:     "mdi:account-voice",
+			Category: esphome.CategoryConfig,
+		}},
 	}
 	if a.o.DeviceID != nil {
 		on := a.o.DeviceID(n)
@@ -86,6 +95,14 @@ func (a *Avatars) newEntities(n int) entities {
 		e.mode.Set(on)
 		slog.Info("avatar mode", "slot", n+1, "on", on)
 		a.poke()
+	}
+	e.fed.OnCommand = func(on bool) {
+		if err := write().AvatarFed(on); err != nil {
+			slog.Error("saving avatar fed failed", "slot", n+1, "err", err)
+			return
+		}
+		e.fed.Set(on)
+		slog.Info("avatar fed by Home Assistant", "slot", n+1, "on", on)
 	}
 	e.url.OnCommand = func(v string) {
 		if err := write().AvatarURL(v); err != nil {
@@ -124,7 +141,7 @@ func (a *Avatars) newEntities(n int) entities {
 func (e entities) bases() []*esphome.Base {
 	return []*esphome.Base{
 		&e.mode.Base, &e.url.Base, &e.id.Base, &e.connection.Base,
-		&e.session.Base, &e.state.Base,
+		&e.session.Base, &e.state.Base, &e.fed.Base,
 	}
 }
 
@@ -134,7 +151,7 @@ func (a *Avatars) Entities(slot int) []esphome.Entity {
 		return nil
 	}
 	e := a.ents[slot]
-	return []esphome.Entity{e.mode, e.url, e.id, e.connection, e.session, e.state}
+	return []esphome.Entity{e.mode, e.url, e.id, e.connection, e.session, e.state, e.fed}
 }
 
 // Restore shows the saved settings in Home Assistant.
@@ -148,6 +165,7 @@ func (a *Avatars) Restore(words []schema.WakeWord) {
 		e.url.Set(saved.URL)
 		e.id.Set(saved.ID)
 		e.connection.Set(saved.Connection.Label())
+		e.fed.Set(saved.Fed)
 	}
 	a.poke()
 }

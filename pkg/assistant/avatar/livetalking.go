@@ -45,6 +45,9 @@ type result struct {
 	Code int             `json:"code"`
 	Msg  string          `json:"msg"`
 	Data json.RawMessage `json:"data"`
+	// ReplyID names the reply Home Assistant streams into the session, from when it opens until
+	// its last frame has played; empty for none, as on a LiveTalking that does not stream.
+	ReplyID string `json:"reply_id"`
 }
 
 // offer opens a render session for a recv-only offer and returns the answer and the session id.
@@ -116,18 +119,23 @@ func (s server) interrupt(ctx context.Context, id string) error {
 // speaking reports whether the session is still rendering speech. It turns false before the last
 // of the audio arrives, so it is never the only sign a reply ended.
 func (s server) speaking(ctx context.Context, id string) (bool, error) {
+	on, _, err := s.status(ctx, id)
+	return on, err
+}
+
+// status is speaking, and the streamed reply open on the session, if any.
+func (s server) status(ctx context.Context, id string) (on bool, reply string, err error) {
 	var r result
 	if err := s.postJSON(ctx, "is_speaking", session{SessionID: id}, &r); err != nil {
-		return false, err
+		return false, "", err
 	}
 	if err := r.ok("/is_speaking"); err != nil {
-		return false, err
+		return false, "", err
 	}
-	var on bool
 	if err := json.Unmarshal(r.Data, &on); err != nil {
-		return false, fmt.Errorf("%w: /is_speaking data %s", errRefused, r.Data)
+		return false, "", fmt.Errorf("%w: /is_speaking data %s", errRefused, r.Data)
 	}
-	return on, nil
+	return on, r.ReplyID, nil
 }
 
 func (r result) ok(endpoint string) error {

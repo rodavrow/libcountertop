@@ -120,3 +120,21 @@ func TestAnHTTPErrorIsRefused(t *testing.T) {
 		t.Fatalf("err %v, want refused", err)
 	}
 }
+
+// A streamed reply is named on /is_speaking next to the speaking flag; null, or no key at all on an
+// older LiveTalking, is no streamed reply.
+func TestTheStatusNamesTheOpenStreamedReply(t *testing.T) {
+	for body, want := range map[string]string{
+		`{"code":0,"msg":"ok","data":true,"reply_id":"r:1.a-b"}`: "r:1.a-b",
+		`{"code":0,"msg":"ok","data":true,"reply_id":null}`:      "",
+		`{"code":0,"msg":"ok","data":true}`:                      "",
+	} {
+		s := serve(t, func(w http.ResponseWriter, _ *http.Request) { _, _ = io.WriteString(w, body) })
+
+		on, reply, err := s.status(context.Background(), "42")
+
+		if err != nil || !on || reply != want {
+			t.Errorf("%s: speaking %v, reply %q, err %v; want %q", body, on, reply, err, want)
+		}
+	}
+}

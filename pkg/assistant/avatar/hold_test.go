@@ -26,7 +26,7 @@ func spokeOnScreen(t *testing.T, r *rig) {
 	}
 	done := make(chan bool)
 	go func() {
-		handled, err := r.a.Speak(context.Background(), 0, r.url+"/clip.mp3", &lane{}, nil)
+		handled, _, err := r.a.Speak(context.Background(), 0, r.url+"/clip.mp3", &lane{}, nil)
 		if err != nil {
 			t.Error(err)
 		}

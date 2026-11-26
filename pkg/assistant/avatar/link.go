@@ -96,7 +96,22 @@ type link struct {
 	// each refusal in a row, until a picture is shown.
 	reopenAt   time.Time
 	reopenWait time.Duration
-	published  [2]string
+	// followed is the last streamed reply this link followed; LiveTalking names it until its
+	// last frame has played, so the next reply must not take it for its own.
+	followed  string
+	published [2]string
+}
+
+func (l *link) follows(reply string) {
+	l.mu.Lock()
+	l.followed = reply
+	l.mu.Unlock()
+}
+
+func (l *link) lastFollowed() string {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	return l.followed
 }
 
 func (l *link) snapshot() (State, string) {

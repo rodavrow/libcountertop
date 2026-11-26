@@ -14,6 +14,9 @@ type Avatar struct {
 	URL        string           `json:"url,omitempty"`
 	ID         string           `json:"id,omitempty"`
 	Connection AvatarConnection `json:"connection,omitempty"`
+	// Fed is that Home Assistant streams replies into the session itself, so the device follows
+	// the session instead of sending it the whole clip.
+	Fed bool `json:"fed,omitempty"`
 }
 
 // AvatarConnection is when the device keeps a LiveTalking session open.

@@ -60,6 +60,10 @@ const (
 	evAnnouncing
 	evAnnounced
 	evSpoken
+	// evRunURL is the reply's clip, named as the run starts; evStreamOffered is Home Assistant
+	// starting to stream the reply's text to the voice, before the text is complete.
+	evRunURL
+	evStreamOffered
 )
 
 type event struct {
@@ -121,6 +125,8 @@ type Conversation struct {
 
 	said   string
 	answer string
+	// runURL is the reply's clip as the run named it at its start.
+	runURL string
 
 	avatarHeld  *int
 	avatarWhole bool
@@ -151,6 +157,8 @@ type nextTurn struct {
 type reply struct {
 	url    string
 	stream *Reply
+	// early is a reply started as Home Assistant began streaming it, before it named the clip.
+	early bool
 }
 
 func NewConversation(vs *esphome.VoiceSatellite, options Dependencies) *Conversation {
@@ -384,11 +392,28 @@ func (c *Conversation) dispatch(e event) {
 			c.speak("")
 		}
 
+	case evRunURL:
+		if c.phase != phaseIdle {
+			c.runURL = e.url
+		}
+
+	case evStreamOffered:
+		if c.phase == phaseIdle || c.phase == phaseReplying || c.runURL == "" || !c.fed(c.slot) {
+			return
+		}
+		slog.Info("avatar reply starts with the stream", "slot", c.slot+1)
+		c.speak(c.runURL)
+		c.reply.early = true
+
 	case evReplyURL:
 		if c.phase == phaseIdle {
 			return
 		}
 		if c.streams(c.slot) {
+			return
+		}
+		if c.phase == phaseReplying && c.reply.early {
+			// The same reply, already started with the stream.
 			return
 		}
 		c.speak(e.url)
@@ -585,7 +610,7 @@ func (c *Conversation) start(n nextTurn) {
 		c.send("start", func() error { return c.vs.StartTurn(phrase, audioSettings()) })
 	}
 
-	c.said, c.answer = "", ""
+	c.said, c.answer, c.runURL = "", "", ""
 	c.enter(phaseListening)
 	c.turn.Listening()
 	c.reply = reply{}
@@ -795,6 +820,11 @@ func (c *Conversation) pipeline(e esphome.PipelineEvent) {
 	case api.VoiceAssistantEvent_VOICE_ASSISTANT_INTENT_PROGRESS:
 		if e.Data["tts_start_streaming"] == "1" {
 			slog.Debug("early tts streaming offered", "slot", c.slot+1)
+			c.post(event{kind: evStreamOffered})
+		}
+	case api.VoiceAssistantEvent_VOICE_ASSISTANT_RUN_START:
+		if url := e.Data["url"]; url != "" {
+			c.post(event{kind: evRunURL, url: url})
 		}
 
 	case api.VoiceAssistantEvent_VOICE_ASSISTANT_INTENT_END:
@@ -1029,6 +1059,13 @@ func (c *Conversation) streams(slot int) bool {
 		return false
 	}
 	return c.options.Words.Delivery(slot) == "stream"
+}
+
+// fed reports whether Home Assistant feeds this turn's avatar on slot, so its reply may start
+// as soon as Home Assistant streams it.
+func (c *Conversation) fed(slot int) bool {
+	return c.options.Avatar != nil && c.avatarHeld != nil && *c.avatarHeld == slot &&
+		c.avatarWhole && c.options.Avatar.Fed(slot)
 }
 
 // holdAvatar keeps slot's avatar session open for the turn, so it connects while listening.
