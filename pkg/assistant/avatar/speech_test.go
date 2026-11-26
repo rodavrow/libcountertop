@@ -187,3 +187,27 @@ func TestLatencyCountsTheJitterBufferAndTheQueue(t *testing.T) {
 		t.Fatalf("latency %v, want %v", got, want)
 	}
 }
+
+func TestSpeechReportsWhenItsVoiceStartedAndHowMuchWentOut(t *testing.T) {
+	c := &clock{at: time.Unix(1000, 0)}
+	s := newSpeech(&lane{}, nil, c.now)
+	s.hear(chunk(0))
+	start := c.at
+	for range 10 {
+		s.hear(chunk(4000))
+		c.pass(20 * time.Millisecond)
+	}
+
+	first, flowing, handed := s.voiced()
+
+	if !first.Equal(start) {
+		t.Errorf("first audible at %v, want %v: the silent chunk counts as nothing", first, start)
+	}
+	if flowing.Sub(first) < jitter-20*time.Millisecond || flowing.Sub(first) > jitter {
+		t.Errorf("voice started %s after the first sound, want after the %s jitter buffer",
+			flowing.Sub(first), jitter)
+	}
+	if handed != 200*time.Millisecond {
+		t.Errorf("handed %s, want the 10 loud chunks", handed)
+	}
+}
