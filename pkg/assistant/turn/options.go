@@ -78,10 +78,11 @@ type Avatar interface {
 	Fed(slot int) bool
 
 	// Speak has slot's avatar say the clip at url, its voice going into sink. handled is false
-	// when the caller should play the clip itself, from from on.
+	// when the caller should speak the clip itself: rest is what is left to say at 16 kHz, or nil
+	// for the whole clip.
 	Speak(
 		ctx context.Context, slot int, url string, sink VoiceSink, started func(),
-	) (handled bool, from time.Duration, err error)
+	) (handled bool, rest []int16, err error)
 }
 
 type Dependencies struct {

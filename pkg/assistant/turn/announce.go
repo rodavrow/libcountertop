@@ -3,7 +3,6 @@ package turn
 import (
 	"context"
 	"log/slog"
-	"time"
 
 	esphome "github.com/ygelfand/go-esphome-device"
 
@@ -41,7 +40,7 @@ func (t *Conversation) announcePlain(a esphome.Announce) {
 			if url == "" {
 				continue
 			}
-			if err := t.play(ctx, url, 0, nil); err != nil {
+			if err := t.play(ctx, url, nil); err != nil {
 				return err
 			}
 		}
@@ -107,7 +106,7 @@ func (c *Conversation) say(an *announcement) {
 	}
 	claim := c.sound.Claim("announce", func(ctx context.Context, _ Speaker) error {
 		if an.PreannounceMediaID != "" {
-			if err := c.play(ctx, an.PreannounceMediaID, 0, nil); err != nil {
+			if err := c.play(ctx, an.PreannounceMediaID, nil); err != nil {
 				return err
 			}
 		}
@@ -232,34 +231,35 @@ func (c *Conversation) unsaid() {
 // speaker when it is not or the avatar cannot.
 func (t *Conversation) voice(ctx context.Context, slot int, url string, started func()) error {
 	if a := t.options.Avatar; a != nil && a.Wants(slot) {
-		handled, from, err := a.Speak(ctx, slot, url, t.speaker, started)
+		handled, rest, err := a.Speak(ctx, slot, url, t.speaker, started)
 		if handled || ctx.Err() != nil {
 			return err
 		}
-		return t.play(ctx, url, from, started)
+		if rest != nil {
+			slog.Debug("speaking the rest of the reply", "samples", len(rest))
+			t.playVoice(rest, started)
+			return nil
+		}
 	}
-	return t.play(ctx, url, 0, started)
+	return t.play(ctx, url, started)
 }
 
-// play speaks the clip at url on the speaker, from from on.
-func (t *Conversation) play(
-	ctx context.Context,
-	url string,
-	from time.Duration,
-	started func(),
-) error {
+// play speaks the clip at url on the speaker.
+func (t *Conversation) play(ctx context.Context, url string, started func()) error {
 	samples, err := t.fetch(ctx, url, 16000)
 	if err != nil {
 		return err
 	}
-	skip := min(int(from*16000/time.Second), len(samples))
-	samples = samples[skip:]
-	slog.Debug("playing announcement", "samples", len(samples), "from", from)
+	slog.Debug("playing announcement", "samples", len(samples))
+	t.playVoice(samples, started)
+	return nil
+}
 
+// playVoice plays samples at 16 kHz on the speaker.
+func (t *Conversation) playVoice(samples []int16, started func()) {
 	if started != nil {
 		started()
 	}
 	t.speaker.PlayVoice(samples)
 	t.speaker.PlayVoice(make([]int16, 16000*pcm.Tail/1000))
-	return nil
 }

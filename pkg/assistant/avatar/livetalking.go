@@ -48,6 +48,8 @@ type result struct {
 	// ReplyID names the reply Home Assistant streams into the session, from when it opens until
 	// its last frame has played; empty for none, as on a LiveTalking that does not stream.
 	ReplyID string `json:"reply_id"`
+	// Holding says the streamed reply is open but paused at the source, as for a tool call.
+	Holding bool `json:"holding"`
 }
 
 // offer opens a render session for a recv-only offer and returns the answer and the session id.
@@ -119,23 +121,34 @@ func (s server) interrupt(ctx context.Context, id string) error {
 // speaking reports whether the session is still rendering speech. It turns false before the last
 // of the audio arrives, so it is never the only sign a reply ended.
 func (s server) speaking(ctx context.Context, id string) (bool, error) {
-	on, _, err := s.status(ctx, id)
-	return on, err
+	st, err := s.status(ctx, id)
+	return st.on, err
 }
 
-// status is speaking, and the streamed reply open on the session, if any.
-func (s server) status(ctx context.Context, id string) (on bool, reply string, err error) {
+// state is what /is_speaking says about a session.
+type state struct {
+	// on is whether it is rendering speech.
+	on bool
+	// reply is the streamed reply open on it, if any.
+	reply string
+	// holding is whether that reply is paused at its source; it is not while speech still plays.
+	holding bool
+}
+
+func (s server) status(ctx context.Context, id string) (state, error) {
 	var r result
 	if err := s.postJSON(ctx, "is_speaking", session{SessionID: id}, &r); err != nil {
-		return false, "", err
+		return state{}, err
 	}
 	if err := r.ok("/is_speaking"); err != nil {
-		return false, "", err
+		return state{}, err
 	}
+	var on bool
 	if err := json.Unmarshal(r.Data, &on); err != nil {
-		return false, "", fmt.Errorf("%w: /is_speaking data %s", errRefused, r.Data)
+		return state{}, fmt.Errorf("%w: /is_speaking data %s", errRefused, r.Data)
 	}
-	return on, r.ReplyID, nil
+	// Holding can turn true while the last of the audio before the pause still plays.
+	return state{on: on, reply: r.ReplyID, holding: r.Holding && !on}, nil
 }
 
 func (r result) ok(endpoint string) error {

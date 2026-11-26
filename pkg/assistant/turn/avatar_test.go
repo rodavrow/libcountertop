@@ -19,8 +19,8 @@ type fakeAvatar struct {
 	held    map[int]int
 	woke    []int
 	fed     map[int]bool
-	// from is where a reply handed back resumes.
-	from time.Duration
+	// rest is what is left of a reply handed back.
+	rest []int16
 }
 
 func (a *fakeAvatar) Wants(slot int) bool { return a.wants[slot] }
@@ -36,12 +36,12 @@ func (a *fakeAvatar) Speak(
 	url string,
 	_ VoiceSink,
 	started func(),
-) (bool, time.Duration, error) {
+) (bool, []int16, error) {
 	a.spoke, a.slots = append(a.spoke, url), append(a.slots, slot)
 	if a.handled && started != nil {
 		started()
 	}
-	return a.handled, a.from, nil
+	return a.handled, a.rest, nil
 }
 
 func withAvatar(a *announcing, wants ...int) *fakeAvatar {
@@ -201,11 +201,12 @@ type countingVoice struct {
 
 func (v *countingVoice) PlayVoice(pcm []int16) { v.played = append(v.played, len(pcm)) }
 
-// A reply the avatar broke off is spoken on, from where it stopped, not from the start again.
+// A reply the avatar broke off is spoken on from what the avatar left, not fetched and started
+// again.
 func TestAReplyTheAvatarBrokeOffResumesOnTheSpeaker(t *testing.T) {
 	a := announcer(t)
 	av := withAvatar(a, 1)
-	av.handled, av.from = false, 500*time.Millisecond
+	av.handled, av.rest = false, make([]int16, 16000/2)
 	voice := &countingVoice{}
 	a.speaker = voice
 	a.fetch = func(_ context.Context, url string, _ int) ([]int16, error) {
@@ -219,8 +220,34 @@ func TestAReplyTheAvatarBrokeOffResumesOnTheSpeaker(t *testing.T) {
 	a.speak("reply.mp3")
 	a.plays()
 
-	if len(voice.played) == 0 || voice.played[0] != 2*16000-16000/2 {
-		t.Fatalf("played %v samples, want the clip from 0.5 s on", voice.played)
+	if len(voice.played) == 0 || voice.played[0] != 16000/2 {
+		t.Fatalf("played %v samples, want the half second the avatar left", voice.played)
+	}
+	if len(a.fetched) != 0 {
+		t.Errorf("fetched %v again", a.fetched)
+	}
+}
+
+// An avatar that hands the whole reply back leaves the device to fetch it.
+func TestAReplyHandedBackWholeIsFetched(t *testing.T) {
+	a := announcer(t)
+	av := withAvatar(a, 1)
+	av.handled = false
+	voice := &countingVoice{}
+	a.speaker = voice
+	a.fetch = func(_ context.Context, url string, _ int) ([]int16, error) {
+		a.fetched = append(a.fetched, url)
+		return make([]int16, 2*16000), nil
+	}
+	a.slot = 1
+	a.phase = phaseThinking
+	a.arm(time.Hour)
+
+	a.speak("reply.mp3")
+	a.plays()
+
+	if len(voice.played) == 0 || voice.played[0] != 2*16000 {
+		t.Fatalf("played %v samples, want the whole clip", voice.played)
 	}
 }
 

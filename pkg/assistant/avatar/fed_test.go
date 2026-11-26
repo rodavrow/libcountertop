@@ -2,17 +2,23 @@ package avatar
 
 import (
 	"context"
+	"encoding/binary"
+	"errors"
 	"testing"
 	"time"
 )
 
 type spoke struct {
 	handled bool
-	from    time.Duration
+	rest    []int16
 	err     error
 }
 
-// fedRig is a connected avatar that Home Assistant feeds, on test timings in real time.
+// clipSeconds is how long the fed rig's clip runs.
+const clipSeconds = 2
+
+// fedRig is a connected avatar that Home Assistant feeds, on test timings in real time. Its clip
+// is clipSeconds of 16 kHz WAV.
 func fedRig(t *testing.T) *rig {
 	t.Helper()
 	cfg := always()
@@ -20,14 +26,38 @@ func fedRig(t *testing.T) *rig {
 	r := newRig(t, cfg)
 	r.connect(t)
 	realTime(r)
+	r.lt.set(func(lt *liveTalking) { lt.clip = wav(clipSeconds * handbackRate) })
 	return r
+}
+
+// wav is n samples of 16 kHz mono 16-bit WAV.
+func wav(n int) []byte {
+	data := make([]byte, 2*n)
+	out := []byte("RIFF")
+	out = binary.LittleEndian.AppendUint32(out, uint32(36+len(data)))
+	out = append(out, "WAVEfmt "...)
+	out = binary.LittleEndian.AppendUint32(out, 16)
+	out = binary.LittleEndian.AppendUint16(out, 1)
+	out = binary.LittleEndian.AppendUint16(out, 1)
+	out = binary.LittleEndian.AppendUint32(out, handbackRate)
+	out = binary.LittleEndian.AppendUint32(out, 2*handbackRate)
+	out = binary.LittleEndian.AppendUint16(out, 2)
+	out = binary.LittleEndian.AppendUint16(out, 16)
+	out = append(out, "data"...)
+	out = binary.LittleEndian.AppendUint32(out, uint32(len(data)))
+	return append(out, data...)
+}
+
+// left is how many samples of the rig's clip remain from from on.
+func left(from time.Duration) int {
+	return clipSeconds*handbackRate - int(from*handbackRate/time.Second)
 }
 
 func speakAsync(r *rig, ctx context.Context, sink Sink) <-chan spoke {
 	out := make(chan spoke, 1)
 	go func() {
-		handled, from, err := r.a.Speak(ctx, 0, r.url+"/clip.mp3", sink, nil)
-		out <- spoke{handled, from, err}
+		handled, rest, err := r.a.Speak(ctx, 0, r.url+"/clip.mp3", sink, nil)
+		out <- spoke{handled, rest, err}
 	}()
 	return out
 }
@@ -84,13 +114,9 @@ func TestAFedReplyIsFollowedWithoutUploadingTheClip(t *testing.T) {
 	r.lt.set(func(lt *liveTalking) { lt.reply, lt.speaking = "", false })
 	s := wait(t, got)
 
-	if !s.handled || s.from != 0 || s.err != nil {
-		t.Fatalf(
-			"handled %v from %s err %v, want the avatar to have spoken it",
-			s.handled,
-			s.from,
-			s.err,
-		)
+	if !s.handled || s.rest != nil || s.err != nil {
+		t.Fatalf("handled %v, %d samples left, err %v; want the avatar to have spoken it",
+			s.handled, len(s.rest), s.err)
 	}
 	if len(r.lt.spoken) != 0 {
 		t.Error("uploaded the clip though Home Assistant feeds the session")
@@ -105,6 +131,7 @@ func TestAFedReplyIsFollowedWithoutUploadingTheClip(t *testing.T) {
 func TestAFedSlotWithNoOpenReplySendsTheClipAsBefore(t *testing.T) {
 	r := fedRig(t)
 	r.a.timing.fedFirstSound = time.Minute
+	r.lt.set(func(lt *liveTalking) { lt.clip = nil })
 
 	got := speakAsync(r, context.Background(), &lane{})
 	uploaded(t, r, got)
@@ -160,8 +187,9 @@ func TestAFedReplyWithNoSoundHandsBackFromTheStart(t *testing.T) {
 
 	s := wait(t, speakAsync(r, context.Background(), &lane{}))
 
-	if s.handled || s.from != 0 {
-		t.Fatalf("handled %v from %s, want it handed back from the start", s.handled, s.from)
+	if s.handled || len(s.rest) != left(0) {
+		t.Fatalf("handled %v, %d samples left; want all %d handed back",
+			s.handled, len(s.rest), left(0))
 	}
 	if r.lt.interrupted != 1 {
 		t.Errorf("interrupted %d times, want the silent reply stopped", r.lt.interrupted)
@@ -179,9 +207,10 @@ func TestAFedReplyThatGoesSilentResumesFromWhereItStopped(t *testing.T) {
 	talk(r, 50) // 1 s of speech
 	s := wait(t, got)
 
-	want := time.Second - defaults.rewind
-	if s.handled || s.from != want {
-		t.Fatalf("handled %v from %s, want handed back from %s", s.handled, s.from, want)
+	from := time.Second - defaults.rewind
+	if s.handled || len(s.rest) != left(from) {
+		t.Fatalf("handled %v, %d samples left; want the clip from %s on (%d)",
+			s.handled, len(s.rest), from, left(from))
 	}
 	if r.lt.interrupted != 1 || !sink.drained {
 		t.Errorf("interrupted %d, drained %v", r.lt.interrupted, sink.drained)
@@ -198,8 +227,8 @@ func TestAFedReplyResumesWhenLiveTalkingStopsAnswering(t *testing.T) {
 	r.lt.set(func(lt *liveTalking) { lt.failing = 1000 })
 	s := wait(t, got)
 
-	if s.handled || s.from == 0 {
-		t.Fatalf("handled %v from %s, want handed back mid-reply", s.handled, s.from)
+	if s.handled || len(s.rest) == 0 || len(s.rest) >= left(0) {
+		t.Fatalf("handled %v, %d samples left; want handed back mid-reply", s.handled, len(s.rest))
 	}
 }
 
@@ -215,7 +244,7 @@ func TestOneFailedStatusCallDoesNotEndAFedReply(t *testing.T) {
 	r.lt.set(func(lt *liveTalking) { lt.reply, lt.speaking = "", false })
 
 	if s := wait(t, got); !s.handled {
-		t.Fatalf("handed back (from %s) after a single failed status call", s.from)
+		t.Fatalf("handed back (%d samples) after a single failed status call", len(s.rest))
 	}
 }
 
@@ -250,5 +279,105 @@ func TestAnAvatarNotFedStillUploadsTheClip(t *testing.T) {
 
 	if len(r.lt.spoken) != 1 {
 		t.Fatalf("uploaded %d clips, want the clip sent as before", len(r.lt.spoken))
+	}
+}
+
+// A reply paused at its source, as Home Assistant does while a tool runs, keeps the avatar: its
+// silence is not a dropout, and the reply goes on once the speech does.
+func TestAFedReplyHoldingThroughAPauseKeepsTheAvatar(t *testing.T) {
+	r := fedRig(t)
+	r.lt.set(func(lt *liveTalking) { lt.reply, lt.speaking = "r1", true })
+	got := speakAsync(r, context.Background(), &lane{})
+	talk(r, 10)
+
+	r.lt.set(func(lt *liveTalking) { lt.speaking, lt.holding = false, true })
+	time.Sleep(4 * r.a.timing.fedSilent)
+	select {
+	case s := <-got:
+		t.Fatalf("ended (handled %v) while the reply was holding", s.handled)
+	default:
+	}
+	r.lt.set(func(lt *liveTalking) { lt.speaking, lt.holding = true, false })
+	talk(r, 10)
+	r.lt.set(func(lt *liveTalking) { lt.reply, lt.speaking = "", false })
+
+	if s := wait(t, got); !s.handled || r.lt.interrupted != 0 {
+		t.Fatalf("handled %v, interrupted %d; want the avatar to have spoken it all",
+			s.handled, r.lt.interrupted)
+	}
+}
+
+// A hold is the reply's only: another reply holding is no reason to wait.
+func TestAnotherReplyHoldingIsNoHold(t *testing.T) {
+	r := fedRig(t)
+	r.lt.set(func(lt *liveTalking) { lt.reply, lt.speaking = "r1", true })
+	got := speakAsync(r, context.Background(), &lane{})
+	talk(r, 10)
+
+	r.lt.set(func(lt *liveTalking) { lt.reply, lt.speaking, lt.holding = "r2", false, true })
+
+	if s := wait(t, got); !s.handled {
+		t.Fatal("did not end when the followed reply closed")
+	}
+}
+
+// After a hold the silence counts from when it ended, not from the last sound before it.
+func TestSilenceAfterAHoldCountsFromItsEnd(t *testing.T) {
+	r := fedRig(t)
+	r.lt.set(func(lt *liveTalking) { lt.reply, lt.speaking = "r1", true })
+	got := speakAsync(r, context.Background(), &lane{})
+	talk(r, 10)
+	r.lt.set(func(lt *liveTalking) { lt.speaking, lt.holding = false, true })
+	time.Sleep(4 * r.a.timing.fedSilent)
+
+	ended := time.Now()
+	r.lt.set(func(lt *liveTalking) { lt.holding = false })
+	s := wait(t, got)
+
+	if waited := time.Since(ended); waited < r.a.timing.fedSilent {
+		t.Fatalf("broke off %s after the hold ended, want at least %s",
+			waited, r.a.timing.fedSilent)
+	}
+	if s.handled {
+		t.Fatal("kept a reply that went silent after its hold")
+	}
+}
+
+// Home Assistant pauses the clip with the reply, longer than the device's client allows a whole
+// fetch; a hand-back after it still has the rest.
+func TestTheBackupClipOutlastsAPauseLongerThanTheClientTimeout(t *testing.T) {
+	r := fedRig(t)
+	r.a.o.Client.Timeout = 100 * time.Millisecond
+	pause := make(chan struct{})
+	r.lt.set(func(lt *liveTalking) { lt.reply, lt.speaking, lt.pause = "r1", true, pause })
+	got := speakAsync(r, context.Background(), &lane{})
+	talk(r, 50) // 1 s, then silence
+	time.AfterFunc(300*time.Millisecond, func() { close(pause) })
+
+	s := wait(t, got)
+
+	from := time.Second - defaults.rewind
+	if s.handled || len(s.rest) != left(from) {
+		t.Fatalf("handled %v, %d samples left, err %v; want the clip from %s on (%d)",
+			s.handled, len(s.rest), s.err, from, left(from))
+	}
+}
+
+// A backup clip that stops arriving for good cannot be spoken; what the avatar said is not said
+// again.
+func TestABackupClipThatStopsArrivingLosesTheRest(t *testing.T) {
+	r := fedRig(t)
+	r.a.timing.backup = 200 * time.Millisecond
+	pause := make(chan struct{})
+	t.Cleanup(func() { close(pause) })
+	r.lt.set(func(lt *liveTalking) { lt.reply, lt.speaking, lt.pause = "r1", true, pause })
+	got := speakAsync(r, context.Background(), &lane{})
+	talk(r, 50)
+
+	s := wait(t, got)
+
+	if !s.handled || s.rest != nil || !errors.Is(s.err, errIdle) {
+		t.Fatalf("handled %v, %d samples left, err %v; want the rest lost to an idle clip",
+			s.handled, len(s.rest), s.err)
 	}
 }
