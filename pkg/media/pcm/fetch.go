@@ -45,8 +45,13 @@ func Fetch(ctx context.Context, url string, rate int) ([]int16, error) {
 	if err != nil {
 		return nil, err
 	}
+	return Decode(resp.Header.Get("Content-Type"), body, rate)
+}
 
-	kind, _, _ := mime.ParseMediaType(resp.Header.Get("Content-Type"))
+// Decode turns a fetched clip into mono samples at rate. contentType is the response's
+// Content-Type, which tells MP3 from WAV.
+func Decode(contentType string, body []byte, rate int) ([]int16, error) {
+	kind, _, _ := mime.ParseMediaType(contentType)
 	d, err := decode(kind, body)
 	if err != nil {
 		return nil, err
