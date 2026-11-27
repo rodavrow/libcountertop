@@ -393,6 +393,9 @@ calendar:
     weather:
       _: Weather on days
       help: Shows the daily forecast on calendar days
+    week_start:
+      _: First day of the week
+      help: Day the week and month views start on; Auto follows the display language
   title: Title
   today: Today
   tomorrow: Tomorrow
@@ -402,6 +405,10 @@ calendar:
     week: Week
   week:
     start: sunday
+  week_start:
+    auto: Auto
+    monday: Monday
+    sunday: Sunday
 call:
   address: Address
   answer:

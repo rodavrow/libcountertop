@@ -37,11 +37,18 @@ func (view *Renderer) CalendarPage() *shell.Page {
 					schema.CalendarOpenings(),
 					cfg.Opening,
 				),
+				settings.ModeRow(
+					settings.ModeMarks{},
+					say.T("calendar.setting.week_start"),
+					schema.CalendarWeekStarts(),
+					cfg.WeekStart,
+				),
 				{Label: say.T("calendar.setting.weather"), Kind: menu.Toggle, On: cfg.Weather},
 				{Label: say.T("calendar.setting.saver"), Kind: menu.Toggle, On: cfg.Saver},
 			}
 			taps := []func(int){
 				settings.ModePick(schema.CalendarOpenings(), c.SetOpening),
+				settings.ModePick(schema.CalendarWeekStarts(), c.SetWeekStart),
 				func(int) { c.SetWeather(!cfg.Weather) },
 				func(int) { c.SetSaver(!cfg.Saver) },
 			}

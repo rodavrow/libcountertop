@@ -185,6 +185,7 @@ var Shared = Coverage{
 		"Calendar.Weather":          "calendar.weather",
 		"Calendar.Opening":          "calendar.opening",
 		"Calendar.Saver":            "calendar.saver",
+		"Calendar.WeekStart":        "calendar.week_start",
 		"Todo.Entities":             "todo.entities",
 		"Todo.Completed":            "todo.completed",
 		"TV.Default":                "tv.default",

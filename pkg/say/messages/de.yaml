@@ -391,6 +391,9 @@ calendar:
     weather:
       _: Wetter an Tagen
       help: Zeigt die Tagesvorhersage an Kalendertagen
+    week_start:
+      _: Erster Wochentag
+      help: Tag, mit dem Wochen- und Monatsansicht beginnen; Automatisch folgt der Anzeigesprache
   title: Titel
   today: Heute
   tomorrow: Morgen
@@ -400,6 +403,10 @@ calendar:
     week: Woche
   week:
     start: monday
+  week_start:
+    auto: Automatisch
+    monday: Montag
+    sunday: Sonntag
 call:
   address: Adresse
   answer:

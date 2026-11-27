@@ -53,6 +53,11 @@ func NewTable() *Table {
 			Setting{Name: "saver", Group: Group, Icon: "mdi:calendar-clock"},
 			func(c *schema.Calendar) *bool { return &c.Saver },
 		),
+		setting.Pick(
+			Setting{Name: "week_start", Group: Group, Icon: "mdi:calendar-week-begin"},
+			schema.CalendarWeekStarts(),
+			func(c *schema.Calendar) *schema.CalendarWeekStart { return &c.WeekStart },
+		),
 	}, setting.Messages{Text: say.T, Missing: say.Missing})
 }
 
