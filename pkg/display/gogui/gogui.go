@@ -853,6 +853,14 @@ func (m *measurer) TextHeight(text string, s gui.TextStyle) float32 {
 	return h
 }
 
+func (m *measurer) TextInkBounds(text string, s gui.TextStyle) (gui.InkBounds, bool) {
+	r, ok := m.ts.InkBounds(text, cfg(s))
+	if !ok {
+		return gui.InkBounds{}, false
+	}
+	return gui.InkBounds{X: r.X, Y: r.Y, Width: r.Width, Height: r.Height}, true
+}
+
 func (m *measurer) FontHeight(s gui.TextStyle) float32 {
 	h, err := m.ts.FontHeight(cfg(s))
 	if err != nil {
