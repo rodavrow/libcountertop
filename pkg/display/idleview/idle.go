@@ -43,6 +43,8 @@ type Idle struct {
 	options Options
 
 	knobs *setting.Controls[schema.Idle]
+	wake  *esphome.Button
+	sleep *esphome.Button
 
 	mu    sync.Mutex
 	hold  *shell.Hold
@@ -60,6 +62,20 @@ func NewIdle(options Options) *Idle {
 		Read:   options.Settings.Read,
 		Save:   i.save,
 	}
+	i.wake = &esphome.Button{
+		Base: esphome.Base{
+			ObjectID: "screen_wake", Name: "Wake", Icon: "mdi:monitor-eye",
+			DeviceID: options.DeviceID,
+		},
+		OnPress: i.Wake,
+	}
+	i.sleep = &esphome.Button{
+		Base: esphome.Base{
+			ObjectID: "screen_sleep", Name: "Sleep", Icon: "mdi:power-sleep",
+			DeviceID: options.DeviceID,
+		},
+		OnPress: i.Lock,
+	}
 	return i
 }
 
@@ -67,7 +83,9 @@ func (i *Idle) Name() string { return "idle" }
 
 func (i *Idle) View() *View { return i.options.View }
 
-func (i *Idle) Entities() []esphome.Entity { return i.knobs.Entities() }
+func (i *Idle) Entities() []esphome.Entity {
+	return append(i.knobs.Entities(), i.wake, i.sleep)
+}
 
 func (i *Idle) Settings() *setting.Controls[schema.Idle] { return i.knobs }
 

@@ -279,8 +279,12 @@ func TestRestorePutsEveryEntityBack(t *testing.T) {
 			if e.OnCommand == nil {
 				t.Errorf("%v takes no command", e)
 			}
+		case *esphome.Button:
+			if e.OnPress == nil {
+				t.Errorf("%v does nothing when pressed", e)
+			}
 		default:
-			t.Errorf("%v is neither a select nor a number", e)
+			t.Errorf("%v is neither a select, a number nor a button", e)
 		}
 	}
 }
