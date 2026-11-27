@@ -139,12 +139,12 @@ func TestTheStatusNamesTheOpenStreamedReply(t *testing.T) {
 	}
 }
 
-// A reply paused at its source is holding; the last of the audio before the pause still plays,
-// so holding counts only once it has.
+// A reply paused at its source is holding, even while the last of the audio before the pause
+// still plays.
 func TestTheStatusSaysWhenTheReplyIsHolding(t *testing.T) {
 	for body, want := range map[string]bool{
 		`{"code":0,"data":false,"reply_id":"r1","holding":true}`:  true,
-		`{"code":0,"data":true,"reply_id":"r1","holding":true}`:   false,
+		`{"code":0,"data":true,"reply_id":"r1","holding":true}`:   true,
 		`{"code":0,"data":false,"reply_id":"r1","holding":false}`: false,
 		`{"code":0,"data":false,"reply_id":"r1"}`:                 false,
 	} {

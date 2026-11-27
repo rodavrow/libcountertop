@@ -113,6 +113,8 @@ type Stage interface {
 	Placer
 	Staging
 	Look(assistant.Showing) (custom, full bool)
+	// AvatarLook reports that the show's look is its avatar, up or on its way.
+	AvatarLook(assistant.Showing) bool
 	// Held is the avatar kept on screen between announcements, shown with no turn going.
 	Held() (assistant.Showing, bool)
 	// Release lets the held avatar go and reports whether one was held.

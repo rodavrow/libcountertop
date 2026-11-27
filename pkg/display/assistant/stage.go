@@ -132,11 +132,15 @@ func (s *Stage) lookFor(show Showing) look {
 
 func (s *Stage) Look(show Showing) (custom, full bool) {
 	l := s.lookFor(show)
-	if s.avatarUp(show) || s.avatarPending(show) {
+	if s.AvatarLook(show) {
 		return true, l.place == schema.LookFull
 	}
 	return l.custom(), l.place == schema.LookFull
 }
+
+// AvatarLook reports that show's look is its avatar, up or on its way. The look's place is then
+// filled or kept empty from the first frame it is placed, with nothing to stage first.
+func (s *Stage) AvatarLook(show Showing) bool { return s.avatarUp(show) || s.avatarPending(show) }
 
 func (s *Stage) Above(at ui.Rect, show Showing) {
 	if !s.avatar(at, false, show) {

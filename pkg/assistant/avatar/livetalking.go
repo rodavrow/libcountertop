@@ -131,7 +131,8 @@ type state struct {
 	on bool
 	// reply is the streamed reply open on it, if any.
 	reply string
-	// holding is whether that reply is paused at its source; it is not while speech still plays.
+	// holding is whether that reply is paused at its source. It can be while the last of the
+	// audio before the pause still renders, so on may still be true.
 	holding bool
 }
 
@@ -147,8 +148,7 @@ func (s server) status(ctx context.Context, id string) (state, error) {
 	if err := json.Unmarshal(r.Data, &on); err != nil {
 		return state{}, fmt.Errorf("%w: /is_speaking data %s", errRefused, r.Data)
 	}
-	// Holding can turn true while the last of the audio before the pause still plays.
-	return state{on: on, reply: r.ReplyID, holding: r.Holding && !on}, nil
+	return state{on: on, reply: r.ReplyID, holding: r.Holding}, nil
 }
 
 func (r result) ok(endpoint string) error {
