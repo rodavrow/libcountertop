@@ -8,9 +8,9 @@ import (
 const releaseChunk = voiceRate
 
 type gate struct {
-	heard  time.Time
-	phrase string
-	send   func([]byte)
+	heard time.Time
+	begin func() error
+	send  func([]byte)
 
 	mu   sync.Mutex
 	open bool

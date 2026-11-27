@@ -44,7 +44,7 @@ type Engine struct {
 
 	Threshold func(slot int) float64
 
-	OnDetect func(slot int)
+	OnDetect func(wake.Detection)
 
 	OnReady func(slot int)
 
@@ -440,7 +440,11 @@ func (e *Engine) judge(n int, s *slot, score float64, now time.Time) {
 	s.crossing, s.peak = score, score
 
 	if e.OnDetect != nil {
-		e.notify("wake detected", func() { e.OnDetect(n) })
+		d := wake.Detection{Slot: n, Score: score, Cutoff: cutoff}
+		if s.model.Kind == wake.KindPryon {
+			d.Cutoff = 0
+		}
+		e.notify("wake detected", func() { e.OnDetect(d) })
 	}
 }
 
