@@ -52,8 +52,6 @@ func CalendarOpenings() []CalendarOpening {
 
 func (o CalendarOpening) Label() string { return say.T("calendar.opening." + string(o)) }
 
-// CalendarWeekStart is the first day of the week and month views. Auto (or
-// unset) takes it from the display language (calendar.week.start).
 type CalendarWeekStart string
 
 const (
@@ -66,13 +64,17 @@ func CalendarWeekStarts() []CalendarWeekStart {
 	return []CalendarWeekStart{WeekStartAuto, WeekStartSunday, WeekStartMonday}
 }
 
-func (w CalendarWeekStart) Label() string { return say.T("calendar.week_start." + string(w)) }
+func (w CalendarWeekStart) Label() string {
+	if w == WeekStartAuto {
+		return say.T("calendar.week_start.auto")
+	}
+	return say.T("common.day." + string(w)[:3])
+}
 
 func DefaultCalendar() Calendar {
 	return Calendar{Weather: true, Opening: OpenLast, View: CalendarMonth, WeekStart: WeekStartAuto}
 }
 
-// FirstWeekday is the day the week and month views start on.
 func (c Calendar) FirstWeekday() time.Weekday {
 	switch c.WeekStart {
 	case WeekStartSunday:

@@ -177,7 +177,7 @@ func (a *Alarms) Days(d *draft) *shell.Page {
 		taps := make([]func(int), 0, len(week))
 		for _, day := range week {
 			rows = append(rows, menu.Row{
-				Label: say.T("alarm.day." + strings.ToLower(day.String()[:3])),
+				Label: say.T("common.day." + strings.ToLower(day.String()[:3])),
 				Kind:  menu.Toggle,
 				On:    slices.Contains(d.Days, day),
 			})
@@ -285,7 +285,7 @@ func days(d alarm.Weekdays) string {
 	names := make([]string, 0, len(d))
 	for _, day := range week {
 		if slices.Contains(d, day) {
-			names = append(names, say.T("alarm.day."+strings.ToLower(day.String()[:3])))
+			names = append(names, say.T("common.day."+strings.ToLower(day.String()[:3])))
 		}
 	}
 	return strings.Join(names, ", ")

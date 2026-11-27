@@ -145,14 +145,6 @@ alarm:
   add: Aggiungi sveglia
   app: Sveglie
   daily: Ogni giorno
-  day:
-    fri: Venerdì
-    mon: Lunedì
-    sat: Sabato
-    sun: Domenica
-    thu: Giovedì
-    tue: Martedì
-    wed: Mercoledì
   delete: Elimina sveglia
   edit: Sveglia
   hour: Ora
@@ -393,7 +385,7 @@ calendar:
       help: Mostra le previsioni giornaliere nei giorni del calendario
     week_start:
       _: Primo giorno della settimana
-      help: 'Giorno da cui iniziano le viste settimana e mese; Automatico segue la lingua dell''interfaccia'
+      help: Giorno da cui iniziano le viste settimana e mese
   title: Titolo
   today: Oggi
   tomorrow: Domani
@@ -405,8 +397,6 @@ calendar:
     start: monday
   week_start:
     auto: Automatico
-    monday: Lunedì
-    sunday: Domenica
 call:
   address: Indirizzo
   answer:
@@ -805,6 +795,14 @@ common:
     cancel: Annulla
     retry: Riprova
     save: Salva
+  day:
+    fri: Venerdì
+    mon: Lunedì
+    sat: Sabato
+    sun: Domenica
+    thu: Giovedì
+    tue: Martedì
+    wed: Mercoledì
   states:
     connected: Connesso
     connecting: Connessione…

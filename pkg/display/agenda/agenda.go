@@ -130,9 +130,6 @@ func (a *Agenda) page(step int) {
 }
 
 func (a *Agenda) first() time.Weekday {
-	if a.o.Calendar == nil {
-		return schema.Calendar{}.FirstWeekday()
-	}
 	return a.o.Calendar.Read().FirstWeekday()
 }
 

@@ -145,14 +145,6 @@ alarm:
   add: Wecker hinzufügen
   app: Wecker
   daily: Jeden Tag
-  day:
-    fri: Freitag
-    mon: Montag
-    sat: Samstag
-    sun: Sonntag
-    thu: Donnerstag
-    tue: Dienstag
-    wed: Mittwoch
   delete: Wecker löschen
   edit: Wecker
   hour: Stunde
@@ -393,7 +385,7 @@ calendar:
       help: Zeigt die Tagesvorhersage an Kalendertagen
     week_start:
       _: Erster Wochentag
-      help: Tag, mit dem Wochen- und Monatsansicht beginnen; Automatisch folgt der Anzeigesprache
+      help: Tag, mit dem Wochen- und Monatsansicht beginnen
   title: Titel
   today: Heute
   tomorrow: Morgen
@@ -405,8 +397,6 @@ calendar:
     start: monday
   week_start:
     auto: Automatisch
-    monday: Montag
-    sunday: Sonntag
 call:
   address: Adresse
   answer:
@@ -805,6 +795,14 @@ common:
     cancel: Abbrechen
     retry: Erneut versuchen
     save: Speichern
+  day:
+    fri: Freitag
+    mon: Montag
+    sat: Samstag
+    sun: Sonntag
+    thu: Donnerstag
+    tue: Dienstag
+    wed: Mittwoch
   states:
     connected: Verbunden
     connecting: Verbindet…

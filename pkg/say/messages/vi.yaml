@@ -145,14 +145,6 @@ alarm:
   add: Thêm báo thức
   app: Báo thức
   daily: Mỗi ngày
-  day:
-    fri: Thứ Sáu
-    mon: Thứ Hai
-    sat: Thứ Bảy
-    sun: Chủ Nhật
-    thu: Thứ Năm
-    tue: Thứ Ba
-    wed: Thứ Tư
   delete: Xóa báo thức
   edit: Báo thức
   hour: Giờ
@@ -393,7 +385,7 @@ calendar:
       help: Hiển thị dự báo hằng ngày trên các ngày trong lịch
     week_start:
       _: Ngày đầu tuần
-      help: Ngày bắt đầu của chế độ xem tuần và tháng; Tự động theo ngôn ngữ hiển thị
+      help: Ngày bắt đầu của chế độ xem tuần và tháng
   title: Tiêu đề
   today: Hôm nay
   tomorrow: Ngày mai
@@ -405,8 +397,6 @@ calendar:
     start: monday
   week_start:
     auto: Tự động
-    monday: Thứ hai
-    sunday: Chủ nhật
 call:
   address: Địa chỉ
   answer:
@@ -805,6 +795,14 @@ common:
     cancel: Hủy
     retry: Thử lại
     save: Lưu
+  day:
+    fri: Thứ Sáu
+    mon: Thứ Hai
+    sat: Thứ Bảy
+    sun: Chủ Nhật
+    thu: Thứ Năm
+    tue: Thứ Ba
+    wed: Thứ Tư
   states:
     connected: Đã kết nối
     connecting: Đang kết nối…

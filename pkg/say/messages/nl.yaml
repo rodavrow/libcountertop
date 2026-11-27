@@ -145,14 +145,6 @@ alarm:
   add: Wekker toevoegen
   app: Wekkers
   daily: Elke dag
-  day:
-    fri: Vrijdag
-    mon: Maandag
-    sat: Zaterdag
-    sun: Zondag
-    thu: Donderdag
-    tue: Dinsdag
-    wed: Woensdag
   delete: Wekker verwijderen
   edit: Wekker
   hour: Uur
@@ -393,7 +385,7 @@ calendar:
       help: Toont de dagverwachting bij agendadagen
     week_start:
       _: Eerste dag van de week
-      help: Dag waarop week- en maandweergave beginnen; Automatisch volgt de weergavetaal
+      help: Dag waarop week- en maandweergave beginnen
   title: Titel
   today: Vandaag
   tomorrow: Morgen
@@ -405,8 +397,6 @@ calendar:
     start: monday
   week_start:
     auto: Automatisch
-    monday: Maandag
-    sunday: Zondag
 call:
   address: Adres
   answer:
@@ -805,6 +795,14 @@ common:
     cancel: Annuleren
     retry: Opnieuw proberen
     save: Opslaan
+  day:
+    fri: Vrijdag
+    mon: Maandag
+    sat: Zaterdag
+    sun: Zondag
+    thu: Donderdag
+    tue: Dinsdag
+    wed: Woensdag
   states:
     connected: Verbonden
     connecting: Verbinden…

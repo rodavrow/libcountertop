@@ -145,14 +145,6 @@ alarm:
   add: Add alarm
   app: Alarms
   daily: Every day
-  day:
-    fri: Friday
-    mon: Monday
-    sat: Saturday
-    sun: Sunday
-    thu: Thursday
-    tue: Tuesday
-    wed: Wednesday
   delete: Delete alarm
   edit: Alarm
   hour: Hour
@@ -395,7 +387,7 @@ calendar:
       help: Shows the daily forecast on calendar days
     week_start:
       _: First day of the week
-      help: Day the week and month views start on; Auto follows the display language
+      help: Day the week and month views start on
   title: Title
   today: Today
   tomorrow: Tomorrow
@@ -407,8 +399,6 @@ calendar:
     start: sunday
   week_start:
     auto: Auto
-    monday: Monday
-    sunday: Sunday
 call:
   address: Address
   answer:
@@ -811,6 +801,14 @@ common:
     cancel: Cancel
     retry: Try again
     save: Save
+  day:
+    fri: Friday
+    mon: Monday
+    sat: Saturday
+    sun: Sunday
+    thu: Thursday
+    tue: Tuesday
+    wed: Wednesday
   states:
     connected: Connected
     connecting: Connecting…
