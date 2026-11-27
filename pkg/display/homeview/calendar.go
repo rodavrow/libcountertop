@@ -181,7 +181,7 @@ func (e *colorEditor) side(w *gogui.Window) gogui.View {
 			gogui.ColorWheel(gogui.ColorWheelCfg{
 				ID:            "calendar-wheel",
 				Value:         gogui.HSLA{H: value.H, S: value.S, L: 0.5, A: 1},
-				Size:          size,
+				Size:          size - reach*0.55,
 				MarkerSize:    reach * 0.55,
 				FocusDisabled: true,
 				OnChange: func(next gogui.HSLA, ev gogui.EventCtx) {

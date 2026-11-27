@@ -38,8 +38,8 @@ func TestABiggerAskGetsANewImage(t *testing.T) {
 	}
 	small := settle(100, "")
 	large := settle(400, small)
-	if w, _, _, ok := gogui.LookupImage(large); !ok || w != 400 {
-		t.Errorf("the larger picture is %d wide (%v), want 400", w, ok)
+	if mi, ok := gogui.LookupImage(large); !ok || mi.W != 400 {
+		t.Errorf("the larger picture is %d wide (%v), want 400", mi.W, ok)
 	}
 	if gogui.HasImage(strings.TrimPrefix(small, "mem:")) {
 		t.Error("the smaller picture was kept")

@@ -62,7 +62,8 @@ func (e *customEditor) rows() ([]menu.Row, []func(int)) {
 func (e *customEditor) view(w *gogui.Window) gogui.View {
 	vw, vh := w.WindowSize()
 	reach := style.Reach()
-	size := min(float32(min(vw, vh))*0.55, reach*9)
+	marker := reach * 0.55
+	size := min(float32(min(vw, vh))*0.55, reach*9) - marker
 	_, v := e.current()
 	change := func(next gogui.HSLA, ev gogui.EventCtx) {
 		e.set(next)
@@ -72,12 +73,13 @@ func (e *customEditor) view(w *gogui.Window) gogui.View {
 		Sizing:  gogui.FitFit,
 		Padding: gogui.NoPadding,
 		Spacing: gogui.SpacingPx(reach * 0.4),
+		VAlign:  gogui.VAlignMiddle,
 		Content: []gogui.View{
 			gogui.ColorPlane(gogui.ColorPlaneCfg{
 				ID:            "custom-plane",
 				Value:         v,
 				Size:          size,
-				MarkerSize:    reach * 0.55,
+				MarkerSize:    marker,
 				Radius:        gogui.RadiusMedium,
 				FocusDisabled: true,
 				OnChange:      change,

@@ -1,6 +1,7 @@
 package gogui
 
 import (
+	"cmp"
 	"context"
 	"fmt"
 	"image"
@@ -10,6 +11,7 @@ import (
 	"log/slog"
 	"math"
 	"os"
+	"slices"
 	"strings"
 	"time"
 
@@ -44,6 +46,7 @@ const (
 	runWords   = 40
 
 	imageIDs = 1 << 24
+	memIdle  = 64
 
 	touchWait = time.Second
 )
@@ -164,6 +167,7 @@ type Renderer struct {
 
 	images    map[string]picture
 	mem       map[string]memPicture
+	memGen    uint64
 	live      map[string]uint32
 	free      []uint32
 	frame     uint64
@@ -180,8 +184,9 @@ type picture struct {
 }
 
 type memPicture struct {
-	id   uint32
-	seen uint64
+	id     uint32
+	serial uint64
+	seen   uint64
 }
 
 func New(sink Sink, w *gui.Window) (*Renderer, error) {
@@ -459,30 +464,60 @@ func (r *Renderer) imageID() uint32 {
 }
 
 func (r *Renderer) memPicture(src string) picture {
-	if m, ok := r.mem[src]; ok {
-		m.seen = r.frame
+	mi, ok := gui.LookupImage(src)
+	m, cached := r.mem[src]
+	if !ok {
+		if cached {
+			r.dropMem(src, m)
+		}
+		return picture{}
+	}
+	m.seen = r.frame
+	if cached && m.serial == mi.Serial {
 		r.mem[src] = m
 		return picture{id: m.id, ok: true}
 	}
-	w, h, pix, ok := gui.LookupImage(src)
-	if !ok {
+	if !cached {
+		m.id = r.imageID()
+	}
+	if err := r.sink.Texture(m.id, mi.W, mi.H, 0, 0, mi.W, mi.H, mi.Pix); err != nil {
+		r.dropMem(src, m)
 		return picture{}
 	}
-	m := memPicture{id: r.imageID(), seen: r.frame}
-	if err := r.sink.Texture(m.id, w, h, 0, 0, w, h, pix); err != nil {
-		r.free = append(r.free, m.id)
-		return picture{}
-	}
+	m.serial = mi.Serial
 	r.mem[src] = m
 	return picture{id: m.id, ok: true}
 }
 
+func (r *Renderer) dropMem(src string, m memPicture) {
+	delete(r.mem, src)
+	r.free = append(r.free, m.id)
+}
+
 func (r *Renderer) sweepMem() {
+	if gen := gui.ImageRegistryGen(); gen != r.memGen {
+		r.memGen = gen
+		for src, m := range r.mem {
+			if s, ok := gui.ImageSerial(src); !ok || s != m.serial {
+				r.dropMem(src, m)
+			}
+		}
+	}
+	var idle []string
 	for src, m := range r.mem {
 		if m.seen != r.frame {
-			delete(r.mem, src)
-			r.free = append(r.free, m.id)
+			idle = append(idle, src)
 		}
+	}
+	if len(idle) <= memIdle {
+		return
+	}
+	slices.SortFunc(
+		idle,
+		func(a, b string) int { return cmp.Compare(r.mem[a].seen, r.mem[b].seen) },
+	)
+	for _, src := range idle[:len(idle)-memIdle] {
+		r.dropMem(src, r.mem[src])
 	}
 }
 

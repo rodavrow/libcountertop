@@ -183,14 +183,73 @@ func (s *textureSink) Texture(id uint32, _, _, _, _, _, _ int, _ []byte) error {
 	return nil
 }
 
-func TestAMemoryImageUploadsOnceAndItsSlotIsReusedWhenItLeaves(t *testing.T) {
+func TestAMemoryImageUploadsOnceWhileItStaysRegistered(t *testing.T) {
 	pix := make([]byte, 8*8*4)
 	first := gui.UseImage("gogui-test/a", 8, 8, pix)
 	second := gui.UseImage("gogui-test/b", 8, 8, pix)
 	src := first
+	r, s, w := memRenderer(t, &src)
+	render := func() {
+		if _, err := r.Render(w); err != nil {
+			t.Fatal(err)
+		}
+	}
+	base := len(s.uploads)
+	for range 3 {
+		render()
+	}
+	src = second
+	render()
+	src = first
+	render()
+	if got := s.uploads[base:]; len(got) != 2 {
+		t.Errorf("uploads %v, want one for each image", got)
+	}
+}
+
+func TestADroppedMemoryImageFreesItsSlot(t *testing.T) {
+	pix := make([]byte, 8*8*4)
+	first := gui.UseImage("gogui-test/drop-a", 8, 8, pix)
+	src := first
+	r, s, w := memRenderer(t, &src)
+	if _, err := r.Render(w); err != nil {
+		t.Fatal(err)
+	}
+	slot := s.uploads[len(s.uploads)-1]
+	gui.DropImage("gogui-test/drop-a")
+	if _, err := r.Render(w); err != nil {
+		t.Fatal(err)
+	}
+	src = gui.UseImage("gogui-test/drop-b", 8, 8, pix)
+	if _, err := r.Render(w); err != nil {
+		t.Fatal(err)
+	}
+	if got := s.uploads[len(s.uploads)-1]; got != slot {
+		t.Errorf("the new image went to slot %d, want the dropped image's %d", got, slot)
+	}
+}
+
+func TestAKeyRegisteredAgainAtANewSizeUploadsAgain(t *testing.T) {
+	src := gui.UseImage("gogui-test/resize", 8, 8, make([]byte, 8*8*4))
+	r, s, w := memRenderer(t, &src)
+	if _, err := r.Render(w); err != nil {
+		t.Fatal(err)
+	}
+	base := len(s.uploads)
+	gui.UseImage("gogui-test/resize", 16, 16, make([]byte, 16*16*4))
+	if _, err := r.Render(w); err != nil {
+		t.Fatal(err)
+	}
+	if got := s.uploads[base:]; len(got) != 1 {
+		t.Errorf("%d uploads after the key changed size, want 1", len(got))
+	}
+}
+
+func memRenderer(t *testing.T, src *string) (*Renderer, *textureSink, *gui.Window) {
+	t.Helper()
 	w := gui.SimpleWindow("mem", 64, 64, &counter{}, func(w *gui.Window) {
 		w.SetView(func(*gui.Window) gui.View {
-			return gui.Image(gui.ImageCfg{Src: src, Width: 8, Height: 8})
+			return gui.Image(gui.ImageCfg{Src: *src, Width: 8, Height: 8})
 		})
 	})
 	s := &textureSink{}
@@ -199,28 +258,7 @@ func TestAMemoryImageUploadsOnceAndItsSlotIsReusedWhenItLeaves(t *testing.T) {
 		t.Fatal(err)
 	}
 	w.Config.OnInit(w)
-	base := len(s.uploads)
-	for range 3 {
-		if _, err := r.Render(w); err != nil {
-			t.Fatal(err)
-		}
-	}
-	got := s.uploads[base:]
-	if len(got) != 1 {
-		t.Fatalf("%d uploads for one unchanged image", len(got))
-	}
-	src = second
-	if _, err := r.Render(w); err != nil {
-		t.Fatal(err)
-	}
-	src = first
-	if _, err := r.Render(w); err != nil {
-		t.Fatal(err)
-	}
-	got = s.uploads[base:]
-	if len(got) != 3 || got[2] != got[0] && got[2] != got[1] {
-		t.Errorf("uploads %v: a returning image should reuse a freed slot", got)
-	}
+	return r, s, w
 }
 
 func TestAStillViewStopsDrawing(t *testing.T) {
