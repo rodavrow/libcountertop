@@ -237,6 +237,16 @@ func New(sink Sink, w *gui.Window) (*Renderer, error) {
 	return r, nil
 }
 
+// Close frees the text system, which removes the temp files backing its in-memory fonts. Call it
+// once the window is done: nothing may render or measure text after.
+func (r *Renderer) Close() {
+	if r.textSys == nil {
+		return
+	}
+	r.textSys.Free()
+	r.textSys = nil
+}
+
 func (r *Renderer) SetRotation(quarterTurns int) { r.rot = quarterTurns & 3 }
 
 func (r *Renderer) SetClear(c *gui.Color) { r.clear = c }

@@ -36,6 +36,7 @@ func TestALivePictureUploadsWholeOnceThenOnlyWhatChanged(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	t.Cleanup(r.Close)
 	w.Config.OnInit(w)
 	base := len(s.uploads)
 	render := func() {

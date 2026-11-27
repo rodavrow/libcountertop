@@ -426,6 +426,7 @@ func (a *App) Run(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	defer r.Close()
 	r.SetRotation(int(rot) / 90)
 	if a.o.Input != nil {
 		detach := a.o.Input.Attach(

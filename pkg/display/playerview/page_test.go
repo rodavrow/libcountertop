@@ -125,6 +125,7 @@ func TestThePlayerDrawsBothWays(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		t.Cleanup(r.Close)
 		w.Config.OnInit(w)
 		if _, err := r.Render(w); err != nil {
 			t.Fatalf("%dx%d: %v", size.w, size.h, err)
