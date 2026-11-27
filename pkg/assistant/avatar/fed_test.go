@@ -307,6 +307,57 @@ func TestAFedReplyHoldingThroughAPauseKeepsTheAvatar(t *testing.T) {
 	}
 }
 
+// LiveTalking can report the hold while it still says it is speaking, as while it renders the
+// last of the audio before the pause. That is still a hold, not silence.
+func TestRegressionAHoldReportedWhileStillSpeakingKeepsTheAvatar(t *testing.T) {
+	r := fedRig(t)
+	r.lt.set(func(lt *liveTalking) { lt.reply, lt.speaking = "r1", true })
+	got := speakAsync(r, context.Background(), &lane{})
+	talk(r, 10)
+
+	r.lt.set(func(lt *liveTalking) { lt.holding = true })
+	time.Sleep(4 * r.a.timing.fedSilent)
+
+	select {
+	case s := <-got:
+		t.Fatalf("ended (handled %v) while the reply was holding", s.handled)
+	default:
+	}
+	r.lt.set(func(lt *liveTalking) { lt.holding = false })
+	talk(r, 10)
+	r.lt.set(func(lt *liveTalking) { lt.reply, lt.speaking = "", false })
+	if s := wait(t, got); !s.handled || r.lt.interrupted != 0 {
+		t.Fatalf("handled %v, interrupted %d; want the avatar to have spoken it all",
+			s.handled, r.lt.interrupted)
+	}
+}
+
+// The opener's quiet tail arrives before the hold does; together they outlast the silence limit
+// counted from the last loud chunk, and the reply still keeps the avatar.
+func TestRegressionAQuietTailThenAHoldKeepsTheAvatar(t *testing.T) {
+	r := fedRig(t)
+	r.lt.set(func(lt *liveTalking) { lt.reply, lt.speaking = "r1", true })
+	got := speakAsync(r, context.Background(), &lane{})
+	talk(r, 10)
+	for range 3 {
+		r.peer().play(chunk(audible / 3))
+		time.Sleep(10 * time.Millisecond)
+	}
+
+	r.lt.set(func(lt *liveTalking) { lt.holding = true })
+	time.Sleep(4 * r.a.timing.fedSilent)
+
+	select {
+	case s := <-got:
+		t.Fatalf("ended (handled %v) during the hold after the quiet tail", s.handled)
+	default:
+	}
+	r.lt.set(func(lt *liveTalking) { lt.speaking, lt.holding = false, false })
+	if s := wait(t, got); s.handled {
+		t.Fatal("kept a reply that went silent after its hold")
+	}
+}
+
 // A hold is the reply's only: another reply holding is no reason to wait.
 func TestAnotherReplyHoldingIsNoHold(t *testing.T) {
 	r := fedRig(t)
