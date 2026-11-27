@@ -385,9 +385,10 @@ func TestSilenceAfterAHoldCountsFromItsEnd(t *testing.T) {
 	r.lt.set(func(lt *liveTalking) { lt.holding = false })
 	s := wait(t, got)
 
-	if waited := time.Since(ended); waited < r.a.timing.fedSilent {
-		t.Fatalf("broke off %s after the hold ended, want at least %s",
-			waited, r.a.timing.fedSilent)
+	// The hold was last seen at a poll a little before ended, and the silence counts from that
+	// poll; counted from the last sound, it would break off at once.
+	if waited, least := time.Since(ended), r.a.timing.fedSilent/2; waited < least {
+		t.Fatalf("broke off %s after the hold ended, want at least %s", waited, least)
 	}
 	if s.handled {
 		t.Fatal("kept a reply that went silent after its hold")
