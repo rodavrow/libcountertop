@@ -239,7 +239,9 @@ func (a *App) speaker(w *gogui.Window, show assistant.Showing) gogui.View {
 func (a *App) fullLook() bool {
 	if show, ok := a.o.Assistant.Now(); ok {
 		custom, full := a.o.Stage.Look(show)
-		return custom && full && a.o.Stage.Staged()
+		// An avatar needs no staging: the show places it from this frame on, while the last
+		// placement may be a held avatar's, up to a second ago.
+		return custom && full && (a.o.Stage.AvatarLook(show) || a.o.Stage.Staged())
 	}
 	// A held avatar is placed only at the screen's slower redraws, so it counts as staged
 	// without the stage's short grace.
