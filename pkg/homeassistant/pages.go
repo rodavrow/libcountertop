@@ -30,33 +30,35 @@ PREPARE
 {%- endfor -%}
 {"next": {{ ns.next | to_json }}, "items": [{{ ns.parts | join(',') }}]}`
 
-type listing struct {
-	source  string
-	where   string
-	prepare string
-	item    string
-	small   string
+type Listing struct {
+	Source  string
+	Where   string
+	Prepare string
+	Item    string
+	Small   string
 }
 
-func (l listing) page(start int) string {
-	where := l.where
+func (l Listing) page(start int) string {
+	where := l.Where
 	if where == "" {
 		where = "true"
 	}
 	return strings.NewReplacer(
-		"SOURCE", l.source,
+		"SOURCE", l.Source,
 		"WHERE", where,
 		"START", strconv.Itoa(start),
-		"PREPARE", l.prepare,
-		"ITEM", l.item,
-		"SMALL", l.small,
+		"PREPARE", l.Prepare,
+		"ITEM", l.Item,
+		"SMALL", l.Small,
 		"BUDGET", strconv.Itoa(pageBudget),
 	).Replace(pageTemplate)
 }
 
-type render func(ctx context.Context, tmpl string) (json.RawMessage, error)
-
-func listAll[T any](ctx context.Context, ask render, l listing) ([]T, error) {
+func ListAll[T any](
+	ctx context.Context,
+	ask func(ctx context.Context, tmpl string) (json.RawMessage, error),
+	l Listing,
+) ([]T, error) {
 	out := []T{}
 	for start := 0; ; {
 		raw, err := ask(ctx, l.page(start))

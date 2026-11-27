@@ -68,7 +68,7 @@ func TestNoEntitiesIsNotNil(t *testing.T) {
 func entitiesFrom(t *testing.T, page string) ([]Entity, error) {
 	t.Helper()
 	quoted, _ := json.Marshal(page)
-	out, err := listAll[Entity](
+	out, err := ListAll[Entity](
 		context.Background(),
 		func(context.Context, string) (json.RawMessage, error) { return quoted, nil },
 		Filter{}.listing(),
