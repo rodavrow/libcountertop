@@ -3,6 +3,7 @@ package gogui
 import (
 	"context"
 	"math"
+	"os"
 
 	"testing"
 	"time"
@@ -58,6 +59,7 @@ func TestAFrameIsOneWellFormedBatch(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	t.Cleanup(r.Close)
 	if !s.programs[slotSolid] || !s.programs[slotGlyph] {
 		t.Fatalf("programs %v", s.programs)
 	}
@@ -142,6 +144,7 @@ func TestATouchReachesTheViewAndDrawsAFrame(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	t.Cleanup(r.Close)
 	ctx, cancel := context.WithCancel(context.Background())
 	done := make(chan error, 1)
 	go func() { done <- r.Run(ctx, w) }()
@@ -257,6 +260,7 @@ func memRenderer(t *testing.T, src *string) (*Renderer, *textureSink, *gui.Windo
 	if err != nil {
 		t.Fatal(err)
 	}
+	t.Cleanup(r.Close)
 	w.Config.OnInit(w)
 	return r, s, w
 }
@@ -277,6 +281,7 @@ func TestAStillViewStopsDrawing(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	t.Cleanup(r.Close)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	go func() { _ = r.Run(ctx, w) }()
@@ -305,6 +310,7 @@ func glyphBounds(t *testing.T, angle float32) (w, h float32) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	t.Cleanup(r.Close)
 	win.Config.OnInit(win)
 	if _, err := r.Render(win); err != nil {
 		t.Fatal(err)
@@ -381,5 +387,27 @@ func TestEachFingerKeepsItsOwnSlop(t *testing.T) {
 	}
 	if len(r.still) != 0 {
 		t.Errorf("fingers still held: %v", r.still)
+	}
+}
+
+// The text system keeps each font it was given as bytes in a temp file; a closed renderer takes
+// them with it, so a device's temp dir does not fill a few files at every start.
+func TestRegressionAClosedRendererLeavesNoTempFonts(t *testing.T) {
+	dir := t.TempDir()
+	t.Setenv("TMPDIR", dir)
+	w := gui.SimpleWindow("test", 320, 200, &app{}, func(w *gui.Window) { w.SetView(view) })
+	r, err := New(&sink{}, w)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if left, _ := os.ReadDir(dir); len(left) == 0 {
+		t.Fatal("no temp fonts were written, so this test proves nothing")
+	}
+
+	r.Close()
+	r.Close()
+
+	if left, _ := os.ReadDir(dir); len(left) != 0 {
+		t.Fatalf("%d temp files left after Close", len(left))
 	}
 }

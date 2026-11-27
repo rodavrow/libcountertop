@@ -61,6 +61,7 @@ func pressRig(t *testing.T, fired chan string) (*backend.Renderer, frames) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	t.Cleanup(r.Close)
 	ctx, cancel := context.WithCancel(context.Background())
 	done := make(chan struct{})
 	t.Cleanup(func() { cancel(); <-done })

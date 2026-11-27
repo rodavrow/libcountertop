@@ -57,6 +57,7 @@ func TestProgressFramesContainRowsVersionAndSkip(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		t.Cleanup(r.Close)
 		s.r = r
 		s.w.Config.OnInit(s.w)
 		if err := s.Draw(
@@ -105,6 +106,7 @@ func TestBootTextUsesBundledFontAndPaletteBeforeMainGUI(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		t.Cleanup(r.Close)
 		s.r = r
 		s.w.Config.OnInit(s.w)
 		if err := s.Draw([]startup.Progress{{Name: "wifi", Doing: "joining"}}, true); err != nil {
@@ -165,6 +167,7 @@ func TestBootLayoutFitsPortraitAndLandscapeWithOversizedTheme(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
+			t.Cleanup(r.Close)
 			s.r = r
 			s.w.Config.OnInit(s.w)
 			progress := make([]startup.Progress, 18)
@@ -230,6 +233,7 @@ func TestEchoBootKeepsReadableFontSizes(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	t.Cleanup(r.Close)
 	s.r = r
 	s.w.Config.OnInit(s.w)
 	progress := make([]startup.Progress, 12)

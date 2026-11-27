@@ -69,7 +69,12 @@ func NewScene(
 	}
 	return s, nil
 }
-func (s *Scene) Close() { _ = s.c.VideoClose(s.id) }
+func (s *Scene) Close() {
+	if s.r != nil {
+		s.r.Close()
+	}
+	_ = s.c.VideoClose(s.id)
+}
 func (s *Scene) Draw(p []startup.Progress, listed bool) error {
 	s.progress = startup.Display(p)
 	s.listed = listed
