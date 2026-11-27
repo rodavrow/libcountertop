@@ -391,6 +391,9 @@ calendar:
     weather:
       _: Thời tiết theo ngày
       help: Hiển thị dự báo hằng ngày trên các ngày trong lịch
+    week_start:
+      _: Ngày đầu tuần
+      help: Ngày bắt đầu của chế độ xem tuần và tháng; Tự động theo ngôn ngữ hiển thị
   title: Tiêu đề
   today: Hôm nay
   tomorrow: Ngày mai
@@ -400,6 +403,10 @@ calendar:
     week: Tuần
   week:
     start: monday
+  week_start:
+    auto: Tự động
+    monday: Thứ hai
+    sunday: Chủ nhật
 call:
   address: Địa chỉ
   answer:

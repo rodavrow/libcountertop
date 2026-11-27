@@ -391,6 +391,9 @@ calendar:
     weather:
       _: Weer bij dagen
       help: Toont de dagverwachting bij agendadagen
+    week_start:
+      _: Eerste dag van de week
+      help: Dag waarop week- en maandweergave beginnen; Automatisch volgt de weergavetaal
   title: Titel
   today: Vandaag
   tomorrow: Morgen
@@ -400,6 +403,10 @@ calendar:
     week: Week
   week:
     start: monday
+  week_start:
+    auto: Automatisch
+    monday: Maandag
+    sunday: Zondag
 call:
   address: Adres
   answer:

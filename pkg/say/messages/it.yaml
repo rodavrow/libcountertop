@@ -391,6 +391,9 @@ calendar:
     weather:
       _: Meteo sui giorni
       help: Mostra le previsioni giornaliere nei giorni del calendario
+    week_start:
+      _: Primo giorno della settimana
+      help: 'Giorno da cui iniziano le viste settimana e mese; Automatico segue la lingua dell''interfaccia'
   title: Titolo
   today: Oggi
   tomorrow: Domani
@@ -400,6 +403,10 @@ calendar:
     week: Settimana
   week:
     start: monday
+  week_start:
+    auto: Automatico
+    monday: Lunedì
+    sunday: Domenica
 call:
   address: Indirizzo
   answer:

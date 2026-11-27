@@ -130,10 +130,10 @@ func (a *Agenda) page(step int) {
 }
 
 func (a *Agenda) first() time.Weekday {
-	if say.T("calendar.week.start") == "monday" {
-		return time.Monday
+	if a.o.Calendar == nil {
+		return schema.Calendar{}.FirstWeekday()
 	}
-	return time.Sunday
+	return a.o.Calendar.Read().FirstWeekday()
 }
 
 func (a *Agenda) span(v schema.CalendarView, at time.Time) (time.Time, time.Time) {

@@ -193,6 +193,8 @@ func (c *Calendar) SetColor(entity, hex string) {
 
 func (c *Calendar) SetOpening(v schema.CalendarOpening) { c.change("opening", string(v)) }
 
+func (c *Calendar) SetWeekStart(v schema.CalendarWeekStart) { c.change("week_start", string(v)) }
+
 func (c *Calendar) SetWeather(on bool) { c.change("weather", setting.OnOff(on)) }
 
 func (c *Calendar) SetSaver(on bool) { c.change("saver", setting.OnOff(on)) }
