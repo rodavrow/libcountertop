@@ -48,7 +48,7 @@ const (
 	entitySmall = `{'id': s.entity_id, 'name': s.name[:200], 'state': s.state[:200]}`
 )
 
-func (f Filter) listing() listing {
+func (f Filter) listing() Listing {
 	source := "states"
 	if len(f.Domains) > 0 {
 		source = "states | selectattr('domain', 'in', " + list(f.Domains) + ")"
@@ -58,12 +58,12 @@ func (f Filter) listing() listing {
 		"LABELS", list(f.Labels),
 		"ATTRIBUTES", list(f.Attributes),
 	)
-	return listing{
-		source:  "(" + source + ") | sort(attribute='entity_id')",
-		where:   fill.Replace(entityWhere),
-		prepare: fill.Replace(entityPrepare),
-		item:    entityItem,
-		small:   entitySmall,
+	return Listing{
+		Source:  "(" + source + ") | sort(attribute='entity_id')",
+		Where:   fill.Replace(entityWhere),
+		Prepare: fill.Replace(entityPrepare),
+		Item:    entityItem,
+		Small:   entitySmall,
 	}
 }
 

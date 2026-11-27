@@ -12,7 +12,11 @@ type item struct {
 	ID string `json:"id"`
 }
 
-func pages(t *testing.T, l listing, answers map[int]string) render {
+func pages(
+	t *testing.T,
+	l Listing,
+	answers map[int]string,
+) func(context.Context, string) (json.RawMessage, error) {
 	t.Helper()
 	return func(_ context.Context, tmpl string) (json.RawMessage, error) {
 		for start, answer := range answers {
@@ -26,8 +30,8 @@ func pages(t *testing.T, l listing, answers map[int]string) render {
 }
 
 func TestPagesJoinUntilThereIsNoNext(t *testing.T) {
-	l := listing{source: "states", item: "{'id': s.entity_id}", small: "{}"}
-	got, err := listAll[item](context.Background(), pages(t, l, map[int]string{
+	l := Listing{Source: "states", Item: "{'id': s.entity_id}", Small: "{}"}
+	got, err := ListAll[item](context.Background(), pages(t, l, map[int]string{
 		0: `{"next": 2, "items": [{"id":"a"},{"id":"b"}]}`,
 		2: `{"next": 3, "items": [{"id":"c"}]}`,
 		3: `{"next": null, "items": [{"id":"d"}]}`,
@@ -45,8 +49,8 @@ func TestPagesJoinUntilThereIsNoNext(t *testing.T) {
 }
 
 func TestAPageThatDoesNotMoveOnIsRefused(t *testing.T) {
-	l := listing{source: "states", item: "{}", small: "{}"}
-	_, err := listAll[item](context.Background(), pages(t, l, map[int]string{
+	l := Listing{Source: "states", Item: "{}", Small: "{}"}
+	_, err := ListAll[item](context.Background(), pages(t, l, map[int]string{
 		0: `{"next": 2, "items": [{"id":"a"}]}`,
 		2: `{"next": 2, "items": [{"id":"b"}]}`,
 	}), l)
@@ -57,8 +61,8 @@ func TestAPageThatDoesNotMoveOnIsRefused(t *testing.T) {
 
 func TestAFailedPageFailsTheList(t *testing.T) {
 	want := errors.New("not connected")
-	l := listing{source: "states", item: "{}", small: "{}"}
-	_, err := listAll[item](
+	l := Listing{Source: "states", Item: "{}", Small: "{}"}
+	_, err := ListAll[item](
 		context.Background(),
 		func(context.Context, string) (json.RawMessage, error) { return nil, want },
 		l,
@@ -69,7 +73,7 @@ func TestAFailedPageFailsTheList(t *testing.T) {
 }
 
 func TestPageTemplateCarriesItsPosition(t *testing.T) {
-	tmpl := listing{source: "states", where: "s.state != 'off'", item: "{}", small: "{}"}.page(312)
+	tmpl := Listing{Source: "states", Where: "s.state != 'off'", Item: "{}", Small: "{}"}.page(312)
 	for _, want := range []string{
 		"for s in states if s.state != 'off'",
 		"ns.seen >= 312",
