@@ -70,7 +70,7 @@ func (c *Card) lightBody(w *gogui.Window, e Entity, width float32) []gogui.View 
 			},
 		}
 		x := c.held(d, now)
-		says := say.T("card.light.waiting")
+		says := say.T("common.states.waiting")
 		if ready {
 			says = strconv.Itoa(int(math.Round(lo+x*(hi-lo)))) + " K"
 		}
@@ -123,11 +123,12 @@ func (c *Card) colorWheel(e Entity, width float32) []gogui.View {
 	h, s := c.held(hueDial, now), c.held(satDial, now)
 	reach := style.Reach()
 	size := min(width*0.7, reach*8)
+	marker := reach * 0.55
 	wheel := gogui.ColorWheel(gogui.ColorWheelCfg{
 		ID:            "card-wheel",
 		Value:         gogui.HSLA{H: float32(h * 360), S: float32(s), L: 0.5, A: 1},
-		Size:          size,
-		MarkerSize:    reach * 0.55,
+		Size:          size - marker,
+		MarkerSize:    marker,
 		FocusDisabled: true,
 		OnChange: func(col gogui.HSLA, ev gogui.EventCtx) {
 			if !e.Available {

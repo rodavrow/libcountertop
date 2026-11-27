@@ -45,14 +45,14 @@ func (view *Renderer) homeRows() ([]menu.Row, []func(int)) {
 	if title, _, _ := view.trouble(); title != "" {
 		return rows, taps
 	}
-	says := say.T("weather.off")
+	says := say.T("common.states.off")
 	if wc := view.options.Weather.Read(); wc.Entity != "" {
 		says = wc.Entity
 	}
 	rows = append(rows, menu.Row{Label: say.T("weather.title"), Kind: menu.Chevron, Value: says})
 	taps = append(taps, func(int) { view.options.Shell.Push(view.options.WeatherEntities()) })
 	if t := view.options.Todo; t != nil {
-		list := say.T("todo.off")
+		list := say.T("common.states.off")
 		switch lists := t.Lists(); len(lists) {
 		case 0:
 		case 1:
@@ -64,7 +64,7 @@ func (view *Renderer) homeRows() ([]menu.Row, []func(int)) {
 		taps = append(taps, func(int) { view.options.Shell.Push(view.TodoLists()) })
 	}
 	if c := view.options.Calendar; c != nil {
-		chosen := say.T("calendar.off")
+		chosen := say.T("common.states.off")
 		if n := len(c.Chosen()); n > 0 {
 			chosen = say.F("calendar.chosen", map[string]any{"N": n})
 		}
@@ -256,7 +256,7 @@ func (view *Renderer) Picker(p *homecontrol.Picker) gogui.View {
 			view.options.UI.Row(
 				"retry",
 				"picker",
-				menu.Row{Glyph: gogui.IconSync, Label: say.T("home.retry")},
+				menu.Row{Glyph: gogui.IconSync, Label: say.T("common.actions.retry")},
 				func(int) { p.Retry() },
 				true,
 			),
@@ -732,7 +732,7 @@ func (view *Renderer) TodoLists() *shell.Page {
 			case err != nil:
 				return append(rows,
 						menu.Row{Label: say.T("home.failed"), Hint: err.Error()},
-						menu.Row{Label: say.T("home.retry")},
+						menu.Row{Label: say.T("common.actions.retry")},
 					),
 					append(taps, nil, func(int) { t.Fetch() })
 			case len(list) == 0:

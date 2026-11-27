@@ -31,7 +31,7 @@ func (f *face) splitWord() string {
 	case cooling:
 		return say.T("thermostat.cooling")
 	case stopped:
-		return say.T("thermostat.off")
+		return say.T("common.states.off")
 	}
 	return say.T("thermostat.holding")
 }

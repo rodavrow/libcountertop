@@ -456,11 +456,11 @@ func (l *Library) set(f *feed, st State) {
 func (st State) Says() string {
 	switch st.Status {
 	case Off:
-		return say.T("photos.status.off")
+		return say.T("common.states.off")
 	case Connecting:
-		return say.T("photos.status.connecting")
+		return say.T("common.states.connecting")
 	case Ready:
-		return say.T("photos.status.ready")
+		return say.T("common.states.connected")
 	case BadKey:
 		return say.T("photos.status.key")
 	case TooOld:
@@ -474,7 +474,7 @@ func (st State) Says() string {
 	case NoPermission:
 		return say.F("photos.status.permission", map[string]any{"Name": st.Missing})
 	}
-	return say.T("photos.status.unset")
+	return say.T("common.states.unset")
 }
 
 func (l *Library) forget(gone entry) {

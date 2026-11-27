@@ -7,6 +7,13 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/display/ui"
 )
 
+func ScrollID(w *gogui.Window, leaf string) string {
+	if ids := w.ResolveID(leaf); len(ids) > 0 {
+		return ids[0]
+	}
+	return leaf
+}
+
 type LivePreview struct{ feed shell.Feed }
 
 func (p *LivePreview) View(w *gogui.Window, watch func(ui.Rect) shell.Feed) gogui.View {

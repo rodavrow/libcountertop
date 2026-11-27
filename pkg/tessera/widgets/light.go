@@ -74,7 +74,7 @@ func (v *View) lightBody(
 			},
 		}
 		x := v.held(d, now)
-		says := say.T("tessera.light.waiting")
+		says := say.T("common.states.waiting")
 		if ready {
 			says = strconv.Itoa(int(math.Round(lo+x*(hi-lo)))) + " K"
 		}
@@ -162,11 +162,12 @@ func (v *View) colorWheel(
 	h, s := v.held(hueDial, now), v.held(satDial, now)
 	reach := style.Reach()
 	size := min(width*0.7, reach*8)
+	marker := reach * 0.55
 	wheel := gogui.ColorWheel(gogui.ColorWheelCfg{
 		ID:            "tessera-wheel",
 		Value:         gogui.HSLA{H: float32(h * 360), S: float32(s), L: 0.5, A: 1},
-		Size:          size,
-		MarkerSize:    reach * 0.55,
+		Size:          size - marker,
+		MarkerSize:    marker,
 		FocusDisabled: true,
 		OnChange: func(c gogui.HSLA, ev gogui.EventCtx) {
 			if !e.Available {

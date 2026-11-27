@@ -45,6 +45,7 @@ type Shared struct {
 	Weather    Weather    `json:"weather"`
 
 	YouTubeAccounts YouTubeAccounts `json:"youtube_accounts,omitzero"`
+	Plex            Plex            `json:"plex,omitzero"`
 }
 
 func DefaultShared() Shared {
@@ -146,6 +147,7 @@ type Sections[C any] struct {
 	Weather    storage.Binding[C, Weather]
 
 	YouTubeAccounts storage.Binding[C, YouTubeAccounts]
+	Plex            storage.Binding[C, Plex]
 }
 
 func NewSections[C any](store func() *storage.Store[C], shared func(*C) *Shared) Sections[C] {
@@ -199,6 +201,7 @@ func NewSections[C any](store func() *storage.Store[C], shared func(*C) *Shared)
 			shared,
 			func(s *Shared) *YouTubeAccounts { return &s.YouTubeAccounts },
 		),
+		Plex: bind(store, shared, func(s *Shared) *Plex { return &s.Plex }),
 	}
 }
 

@@ -41,6 +41,17 @@ type Alarm struct {
 	Light  time.Duration
 }
 
+func Default() Alarm {
+	return Alarm{
+		Hour:   7,
+		On:     true,
+		Sound:  schema.ChimeTimer,
+		Snooze: 9 * time.Minute,
+		Volume: VolumeGentle,
+		Ramp:   time.Minute,
+	}
+}
+
 func (a Alarm) Clock() string { return fmt.Sprintf("%02d:%02d", a.Hour, a.Minute) }
 
 func (a Alarm) Once() bool { return len(a.Days) == 0 }

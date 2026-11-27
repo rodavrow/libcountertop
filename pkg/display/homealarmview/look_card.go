@@ -165,9 +165,9 @@ func cardLook(f *face) (gogui.View, skin) {
 		))
 	}
 	for _, t := range f.dev.Toggles {
-		value := say.T("homealarm.off")
+		value := say.T("common.states.off")
 		if t.On {
-			value = say.T("homealarm.on")
+			value = say.T("common.states.on")
 		}
 		side = append(
 			side,

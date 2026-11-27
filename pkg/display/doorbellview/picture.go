@@ -18,7 +18,12 @@ import (
 type pictures struct {
 	mu    sync.Mutex
 	gen   uint64
-	shown map[string]message.Picture
+	shown map[string]kept
+}
+
+type kept struct {
+	pic message.Picture
+	key string
 }
 
 func (p *pictures) keep(name string, jpeg []byte, most int) (message.Picture, bool) {
@@ -33,7 +38,7 @@ func (p *pictures) keepImage(name string, rgba *image.RGBA) message.Picture {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	if p.shown == nil {
-		p.shown = map[string]message.Picture{}
+		p.shown = map[string]kept{}
 	}
 	p.gen++
 	key := fmt.Sprintf("doorbell/%s/%d", name, p.gen)
@@ -43,25 +48,25 @@ func (p *pictures) keepImage(name string, rgba *image.RGBA) message.Picture {
 		Height: rgba.Rect.Dy(),
 	}
 	if old, ok := p.shown[name]; ok {
-		gogui.DropImage(old.Src)
+		gogui.DropImage(old.key)
 	}
-	p.shown[name] = pic
+	p.shown[name] = kept{pic: pic, key: key}
 	return pic
 }
 
 func (p *pictures) get(name string) (message.Picture, bool) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	pic, ok := p.shown[name]
-	return pic, ok
+	k, ok := p.shown[name]
+	return k.pic, ok
 }
 
 func (p *pictures) prune(prefix string, keep map[string]bool) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	for name, pic := range p.shown {
+	for name, k := range p.shown {
 		if strings.HasPrefix(name, prefix) && !keep[name] {
-			gogui.DropImage(pic.Src)
+			gogui.DropImage(k.key)
 			delete(p.shown, name)
 		}
 	}

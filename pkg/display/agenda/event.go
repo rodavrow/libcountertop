@@ -99,7 +99,7 @@ func (a *Agenda) add(start time.Time) {
 	page := &shell.Page{Title: say.T("calendar.add")}
 	page.Build = func() ([]menu.Row, []func(int)) { return a.form(d) }
 	page.Actions = []shell.Action{{
-		Label: say.T("calendar.save"),
+		Label: say.T("common.actions.save"),
 		Glyph: "mdi:content-save-outline",
 		Do:    func() { a.save(d) },
 	}}

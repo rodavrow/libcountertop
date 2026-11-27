@@ -196,7 +196,7 @@ func (r *Radar) build(w *gogui.Window) gogui.View {
 			})))
 			r.o.Again(w, time.Second)
 		} else {
-			layers = append(layers, widgets.Placed(box, widgets.Spinner(vw, vh, time.Since(start))))
+			layers = append(layers, widgets.Placed(box, widgets.Spinner(vw, vh)))
 			r.o.Again(w, widgets.SpinStep)
 		}
 	}

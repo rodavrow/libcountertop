@@ -1,6 +1,11 @@
 package schema
 
-import "testing"
+import (
+	"testing"
+	"time"
+
+	"github.com/ygelfand/libcountertop/pkg/say"
+)
 
 func TestCalendarSlotsSkipPickedColors(t *testing.T) {
 	c := Calendar{
@@ -54,6 +59,26 @@ func TestCalendarOpensOnTheChosenView(t *testing.T) {
 	} {
 		if got := c.cfg.Opens(); got != c.want {
 			t.Errorf("%+v opens %s, want %s", c.cfg, got, c.want)
+		}
+	}
+}
+
+func TestCalendarWeekStartsOnTheChosenDay(t *testing.T) {
+	defer say.Use("en")
+	for _, c := range []struct {
+		lang  string
+		start CalendarWeekStart
+		want  time.Weekday
+	}{
+		{"en", "", time.Sunday},
+		{"en", WeekStartAuto, time.Sunday},
+		{"en", WeekStartMonday, time.Monday},
+		{"de", WeekStartAuto, time.Monday},
+		{"de", WeekStartSunday, time.Sunday},
+	} {
+		say.Use(c.lang)
+		if got := (Calendar{WeekStart: c.start}).FirstWeekday(); got != c.want {
+			t.Errorf("%s with week start %q starts on %s, want %s", c.lang, c.start, got, c.want)
 		}
 	}
 }

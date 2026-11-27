@@ -204,7 +204,7 @@ func (p *AssistantPages) Listening(slot int) string {
 	if id := p.options.Preferences.Wake.Read().Slot(slot).ID; id != "" {
 		return wake.Pick(p.options.Models(), id).Phrase
 	}
-	return say.T("assistants.off")
+	return say.T("common.states.off")
 }
 
 func (p *AssistantPages) Hearing(slot int) string {
@@ -223,7 +223,7 @@ func (p *AssistantPages) Hearing(slot int) string {
 
 func arbitrationRows(a arbitration.Setting) ([]menu.Row, []func(int)) {
 	now := a.Read()
-	waitValue := say.T("assistants.off")
+	waitValue := say.T("common.states.off")
 	if now.Arbitration > 0 {
 		waitValue = say.F("assistants.arbitration.value", map[string]any{"N": now.Arbitration})
 	}
@@ -445,7 +445,7 @@ func (p *AssistantPages) Word(slot int) *shell.Page {
 			if now != "" {
 				current = p.Listening(slot)
 			}
-			rows := []menu.Row{{Label: say.T("assistants.off"), Chosen: current == ""}}
+			rows := []menu.Row{{Label: say.T("common.states.off"), Chosen: current == ""}}
 			acts := []func(int){p.UseWord(slot, "")}
 			for _, phrase := range p.options.Phrases() {
 				rows = append(rows, menu.Row{Label: phrase, Chosen: phrase == current})
@@ -514,7 +514,7 @@ func (p *AssistantPages) Phrases() string {
 		}
 	}
 	if len(names) == 0 {
-		return say.T("assistants.off")
+		return say.T("common.states.off")
 	}
 	return strings.Join(names, ", ")
 }

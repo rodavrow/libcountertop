@@ -368,7 +368,7 @@ func (f *face) problem() string {
 	case !f.st.Known():
 		return say.T("thermostat.waiting")
 	case !f.st.Available():
-		return say.T("thermostat.unavailable")
+		return say.T("common.states.unavailable")
 	}
 	return ""
 }
@@ -388,7 +388,7 @@ func (f *face) action() string {
 		return say.T("thermostat.action.fan")
 	}
 	if f.st.Mode == thermostat.Off {
-		return say.T("thermostat.action.off")
+		return say.T("common.states.off")
 	}
 	return say.T("thermostat.action.idle")
 }

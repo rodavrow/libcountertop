@@ -748,7 +748,7 @@ func (c *Cameras) showLive(id string, img *image.RGBA) {
 func (c *Cameras) buildLive(w *gogui.Window) gogui.View {
 	vw, vh := w.WindowSize()
 	c.mu.Lock()
-	f, id, began, video, audible, why := c.liveShot, c.watching, c.liveBegan, c.video, c.audible, c.why
+	f, id, video, audible, why := c.liveShot, c.watching, c.video, c.audible, c.why
 	thumb, zoom := c.frames[id], c.zoom
 	c.mu.Unlock()
 	if video != nil {
@@ -787,7 +787,7 @@ func (c *Cameras) buildLive(w *gogui.Window) gogui.View {
 	}
 	if video == nil && f.src == "" && why == "" {
 		content = append(content,
-			widgets.Placed(ui.Rect{W: vw, H: vh}, widgets.Spinner(vw, vh, time.Since(began))))
+			widgets.Placed(ui.Rect{W: vw, H: vh}, widgets.Spinner(vw, vh)))
 		c.spinAgain(w)
 	}
 	level := c.o.Shell.Controls()
@@ -1130,7 +1130,7 @@ func abs(n int) int {
 
 func seconds(n int) string {
 	if n == 0 {
-		return say.T("cameras.off")
+		return say.T("common.states.off")
 	}
 	return say.F("cameras.seconds", map[string]any{"N": n})
 }

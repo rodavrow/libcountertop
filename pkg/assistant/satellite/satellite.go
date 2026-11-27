@@ -9,6 +9,7 @@ import (
 	"google.golang.org/protobuf/proto"
 
 	"github.com/ygelfand/libcountertop/pkg/assistant/turn"
+	"github.com/ygelfand/libcountertop/pkg/inference/wake"
 	"github.com/ygelfand/libcountertop/pkg/inference/wakeslots"
 	"github.com/ygelfand/libcountertop/pkg/runtime/safe"
 )
@@ -18,7 +19,8 @@ const Features = esphome.DefaultVoiceFeatures |
 	esphome.FeatureSpeaker |
 	esphome.FeatureAnnounce |
 	esphome.FeatureStartConversation |
-	esphome.FeatureTimers
+	esphome.FeatureTimers |
+	esphome.FeatureWakeWordAudio
 
 type Timers interface {
 	Event(esphome.TimerEvent)
@@ -73,11 +75,6 @@ func New(vs *esphome.VoiceSatellite, deps turn.Dependencies, options Options) *S
 	}
 
 	vs.OnTimer = options.Timers.Event
-	vs.OnSubscribed = func(subscribed bool) {
-		if !subscribed {
-			options.Timers.Forget()
-		}
-	}
 	return s
 }
 
@@ -89,7 +86,13 @@ func (s *Satellite) Handle(ctx context.Context, c *esphome.Conn, msg proto.Messa
 	return s.vs.Handle(ctx, c, msg)
 }
 
-func (s *Satellite) ConnClosed(c *esphome.Conn) { s.vs.ConnClosed(c) }
+func (s *Satellite) ConnClosed(c *esphome.Conn) {
+	held := s.vs.Subscribed()
+	s.vs.ConnClosed(c)
+	if held && !s.vs.Subscribed() {
+		s.options.Timers.Forget()
+	}
+}
 
 func (s *Satellite) Run(ctx context.Context) error {
 	s.turn.Run(ctx)
@@ -102,7 +105,7 @@ func (s *Satellite) Turn() *turn.Conversation { return s.turn }
 
 func (s *Satellite) Start(slot int) { s.turn.Start(slot) }
 
-func (s *Satellite) Heard(slot int) { s.turn.Heard(slot) }
+func (s *Satellite) Heard(d wake.Detection) { s.turn.Heard(d) }
 
 func (s *Satellite) AfterTurn(fn func()) {
 	var (

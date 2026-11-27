@@ -30,7 +30,7 @@ func (s *source) Picture(context.Context, string) (image.Image, error) {
 
 func TestInitialsTakeTheFirstTwoWords(t *testing.T) {
 	for name, want := range map[string]string{
-		"Yuri":           "Y",
+		"Alex":           "A",
 		"Mary Ann Smith": "MA",
 		"  beth ":        "B",
 		"":               "",
@@ -42,7 +42,7 @@ func TestInitialsTakeTheFirstTwoWords(t *testing.T) {
 }
 
 func TestAPictureIsFetchedOnceUntilItsPathChanges(t *testing.T) {
-	src := &source{people: []Person{{ID: "person.yuri", Name: "Yuri", Picture: "/a"}}}
+	src := &source{people: []Person{{ID: "person.alex", Name: "Alex", Picture: "/a"}}}
 	done := make(chan struct{}, 4)
 	b := NewBook(src, func() { done <- struct{}{} })
 	for range 2 {
@@ -56,7 +56,7 @@ func TestAPictureIsFetchedOnceUntilItsPathChanges(t *testing.T) {
 	if n := src.fetched.Load(); n != 1 {
 		t.Errorf("fetched %d times for an unchanged path, want 1", n)
 	}
-	src.people = []Person{{ID: "person.yuri", Name: "Yuri", Picture: "/b"}}
+	src.people = []Person{{ID: "person.alex", Name: "Alex", Picture: "/b"}}
 	b.Refresh()
 	<-done
 	if n := src.fetched.Load(); n != 2 {
@@ -78,7 +78,7 @@ func (f *flaky) Picture(ctx context.Context, path string) (image.Image, error) {
 
 func TestAFailedPictureIsRetriedOnTheNextLook(t *testing.T) {
 	src := &flaky{
-		source: source{people: []Person{{ID: "person.yuri", Name: "Yuri", Picture: "/a"}}},
+		source: source{people: []Person{{ID: "person.alex", Name: "Alex", Picture: "/a"}}},
 	}
 	src.fail.Store(true)
 	done := make(chan struct{}, 4)

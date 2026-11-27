@@ -121,7 +121,7 @@ func (c *Calls) incoming(m envelope, p discovery.Peer, l line) int {
 			c.tone(schema.ChimeDing, schema.ChimeDing),
 		)
 		if c.options.Messages != nil {
-			c.options.Messages.Info(p.Name, say.T("call.connected"), noticeFor)
+			c.options.Messages.Info(p.Name, say.T("common.states.connected"), noticeFor)
 		}
 		c.Answer()
 		return http.StatusAccepted

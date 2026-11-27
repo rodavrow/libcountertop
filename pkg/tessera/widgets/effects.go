@@ -127,7 +127,7 @@ func (v *View) namesBody(
 	}
 	names, ok := screen.Names(s.pick)
 	if !ok {
-		return []gogui.View{gogui.Label(say.T("tessera.light.waiting"), secondary())}
+		return []gogui.View{gogui.Label(say.T("common.states.waiting"), secondary())}
 	}
 	current := t.Text("effect")
 	action, field := "light.turn_on", "effect"

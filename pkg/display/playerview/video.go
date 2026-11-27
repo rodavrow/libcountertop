@@ -70,7 +70,7 @@ func (pv *Renderer) Video(w *gogui.Window, p *videoplayer.Page) gogui.View {
 				0,
 				float32(vw),
 				float32(vh),
-				widgets.Spinner(vw, vh, time.Since(look.Began)),
+				widgets.Spinner(vw, vh),
 			),
 		)
 	}

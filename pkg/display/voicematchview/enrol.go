@@ -96,12 +96,12 @@ func (v *View) heading(p voicematch.Progress, pal theme.Theme) []gogui.View {
 func (v *View) outcome(p voicematch.Progress) (shell.Busy, bool) {
 	cancel := shell.BusyButton{
 		ID:    "voicematch-cancel",
-		Label: say.T("voicematch.cancel"),
+		Label: say.T("common.actions.cancel"),
 		Do:    v.o.Shell.Pop,
 	}
 	again := shell.BusyButton{
 		ID:      "voicematch-again",
-		Label:   say.T("voicematch.again"),
+		Label:   say.T("common.actions.retry"),
 		Primary: true,
 		Do:      v.again,
 	}
@@ -150,7 +150,7 @@ func (v *View) footer(w *gogui.Window, p voicematch.Progress, pal theme.Theme) [
 	return []gogui.View{
 		dots(p.Step, pal, float32(min(w.WindowSize()))),
 		gogui.Label(statusText(p.Step), status),
-		v.key(w, "voicematch-cancel", say.T("voicematch.cancel"), false, pal, v.o.Shell.Pop),
+		v.key(w, "voicematch-cancel", say.T("common.actions.cancel"), false, pal, v.o.Shell.Pop),
 	}
 }
 

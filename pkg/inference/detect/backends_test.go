@@ -49,8 +49,8 @@ func TestSlotsOfDifferentKindsBothRun(t *testing.T) {
 	made := fakes(t)
 	e := New(2, nil)
 
-	fired := make(chan int, 2)
-	e.OnDetect = func(slot int) { fired <- slot }
+	fired := make(chan wake.Detection, 2)
+	e.OnDetect = func(d wake.Detection) { fired <- d }
 
 	if err := e.Use(0, model("glados", wake.KindOpenWakeWord)); err != nil {
 		t.Fatalf("Use(0): %v", err)
@@ -73,16 +73,16 @@ func TestSlotsOfDifferentKindsBothRun(t *testing.T) {
 	}
 
 	select {
-	case slot := <-fired:
-		if slot != 1 {
-			t.Errorf("slot %d fired, want 1", slot+1)
+	case d := <-fired:
+		if d.Slot != 1 || d.Score != 0.99 || d.Cutoff != wake.DefaultThreshold {
+			t.Errorf("detection %+v, want slot 1 scoring 0.99 against %v", d, wake.DefaultThreshold)
 		}
 	case <-time.After(2 * time.Second):
 		t.Fatal("nothing fired")
 	}
 	select {
-	case slot := <-fired:
-		t.Errorf("slot %d fired too, want only the one over its threshold", slot+1)
+	case d := <-fired:
+		t.Errorf("slot %d fired too, want only the one over its threshold", d.Slot+1)
 	case <-time.After(100 * time.Millisecond):
 	}
 }
@@ -151,8 +151,8 @@ func TestOnePryonWordInTwoSlotsLoadsTwice(t *testing.T) {
 	e := New(2, nil)
 	e.backends[wake.KindPryon] = f
 
-	fired := make(chan int, 2)
-	e.OnDetect = func(slot int) { fired <- slot }
+	fired := make(chan wake.Detection, 2)
+	e.OnDetect = func(d wake.Detection) { fired <- d }
 
 	for slot := range 2 {
 		if err := e.Use(slot, model("en-US/ALEXA", wake.KindPryon)); err != nil {
@@ -166,16 +166,16 @@ func TestOnePryonWordInTwoSlotsLoadsTwice(t *testing.T) {
 	f.loaded[e.slots[1].key] = 0.3
 	e.score([]int16{0})
 	select {
-	case slot := <-fired:
-		if slot != 1 {
-			t.Errorf("slot %d fired, want 2", slot+1)
+	case d := <-fired:
+		if d.Slot != 1 || d.Score != 0.3 || d.Cutoff != 0 {
+			t.Errorf("detection %+v, want slot 2 scoring 0.3 with no cutoff", d)
 		}
 	case <-time.After(2 * time.Second):
 		t.Fatal("nothing fired")
 	}
 	select {
-	case slot := <-fired:
-		t.Errorf("slot %d fired too, want only the slot whose decoder accepted", slot+1)
+	case d := <-fired:
+		t.Errorf("slot %d fired too, want only the slot whose decoder accepted", d.Slot+1)
 	case <-time.After(100 * time.Millisecond):
 	}
 

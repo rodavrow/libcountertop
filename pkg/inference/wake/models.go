@@ -31,6 +31,12 @@ const (
 	KindGemini        Kind = "gemini"
 )
 
+type Detection struct {
+	Slot   int
+	Score  float64
+	Cutoff float64
+}
+
 type Model struct {
 	ID string
 

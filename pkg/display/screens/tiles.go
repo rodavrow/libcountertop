@@ -171,13 +171,13 @@ func cell(width, gap float32, n int) float32 {
 func deviceStatus(t homecontrol.Tile) string {
 	switch {
 	case !t.Available:
-		return say.T("home.tile.unavailable")
+		return say.T("common.states.unavailable")
 	case t.On && t.Level >= 0:
 		return say.F("home.tile.level", map[string]any{"N": t.Level})
 	case t.On:
-		return say.T("home.tile.on")
+		return say.T("common.states.on")
 	}
-	return say.T("home.tile.off")
+	return say.T("common.states.off")
 }
 
 func (app *App) chip(

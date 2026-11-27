@@ -318,7 +318,7 @@ func (t *Tuner) browse(w *gogui.Window, f *folder) gogui.View {
 				nil,
 				false,
 			),
-			ui.Row("retry", page, menu.Row{Label: say.T("home.retry")},
+			ui.Row("retry", page, menu.Row{Label: say.T("common.actions.retry")},
 				func(int) { t.o.Radio.Refresh(f.id) }, false),
 		)
 	case len(p.Items) == 0:

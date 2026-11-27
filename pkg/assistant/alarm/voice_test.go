@@ -7,6 +7,7 @@ import (
 
 	esphome "github.com/ygelfand/go-esphome-device"
 
+	"github.com/ygelfand/libcountertop/pkg/audio/tone"
 	"github.com/ygelfand/libcountertop/pkg/say"
 )
 
@@ -65,8 +66,22 @@ func TestVoiceCreatesAndPersistsAlarms(t *testing.T) {
 	al := alarms[0]
 	if al.Name != "Work" || al.Hour != 7 || al.Minute != 30 || !al.On ||
 		al.Days.String() != "mon,tue,wed,thu,fri" ||
-		al.Snooze != 5*time.Minute {
+		al.Snooze != Default().Snooze || al.Volume != Default().Volume ||
+		al.Sound != Default().Sound {
 		t.Fatalf("alarm = %+v", al)
+	}
+	if len(tone.Wake(al.Sound)) == 0 {
+		t.Fatalf("sound %q plays nothing", al.Sound)
+	}
+}
+
+func TestAlarmSetWithoutSoundRingsTheDefault(t *testing.T) {
+	al, err := fromCall(voiceCall(t, map[string]string{"time": "06:30"}))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if al.Sound != Default().Sound {
+		t.Fatalf("sound = %q, want %q", al.Sound, Default().Sound)
 	}
 }
 

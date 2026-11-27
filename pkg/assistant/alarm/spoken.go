@@ -90,4 +90,4 @@ func spokenDayNames(w Weekdays) string {
 	return strings.Join(names, ", ")
 }
 
-func spokenDay(d time.Weekday) string { return say.Speak("alarm.day." + dayNames[d]) }
+func spokenDay(d time.Weekday) string { return say.Speak("common.day." + dayNames[d]) }

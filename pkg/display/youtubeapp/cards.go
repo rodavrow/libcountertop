@@ -177,16 +177,13 @@ func (a *App) starting(v youtube.Video, width, height float32) []gogui.View {
 			a.redraw()
 		})
 	}
-	a.mu.Lock()
-	since := time.Since(a.began)
-	a.mu.Unlock()
 	return []gogui.View{gogui.Column(gogui.ContainerCfg{
 		Width:   width,
 		Height:  height,
 		Sizing:  gogui.FixedFixed,
 		Padding: gogui.NoPadding,
 		Color:   shade,
-		Content: []gogui.View{widgets.Spinner(int(width), int(height), since)},
+		Content: []gogui.View{widgets.Spinner(int(width), int(height))},
 	})}
 }
 

@@ -248,7 +248,7 @@ func (v *View) hub(
 		add(say.T("home.loading"), title)
 	case err != nil:
 		add(say.T("home.failed"), title)
-		add(say.T("home.retry"), small)
+		add(say.T("common.actions.retry"), small)
 	case len(segs) == 0 || segs[0].ring.Devices == 0:
 		add(say.T("home.empty"), title)
 	default:

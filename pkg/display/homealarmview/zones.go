@@ -96,9 +96,9 @@ func (f *face) counts() (secure, open int) {
 func (f *face) toggles() []action {
 	out := make([]action, 0, len(f.dev.Toggles))
 	for _, t := range f.dev.Toggles {
-		state := say.T("homealarm.off")
+		state := say.T("common.states.off")
 		if t.On {
-			state = say.T("homealarm.on")
+			state = say.T("common.states.on")
 		}
 		out = append(out, action{
 			id:      "toggle-" + t.Entity,

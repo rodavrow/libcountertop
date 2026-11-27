@@ -129,6 +129,10 @@ func fromCall(c esphome.Call) (Alarm, error) {
 	if volume == "" {
 		volume = VolumeStatic
 	}
+	sound := schema.Chime(c.String("sound"))
+	if sound == "" {
+		sound = Default().Sound
+	}
 	return Alarm{
 		ID:     c.String("id"),
 		Name:   c.String("name"),
@@ -136,7 +140,7 @@ func fromCall(c esphome.Call) (Alarm, error) {
 		Minute: minute,
 		Days:   days,
 		On:     c.Bool("enabled"),
-		Sound:  schema.Chime(c.String("sound")),
+		Sound:  sound,
 		Snooze: time.Duration(c.Int("snooze_minutes")) * time.Minute,
 		Volume: volume,
 		Ramp:   time.Duration(c.Int("ramp_seconds")) * time.Second,

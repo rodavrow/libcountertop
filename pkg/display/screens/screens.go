@@ -64,7 +64,6 @@ var esphomeLogo string
 const (
 	layerID    = 60
 	layerZ     = 5
-	busyZ      = 1000
 	helperWait = 200 * time.Millisecond
 )
 

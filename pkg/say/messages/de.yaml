@@ -145,14 +145,6 @@ alarm:
   add: Wecker hinzufügen
   app: Wecker
   daily: Jeden Tag
-  day:
-    fri: Freitag
-    mon: Montag
-    sat: Samstag
-    sun: Sonntag
-    thu: Donnerstag
-    tue: Dienstag
-    wed: Mittwoch
   delete: Wecker löschen
   edit: Wecker
   hour: Stunde
@@ -160,20 +152,15 @@ alarm:
   minute: Minute
   minutes: '{{.N}} Min.'
   name: Name
-  'off': Aus
   'on': Wecker an
   once: Einmalig
   ramp: Sanfter Start
   repeat: Wiederholen
-  save: Speichern
   seconds: '{{.N}} s'
   snooze: Schlummern
   snooze_for: '{{.N}} Min. schlummern'
   snoozed: Pausiert bis {{.T}}
   sound: Ton
-  state:
-    'off': Aus
-    'on': An
   stop: Stopp
   volume:
     _: Lautstärke
@@ -245,7 +232,6 @@ assistants:
     gemini: Gemini
     pryon: Pryon
     stopword: Stoppwort
-  'off': Aus
   pipeline:
     _: Pipeline
     preferred: Bevorzugt
@@ -381,14 +367,12 @@ calendar:
     title: Titel eingeben
   none: Keine Kalender in Home Assistant
   notes: Notizen
-  'off': Aus
   opening:
     day: Tag
     last: Zuletzt verwendet
     month: Monat
     week: Woche
   pick: Kalender wählen
-  save: Speichern
   setting:
     colors:
       _: Kalenderfarben
@@ -403,6 +387,9 @@ calendar:
     weather:
       _: Wetter an Tagen
       help: Zeigt die Tagesvorhersage an Kalendertagen
+    week_start:
+      _: Erster Wochentag
+      help: Tag, mit dem Wochen- und Monatsansicht beginnen
   title: Titel
   today: Heute
   tomorrow: Morgen
@@ -412,6 +399,8 @@ calendar:
     week: Woche
   week:
     start: monday
+  week_start:
+    auto: Automatisch
 call:
   address: Adresse
   answer:
@@ -431,7 +420,6 @@ call:
     'off': Kamera aus
     'on': Kamera an
   caps: Kann
-  connected: Verbunden
   declined: Abgelehnt
   dropped: Anruf abgebrochen
   empty: Keine anderen Geräte gefunden
@@ -662,7 +650,6 @@ cameras:
   loading: Kameras werden geladen
   none: Keine Kameras ausgewählt
   nosite: Die Adresse von Home Assistant ist unbekannt. Lege die Home-Assistant-URL unter Einstellungen → Hausteuerung → Kameras fest
-  'off': Aus
   pick: Auswählen
   seconds: '{{.N}} s'
   setting:
@@ -695,7 +682,6 @@ card:
   light:
     brightness: Helligkeit
     hue: Farbe
-    waiting: Warten
     warmth: Farbtemperatur
   lock:
     lock: Verriegeln
@@ -808,6 +794,27 @@ clock:
       help: Größe der Dashboard-Uhr, von Nano bis Groß, als Anteil ihrer Fläche
   title: Uhr
   zone: Zeitzone
+common:
+  actions:
+    cancel: Abbrechen
+    retry: Erneut versuchen
+    save: Speichern
+  day:
+    fri: Freitag
+    mon: Montag
+    sat: Samstag
+    sun: Sonntag
+    thu: Donnerstag
+    tue: Dienstag
+    wed: Mittwoch
+  states:
+    connected: Verbunden
+    connecting: Verbindet…
+    'off': Aus
+    'on': An
+    unavailable: Nicht verfügbar
+    unset: Nicht eingerichtet
+    waiting: Warten
 controls:
   dock:
     _: Dock-Position
@@ -894,11 +901,9 @@ doorbell:
       hint: Eine Home-Assistant-Kamera, die diese Tür zeigt
     title: Home-Assistant-Kamera
   cameras: '{{.N}} Kameras'
-  cancel: Abbrechen
   channel: Kanal {{.N}}
   checking: Wird geprüft…
   connect: Verbinden
-  connecting: Verbindet…
   entity:
     chime: Klingelton der Türklingel
     door:
@@ -946,8 +951,6 @@ doorbell:
   none: Keine Türklingeln eingerichtet
   notsaved: Nicht gespeichert
   offline: Offline
-  ok: OK
-  save: Speichern
   saved: Gespeichert
   sensor:
     animal: Tiersensor
@@ -1002,14 +1005,11 @@ doorbell:
     reolink: Reolink
     rtsp: RTSP
   status:
-    connected: Verbunden
-    connecting: Verbindet…
     events: Ereignisse
     login: Falscher Benutzer oder falsches Passwort
     none: Keine Türklingeln in Home Assistant
     ready: '{{.Count}} verbunden'
     unreachable: Türklingeln nicht erreichbar
-    unset: Nicht eingerichtet
     unsupported: Von dieser Quelle nicht verfügbar
     video: Video
   stream:
@@ -1072,6 +1072,9 @@ features:
   mealie:
     _: Mealie
     hint: Rezepte und Kochmodus
+  plex:
+    _: Plex
+    hint: Anmeldung, Profil und Server
   proxy:
     _: Bluetooth-Proxy
     hint: Bluetooth-LE-Proxy für Home Assistant
@@ -1163,7 +1166,6 @@ home:
   refused:
     _: Aktionen nicht erlaubt
     hint: Öffne ESPHome, tippe auf das Einstellungszahnrad bei {{.Name}} und aktiviere „Allow the device to perform Home Assistant actions“.
-  retry: Erneut versuchen
   saver:
     _: Bildschirmschoner
     'off': Schalte Auto-Standby in den Bildschirmeinstellungen von Tessera ein, um dessen Bildschirmschoner zu nutzen
@@ -1269,9 +1271,6 @@ home:
       'on': Alle an
     area: '{{.N}} von {{.Of}} an'
     level: '{{.N}} %'
-    'off': Aus
-    'on': An
-    unavailable: Nicht verfügbar
   title: Haussteuerung
   unconnected:
     _: Nicht verbunden
@@ -1287,7 +1286,6 @@ homealarm:
     sheet: Blatt
     time: Zeit
     type: Typ
-  cancel: Abbrechen
   chip:
     alarm: Alarm
     armed: Scharf
@@ -1369,9 +1367,7 @@ homealarm:
   notready:
     many: 'Nicht bereit: {{.N}} Zonen offen'
     one: 'Nicht bereit: {{.Zone}} offen'
-  'off': Aus
   ok: OK
-  'on': An
   panic: Panik
   pick: Eins wählen
   plate:
@@ -1570,7 +1566,6 @@ ink:
   theme: Design
   violet: Violett
 keyboard:
-  cancel: Abbrechen
   code_expired: Code abgelaufen
   compact: Kompakt
   enter: Eingabe
@@ -1578,7 +1573,6 @@ keyboard:
   hide: Ausblenden
   large: Groß
   refresh: Aktualisieren
-  save: Speichern
   search: Suchen
   size: Tastaturgröße
   standard: Standard
@@ -1596,8 +1590,6 @@ lock:
   mismatch: Die PINs stimmen nicht überein. Gib eine neue PIN ein
   new: Gib eine neue PIN mit 4 bis 8 Ziffern ein
   next: Weiter
-  'off': Aus
-  'on': An
   set: PIN festlegen
   title: Einstellungen
   wait: Erneut versuchen in {{.Seconds}} s
@@ -1962,16 +1954,12 @@ photos:
   sources: Quellen
   status:
     _: Status
-    connecting: Verbindet…
     empty: Keine passenden Fotos
     key: Falscher API-Schlüssel
-    'off': Aus
     old: 'Immich {{.Version}}: erfordert 3.2 oder neuer'
     permission: API-Schlüssel braucht {{.Name}}
-    ready: Verbunden
     unknown: Nichts namens {{.Name}}
     unreachable: Server nicht erreichbar
-    unset: Nicht eingerichtet
 phototransition:
   cut: Keiner
   dissolve: Auflösen
@@ -1992,6 +1980,65 @@ player:
   next: Als Nächstes
   none: Nichts
   now: Läuft gerade
+plex:
+  app: Plex
+  asking: Anmeldecode wird geholt…
+  cantplay: Das kann hier nicht abgespielt werden
+  connecting: Verbindung zu Plex…
+  empty: Hier ist noch nichts
+  episode: S{{.S}} E{{.E}}
+  episodes: '{{.N}} Folgen'
+  fromstart: Von vorn abspielen
+  home: Start
+  hours: '{{.N}} Std.'
+  hours_minutes: '{{.H}} Std. {{.M}} Min.'
+  categories: Kategorien
+  library: Mediathek
+  mark_unwatched: Als ungesehen markieren
+  mark_watched: Als gesehen markieren
+  minutes: '{{.N}} Min.'
+  nothing: Nichts gefunden
+  recommended: Empfohlen
+  see_all: Alle anzeigen
+  shuffle: Zufällig
+  sort: 'Sortieren: {{.Name}}'
+  subtitles: 'Untertitel: {{.Name}}'
+  titles: '{{.N}} Titel'
+  unwatched_only: Ungesehen
+  pin:
+    _: PIN für {{.Name}} eingeben
+    wrong: Falsche PIN, bitte erneut
+  play: Abspielen
+  profile:
+    switch: Profil wechseln
+  refused: Plex hat dieses Gerät abgemeldet
+  resume: Fortsetzen ab {{.Time}}
+  search:
+    _: Suche
+    hint: Filme, Serien und Musik suchen
+  signin:
+    _: Anmelden
+    again: Neuen Code holen
+    expired: Der Code ist abgelaufen
+    failed: Plex ist zum Anmelden nicht erreichbar
+    enter: und gib ein
+    go: Gehe auf deinem Telefon oder Computer zu
+    hint: Melde dich mit deinem Plex-Konto an, um deine Mediatheken hier anzusehen
+    title: Bei Plex anmelden
+    waiting: Warte auf Bestätigung…
+  signout: Abmelden
+  status:
+    _: Status
+    choosing: Profil wird gewählt
+    connecting: Verbinde…
+    ready: Verbunden
+    refused: Von Plex abgemeldet
+    signedout: Nicht angemeldet
+    signing: Anmeldung…
+    unreachable: Server nicht erreichbar
+  unreachable: Dein Plex-Server ist nicht erreichbar
+  unwatched: '{{.N}} ungesehen'
+  who: Wer schaut?
 position:
   bottom: Unten
   center: Mitte
@@ -2009,7 +2056,6 @@ poster:
     poster: Hintergrundbild
   hourly: Stündlich
   never: Nie
-  'off': Aus
   setting:
     every:
       _: Wechseln alle
@@ -2502,7 +2548,6 @@ tessera:
     effects: Effekte
     hue: Farbe
     lamps: Lampen
-    waiting: Warten
     warmth: Farbtemperatur
   lock:
     jammed: Blockiert
@@ -2589,7 +2634,6 @@ thermostat:
     fan: Lüfter
     heating: Heizt
     idle: Ruhe
-    'off': Aus
   app: Thermostat
   between: Hält zwischen
   choose:
@@ -2647,7 +2691,6 @@ thermostat:
     'off': Aus
   no-preset: Keine Voreinstellung
   none: Keine Thermostate gewählt
-  'off': Aus
   out: Außen
   outside: Außen
   preset:
@@ -2676,7 +2719,6 @@ thermostat:
   target: Ziel
   temp: Temp.
   temperature: Temperatur
-  unavailable: Nicht verfügbar
   waiting: Warte auf Home Assistant
 timer:
   stop: Stopp
@@ -2697,7 +2739,6 @@ todo:
     todo: Einkaufsliste
   lists: '{{.Count}} Listen'
   none: Keine To-do-Listen in Home Assistant
-  'off': Aus
   pick: Wähle eine Liste unter Einstellungen → Haussteuerung → Einkaufsliste
   setting:
     completed:
@@ -2891,8 +2932,6 @@ voice:
 voicematch:
   accept: Übernehmen
   add: Stimme hinzufügen
-  again: Erneut versuchen
-  cancel: Abbrechen
   done: Voice Match ist für {{.Name}} bereit
   failed: Voice Match konnte nicht eingerichtet werden
   finish: Fertig
@@ -2969,7 +3008,6 @@ weather:
     stack: Stapel
     words: Wörter
   none: Keine Wetterentitäten in Home Assistant
-  'off': Aus
   setting:
     alerts:
       _: Wetterwarnungen
@@ -3040,14 +3078,12 @@ webaccess:
   title: Webzugriff
 wifi:
   busy: Verbindet bereits mit einem anderen Netzwerk
-  connected: Verbunden
   failed: Verbindung mit {{.Network}} fehlgeschlagen
   join: Verbinden
   joined: Verbunden mit {{.Network}}
   joining: Verbindet mit {{.Network}}…
   left: Noch {{.N}} s
   none: Keine Netzwerke gefunden
-  ok: OK
   password: Passwort
   refused: Falsches Passwort
   scan:
@@ -3067,7 +3103,6 @@ youtube:
   anonymous: Anonym
   app: YouTube
   asking: Code wird angefordert…
-  cancel: Abbrechen
   category:
     filler: Füllmaterial
     hook: Aufhänger

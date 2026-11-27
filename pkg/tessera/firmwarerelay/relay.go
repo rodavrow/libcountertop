@@ -37,6 +37,11 @@ var blocked = map[string]bool{
 	"wi-fi_co-processor":  true,
 	"panel_watch":         true,
 	"panel_misses":        true,
+	"screen_chip":         true,
+	"loop_stack_free":     true,
+	"wake":                true,
+	"sleep":               true,
+	"motion":              true,
 }
 
 const clockPattern = `^([01][0-9]|2[0-3]):[0-5][0-9]$`
@@ -209,7 +214,7 @@ func (r *Relay) mirror(c *firmware.Client, listed []proto.Message) {
 		switch m := m.(type) {
 		case *api.ListEntitiesTextSensorResponse:
 			id := slug(m.Name)
-			t := &esphome.TextSensor{Base: r.base(id, m.Name, m.Icon, m.EntityCategory)}
+			t := &esphome.TextSensor{Base: r.base(id, m)}
 			if id == "device_name" {
 				t.Set(r.opts.Node() + "-" + r.opts.Word)
 			} else {
@@ -220,7 +225,7 @@ func (r *Relay) mirror(c *firmware.Client, listed []proto.Message) {
 			id := slug(m.Name)
 			key := m.Key
 			t := &esphome.Text{
-				Base:      r.base(id, m.Name, m.Icon, m.EntityCategory),
+				Base:      r.base(id, m),
 				MinLength: m.MinLength,
 				MaxLength: m.MaxLength,
 				Pattern:   m.Pattern,
@@ -232,7 +237,7 @@ func (r *Relay) mirror(c *firmware.Client, listed []proto.Message) {
 		case *api.ListEntitiesSwitchResponse:
 			id := slug(m.Name)
 			key := m.Key
-			s := &esphome.Switch{Base: r.base(id, m.Name, m.Icon, m.EntityCategory)}
+			s := &esphome.Switch{Base: r.base(id, m)}
 			s.OnCommand = func(on bool) { _ = c.Send(&api.SwitchCommandRequest{Key: key, State: on}) }
 			apply[m.Key] = func(st proto.Message) { s.Set(st.(*api.SwitchStateResponse).State) }
 			if id == "auto_standby" {
@@ -243,7 +248,7 @@ func (r *Relay) mirror(c *firmware.Client, listed []proto.Message) {
 			id := slug(m.Name)
 			key := m.Key
 			n := &esphome.Number{
-				Base: r.base(id, m.Name, m.Icon, m.EntityCategory),
+				Base: r.base(id, m),
 				Min:  float64(m.MinValue),
 				Max:  float64(m.MaxValue),
 				Step: float64(m.Step),
@@ -261,7 +266,7 @@ func (r *Relay) mirror(c *firmware.Client, listed []proto.Message) {
 			id := slug(m.Name)
 			key := m.Key
 			t := &esphome.Text{
-				Base:      r.base(id, m.Name, m.Icon, m.EntityCategory),
+				Base:      r.base(id, m),
 				MinLength: 5,
 				MaxLength: 5,
 				Pattern:   clockPattern,
@@ -288,13 +293,13 @@ func (r *Relay) mirror(c *firmware.Client, listed []proto.Message) {
 		case *api.ListEntitiesButtonResponse:
 			id := slug(m.Name)
 			key := m.Key
-			b := &esphome.Button{Base: r.base(id, m.Name, m.Icon, m.EntityCategory)}
+			b := &esphome.Button{Base: r.base(id, m)}
 			b.OnPress = func() { _ = c.Send(&api.ButtonCommandRequest{Key: key}) }
 			add(b, "b", id)
 		case *api.ListEntitiesSensorResponse:
 			id := slug(m.Name)
 			n := &esphome.Sensor{
-				Base:        r.base(id, m.Name, m.Icon, m.EntityCategory),
+				Base:        r.base(id, m),
 				Unit:        m.UnitOfMeasurement,
 				DeviceClass: m.DeviceClass,
 				StateClass:  esphome.SensorStateClass(m.StateClass),
@@ -309,7 +314,7 @@ func (r *Relay) mirror(c *firmware.Client, listed []proto.Message) {
 		case *api.ListEntitiesBinarySensorResponse:
 			id := slug(m.Name)
 			b := &esphome.BinarySensor{
-				Base:        r.base(id, m.Name, m.Icon, m.EntityCategory),
+				Base:        r.base(id, m),
 				DeviceClass: m.DeviceClass,
 			}
 			apply[m.Key] = func(st proto.Message) { b.Set(st.(*api.BinarySensorStateResponse).State) }
@@ -318,7 +323,7 @@ func (r *Relay) mirror(c *firmware.Client, listed []proto.Message) {
 			id := slug(m.Name)
 			key := m.Key
 			o := &esphome.Select{
-				Base:    r.base(id, m.Name, m.Icon, m.EntityCategory),
+				Base:    r.base(id, m),
 				Options: m.Options,
 			}
 			o.OnCommand = func(v string) { _ = c.Send(&api.SelectCommandRequest{Key: key, State: v}) }
@@ -389,13 +394,21 @@ func stateKey(m proto.Message) (uint32, bool) {
 	return 0, false
 }
 
-func (r *Relay) base(id, name, icon string, category esphome.EntityCategory) esphome.Base {
+type listedEntity interface {
+	GetName() string
+	GetIcon() string
+	GetEntityCategory() api.EntityCategory
+	GetDisabledByDefault() bool
+}
+
+func (r *Relay) base(id string, m listedEntity) esphome.Base {
 	return esphome.Base{
-		ObjectID: "tessera_" + r.opts.Word + "_" + id,
-		Name:     name,
-		Icon:     icon,
-		Category: category,
-		DeviceID: r.opts.Device,
+		ObjectID:          "tessera_" + r.opts.Word + "_" + id,
+		Name:              m.GetName(),
+		Icon:              m.GetIcon(),
+		Category:          m.GetEntityCategory(),
+		DisabledByDefault: m.GetDisabledByDefault(),
+		DeviceID:          r.opts.Device,
 	}
 }
 

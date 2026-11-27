@@ -3,7 +3,6 @@ package alarm
 import (
 	"fmt"
 	"strings"
-	"time"
 
 	esphome "github.com/ygelfand/go-esphome-device"
 
@@ -70,10 +69,9 @@ func (a *Alarms) voice(c esphome.Call) (string, error) {
 				), nil
 			}
 		}
-		al, err := a.Set(Alarm{
-			Name: name, Hour: hour, Minute: minute, Days: days, On: true,
-			Snooze: 5 * time.Minute, Volume: VolumeStatic,
-		})
+		al := Default()
+		al.Name, al.Hour, al.Minute, al.Days = name, hour, minute, days
+		al, err = a.Set(al)
 		if err != nil {
 			return "", err
 		}

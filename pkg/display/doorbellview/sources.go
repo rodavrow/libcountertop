@@ -188,7 +188,7 @@ func (v *View) nvrPage() *shell.Page {
 			case busy:
 				rows, taps = append(
 					rows,
-					menu.Row{Label: say.T("doorbell.connecting"), Dim: true},
+					menu.Row{Label: say.T("common.states.connecting"), Dim: true},
 				), append(
 					taps,
 					nil,

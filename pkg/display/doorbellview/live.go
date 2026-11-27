@@ -437,7 +437,7 @@ func (l *session) build(w *gogui.Window) gogui.View {
 		}
 		if why == "" {
 			content = append(content,
-				widgets.Placed(ui.Rect{W: vw, H: vh}, widgets.Spinner(vw, vh, time.Since(l.began))))
+				widgets.Placed(ui.Rect{W: vw, H: vh}, widgets.Spinner(vw, vh)))
 			l.v.spinAgain(w)
 		}
 	}

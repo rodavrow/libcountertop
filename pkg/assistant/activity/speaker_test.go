@@ -10,13 +10,13 @@ func TestAKnownSpeakerRidesAlongWithTheTurn(t *testing.T) {
 	log, got := caught()
 	turn := log.Begin(1, "Hey Google")
 	turn.Awaits()
-	turn.Spoke("Yuri", "person.yuri", 0.613)
+	turn.Spoke("Alex", "person.alex", 0.613)
 	turn.Ends(Completed)
 	if len(*got) != 1 {
 		t.Fatalf("%d events, want 1", len(*got))
 	}
 	e := (*got)[0]
-	if e["speaker"] != "Yuri" || e["speaker_person"] != "person.yuri" ||
+	if e["speaker"] != "Alex" || e["speaker_person"] != "person.alex" ||
 		e["speaker_score"] != "0.61" {
 		t.Errorf("speaker fields %v", e)
 	}
@@ -63,11 +63,11 @@ func TestALateMatchIsWaitedFor(t *testing.T) {
 		t.Fatal("the event went out before the awaited match")
 	case <-time.After(100 * time.Millisecond):
 	}
-	turn.Spoke("Yuri", "person.yuri", 0.7)
+	turn.Spoke("Alex", "person.alex", 0.7)
 	<-sent
 	mu.Lock()
 	defer mu.Unlock()
-	if len(got) != 1 || got[0]["speaker"] != "Yuri" {
-		t.Errorf("events %v, want one naming Yuri", got)
+	if len(got) != 1 || got[0]["speaker"] != "Alex" {
+		t.Errorf("events %v, want one naming Alex", got)
 	}
 }

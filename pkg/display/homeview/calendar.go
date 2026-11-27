@@ -37,11 +37,18 @@ func (view *Renderer) CalendarPage() *shell.Page {
 					schema.CalendarOpenings(),
 					cfg.Opening,
 				),
+				settings.ModeRow(
+					settings.ModeMarks{},
+					say.T("calendar.setting.week_start"),
+					schema.CalendarWeekStarts(),
+					cfg.WeekStart,
+				),
 				{Label: say.T("calendar.setting.weather"), Kind: menu.Toggle, On: cfg.Weather},
 				{Label: say.T("calendar.setting.saver"), Kind: menu.Toggle, On: cfg.Saver},
 			}
 			taps := []func(int){
 				settings.ModePick(schema.CalendarOpenings(), c.SetOpening),
+				settings.ModePick(schema.CalendarWeekStarts(), c.SetWeekStart),
 				func(int) { c.SetWeather(!cfg.Weather) },
 				func(int) { c.SetSaver(!cfg.Saver) },
 			}
@@ -52,7 +59,7 @@ func (view *Renderer) CalendarPage() *shell.Page {
 			case err != nil:
 				return append(rows,
 						menu.Row{Label: say.T("home.failed"), Hint: err.Error()},
-						menu.Row{Label: say.T("home.retry")},
+						menu.Row{Label: say.T("common.actions.retry")},
 					),
 					append(taps, nil, func(int) { c.Fetch() })
 			case len(list) == 0:
@@ -181,7 +188,7 @@ func (e *colorEditor) side(w *gogui.Window) gogui.View {
 			gogui.ColorWheel(gogui.ColorWheelCfg{
 				ID:            "calendar-wheel",
 				Value:         gogui.HSLA{H: value.H, S: value.S, L: 0.5, A: 1},
-				Size:          size,
+				Size:          size - reach*0.55,
 				MarkerSize:    reach * 0.55,
 				FocusDisabled: true,
 				OnChange: func(next gogui.HSLA, ev gogui.EventCtx) {

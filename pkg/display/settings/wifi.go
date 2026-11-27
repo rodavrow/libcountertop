@@ -89,7 +89,7 @@ func (p *WifiPages) list() ([]menu.Row, []func(int)) {
 		row := menu.Row{Glyph: strength(n), Label: n.SSID}
 		switch {
 		case n.SSID == now:
-			row.Value, row.Chosen = say.T("wifi.connected"), true
+			row.Value, row.Chosen = say.T("common.states.connected"), true
 			acts = append(acts, nil)
 		case !n.Security.Supported():
 			row.Dim = true
@@ -140,6 +140,7 @@ func strength(n wpa.Network) string {
 }
 
 func (p *WifiPages) scan() {
+	p.forget()
 	p.mu.Lock()
 	if p.scanning {
 		p.mu.Unlock()
@@ -174,6 +175,7 @@ func (p *WifiPages) scan() {
 }
 
 func (p *WifiPages) start(n wpa.Network, password string) {
+	p.forget()
 	if n.Security != wpa.Open && len(password) < wifiShortest {
 		p.refuse(n.SSID, say.F("wifi.short", map[string]any{"N": wifiShortest}))
 		return
@@ -198,17 +200,6 @@ func (p *WifiPages) refuse(ssid, why string) {
 		Text:    say.F("wifi.failed", map[string]any{"Network": ssid}),
 		Detail:  why,
 		Outcome: shell.Failed,
-		Buttons: []shell.BusyButton{{
-			ID:      "wifi-ok",
-			Label:   say.T("wifi.ok"),
-			Primary: true,
-			Do: func() {
-				p.mu.Lock()
-				p.refused = nil
-				p.mu.Unlock()
-				p.stack.Redraw()
-			},
-		}},
 	}
 	p.mu.Unlock()
 	p.stack.Redraw()
@@ -260,9 +251,6 @@ func (p *WifiPages) busy() (shell.Busy, bool) {
 			Text:    say.F("wifi.failed", map[string]any{"Network": s.SSID}),
 			Detail:  failure(s.Failed),
 			Outcome: shell.Failed,
-			Buttons: []shell.BusyButton{
-				{ID: "wifi-ok", Label: say.T("wifi.ok"), Primary: true, Do: p.dismiss(s.Until)},
-			},
 		}, true
 	default:
 		p.close(s.Until)
@@ -299,11 +287,12 @@ func failure(err error) string {
 	}
 }
 
-func (p *WifiPages) dismiss(until time.Time) func() {
-	return func() {
-		p.mu.Lock()
-		p.seen = until
-		p.mu.Unlock()
-		p.stack.Redraw()
+func (p *WifiPages) forget() {
+	s := p.wifi.State()
+	p.mu.Lock()
+	p.refused = nil
+	if !s.Moving {
+		p.seen = s.Until
 	}
+	p.mu.Unlock()
 }

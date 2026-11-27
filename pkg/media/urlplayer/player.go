@@ -408,6 +408,18 @@ func (p *Player) Ready() bool {
 	return t != nil && t == shown && !t.waiting.Load()
 }
 
+func (p *Player) Failed() error {
+	p.mu.Lock()
+	t := p.cur
+	p.mu.Unlock()
+	if t == nil {
+		return nil
+	}
+	t.mu.Lock()
+	defer t.mu.Unlock()
+	return t.failed
+}
+
 func (p *Player) ready(t *track) {
 	p.mu.Lock()
 	current := p.cur == t

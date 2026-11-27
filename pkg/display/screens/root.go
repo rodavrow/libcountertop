@@ -8,7 +8,6 @@ import (
 	"github.com/ygelfand/libcountertop/pkg/display/clockview"
 	"github.com/ygelfand/libcountertop/pkg/display/dashboard"
 	"github.com/ygelfand/libcountertop/pkg/display/navigation"
-	"github.com/ygelfand/libcountertop/pkg/display/shell"
 	"github.com/ygelfand/libcountertop/pkg/display/theme"
 	"github.com/ygelfand/libcountertop/pkg/display/ui"
 	"github.com/ygelfand/libcountertop/pkg/display/widgets"
@@ -51,9 +50,6 @@ func (a *App) compose(w *gogui.Window) gogui.View {
 		layers = append(layers, widgets.Floating(0, s.Build(w)))
 	}
 	layers = overlaid(w, layers, overlays)
-	if v := a.busy(w, covering); v != nil {
-		layers = append(layers, widgets.Floating(busyZ, v))
-	}
 	if a.ui.Editor.Typing(w) || a.pageTyping(covering) {
 		if v := a.keyboard(w, covering); v != nil {
 			layers = append(
@@ -71,21 +67,6 @@ func (a *App) compose(w *gogui.Window) gogui.View {
 		}
 	}
 	return stack(layers)
-}
-
-func (a *App) busy(w *gogui.Window, covering *Screen) gogui.View {
-	if covering == nil {
-		return nil
-	}
-	p, ok := covering.View.(*shell.Page)
-	if !ok || p.Busy == nil {
-		return nil
-	}
-	b, shown := p.Busy()
-	if !shown {
-		return nil
-	}
-	return a.ui.Toolkit.Busy(w, b, a.ui.Palette())
 }
 
 func (a *App) base(w *gogui.Window, covering *Screen) gogui.View {

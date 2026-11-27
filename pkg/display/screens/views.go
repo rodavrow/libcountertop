@@ -65,9 +65,9 @@ func (a *App) pageScreen(p *shell.Page) *Screen {
 			})
 		},
 	}
-	if len(p.Actions) > 0 {
+	if len(p.Actions) > 0 || p.Busy != nil {
 		s.Foot = func(w *gogui.Window) gogui.View {
-			return a.ui.Toolkit.ActionBar(w, p.Actions, a.ui.Palette())
+			return a.ui.Toolkit.ActionBar(w, p.Actions, p.Busy, a.ui.Palette())
 		}
 	}
 	return s
@@ -176,8 +176,8 @@ func (a *App) keyboard(w *gogui.Window, covering *Screen) gogui.View {
 	if r == nil {
 		return nil
 	}
-	opts.Cancel = say.T("keyboard.cancel")
-	opts.Save = a.ui.Editor.Action(say.T("keyboard.save"))
+	opts.Cancel = say.T("common.actions.cancel")
+	opts.Save = a.ui.Editor.Action(say.T("common.actions.save"))
 	opts.Type, opts.Press, opts.Pair = r.Type, r.Press, a.o.KeyboardPair
 	at, view := a.ui.Editor.Keyboard(w, opts)
 	return widgets.Placed(at, view)

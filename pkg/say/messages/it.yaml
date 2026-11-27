@@ -145,14 +145,6 @@ alarm:
   add: Aggiungi sveglia
   app: Sveglie
   daily: Ogni giorno
-  day:
-    fri: Venerdì
-    mon: Lunedì
-    sat: Sabato
-    sun: Domenica
-    thu: Giovedì
-    tue: Martedì
-    wed: Mercoledì
   delete: Elimina sveglia
   edit: Sveglia
   hour: Ora
@@ -160,20 +152,15 @@ alarm:
   minute: Minuto
   minutes: '{{.N}} min'
   name: Nome
-  'off': 'Off'
   'on': Sveglia attiva
   once: Una volta
   ramp: Avvio graduale
   repeat: Ripeti
-  save: Salva
   seconds: '{{.N}} s'
   snooze: Posticipa
   snooze_for: Posticipa {{.N}} min
   snoozed: Posticipata fino alle {{.T}}
   sound: Suono
-  state:
-    'off': 'Off'
-    'on': 'On'
   stop: Ferma
   volume:
     _: Volume
@@ -245,7 +232,6 @@ assistants:
     gemini: Gemini
     pryon: Pryon
     stopword: Parola di stop
-  'off': 'Off'
   pipeline:
     _: Pipeline
     preferred: Preferita
@@ -381,14 +367,12 @@ calendar:
     title: Inserisci un titolo
   none: Nessun calendario in Home Assistant
   notes: Note
-  'off': 'Off'
   opening:
     day: Giorno
     last: Ultima usata
     month: Mese
     week: Settimana
   pick: Scegli i calendari
-  save: Salva
   setting:
     colors:
       _: Colori dei calendari
@@ -403,6 +387,9 @@ calendar:
     weather:
       _: Meteo sui giorni
       help: Mostra le previsioni giornaliere nei giorni del calendario
+    week_start:
+      _: Primo giorno della settimana
+      help: Giorno da cui iniziano le viste settimana e mese
   title: Titolo
   today: Oggi
   tomorrow: Domani
@@ -412,6 +399,8 @@ calendar:
     week: Settimana
   week:
     start: monday
+  week_start:
+    auto: Automatico
 call:
   address: Indirizzo
   answer:
@@ -431,7 +420,6 @@ call:
     'off': Fotocamera disattivata
     'on': Fotocamera attiva
   caps: Funzioni
-  connected: Connesso
   declined: Rifiutata
   dropped: Chiamata interrotta
   empty: Nessun altro dispositivo trovato
@@ -662,7 +650,6 @@ cameras:
   loading: Caricamento videocamere
   none: Nessuna videocamera selezionata
   nosite: Indirizzo di Home Assistant sconosciuto. Imposta l'URL di Home Assistant in Impostazioni → Controllo casa → Videocamere
-  'off': 'Off'
   pick: Seleziona
   seconds: '{{.N}} s'
   setting:
@@ -695,7 +682,6 @@ card:
   light:
     brightness: Luminosità
     hue: Colore
-    waiting: In attesa
     warmth: Temperatura colore
   lock:
     lock: Blocca
@@ -808,6 +794,27 @@ clock:
       help: Dimensione dell'orologio della dashboard, da nano a grande, come quota della sua area
   title: Orologio
   zone: Fuso orario
+common:
+  actions:
+    cancel: Annulla
+    retry: Riprova
+    save: Salva
+  day:
+    fri: Venerdì
+    mon: Lunedì
+    sat: Sabato
+    sun: Domenica
+    thu: Giovedì
+    tue: Martedì
+    wed: Mercoledì
+  states:
+    connected: Connesso
+    connecting: Connessione…
+    'off': 'Off'
+    'on': 'On'
+    unavailable: Non disponibile
+    unset: Non configurato
+    waiting: In attesa
 controls:
   dock:
     _: Posizione dock
@@ -894,11 +901,9 @@ doorbell:
       hint: Una videocamera di Home Assistant che inquadra questa porta
     title: Videocamera Home Assistant
   cameras: '{{.N}} videocamere'
-  cancel: Annulla
   channel: Canale {{.N}}
   checking: Verifica…
   connect: Connetti
-  connecting: Connessione…
   entity:
     chime: Suono campanello
     door:
@@ -946,8 +951,6 @@ doorbell:
   none: Nessun campanello configurato
   notsaved: Non salvato
   offline: Offline
-  ok: OK
-  save: Salva
   saved: Salvato
   sensor:
     animal: Sensore animali
@@ -1002,14 +1005,11 @@ doorbell:
     reolink: Reolink
     rtsp: RTSP
   status:
-    connected: Connesso
-    connecting: Connessione…
     events: Eventi
     login: Utente o password errati
     none: Nessun campanello in Home Assistant
     ready: '{{.Count}} connessi'
     unreachable: Campanelli non raggiungibili
-    unset: Non configurato
     unsupported: Non disponibile da questa sorgente
     video: Video
   stream:
@@ -1072,6 +1072,9 @@ features:
   mealie:
     _: Mealie
     hint: Ricette e modalità cucina
+  plex:
+    _: Plex
+    hint: Accesso, profilo e server
   proxy:
     _: Proxy Bluetooth
     hint: Proxy Bluetooth LE per Home Assistant
@@ -1163,7 +1166,6 @@ home:
   refused:
     _: Azioni non consentite
     hint: Apri ESPHome, premi l'ingranaggio delle impostazioni su {{.Name}} e abilita “Consenti al dispositivo di eseguire azioni di Home Assistant”.
-  retry: Riprova
   saver:
     _: Salvaschermo
     'off': Attiva lo standby automatico nelle impostazioni schermo di Tessera per usarne il salvaschermo
@@ -1269,9 +1271,6 @@ home:
       'on': Accendi tutto
     area: '{{.N}} di {{.Of}} accesi'
     level: '{{.N}}%'
-    'off': 'Off'
-    'on': 'On'
-    unavailable: Non disponibile
   title: Controllo casa
   unconnected:
     _: Non connesso
@@ -1287,7 +1286,6 @@ homealarm:
     sheet: Foglio
     time: Ora
     type: Tipo
-  cancel: Annulla
   chip:
     alarm: Allarme
     armed: Inserito
@@ -1369,9 +1367,7 @@ homealarm:
   notready:
     many: 'Non pronto: {{.N}} zone aperte'
     one: 'Non pronto: {{.Zone}} aperta'
-  'off': 'Off'
   ok: OK
-  'on': 'On'
   panic: Panico
   pick: Scegline una
   plate:
@@ -1570,7 +1566,6 @@ ink:
   theme: Tema
   violet: Viola
 keyboard:
-  cancel: Annulla
   code_expired: Codice scaduto
   compact: Compatta
   enter: Invio
@@ -1578,7 +1573,6 @@ keyboard:
   hide: Nascondi
   large: Grande
   refresh: Aggiorna
-  save: Salva
   search: Cerca
   size: Dimensione tastiera
   standard: Standard
@@ -1596,8 +1590,6 @@ lock:
   mismatch: I PIN non corrispondono. Inserisci un nuovo PIN
   new: Inserisci un nuovo PIN, da 4 a 8 cifre
   next: Avanti
-  'off': 'Off'
-  'on': 'On'
   set: Imposta PIN
   title: Impostazioni
   wait: Riprova tra {{.Seconds}} s
@@ -1964,16 +1956,12 @@ photos:
   sources: Sorgenti
   status:
     _: Stato
-    connecting: Connessione…
     empty: Nessuna foto corrispondente
     key: Chiave API errata
-    'off': 'Off'
     old: 'Immich {{.Version}}: serve la 3.2 o successiva'
     permission: La chiave API richiede {{.Name}}
-    ready: Connesso
     unknown: Nessun elemento chiamato {{.Name}}
     unreachable: Server non raggiungibile
-    unset: Non configurato
 phototransition:
   cut: Nessuna
   dissolve: Dissolvenza incrociata
@@ -1994,6 +1982,65 @@ player:
   next: A seguire
   none: Niente
   now: In riproduzione
+plex:
+  app: Plex
+  asking: Richiesta del codice di accesso…
+  cantplay: Non è possibile riprodurlo qui
+  connecting: Connessione a Plex…
+  empty: Ancora niente qui
+  episode: S{{.S}} E{{.E}}
+  episodes: '{{.N}} episodi'
+  fromstart: Riproduci dall'inizio
+  home: Home
+  hours: '{{.N}} h'
+  hours_minutes: '{{.H}} h {{.M}} min'
+  minutes: '{{.N}} min'
+  categories: Categorie
+  library: Libreria
+  mark_unwatched: Segna come non visto
+  mark_watched: Segna come visto
+  recommended: Consigliati
+  see_all: Vedi tutto
+  shuffle: Casuale
+  sort: 'Ordina: {{.Name}}'
+  subtitles: 'Sottotitoli: {{.Name}}'
+  titles: '{{.N}} titoli'
+  unwatched_only: Da vedere
+  nothing: Nessun risultato
+  pin:
+    _: Inserisci il PIN di {{.Name}}
+    wrong: PIN errato, riprova
+  play: Riproduci
+  profile:
+    switch: Cambia profilo
+  refused: Plex ha disconnesso questo dispositivo
+  resume: Riprendi da {{.Time}}
+  search:
+    _: Cerca
+    hint: Cerca film, serie e musica
+  signin:
+    _: Accedi
+    again: Ottieni un nuovo codice
+    expired: Il codice è scaduto
+    failed: Impossibile raggiungere Plex per l'accesso
+    enter: e inserisci
+    go: Sul telefono o sul computer, vai su
+    hint: Accedi con il tuo account Plex per guardare le tue librerie qui
+    title: Accedi a Plex
+    waiting: In attesa di conferma…
+  signout: Esci
+  status:
+    _: Stato
+    choosing: Scelta del profilo
+    connecting: Connessione…
+    ready: Connesso
+    refused: Disconnesso da Plex
+    signedout: Accesso non effettuato
+    signing: Accesso in corso…
+    unreachable: Server non raggiungibile
+  unreachable: Impossibile raggiungere il tuo server Plex
+  unwatched: '{{.N}} da vedere'
+  who: Chi guarda?
 position:
   bottom: In basso
   center: Centro
@@ -2011,7 +2058,6 @@ poster:
     poster: Sfondo
   hourly: Ogni ora
   never: Mai
-  'off': 'Off'
   setting:
     every:
       _: Cambia ogni
@@ -2504,7 +2550,6 @@ tessera:
     effects: Effetti
     hue: Colore
     lamps: Lampade
-    waiting: In attesa
     warmth: Temperatura colore
   lock:
     jammed: Inceppata
@@ -2591,7 +2636,6 @@ thermostat:
     fan: Ventola
     heating: Riscaldamento
     idle: Inattivo
-    'off': 'Off'
   app: Termostato
   between: Mantiene tra
   choose:
@@ -2649,7 +2693,6 @@ thermostat:
     'off': 'Off'
   no-preset: Nessun preset
   none: Nessun termostato scelto
-  'off': 'Off'
   out: Est
   outside: Esterno
   preset:
@@ -2678,7 +2721,6 @@ thermostat:
   target: Obiettivo
   temp: Temp
   temperature: Temperatura
-  unavailable: Non disponibile
   waiting: In attesa di Home Assistant
 timer:
   stop: Ferma
@@ -2699,7 +2741,6 @@ todo:
     todo: Lista della spesa
   lists: '{{.Count}} liste'
   none: Nessuna lista di cose da fare in Home Assistant
-  'off': 'Off'
   pick: Scegli una lista in Impostazioni → Controllo casa → Lista della spesa
   setting:
     completed:
@@ -2895,8 +2936,6 @@ voice:
 voicematch:
   accept: Accetta
   add: Aggiungi una voce
-  again: Riprova
-  cancel: Annulla
   done: Voice match è pronto per {{.Name}}
   failed: Impossibile configurare Voice match
   finish: Fine
@@ -2973,7 +3012,6 @@ weather:
     stack: Pila
     words: Parole
   none: Nessuna entità meteo in Home Assistant
-  'off': 'Off'
   setting:
     alerts:
       _: Allerte meteo
@@ -3044,14 +3082,12 @@ webaccess:
   title: Accesso web
 wifi:
   busy: Già in connessione a un'altra rete
-  connected: Connesso
   failed: Impossibile connettersi a {{.Network}}
   join: Connetti
   joined: Connesso a {{.Network}}
   joining: Connessione a {{.Network}}…
   left: '{{.N}} s rimanenti'
   none: Nessuna rete trovata
-  ok: OK
   password: Password
   refused: Password errata
   scan:
@@ -3071,7 +3107,6 @@ youtube:
   anonymous: Anonimo
   app: YouTube
   asking: Richiesta del codice…
-  cancel: Annulla
   category:
     filler: Riempitivo
     hook: Gancio

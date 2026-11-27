@@ -24,7 +24,6 @@ const (
 	stale        = 5 * time.Minute
 	eventsAction = "calendar.get_events"
 	createAction = "calendar.create_event"
-	eventsShape  = "{{ response | to_json }}"
 	dayLayout    = "2006-01-02"
 	wireLayout   = "2006-01-02 15:04:05"
 	features     = "supported_features"
@@ -193,6 +192,8 @@ func (c *Calendar) SetColor(entity, hex string) {
 
 func (c *Calendar) SetOpening(v schema.CalendarOpening) { c.change("opening", string(v)) }
 
+func (c *Calendar) SetWeekStart(v schema.CalendarWeekStart) { c.change("week_start", string(v)) }
+
 func (c *Calendar) SetWeather(on bool) { c.change("weather", setting.OnOff(on)) }
 
 func (c *Calendar) SetSaver(on bool) { c.change("saver", setting.OnOff(on)) }
@@ -283,14 +284,20 @@ func (c *Calendar) Refresh() {
 	go func() {
 		ctx, cancel := context.WithTimeout(context.Background(), fetchWait)
 		defer cancel()
-		raw, err := c.opts.Controller.Ask(ctx, eventsAction, map[string]string{
-			"entity_id":       strings.Join(chosen, ","),
-			"start_date_time": want.from.Format(wireLayout),
-			"end_date_time":   want.to.Format(wireLayout),
-		}, nil, eventsShape)
+		var (
+			list []wire
+			err  error
+		)
+		for _, id := range chosen {
+			var got []wire
+			if got, err = c.fetch(ctx, id, want); err != nil {
+				break
+			}
+			list = append(list, got...)
+		}
 		var events []Event
 		if err == nil {
-			events, err = parse(raw, want.from.Location())
+			events = parse(list, want.from.Location())
 		}
 		c.mu.Lock()
 		c.asking = false
@@ -348,7 +355,41 @@ func (c *Calendar) Create(ctx context.Context, d Draft) error {
 	return nil
 }
 
+const (
+	eventItem  = "{'start': s.start, 'end': s.end, 'summary': s.get('summary'), 'location': s.get('location'), 'description': s.get('description')}"
+	eventSmall = "{'start': s.start, 'end': s.end, 'summary': (s.get('summary') or '')[:200], 'location': (s.get('location') or '')[:200]}"
+)
+
+func eventsListing(id string) homeassistant.Listing {
+	quoted, _ := json.Marshal(id)
+	return homeassistant.Listing{
+		Source: "response[" + string(quoted) + "].events",
+		Item:   eventItem,
+		Small:  eventSmall,
+	}
+}
+
+func (c *Calendar) fetch(ctx context.Context, id string, want window) ([]wire, error) {
+	data := map[string]string{
+		"entity_id":       id,
+		"start_date_time": want.from.Format(wireLayout),
+		"end_date_time":   want.to.Format(wireLayout),
+	}
+	got, err := homeassistant.ListAll[wire](
+		ctx,
+		func(ctx context.Context, tmpl string) (json.RawMessage, error) {
+			return c.opts.Controller.Ask(ctx, eventsAction, data, nil, tmpl)
+		},
+		eventsListing(id),
+	)
+	for i := range got {
+		got[i].Calendar = id
+	}
+	return got, err
+}
+
 type wire struct {
+	Calendar    string `json:"-"`
 	Start       string `json:"start"`
 	End         string `json:"end"`
 	Summary     string `json:"summary"`
@@ -356,34 +397,26 @@ type wire struct {
 	Description string `json:"description"`
 }
 
-func parse(raw json.RawMessage, loc *time.Location) ([]Event, error) {
-	var lists map[string]struct {
-		Events []wire `json:"events"`
-	}
-	if err := json.Unmarshal(raw, &lists); err != nil {
-		return nil, fmt.Errorf("calendar: the events: %w", err)
-	}
+func parse(list []wire, loc *time.Location) []Event {
 	var out []Event
-	for entity, list := range lists {
-		for _, w := range list.Events {
-			start, allDay, err := when(w.Start, loc)
-			if err != nil {
-				continue
-			}
-			end, _, err := when(w.End, loc)
-			if err != nil {
-				end = start
-			}
-			out = append(out, Event{
-				Calendar:    entity,
-				Summary:     w.Summary,
-				Location:    w.Location,
-				Description: w.Description,
-				Start:       start,
-				End:         end,
-				AllDay:      allDay,
-			})
+	for _, w := range list {
+		start, allDay, err := when(w.Start, loc)
+		if err != nil {
+			continue
 		}
+		end, _, err := when(w.End, loc)
+		if err != nil {
+			end = start
+		}
+		out = append(out, Event{
+			Calendar:    w.Calendar,
+			Summary:     w.Summary,
+			Location:    w.Location,
+			Description: w.Description,
+			Start:       start,
+			End:         end,
+			AllDay:      allDay,
+		})
 	}
 	slices.SortFunc(out, func(a, b Event) int {
 		if a.AllDay != b.AllDay && a.Start.Equal(b.Start) {
@@ -394,7 +427,7 @@ func parse(raw json.RawMessage, loc *time.Location) ([]Event, error) {
 		}
 		return a.Start.Compare(b.Start)
 	})
-	return out, nil
+	return out
 }
 
 func when(s string, loc *time.Location) (time.Time, bool, error) {

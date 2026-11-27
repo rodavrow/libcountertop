@@ -55,8 +55,8 @@ func (v *View) manualPage() *shell.Page {
 
 func (f *form) page(title string, extra ...shell.Action) *shell.Page {
 	actions := append([]shell.Action{
-		{Label: say.T("doorbell.cancel"), Role: shell.Plain, Do: f.v.o.Shell.Pop},
-		{Label: say.T("doorbell.save"), Do: f.save},
+		{Label: say.T("common.actions.cancel"), Role: shell.Plain, Do: f.v.o.Shell.Pop},
+		{Label: say.T("common.actions.save"), Do: f.save},
 	}, extra...)
 	return &shell.Page{Title: title, Build: f.build, Actions: actions, Busy: f.busy}
 }
@@ -244,22 +244,12 @@ func (f *form) show(b *shell.Busy) {
 }
 
 func (f *form) refuse(why string) {
-	f.show(&shell.Busy{
-		Text:    say.T("doorbell.notsaved"),
-		Detail:  why,
-		Outcome: shell.Failed,
-		Buttons: []shell.BusyButton{{
-			ID:      "doorbell-ok",
-			Label:   say.T("doorbell.ok"),
-			Primary: true,
-			Do:      func() { f.show(nil) },
-		}},
-	})
+	f.show(&shell.Busy{Text: say.T("doorbell.notsaved"), Detail: why, Outcome: shell.Failed})
 }
 
 func (f *form) save() {
 	f.mu.Lock()
-	busy := f.shown != nil
+	busy := f.shown != nil && f.shown.Outcome != shell.Failed
 	door := f.cfg.Doors[f.slot]
 	f.mu.Unlock()
 	if busy {

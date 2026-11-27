@@ -77,7 +77,7 @@ func timerText(t tessera.Tile, now time.Time) string {
 		)
 	}
 	if t.ExtraText("dur") == "" {
-		return say.T("home.tile.off")
+		return say.T("common.states.off")
 	}
 	return countdown(full)
 }
@@ -99,9 +99,9 @@ var binaryClasses = map[string]bool{
 func binaryWord(class string, on bool) string {
 	if !binaryClasses[class] {
 		if on {
-			return say.T("home.tile.on")
+			return say.T("common.states.on")
 		}
-		return say.T("home.tile.off")
+		return say.T("common.states.off")
 	}
 	side := "off"
 	if on {
@@ -140,7 +140,7 @@ func domainLine(t tessera.Tile, l tessera.Layout, now time.Time, narrow bool) st
 		case running(t):
 			return say.T("tessera.running")
 		case t.State == "off":
-			return say.T("home.tile.off")
+			return say.T("common.states.off")
 		}
 		last, _ := t.ExtraNumber("last")
 		return lastRun(last, now, l.Clock24, narrow)
@@ -157,9 +157,9 @@ func domainLine(t tessera.Tile, l tessera.Layout, now time.Time, narrow bool) st
 	}
 	switch t.State {
 	case "on":
-		return say.T("home.tile.on")
+		return say.T("common.states.on")
 	case "off":
-		return say.T("home.tile.off")
+		return say.T("common.states.off")
 	}
 	return word(t, n)
 }

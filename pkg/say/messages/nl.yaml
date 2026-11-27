@@ -145,14 +145,6 @@ alarm:
   add: Wekker toevoegen
   app: Wekkers
   daily: Elke dag
-  day:
-    fri: Vrijdag
-    mon: Maandag
-    sat: Zaterdag
-    sun: Zondag
-    thu: Donderdag
-    tue: Dinsdag
-    wed: Woensdag
   delete: Wekker verwijderen
   edit: Wekker
   hour: Uur
@@ -160,20 +152,15 @@ alarm:
   minute: Minuut
   minutes: '{{.N}} min'
   name: Naam
-  'off': Uit
   'on': Wekker aan
   once: Eenmalig
   ramp: Zacht beginnen
   repeat: Herhalen
-  save: Opslaan
   seconds: '{{.N}} s'
   snooze: Snooze
   snooze_for: '{{.N}} min snoozen'
   snoozed: Gesnoozed tot {{.T}}
   sound: Geluid
-  state:
-    'off': Uit
-    'on': Aan
   stop: Stop
   volume:
     _: Volume
@@ -245,7 +232,6 @@ assistants:
     gemini: Gemini
     pryon: Pryon
     stopword: Stopwoord
-  'off': Uit
   pipeline:
     _: Pipeline
     preferred: Voorkeur
@@ -381,14 +367,12 @@ calendar:
     title: Voer een titel in
   none: Geen agenda's in Home Assistant
   notes: Notities
-  'off': Uit
   opening:
     day: Dag
     last: Laatst gebruikt
     month: Maand
     week: Week
   pick: Agenda's kiezen
-  save: Opslaan
   setting:
     colors:
       _: Agendakleuren
@@ -403,6 +387,9 @@ calendar:
     weather:
       _: Weer bij dagen
       help: Toont de dagverwachting bij agendadagen
+    week_start:
+      _: Eerste dag van de week
+      help: Dag waarop week- en maandweergave beginnen
   title: Titel
   today: Vandaag
   tomorrow: Morgen
@@ -412,6 +399,8 @@ calendar:
     week: Week
   week:
     start: monday
+  week_start:
+    auto: Automatisch
 call:
   address: Adres
   answer:
@@ -431,7 +420,6 @@ call:
     'off': Camera uit
     'on': Camera aan
   caps: Kan
-  connected: Verbonden
   declined: Geweigerd
   dropped: Gesprek verbroken
   empty: Geen andere apparaten gevonden
@@ -662,7 +650,6 @@ cameras:
   loading: Camera's laden
   none: Geen camera's geselecteerd
   nosite: Het adres van Home Assistant is onbekend. Stel de Home Assistant-URL in via Instellingen → Huisbediening → Camera's
-  'off': Uit
   pick: Selecteren
   seconds: '{{.N}} s'
   setting:
@@ -695,7 +682,6 @@ card:
   light:
     brightness: Helderheid
     hue: Kleur
-    waiting: Wachten
     warmth: Kleurtemperatuur
   lock:
     lock: Vergrendelen
@@ -808,6 +794,27 @@ clock:
       help: Grootte van de dashboardklok, van nano tot groot, als deel van zijn vlak
   title: Klok
   zone: Tijdzone
+common:
+  actions:
+    cancel: Annuleren
+    retry: Opnieuw proberen
+    save: Opslaan
+  day:
+    fri: Vrijdag
+    mon: Maandag
+    sat: Zaterdag
+    sun: Zondag
+    thu: Donderdag
+    tue: Dinsdag
+    wed: Woensdag
+  states:
+    connected: Verbonden
+    connecting: Verbinden…
+    'off': Uit
+    'on': Aan
+    unavailable: Niet beschikbaar
+    unset: Niet ingesteld
+    waiting: Wachten
 controls:
   dock:
     _: Positie van het dock
@@ -894,11 +901,9 @@ doorbell:
       hint: Een Home Assistant-camera die deze deur toont
     title: Home Assistant-camera
   cameras: '{{.N}} camera''s'
-  cancel: Annuleren
   channel: Kanaal {{.N}}
   checking: Controleren…
   connect: Verbinden
-  connecting: Verbinden…
   entity:
     chime: Belgeluid van de deurbel
     door:
@@ -946,8 +951,6 @@ doorbell:
   none: Geen deurbellen ingesteld
   notsaved: Niet opgeslagen
   offline: Offline
-  ok: OK
-  save: Opslaan
   saved: Opgeslagen
   sensor:
     animal: Diersensor
@@ -1002,14 +1005,11 @@ doorbell:
     reolink: Reolink
     rtsp: RTSP
   status:
-    connected: Verbonden
-    connecting: Verbinden…
     events: Gebeurtenissen
     login: Verkeerde gebruiker of wachtwoord
     none: Geen deurbellen in Home Assistant
     ready: '{{.Count}} verbonden'
     unreachable: Deurbellen niet bereikbaar
-    unset: Niet ingesteld
     unsupported: Niet beschikbaar via deze bron
     video: Video
   stream:
@@ -1072,6 +1072,9 @@ features:
   mealie:
     _: Mealie
     hint: Recepten en kookmodus
+  plex:
+    _: Plex
+    hint: Inloggen, profiel en server
   proxy:
     _: Bluetooth-proxy
     hint: Bluetooth LE-proxy voor Home Assistant
@@ -1163,7 +1166,6 @@ home:
   refused:
     _: Acties niet toegestaan
     hint: Open ESPHome, tik op het instellingentandwiel bij {{.Name}} en schakel „Allow the device to perform Home Assistant actions” in.
-  retry: Opnieuw proberen
   saver:
     _: Schermbeveiliging
     'off': Zet Automatische stand-by aan in de scherminstellingen van Tessera om de schermbeveiliging ervan te gebruiken
@@ -1269,9 +1271,6 @@ home:
       'on': Alles aan
     area: '{{.N}} van {{.Of}} aan'
     level: '{{.N}}%'
-    'off': Uit
-    'on': Aan
-    unavailable: Niet beschikbaar
   title: Huisbediening
   unconnected:
     _: Niet verbonden
@@ -1287,7 +1286,6 @@ homealarm:
     sheet: Blad
     time: Tijd
     type: Type
-  cancel: Annuleren
   chip:
     alarm: Alarm
     armed: Ingeschakeld
@@ -1369,9 +1367,7 @@ homealarm:
   notready:
     many: 'Niet gereed: {{.N}} zones open'
     one: 'Niet gereed: {{.Zone}} open'
-  'off': Uit
   ok: OK
-  'on': Aan
   panic: Paniek
   pick: Kies er een
   plate:
@@ -1570,7 +1566,6 @@ ink:
   theme: Thema
   violet: Violet
 keyboard:
-  cancel: Annuleren
   code_expired: Code verlopen
   compact: Compact
   enter: Enter
@@ -1578,7 +1573,6 @@ keyboard:
   hide: Verbergen
   large: Groot
   refresh: Vernieuwen
-  save: Opslaan
   search: Zoeken
   size: Toetsenbordgrootte
   standard: Standaard
@@ -1596,8 +1590,6 @@ lock:
   mismatch: De pincodes komen niet overeen. Voer een nieuwe pincode in
   new: Voer een nieuwe pincode in, 4 tot 8 cijfers
   next: Volgende
-  'off': Uit
-  'on': Aan
   set: Pincode instellen
   title: Instellingen
   wait: Probeer opnieuw over {{.Seconds}} s
@@ -1962,16 +1954,12 @@ photos:
   sources: Bronnen
   status:
     _: Status
-    connecting: Verbinden…
     empty: Geen passende foto's
     key: Verkeerde API-sleutel
-    'off': Uit
     old: 'Immich {{.Version}}: vereist 3.2 of nieuwer'
     permission: API-sleutel heeft {{.Name}} nodig
-    ready: Verbonden
     unknown: Niets met de naam {{.Name}}
     unreachable: Server niet bereikbaar
-    unset: Niet ingesteld
 phototransition:
   cut: Geen
   dissolve: Oplossen
@@ -1992,6 +1980,65 @@ player:
   next: Hierna
   none: Niets
   now: Speelt nu
+plex:
+  app: Plex
+  asking: Inlogcode ophalen…
+  cantplay: Dit kan hier niet worden afgespeeld
+  connecting: Verbinden met Plex…
+  empty: Hier is nog niets
+  episode: S{{.S}} A{{.E}}
+  episodes: '{{.N}} afleveringen'
+  fromstart: Vanaf het begin afspelen
+  home: Start
+  hours: '{{.N}} u'
+  hours_minutes: '{{.H}} u {{.M}} min'
+  categories: Categorieën
+  library: Bibliotheek
+  mark_unwatched: Markeren als niet gezien
+  mark_watched: Markeren als gezien
+  minutes: '{{.N}} min'
+  nothing: Niets gevonden
+  recommended: Aanbevolen
+  see_all: Alles tonen
+  shuffle: Willekeurig
+  sort: 'Sorteren: {{.Name}}'
+  subtitles: 'Ondertitels: {{.Name}}'
+  titles: '{{.N}} titels'
+  unwatched_only: Niet gezien
+  pin:
+    _: Voer de pincode van {{.Name}} in
+    wrong: Verkeerde pincode, probeer opnieuw
+  play: Afspelen
+  profile:
+    switch: Profiel wisselen
+  refused: Plex heeft dit apparaat afgemeld
+  resume: Hervatten vanaf {{.Time}}
+  search:
+    _: Zoeken
+    hint: Zoek films, series en muziek
+  signin:
+    _: Inloggen
+    again: Nieuwe code ophalen
+    expired: De code is verlopen
+    failed: Plex is niet bereikbaar om in te loggen
+    enter: en voer in
+    go: Ga op je telefoon of computer naar
+    hint: Log in met je Plex-account om je bibliotheken hier te bekijken
+    title: Inloggen bij Plex
+    waiting: Wachten op goedkeuring…
+  signout: Afmelden
+  status:
+    _: Status
+    choosing: Profiel kiezen
+    connecting: Verbinden…
+    ready: Verbonden
+    refused: Afgemeld door Plex
+    signedout: Niet ingelogd
+    signing: Inloggen…
+    unreachable: Server niet bereikbaar
+  unreachable: Je Plex-server is niet bereikbaar
+  unwatched: '{{.N}} niet gezien'
+  who: Wie kijkt er?
 position:
   bottom: Onder
   center: Midden
@@ -2009,7 +2056,6 @@ poster:
     poster: Achtergrond
   hourly: Elk uur
   never: Nooit
-  'off': Uit
   setting:
     every:
       _: Wisselen elke
@@ -2502,7 +2548,6 @@ tessera:
     effects: Effecten
     hue: Kleur
     lamps: Lampen
-    waiting: Wachten
     warmth: Kleurtemperatuur
   lock:
     jammed: Geblokkeerd
@@ -2589,7 +2634,6 @@ thermostat:
     fan: Ventilator
     heating: Verwarmt
     idle: Rust
-    'off': Uit
   app: Thermostaat
   between: Houdt tussen
   choose:
@@ -2647,7 +2691,6 @@ thermostat:
     'off': Uit
   no-preset: Geen voorinstelling
   none: Geen thermostaten gekozen
-  'off': Uit
   out: Buiten
   outside: Buiten
   preset:
@@ -2676,7 +2719,6 @@ thermostat:
   target: Doel
   temp: Temp
   temperature: Temperatuur
-  unavailable: Niet beschikbaar
   waiting: Wachten op Home Assistant
 timer:
   stop: Stop
@@ -2697,7 +2739,6 @@ todo:
     todo: Boodschappenlijst
   lists: '{{.Count}} lijsten'
   none: Geen takenlijsten in Home Assistant
-  'off': Uit
   pick: Kies een lijst via Instellingen → Huisbediening → Boodschappenlijst
   setting:
     completed:
@@ -2891,8 +2932,6 @@ voice:
 voicematch:
   accept: Accepteren
   add: Stem toevoegen
-  again: Opnieuw proberen
-  cancel: Annuleren
   done: Voice Match is klaar voor {{.Name}}
   failed: Voice Match kon niet worden ingesteld
   finish: Klaar
@@ -2969,7 +3008,6 @@ weather:
     stack: Stapel
     words: Woorden
   none: Geen weerentiteiten in Home Assistant
-  'off': Uit
   setting:
     alerts:
       _: Weerwaarschuwingen
@@ -3040,14 +3078,12 @@ webaccess:
   title: Webtoegang
 wifi:
   busy: Al bezig met verbinden met een ander netwerk
-  connected: Verbonden
   failed: Kon niet verbinden met {{.Network}}
   join: Verbinden
   joined: Verbonden met {{.Network}}
   joining: Verbinden met {{.Network}}…
   left: Nog {{.N}} s
   none: Geen netwerken gevonden
-  ok: OK
   password: Wachtwoord
   refused: Verkeerd wachtwoord
   scan:
@@ -3067,7 +3103,6 @@ youtube:
   anonymous: Anoniem
   app: YouTube
   asking: Code ophalen…
-  cancel: Annuleren
   category:
     filler: Opvulling
     hook: Haakje

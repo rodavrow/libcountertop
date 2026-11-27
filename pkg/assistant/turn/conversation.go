@@ -56,6 +56,7 @@ const (
 	evListen
 	evRelease
 	evVoice
+	evRejected
 	evAnnounce
 	evAnnouncing
 	evAnnounced
@@ -76,6 +77,7 @@ type event struct {
 	code    string
 	msg     string
 	at      time.Time
+	woke    wake.Detection
 
 	announcement *announcement
 	on           bool
@@ -152,6 +154,7 @@ type nextTurn struct {
 	slot     int
 	followUp bool
 	heard    time.Time
+	woke     wake.Detection
 }
 
 type reply struct {
@@ -210,7 +213,9 @@ const (
 	outDepth  = 64
 	voiceRate = 16000
 	preRoll   = 250 * time.Millisecond
-	enrolling = 1e6
+	// ESPHome's default wake_word_audio.buffer_duration.
+	wakeWordAudio = 1500 * time.Millisecond
+	enrolling     = 1e6
 )
 
 func (c *Conversation) send(what string, fn func() error) {
@@ -330,7 +335,7 @@ func (c *Conversation) dispatch(e event) {
 		c.spoken(e.on, e.slot)
 
 	case evStart:
-		c.start(nextTurn{slot: e.slot, heard: e.at})
+		c.start(nextTurn{slot: e.slot, heard: e.at, woke: e.woke})
 
 	case evSpeaking:
 		if c.followUp && c.phase == phaseListening {
@@ -354,9 +359,16 @@ func (c *Conversation) dispatch(e event) {
 			return
 		}
 		slog.Info("recognized voice, turn sent", "slot", c.slot+1, "speaker", e.text)
-		phrase := c.gate.phrase
-		c.send("start", func() error { return c.vs.StartTurn(phrase, audioSettings()) })
+		c.send("start", c.gate.begin)
 		c.gate.release()
+
+	case evRejected:
+		if c.phase != phaseListening {
+			return
+		}
+		slog.Info("home assistant did not verify the wake word", "slot", c.slot+1)
+		c.clearPending()
+		c.idle("wake word not verified", activity.Cancelled)
 
 	case evContinue:
 		if c.phase != phaseIdle {
@@ -604,10 +616,12 @@ func (c *Conversation) start(n nextTurn) {
 	}
 	c.turn = c.log.Begin(slot+1, phrase)
 	c.options.Recorder.Opens(c.turn.ID(), slot)
+	frames, unlisten := c.source.Listen("turn")
+	begin, pre := c.opening(n, phrase)
 	if c.recognizes(n) {
-		c.gate = &gate{heard: n.heard, phrase: phrase, send: c.sendAudio}
+		c.gate = &gate{heard: n.heard, begin: begin, send: c.sendAudio}
 	} else {
-		c.send("start", func() error { return c.vs.StartTurn(phrase, audioSettings()) })
+		c.send("start", begin)
 	}
 
 	c.said, c.answer, c.runURL = "", "", ""
@@ -616,7 +630,7 @@ func (c *Conversation) start(n nextTurn) {
 	c.reply = reply{}
 
 	c.arm(c.listenFor(n))
-	c.startAudio(slot, n.heard)
+	c.startAudio(slot, n.heard, frames, unlisten, pre)
 	if c.gate != nil {
 		c.accept()
 	}
@@ -846,6 +860,8 @@ func (c *Conversation) pipeline(e esphome.PipelineEvent) {
 		c.post(event{kind: evRunEnd})
 	case api.VoiceAssistantEvent_VOICE_ASSISTANT_ERROR:
 		c.post(event{kind: evError, code: e.Data["code"], msg: e.Data["message"]})
+	case api.VoiceAssistantEvent_VOICE_ASSISTANT_WAKE_WORD_REJECTED:
+		c.post(event{kind: evRejected})
 	}
 }
 
@@ -859,7 +875,8 @@ func (c *Conversation) tts(data []byte, end bool) {
 
 func (c *Conversation) Start(slot int) { c.post(event{kind: evStart, slot: slot}) }
 
-func (c *Conversation) Heard(slot int) {
+func (c *Conversation) Heard(d wake.Detection) {
+	slot := d.Slot
 	at := time.Now()
 	if c.options.Voices != nil && !c.Busy() && c.options.Voices.Claim(at) {
 		if c.options.Arbiter != nil {
@@ -869,7 +886,7 @@ func (c *Conversation) Heard(slot int) {
 		return
 	}
 	if c.options.Arbiter == nil || c.Busy() {
-		c.post(event{kind: evStart, slot: slot, at: at})
+		c.post(event{kind: evStart, slot: slot, at: at, woke: d})
 		return
 	}
 	phrase, _ := c.PhraseFor(slot)
@@ -881,7 +898,7 @@ func (c *Conversation) Heard(slot int) {
 			c.options.Presentation.Elsewhere()
 			return
 		}
-		c.post(event{kind: evStart, slot: slot, at: at})
+		c.post(event{kind: evStart, slot: slot, at: at, woke: d})
 	})
 }
 
@@ -907,7 +924,45 @@ func audioSettings() *api.VoiceAssistantAudioSettings {
 	}
 }
 
-func (c *Conversation) startAudio(slot int, heard time.Time) {
+func (c *Conversation) opening(n nextTurn, phrase string) (func() error, []int16) {
+	var since time.Duration
+	if !n.heard.IsZero() {
+		since = time.Since(n.heard)
+	}
+	plain := func() error { return c.vs.StartTurn(phrase, audioSettings()) }
+
+	id, named := "", false
+	if c.Word != nil {
+		id, named = c.Word(n.slot)
+	}
+	if named && !n.heard.IsZero() && !n.followUp && c.vs.WakeWordAudio() {
+		pre := c.source.Recent(wakeWordAudio + since)
+		w := esphome.WakeWordAudio{
+			ID:          id,
+			Probability: float32(n.woke.Score),
+			Cutoff:      float32(n.woke.Cutoff),
+			Bytes:       beforeDetection(pre, since),
+		}
+		return func() error { return c.vs.StartTurnFromWakeWord(phrase, audioSettings(), w) }, pre
+	}
+	if c.options.Words.Tones(n.slot) {
+		return plain, nil
+	}
+	return plain, c.source.Recent(preRoll + since)
+}
+
+func beforeDetection(pre []int16, since time.Duration) uint32 {
+	after := min(int(since*voiceRate/time.Second), len(pre))
+	return uint32(2 * (len(pre) - after))
+}
+
+func (c *Conversation) startAudio(
+	slot int,
+	heard time.Time,
+	frames <-chan []int16,
+	unlisten func(),
+	pre []int16,
+) {
 	g := c.gate
 	if c.options.Voices != nil && !heard.IsZero() {
 		t := c.turn
@@ -929,7 +984,11 @@ func (c *Conversation) startAudio(slot int, heard time.Time) {
 	done := make(chan struct{})
 	c.stopAudio = func() { cancel(); <-done }
 
-	safe.Go("turn audio", func() { defer close(done); c.stream(ctx, slot, heard, g) })
+	safe.Go("turn audio", func() {
+		defer close(done)
+		defer unlisten()
+		c.stream(ctx, slot, frames, pre, g)
+	})
 }
 
 func (c *Conversation) stopStreaming() {
@@ -944,31 +1003,31 @@ func (c *Conversation) stopStreaming() {
 	}
 }
 
-func (c *Conversation) stream(ctx context.Context, slot int, heard time.Time, g *gate) {
+func (c *Conversation) stream(
+	ctx context.Context,
+	slot int,
+	frames <-chan []int16,
+	pre []int16,
+	g *gate,
+) {
 	deliver := c.sendAudio
 	if g != nil {
 		deliver = g.pass
 	}
-	frames, unlisten := c.source.Listen("turn")
-	defer unlisten()
 
 	buf := make([]byte, 0, 320*2)
 
-	lead := preRoll
-	if !heard.IsZero() {
-		lead += time.Since(heard)
-	}
-	pre := c.source.Recent(lead)
-	if c.options.Words.Tones(slot) {
-		pre = nil
-	}
 	if len(pre) > 0 {
 		for _, s := range pre {
 			buf = append(buf, byte(s), byte(s>>8))
 		}
 		c.options.Recorder.Frame(buf)
 
-		deliver(buf)
+		for b := buf; len(b) > 0; {
+			n := min(len(b), releaseChunk)
+			deliver(b[:n])
+			b = b[n:]
+		}
 		slog.Debug("sent audio history", "ms", len(pre)*1000/voiceRate)
 	}
 

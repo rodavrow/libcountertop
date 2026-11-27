@@ -83,16 +83,14 @@ func (b *Book) Refresh() {
 }
 
 func (b *Book) load() {
-	defer func() {
-		b.mu.Lock()
-		b.loading = false
-		b.mu.Unlock()
-	}()
 	ctx, cancel := context.WithTimeout(context.Background(), limit)
 	defer cancel()
 	people, err := b.src.People(ctx)
 	if err != nil {
 		slog.Warn("listing people failed", "err", err)
+		b.mu.Lock()
+		b.loading = false
+		b.mu.Unlock()
 		return
 	}
 	b.mu.Lock()
@@ -117,7 +115,7 @@ func (b *Book) load() {
 		faces[p.Picture] = round(img)
 	}
 	b.mu.Lock()
-	b.people, b.faces = people, faces
+	b.people, b.faces, b.loading = people, faces, false
 	if whole {
 		b.loaded = time.Now()
 	}

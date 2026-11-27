@@ -130,16 +130,35 @@ func (kit *Toolkit) PageFrame(w *gogui.Window, p FrameOptions) gogui.View {
 	})
 }
 
-func (kit *Toolkit) ActionBar(w *gogui.Window, actions []shell.Action, pal theme.Theme) gogui.View {
+func (kit *Toolkit) ActionBar(
+	w *gogui.Window,
+	actions []shell.Action,
+	busy func() (shell.Busy, bool),
+	pal theme.Theme,
+) gogui.View {
 	t := gogui.CurrentTheme()
 	tall := style.Reach()
-	content := make([]gogui.View, 0, 2*len(actions))
+	var b shell.Busy
+	shown := false
+	if busy != nil {
+		b, shown = busy()
+	}
+	working := shown && b.Outcome == shell.Working
+	room := PageWidth(w)
+	for _, a := range actions {
+		room -= KeyWidth(w, a.Label, t.TextStyleTitle, tall) + tall + t.SpacingLarge
+	}
+	middle := gogui.Row(gogui.ContainerCfg{Sizing: gogui.FillFit, Padding: gogui.NoPadding})
+	if shown {
+		middle = barStatus(w, b, room, pal)
+	}
+	content := make([]gogui.View, 0, 2*len(actions)+1)
+	if len(actions) == 0 {
+		content = append(content, middle)
+	}
 	for i, a := range actions {
 		if i == len(actions)-1 {
-			content = append(
-				content,
-				gogui.Row(gogui.ContainerCfg{Sizing: gogui.FillFit, Padding: gogui.NoPadding}),
-			)
+			content = append(content, middle)
 		}
 		st := t.TextStyleTitle
 		cfg := gogui.ContainerCfg{
@@ -160,6 +179,9 @@ func (kit *Toolkit) ActionBar(w *gogui.Window, actions []shell.Action, pal theme
 		case shell.Danger:
 			fill = pal.Danger
 		}
+		if working {
+			fill = fill.Blend(pal.Background, 0.5)
+		}
 		cfg.Color, st.Color = Color(fill), Color(pal.Contrast(fill))
 		if a.Glyph != "" {
 			mark := IconStyle(st.Color)
@@ -169,6 +191,10 @@ func (kit *Toolkit) ActionBar(w *gogui.Window, actions []shell.Action, pal theme
 		cfg.Content = append(cfg.Content, gogui.Label(a.Label, st))
 		do := a.Do
 		content = append(content, kit.Pressable(gogui.Row, cfg, func(e gogui.EventCtx) {
+			if working {
+				e.Consume()
+				return
+			}
 			do()
 			e.Window.InvalidateLayout()
 		}))
@@ -177,7 +203,37 @@ func (kit *Toolkit) ActionBar(w *gogui.Window, actions []shell.Action, pal theme
 		Sizing:  gogui.FillFit,
 		VAlign:  gogui.VAlignMiddle,
 		Padding: gogui.NoPadding,
+		Spacing: gogui.SpacingLarge,
 		Content: content,
+	})
+}
+
+func barStatus(w *gogui.Window, b shell.Busy, room float32, pal theme.Theme) gogui.View {
+	side := style.Reach() * 0.6
+	var mark gogui.View
+	if b.Outcome == shell.Working {
+		mark = SpinnerGlyph(side)
+	} else {
+		st := IconStyle(Color(outcomeColor(b.Outcome, pal)))
+		st.Family, st.Size = icons.Family, side
+		mark = gogui.Label(icons.Glyph(icons.Named(outcomeGlyph(b.Outcome))), st)
+	}
+	text := max(room-side-gogui.CurrentTheme().SpacingMedium, 0)
+	body := gogui.CurrentTheme().Cfg.TextStyleDef
+	body.Color = Color(pal.Text)
+	lines := []gogui.View{gogui.Label(Ellipsize(w, b.Text, body, text), body)}
+	if b.Detail != "" {
+		quiet := Secondary()
+		lines = append(lines, gogui.Label(Ellipsize(w, b.Detail, quiet, text), quiet))
+	}
+	return gogui.Row(gogui.ContainerCfg{
+		Sizing:  gogui.FillFit,
+		Padding: gogui.NoPadding,
+		Spacing: gogui.SpacingMedium,
+		VAlign:  gogui.VAlignMiddle,
+		Content: []gogui.View{mark, gogui.Column(gogui.ContainerCfg{
+			Sizing: gogui.FillFit, Padding: gogui.NoPadding, Content: lines,
+		})},
 	})
 }
 

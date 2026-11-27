@@ -5,6 +5,7 @@ import (
 	"maps"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/ygelfand/libcountertop/pkg/say"
 	"github.com/ygelfand/libcountertop/pkg/settings/storage"
@@ -13,12 +14,13 @@ import (
 const CalendarColors = 8
 
 type Calendar struct {
-	Entities string            `json:"entities"`
-	Colors   map[string]string `json:"colors,omitempty"`
-	Weather  bool              `json:"weather"`
-	Opening  CalendarOpening   `json:"opening"`
-	View     CalendarView      `json:"view,omitempty"`
-	Saver    bool              `json:"saver"`
+	Entities  string            `json:"entities"`
+	Colors    map[string]string `json:"colors,omitempty"`
+	Weather   bool              `json:"weather"`
+	Opening   CalendarOpening   `json:"opening"`
+	View      CalendarView      `json:"view,omitempty"`
+	Saver     bool              `json:"saver"`
+	WeekStart CalendarWeekStart `json:"week_start,omitempty"`
 }
 
 type CalendarView string
@@ -50,8 +52,40 @@ func CalendarOpenings() []CalendarOpening {
 
 func (o CalendarOpening) Label() string { return say.T("calendar.opening." + string(o)) }
 
+type CalendarWeekStart string
+
+const (
+	WeekStartAuto   CalendarWeekStart = "auto"
+	WeekStartSunday CalendarWeekStart = "sunday"
+	WeekStartMonday CalendarWeekStart = "monday"
+)
+
+func CalendarWeekStarts() []CalendarWeekStart {
+	return []CalendarWeekStart{WeekStartAuto, WeekStartSunday, WeekStartMonday}
+}
+
+func (w CalendarWeekStart) Label() string {
+	if w == WeekStartAuto {
+		return say.T("calendar.week_start.auto")
+	}
+	return say.T("common.day." + string(w)[:3])
+}
+
 func DefaultCalendar() Calendar {
-	return Calendar{Weather: true, Opening: OpenLast, View: CalendarMonth}
+	return Calendar{Weather: true, Opening: OpenLast, View: CalendarMonth, WeekStart: WeekStartAuto}
+}
+
+func (c Calendar) FirstWeekday() time.Weekday {
+	switch c.WeekStart {
+	case WeekStartSunday:
+		return time.Sunday
+	case WeekStartMonday:
+		return time.Monday
+	}
+	if say.T("calendar.week.start") == "monday" {
+		return time.Monday
+	}
+	return time.Sunday
 }
 
 func (c Calendar) List() []string {

@@ -259,14 +259,8 @@ func (a *App) refetching() bool {
 }
 
 func (a *App) busy(w *gogui.Window) gogui.View {
-	if a.spinning.CompareAndSwap(false, true) {
-		time.AfterFunc(widgets.SpinStep, func() {
-			a.spinning.Store(false)
-			a.redraw()
-		})
-	}
-	b := shell.Busy{Text: say.T("home.loading")}
-	return widgets.Floating(refreshZ, a.o.UI.Toolkit.Busy(w, b, a.o.UI.Palette()))
+	vw, vh := w.WindowSize()
+	return widgets.Floating(refreshZ, widgets.Spinner(vw, vh))
 }
 
 func (a *App) viewer() (string, *youtube.Session, bool) {
@@ -395,7 +389,8 @@ func (a *App) feedList(
 		Padding:       gogui.NewPadding(0, style.Reach()*listSide, 0, 0),
 		Color:         gogui.CurrentTheme().Cfg.ColorBackground,
 		ItemView: func(i int, _ float32) gogui.View {
-			if i == len(items)-1 && load != nil && w.ScrollVerticalOffset(effective(w, id)) < 0 {
+			if i == len(items)-1 && load != nil &&
+				w.ScrollVerticalOffset(widgets.ScrollID(w, id)) < 0 {
 				load()
 			}
 			return gogui.Column(gogui.ContainerCfg{
@@ -412,7 +407,10 @@ func (a *App) feedList(
 	}
 	if load != nil {
 		cfg.AmendLayout = func(e gogui.EventCtx) {
-			if hidden, ok := e.Window.ScrollOverflowY(effective(e.Window, id)); ok && hidden <= 0 {
+			if hidden, ok := e.Window.ScrollOverflowY(
+				widgets.ScrollID(e.Window, id),
+			); ok &&
+				hidden <= 0 {
 				safe.Go("youtube fill", load)
 			}
 		}
@@ -420,15 +418,8 @@ func (a *App) feedList(
 	return gogui.Column(cfg)
 }
 
-func effective(w *gogui.Window, leaf string) string {
-	if ids := w.ResolveID(leaf); len(ids) > 0 {
-		return ids[0]
-	}
-	return leaf
-}
-
 func inView(w *gogui.Window, leaf string, step, width float32) (int, int) {
-	at := -w.ScrollHorizontalOffset(effective(w, leaf))
+	at := -w.ScrollHorizontalOffset(widgets.ScrollID(w, leaf))
 	return int(at/step) - 1, int((at+width)/step) + 1
 }
 
@@ -608,7 +599,7 @@ func onScroll(step float32, first int, load func() bool) func(gogui.EventCtx) {
 }
 
 func nearEnd(w *gogui.Window, leaf string) bool {
-	id := effective(w, leaf)
+	id := widgets.ScrollID(w, leaf)
 	hidden, ok := w.ScrollOverflowX(id)
 	return ok && hidden+w.ScrollHorizontalOffset(id) < style.Reach()*cardUnits
 }
@@ -701,76 +692,30 @@ func (a *App) welcome(w *gogui.Window) gogui.View {
 }
 
 func (a *App) signInPage(w *gogui.Window, s signing) gogui.View {
-	vw, vh := w.WindowSize()
-	wide := vw >= vh
-	reach := style.Reach()
-	t := gogui.CurrentTheme().Cfg
-	head := t.TextStyleDef
-	head.Size *= 1.6
-	quiet := widgets.Secondary()
-	big := t.TextStyleDef
-	big.Size *= 1.5
-	code := t.TextStyleDef
-	code.Size *= 3.2
-
-	words := []gogui.View{a.mark(reach * 1.6), gogui.Label(say.T("youtube.signin"), head)}
-	var qr gogui.View
+	page := widgets.SignIn{
+		Mark:  a.mark(style.Reach() * 1.6),
+		Title: say.T("youtube.signin"),
+	}
 	switch {
 	case s.problem != "":
-		words = append(words,
-			gogui.Label(s.problem, quiet),
-			a.button("youtube-again", say.T("youtube.again"), true, a.accounts.signIn))
+		page.Note = s.problem
+		page.Actions = append(page.Actions, widgets.SignInAction{
+			ID: "youtube-again", Label: say.T("youtube.again"), Primary: true,
+			Do: a.accounts.signIn,
+		})
 	case s.asking:
-		words = append(words, gogui.Label(say.T("youtube.asking"), quiet))
+		page.Note = say.T("youtube.asking")
 	default:
-		words = append(words,
-			gogui.Label(say.T("youtube.go"), quiet),
-			gogui.Label(activateSite, big),
-			gogui.Label(say.T("youtube.enter"), quiet),
-			gogui.Label(spaced(s.code.User), code),
-			gogui.Label(say.T("youtube.waiting"), quiet),
-		)
-		side := float32(min(vw, vh)) * 0.32
-		qr = widgets.QR(activateURL+url.QueryEscape(s.code.User), side, side)
+		page.Go, page.Site, page.Enter = say.T("youtube.go"), activateSite, say.T("youtube.enter")
+		page.Code, page.Waiting = s.code.User, say.T("youtube.waiting")
+		page.Link = activateURL + url.QueryEscape(s.code.User)
 	}
 	if len(a.accounts.list()) > 0 || a.accounts.isAnonymous() || s.problem != "" {
-		words = append(
-			words,
-			a.button("youtube-cancel", say.T("youtube.cancel"), false, a.accounts.stopSigning),
-		)
+		page.Actions = append(page.Actions, widgets.SignInAction{
+			ID: "youtube-cancel", Label: say.T("common.actions.cancel"), Do: a.accounts.stopSigning,
+		})
 	}
-	text := gogui.Column(gogui.ContainerCfg{
-		Sizing:  gogui.FitFit,
-		Padding: gogui.NoPadding,
-		Spacing: gogui.SpacingMedium,
-		HAlign:  gogui.HAlignCenter,
-		Content: words,
-	})
-	content := []gogui.View{text}
-	if qr != nil {
-		content = append(content, qr)
-	}
-	cfg := gogui.ContainerCfg{
-		Sizing:  gogui.FitFit,
-		Padding: gogui.PaddingLarge,
-		Spacing: gogui.SpacingLarge,
-		HAlign:  gogui.HAlignCenter,
-		VAlign:  gogui.VAlignMiddle,
-		Radius:  gogui.RadiusLarge,
-		Content: content,
-	}
-	var card gogui.View
-	if wide {
-		card = gogui.Row(a.o.UI.Toolkit.Panel(cfg))
-	} else {
-		card = gogui.Column(a.o.UI.Toolkit.Panel(cfg))
-	}
-	return gogui.Column(gogui.ContainerCfg{
-		Sizing:  gogui.FillFill,
-		HAlign:  gogui.HAlignCenter,
-		VAlign:  gogui.VAlignMiddle,
-		Content: []gogui.View{card},
-	})
+	return a.o.UI.SignIn(w, page)
 }
 
 func (a *App) accountsPage(w *gogui.Window) gogui.View {
@@ -931,7 +876,7 @@ func (a *App) tabs(wide bool) gogui.View {
 }
 
 func (a *App) reload(w *gogui.Window, list string) {
-	w.ScrollVerticalTo(effective(w, list), 0)
+	w.ScrollVerticalTo(widgets.ScrollID(w, list), 0)
 	if key, _, ok := a.viewer(); ok {
 		a.feeds.refresh(key)
 	}
@@ -1073,10 +1018,6 @@ func (a *App) redraw() {
 	if a.o.Redraw != nil {
 		a.o.Redraw()
 	}
-}
-
-func spaced(code string) string {
-	return strings.Join(strings.Split(code, ""), " ")
 }
 
 func note(text string) gogui.View {

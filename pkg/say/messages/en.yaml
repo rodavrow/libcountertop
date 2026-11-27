@@ -145,14 +145,6 @@ alarm:
   add: Add alarm
   app: Alarms
   daily: Every day
-  day:
-    fri: Friday
-    mon: Monday
-    sat: Saturday
-    sun: Sunday
-    thu: Thursday
-    tue: Tuesday
-    wed: Wednesday
   delete: Delete alarm
   edit: Alarm
   hour: Hour
@@ -160,20 +152,15 @@ alarm:
   minute: Minute
   minutes: '{{.N}} min'
   name: Name
-  'off': 'Off'
   'on': Alarm on
   once: Once
   ramp: Gentle start
   repeat: Repeat
-  save: Save
   seconds: '{{.N}} s'
   snooze: Snooze
   snooze_for: Snooze {{.N}} min
   snoozed: Snoozed until {{.T}}
   sound: Sound
-  state:
-    'off': 'Off'
-    'on': 'On'
   stop: Stop
   volume:
     _: Volume
@@ -245,7 +232,6 @@ assistants:
     gemini: Gemini
     pryon: Pryon
     stopword: Stop word
-  'off': 'Off'
   pipeline:
     _: Pipeline
     preferred: Preferred
@@ -381,14 +367,12 @@ calendar:
     title: Enter a title
   none: No calendars in Home Assistant
   notes: Notes
-  'off': 'Off'
   opening:
     day: Day
     last: Last used
     month: Month
     week: Week
   pick: Pick calendars
-  save: Save
   setting:
     colors:
       _: Calendar colors
@@ -405,6 +389,9 @@ calendar:
     weather:
       _: Weather on days
       help: Shows the daily forecast on calendar days
+    week_start:
+      _: First day of the week
+      help: Day the week and month views start on
   title: Title
   today: Today
   tomorrow: Tomorrow
@@ -414,6 +401,8 @@ calendar:
     week: Week
   week:
     start: sunday
+  week_start:
+    auto: Auto
 call:
   address: Address
   answer:
@@ -433,7 +422,6 @@ call:
     'off': Camera off
     'on': Camera on
   caps: Can do
-  connected: Connected
   declined: Declined
   dropped: Call dropped
   empty: No other devices found
@@ -664,7 +652,6 @@ cameras:
   loading: Loading cameras
   none: No cameras selected
   nosite: Home Assistant's address isn't known. Set Home Assistant URL in Settings → Home control → Cameras
-  'off': 'Off'
   pick: Select
   seconds: '{{.N}} s'
   setting:
@@ -698,7 +685,6 @@ card:
   light:
     brightness: Brightness
     hue: Color
-    waiting: Waiting
     warmth: Color temperature
   lock:
     lock: Lock
@@ -814,6 +800,27 @@ clock:
       help: Dashboard clock size, from nano to large, as a share of its area
   title: Clock
   zone: Time zone
+common:
+  actions:
+    cancel: Cancel
+    retry: Try again
+    save: Save
+  day:
+    fri: Friday
+    mon: Monday
+    sat: Saturday
+    sun: Sunday
+    thu: Thursday
+    tue: Tuesday
+    wed: Wednesday
+  states:
+    connected: Connected
+    connecting: Connecting…
+    'off': 'Off'
+    'on': 'On'
+    unavailable: Unavailable
+    unset: Not set up
+    waiting: Waiting
 controls:
   dock:
     _: Dock position
@@ -900,11 +907,9 @@ doorbell:
       hint: A Home Assistant camera that shows this door
     title: Home Assistant camera
   cameras: '{{.N}} cameras'
-  cancel: Cancel
   channel: Channel {{.N}}
   checking: Checking…
   connect: Connect
-  connecting: Connecting…
   entity:
     chime: Doorbell ring sound
     door:
@@ -952,8 +957,6 @@ doorbell:
   none: No doorbells set up
   notsaved: Not saved
   offline: Offline
-  ok: OK
-  save: Save
   saved: Saved
   sensor:
     animal: Animal sensor
@@ -1008,14 +1011,11 @@ doorbell:
     reolink: Reolink
     rtsp: RTSP
   status:
-    connected: Connected
-    connecting: Connecting…
     events: Events
     login: Wrong user or password
     none: No doorbells in Home Assistant
     ready: '{{.Count}} connected'
     unreachable: Can't reach the doorbells
-    unset: Not set up
     unsupported: Not available from this source
     video: Video
   stream:
@@ -1078,6 +1078,9 @@ features:
   mealie:
     _: Mealie
     hint: Recipes and cook mode
+  plex:
+    _: Plex
+    hint: Sign-in, profile and server
   proxy:
     _: Bluetooth proxy
     hint: Bluetooth LE proxy for Home Assistant
@@ -1169,7 +1172,6 @@ home:
   refused:
     _: Actions not allowed
     hint: Open ESPHome, press the settings cog on {{.Name}}, and enable “Allow the device to perform Home Assistant actions.”
-  retry: Try again
   saver:
     _: Screen saver
     'off': Turn on Auto standby in Tessera's screen settings to use its screen saver
@@ -1275,9 +1277,6 @@ home:
       'on': All on
     area: '{{.N}} of {{.Of}} on'
     level: '{{.N}}%'
-    'off': 'Off'
-    'on': 'On'
-    unavailable: Unavailable
   title: Home control
   unconnected:
     _: Not connected
@@ -1293,7 +1292,6 @@ homealarm:
     sheet: Sheet
     time: Time
     type: Type
-  cancel: Cancel
   chip:
     alarm: Alarm
     armed: Armed
@@ -1375,9 +1373,7 @@ homealarm:
   notready:
     many: 'Not ready: {{.N}} zones open'
     one: 'Not ready: {{.Zone}} open'
-  'off': 'Off'
   ok: OK
-  'on': 'On'
   panic: Panic
   pick: Pick one
   plate:
@@ -1576,7 +1572,6 @@ ink:
   theme: Theme
   violet: Violet
 keyboard:
-  cancel: Cancel
   code_expired: Code expired
   compact: Compact
   enter: Enter
@@ -1584,7 +1579,6 @@ keyboard:
   hide: Hide
   large: Large
   refresh: Refresh
-  save: Save
   search: Search
   size: Keyboard size
   standard: Standard
@@ -1602,8 +1596,6 @@ lock:
   mismatch: The PINs didn't match. Enter a new PIN
   new: Enter a new PIN, 4 to 8 digits
   next: Next
-  'off': 'Off'
-  'on': 'On'
   set: Set PIN
   title: Settings
   wait: Try again in {{.Seconds}} s
@@ -1976,16 +1968,12 @@ photos:
   sources: Sources
   status:
     _: Status
-    connecting: Connecting…
     empty: No photos match
     key: Wrong API key
-    'off': 'Off'
     old: 'Immich {{.Version}}: needs 3.2 or newer'
     permission: API key needs {{.Name}}
-    ready: Connected
     unknown: Nothing named {{.Name}}
     unreachable: Can't reach the server
-    unset: Not set up
 phototransition:
   cut: None
   dissolve: Dissolve
@@ -2006,6 +1994,65 @@ player:
   next: Up next
   none: Nothing
   now: Now playing
+plex:
+  app: Plex
+  asking: Getting a sign-in code…
+  cantplay: This can't be played here
+  connecting: Connecting to Plex…
+  empty: Nothing here yet
+  episode: S{{.S}} E{{.E}}
+  episodes: '{{.N}} episodes'
+  fromstart: Play from start
+  home: Home
+  hours: '{{.N}} hr'
+  hours_minutes: '{{.H}} hr {{.M}} min'
+  categories: Categories
+  library: Library
+  mark_unwatched: Mark unwatched
+  mark_watched: Mark watched
+  minutes: '{{.N}} min'
+  nothing: Nothing found
+  recommended: Recommended
+  see_all: See all
+  shuffle: Shuffle
+  sort: 'Sort: {{.Name}}'
+  subtitles: 'Subtitles: {{.Name}}'
+  titles: '{{.N}} titles'
+  unwatched_only: Unwatched
+  pin:
+    _: Enter the PIN for {{.Name}}
+    wrong: Wrong PIN, try again
+  play: Play
+  profile:
+    switch: Switch profile
+  refused: Plex signed this device out
+  resume: Resume from {{.Time}}
+  search:
+    _: Search
+    hint: Search movies, shows and music
+  signin:
+    _: Sign in
+    again: Get a new code
+    expired: The code expired
+    failed: Couldn't reach Plex to sign in
+    enter: and enter
+    go: On your phone or computer, go to
+    hint: Sign in with your Plex account to watch your libraries here
+    title: Sign in to Plex
+    waiting: Waiting for approval…
+  signout: Sign out
+  status:
+    _: Status
+    choosing: Choosing a profile
+    connecting: Connecting…
+    ready: Connected
+    refused: Signed out by Plex
+    signedout: Not signed in
+    signing: Signing in…
+    unreachable: Can't reach the server
+  unreachable: Can't reach your Plex server
+  unwatched: '{{.N}} unwatched'
+  who: Who's watching?
 position:
   bottom: Bottom
   center: Center
@@ -2023,7 +2070,6 @@ poster:
     poster: Wallpaper
   hourly: Hourly
   never: Never
-  'off': 'Off'
   setting:
     every:
       _: Change every
@@ -2517,7 +2563,6 @@ tessera:
     effects: Effects
     hue: Color
     lamps: Lamps
-    waiting: Waiting
     warmth: Color temperature
   lock:
     jammed: Jammed
@@ -2604,7 +2649,6 @@ thermostat:
     fan: Fan
     heating: Heating
     idle: Idle
-    'off': 'Off'
   app: Thermostat
   between: Keeping between
   choose:
@@ -2662,7 +2706,6 @@ thermostat:
     'off': 'Off'
   no-preset: No preset
   none: No thermostats chosen
-  'off': 'Off'
   out: Out
   outside: Outside
   preset:
@@ -2691,7 +2734,6 @@ thermostat:
   target: Target
   temp: Temp
   temperature: Temperature
-  unavailable: Unavailable
   waiting: Waiting for Home Assistant
 timer:
   stop: Stop
@@ -2712,7 +2754,6 @@ todo:
     todo: Shopping list
   lists: '{{.Count}} lists'
   none: No to-do lists in Home Assistant
-  'off': 'Off'
   pick: Pick a list in Settings → Home control → Shopping list
   setting:
     completed:
@@ -2909,8 +2950,6 @@ voice:
 voicematch:
   accept: Accept
   add: Add a voice
-  again: Try again
-  cancel: Cancel
   done: Voice match is ready for {{.Name}}
   failed: Voice match couldn't be set up
   finish: Done
@@ -2987,7 +3026,6 @@ weather:
     stack: Stack
     words: Words
   none: No weather entities in Home Assistant
-  'off': 'Off'
   setting:
     alerts:
       _: Weather alerts
@@ -3060,14 +3098,12 @@ webaccess:
   title: Web access
 wifi:
   busy: Already joining another network
-  connected: Connected
   failed: Couldn't join {{.Network}}
   join: Join
   joined: Connected to {{.Network}}
   joining: Joining {{.Network}}…
   left: '{{.N}} s left'
   none: No networks found
-  ok: OK
   password: Password
   refused: Wrong password
   scan:
@@ -3087,7 +3123,6 @@ youtube:
   anonymous: Anonymous
   app: YouTube
   asking: Getting a code…
-  cancel: Cancel
   category:
     filler: Filler
     hook: Hook

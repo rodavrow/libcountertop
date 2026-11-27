@@ -14,7 +14,7 @@ import (
 
 func PosterSays(p config.Poster) string {
 	if !p.Enabled {
-		return say.T("poster.off")
+		return say.T("common.states.off")
 	}
 	return p.Every.Label()
 }
@@ -61,9 +61,9 @@ func (p *BasicPages) System() *shell.Page {
 			acts = append(acts, nil)
 		}
 		if p.options.Lock != nil {
-			value := say.T("lock.off")
+			value := say.T("common.states.off")
 			if p.options.Lock.Locked() {
-				value = say.T("lock.on")
+				value = say.T("common.states.on")
 			}
 			rows = append(rows, menu.Row{
 				Glyph: gogui.IconLock,

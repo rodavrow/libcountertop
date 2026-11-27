@@ -88,9 +88,9 @@ func (s State) Says() string {
 func (s Status) Says() string {
 	switch s {
 	case Connecting:
-		return say.T("doorbell.status.connecting")
+		return say.T("common.states.connecting")
 	case Ready:
-		return say.T("doorbell.status.connected")
+		return say.T("common.states.connected")
 	case BadLogin:
 		return say.T("doorbell.status.login")
 	case Unreachable:
@@ -98,7 +98,7 @@ func (s Status) Says() string {
 	case Unsupported:
 		return say.T("doorbell.status.unsupported")
 	}
-	return say.T("doorbell.status.unset")
+	return say.T("common.states.unset")
 }
 
 type Finder interface {

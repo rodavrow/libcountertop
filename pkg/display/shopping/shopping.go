@@ -98,7 +98,7 @@ func (s *Shopping) build(w *gogui.Window) gogui.View {
 			ui.Row(
 				"retry",
 				page,
-				menu.Row{Label: say.T("home.retry")},
+				menu.Row{Label: say.T("common.actions.retry")},
 				func(int) { s.o.Todo.Refresh() },
 				false,
 			),

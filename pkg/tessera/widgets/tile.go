@@ -117,7 +117,7 @@ func (v *View) line(
 	narrow bool,
 ) string {
 	if !available(t) {
-		return say.T("home.tile.unavailable")
+		return say.T("common.states.unavailable")
 	}
 	if wt != nil {
 		if s := wt.line(now); s != "" {

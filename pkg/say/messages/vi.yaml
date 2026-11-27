@@ -145,14 +145,6 @@ alarm:
   add: Thêm báo thức
   app: Báo thức
   daily: Mỗi ngày
-  day:
-    fri: Thứ Sáu
-    mon: Thứ Hai
-    sat: Thứ Bảy
-    sun: Chủ Nhật
-    thu: Thứ Năm
-    tue: Thứ Ba
-    wed: Thứ Tư
   delete: Xóa báo thức
   edit: Báo thức
   hour: Giờ
@@ -160,20 +152,15 @@ alarm:
   minute: Phút
   minutes: '{{.N}} phút'
   name: Tên
-  'off': Tắt
   'on': Báo thức bật
   once: Một lần
   ramp: Khởi động nhẹ nhàng
   repeat: Lặp lại
-  save: Lưu
   seconds: '{{.N}} giây'
   snooze: Báo lại
   snooze_for: Báo lại sau {{.N}} phút
   snoozed: Báo lại đến {{.T}}
   sound: Âm thanh
-  state:
-    'off': Tắt
-    'on': Bật
   stop: Dừng
   volume:
     _: Âm lượng
@@ -245,7 +232,6 @@ assistants:
     gemini: Gemini
     pryon: Pryon
     stopword: Từ dừng
-  'off': Tắt
   pipeline:
     _: Pipeline
     preferred: Ưu tiên
@@ -381,14 +367,12 @@ calendar:
     title: Nhập tiêu đề
   none: Không có lịch trong Home Assistant
   notes: Ghi chú
-  'off': Tắt
   opening:
     day: Ngày
     last: Lần dùng gần nhất
     month: Tháng
     week: Tuần
   pick: Chọn lịch
-  save: Lưu
   setting:
     colors:
       _: Màu lịch
@@ -403,6 +387,9 @@ calendar:
     weather:
       _: Thời tiết theo ngày
       help: Hiển thị dự báo hằng ngày trên các ngày trong lịch
+    week_start:
+      _: Ngày đầu tuần
+      help: Ngày bắt đầu của chế độ xem tuần và tháng
   title: Tiêu đề
   today: Hôm nay
   tomorrow: Ngày mai
@@ -412,6 +399,8 @@ calendar:
     week: Tuần
   week:
     start: monday
+  week_start:
+    auto: Tự động
 call:
   address: Địa chỉ
   answer:
@@ -431,7 +420,6 @@ call:
     'off': Camera tắt
     'on': Camera bật
   caps: Có thể làm
-  connected: Đã kết nối
   declined: Đã từ chối
   dropped: Cuộc gọi bị ngắt
   empty: Không tìm thấy thiết bị nào khác
@@ -662,7 +650,6 @@ cameras:
   loading: Đang tải camera
   none: Chưa chọn camera
   nosite: Chưa biết địa chỉ Home Assistant. Đặt URL Home Assistant trong Cài đặt → Điều khiển nhà → Camera
-  'off': Tắt
   pick: Chọn
   seconds: '{{.N}} giây'
   setting:
@@ -695,7 +682,6 @@ card:
   light:
     brightness: Độ sáng
     hue: Màu
-    waiting: Đang chờ
     warmth: Nhiệt độ màu
   lock:
     lock: Khóa
@@ -808,6 +794,27 @@ clock:
       help: Kích thước đồng hồ bảng điều khiển, từ nhỏ nhất đến lớn, theo phần diện tích của nó
   title: Đồng hồ
   zone: Múi giờ
+common:
+  actions:
+    cancel: Hủy
+    retry: Thử lại
+    save: Lưu
+  day:
+    fri: Thứ Sáu
+    mon: Thứ Hai
+    sat: Thứ Bảy
+    sun: Chủ Nhật
+    thu: Thứ Năm
+    tue: Thứ Ba
+    wed: Thứ Tư
+  states:
+    connected: Đã kết nối
+    connecting: Đang kết nối…
+    'off': Tắt
+    'on': Bật
+    unavailable: Không khả dụng
+    unset: Chưa thiết lập
+    waiting: Đang chờ
 controls:
   dock:
     _: Vị trí dock
@@ -894,11 +901,9 @@ doorbell:
       hint: Camera Home Assistant hiển thị cửa này
     title: Camera Home Assistant
   cameras: '{{.N}} camera'
-  cancel: Hủy
   channel: Kênh {{.N}}
   checking: Đang kiểm tra…
   connect: Kết nối
-  connecting: Đang kết nối…
   entity:
     chime: Âm thanh chuông cửa
     door:
@@ -946,8 +951,6 @@ doorbell:
   none: Chưa thiết lập chuông cửa
   notsaved: Chưa lưu
   offline: Ngoại tuyến
-  ok: OK
-  save: Lưu
   saved: Đã lưu
   sensor:
     animal: Cảm biến động vật
@@ -1002,14 +1005,11 @@ doorbell:
     reolink: Reolink
     rtsp: RTSP
   status:
-    connected: Đã kết nối
-    connecting: Đang kết nối…
     events: Sự kiện
     login: Sai người dùng hoặc mật khẩu
     none: Không có chuông cửa trong Home Assistant
     ready: '{{.Count}} đã kết nối'
     unreachable: Không thể kết nối chuông cửa
-    unset: Chưa thiết lập
     unsupported: Không khả dụng từ nguồn này
     video: Video
   stream:
@@ -1072,6 +1072,9 @@ features:
   mealie:
     _: Mealie
     hint: Công thức và chế độ nấu ăn
+  plex:
+    _: Plex
+    hint: Đăng nhập, hồ sơ và máy chủ
   proxy:
     _: Proxy Bluetooth
     hint: Proxy Bluetooth LE cho Home Assistant
@@ -1163,7 +1166,6 @@ home:
   refused:
     _: Không được phép thực hiện hành động
     hint: Mở ESPHome, nhấn biểu tượng cài đặt trên {{.Name}} rồi bật “Cho phép thiết bị thực hiện hành động Home Assistant.”
-  retry: Thử lại
   saver:
     _: Màn hình chờ
     'off': Bật Tự động chờ trong cài đặt màn hình Tessera để dùng màn hình chờ của Tessera
@@ -1269,9 +1271,6 @@ home:
       'on': Bật tất cả
     area: '{{.N}} / {{.Of}} đang bật'
     level: '{{.N}}%'
-    'off': Tắt
-    'on': Bật
-    unavailable: Không khả dụng
   title: Điều khiển nhà
   unconnected:
     _: Chưa kết nối
@@ -1287,7 +1286,6 @@ homealarm:
     sheet: Tờ
     time: Giờ
     type: Loại
-  cancel: Hủy
   chip:
     alarm: Báo động
     armed: Đã bật
@@ -1369,9 +1367,7 @@ homealarm:
   notready:
     many: 'Chưa sẵn sàng: {{.N}} khu vực đang mở'
     one: 'Chưa sẵn sàng: {{.Zone}} đang mở'
-  'off': Tắt
   ok: OK
-  'on': Bật
   panic: Hoảng loạn
   pick: Chọn một
   plate:
@@ -1570,7 +1566,6 @@ ink:
   theme: Giao diện
   violet: Tím
 keyboard:
-  cancel: Hủy
   code_expired: Mã đã hết hạn
   compact: Gọn
   enter: Nhập
@@ -1578,7 +1573,6 @@ keyboard:
   hide: Ẩn
   large: Lớn
   refresh: Làm mới
-  save: Lưu
   search: Tìm kiếm
   size: Kích thước bàn phím
   standard: Tiêu chuẩn
@@ -1596,8 +1590,6 @@ lock:
   mismatch: Mã PIN không khớp. Nhập mã PIN mới
   new: Nhập mã PIN mới, 4 đến 8 chữ số
   next: Tiếp
-  'off': Tắt
-  'on': Bật
   set: Đặt mã PIN
   title: Cài đặt
   wait: Thử lại sau {{.Seconds}} giây
@@ -1964,16 +1956,12 @@ photos:
   sources: Nguồn
   status:
     _: Trạng thái
-    connecting: Đang kết nối…
     empty: Không có ảnh phù hợp
     key: Sai khóa API
-    'off': Tắt
     old: 'Immich {{.Version}}: cần 3.2 trở lên'
     permission: Khóa API cần {{.Name}}
-    ready: Đã kết nối
     unknown: Không có gì tên {{.Name}}
     unreachable: Không thể kết nối máy chủ
-    unset: Chưa thiết lập
 phototransition:
   cut: Không
   dissolve: Tan
@@ -1994,6 +1982,65 @@ player:
   next: Tiếp theo
   none: Không có gì
   now: Đang phát
+plex:
+  app: Plex
+  asking: Đang lấy mã đăng nhập…
+  cantplay: Không thể phát nội dung này ở đây
+  connecting: Đang kết nối Plex…
+  empty: Chưa có gì ở đây
+  episode: S{{.S}} E{{.E}}
+  episodes: '{{.N}} tập'
+  fromstart: Phát từ đầu
+  home: Trang chủ
+  hours: '{{.N}} giờ'
+  hours_minutes: '{{.H}} giờ {{.M}} phút'
+  categories: Thể loại
+  library: Thư viện
+  mark_unwatched: Đánh dấu chưa xem
+  mark_watched: Đánh dấu đã xem
+  minutes: '{{.N}} phút'
+  nothing: Không tìm thấy gì
+  recommended: Đề xuất
+  see_all: Xem tất cả
+  shuffle: Ngẫu nhiên
+  sort: 'Sắp xếp: {{.Name}}'
+  subtitles: 'Phụ đề: {{.Name}}'
+  titles: '{{.N}} tựa'
+  unwatched_only: Chưa xem
+  pin:
+    _: Nhập mã PIN của {{.Name}}
+    wrong: Sai mã PIN, hãy thử lại
+  play: Phát
+  profile:
+    switch: Đổi hồ sơ
+  refused: Plex đã đăng xuất thiết bị này
+  resume: Tiếp tục từ {{.Time}}
+  search:
+    _: Tìm kiếm
+    hint: Tìm phim, chương trình và nhạc
+  signin:
+    _: Đăng nhập
+    again: Lấy mã mới
+    expired: Mã đã hết hạn
+    failed: Không kết nối được Plex để đăng nhập
+    enter: và nhập
+    go: Trên điện thoại hoặc máy tính, truy cập
+    hint: Đăng nhập tài khoản Plex để xem thư viện của bạn tại đây
+    title: Đăng nhập Plex
+    waiting: Đang chờ xác nhận…
+  signout: Đăng xuất
+  status:
+    _: Trạng thái
+    choosing: Đang chọn hồ sơ
+    connecting: Đang kết nối…
+    ready: Đã kết nối
+    refused: Plex đã đăng xuất
+    signedout: Chưa đăng nhập
+    signing: Đang đăng nhập…
+    unreachable: Không kết nối được máy chủ
+  unreachable: Không kết nối được máy chủ Plex của bạn
+  unwatched: '{{.N}} chưa xem'
+  who: Ai đang xem?
 position:
   bottom: Dưới
   center: Giữa
@@ -2011,7 +2058,6 @@ poster:
     poster: Hình nền
   hourly: Hằng giờ
   never: Không bao giờ
-  'off': Tắt
   setting:
     every:
       _: Thay đổi mỗi
@@ -2504,7 +2550,6 @@ tessera:
     effects: Hiệu ứng
     hue: Màu
     lamps: Đèn
-    waiting: Đang chờ
     warmth: Nhiệt độ màu
   lock:
     jammed: Kẹt
@@ -2591,7 +2636,6 @@ thermostat:
     fan: Quạt
     heating: Đang sưởi
     idle: Chờ
-    'off': Tắt
   app: Bộ điều nhiệt
   between: Giữ trong khoảng
   choose:
@@ -2649,7 +2693,6 @@ thermostat:
     'off': Tắt
   no-preset: Không cài sẵn
   none: Chưa chọn bộ điều nhiệt
-  'off': Tắt
   out: Ngoài
   outside: Ngoài trời
   preset:
@@ -2678,7 +2721,6 @@ thermostat:
   target: Mục tiêu
   temp: Nhiệt độ
   temperature: Nhiệt độ
-  unavailable: Không khả dụng
   waiting: Đang chờ Home Assistant
 timer:
   stop: Dừng
@@ -2699,7 +2741,6 @@ todo:
     todo: Danh sách mua sắm
   lists: '{{.Count}} danh sách'
   none: Không có danh sách việc cần làm trong Home Assistant
-  'off': Tắt
   pick: Chọn danh sách trong Cài đặt → Điều khiển nhà → Danh sách mua sắm
   setting:
     completed:
@@ -2894,8 +2935,6 @@ voice:
 voicematch:
   accept: Chấp nhận
   add: Thêm giọng nói
-  again: Thử lại
-  cancel: Hủy
   done: Nhận diện giọng nói đã sẵn sàng cho {{.Name}}
   failed: Không thể thiết lập nhận diện giọng nói
   finish: Xong
@@ -2972,7 +3011,6 @@ weather:
     stack: Xếp chồng
     words: Chữ
   none: Không có thực thể thời tiết trong Home Assistant
-  'off': Tắt
   setting:
     alerts:
       _: Cảnh báo thời tiết
@@ -3043,14 +3081,12 @@ webaccess:
   title: Truy cập web
 wifi:
   busy: Đang tham gia mạng khác
-  connected: Đã kết nối
   failed: Không thể tham gia {{.Network}}
   join: Tham gia
   joined: Đã kết nối với {{.Network}}
   joining: Đang tham gia {{.Network}}…
   left: Còn {{.N}} giây
   none: Không tìm thấy mạng
-  ok: OK
   password: Mật khẩu
   refused: Sai mật khẩu
   scan:
@@ -3070,7 +3106,6 @@ youtube:
   anonymous: Ẩn danh
   app: YouTube
   asking: Đang lấy mã…
-  cancel: Hủy
   category:
     filler: Nội dung phụ
     hook: Mở đầu thu hút

@@ -402,7 +402,7 @@ func (p *IdlePages) Placed(at config.Placement) menu.Preview {
 
 func weatherShown(on bool, l config.WeatherLayout) string {
 	if !on {
-		return say.T("weather.off")
+		return say.T("common.states.off")
 	}
 	return l.Look.Label()
 }
@@ -507,7 +507,7 @@ func (p *IdlePages) WeatherEntities() *shell.Page {
 			case err != nil:
 				return []menu.Row{
 						{Label: say.T("home.failed"), Hint: err.Error()},
-						{Label: say.T("home.retry")},
+						{Label: say.T("common.actions.retry")},
 					},
 					[]func(int){
 						nil,

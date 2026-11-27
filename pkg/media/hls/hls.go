@@ -1072,6 +1072,17 @@ func narrowed(mv *playlist.Multivariant, o Options) (*playlist.Multivariant, err
 		v = pickSound(mv.Variants)
 	}
 	if v == nil {
+		offered := make([]string, 0, len(mv.Variants))
+		for _, x := range mv.Variants {
+			rate := "-"
+			if x.FrameRate != nil {
+				rate = strconv.FormatFloat(*x.FrameRate, 'f', -1, 64)
+			}
+			offered = append(offered, fmt.Sprintf("codecs=%q resolution=%q bandwidth=%d fps=%s",
+				strings.Join(x.Codecs, ","), x.Resolution, x.Bandwidth, rate))
+		}
+		slog.Warn("hls variants refused", "tallest", o.Tallest, "fastest", o.Fastest,
+			"offered", strings.Join(offered, "; "))
 		return nil, errors.New("hls: no H.264 and AAC-LC variant within the size limits")
 	}
 	out := &playlist.Multivariant{
